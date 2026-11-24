@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101517"><title>UNTETHERED · EVA return simulator</title><style>
+:root{color-scheme:dark;--bg:#101416;--panel:#161d20;--edge:#343e42;--muted:#a2b1b5;--mint:#9ce8ce;--ink:#ecf0ed;--gold:#f4bc72;--mono:Consolas,"SFMono-Regular","Liberation Mono",monospace;--sans:"Segoe UI",Arial,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px var(--sans)}button,select,input{font:inherit}button,select{color:var(--ink);cursor:pointer}button{background:#20282b;border:1px solid var(--edge);border-radius:5px}button:hover:enabled,select:hover{background:#2a3437;border-color:#6b7d81}button:focus-visible,select:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--mint);outline-offset:3px}button:disabled{cursor:default;opacity:.45}button svg{width:15px;height:15px;vertical-align:-3px}header{border-bottom:1px solid var(--edge);background:#14191b}.bar,main{width:min(1512px,100%);margin:auto}.bar{display:flex;align-items:center;justify-content:space-between;padding:17px clamp(16px,3.6vw,58px);gap:12px}.brand{display:flex;align-items:center;gap:13px}.brand>svg{width:38px;height:38px}.wordmark{font-weight:750;letter-spacing:.18em;font-size:20px;line-height:1.1}.subbrand,.micro,.sectionlabel,.spec,.tag,.plotlabel,.foot,.eyebrow{font:10px/1.45 var(--mono);letter-spacing:.105em;text-transform:uppercase}.subbrand{color:var(--muted);letter-spacing:.17em;font-size:9px;margin-top:4px}.toptools,.actions,.caption,.settings,.row,.chips,.legend,.cardhead,.inc,.fr{display:flex;align-items:center;gap:10px}.toptools{gap:17px}.tag{border:1px solid #435050;color:#bccac7;border-radius:4px;padding:4px 7px;letter-spacing:.08em}.quiet{padding:8px 11px;display:inline-flex;align-items:center;gap:7px}.quiet svg{fill:none;stroke:currentColor;stroke-width:1.6}.guide{background:transparent}main{padding:24px clamp(16px,3.6vw,58px) 22px}.mission{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:17px}.eyebrow,.plotlabel{color:var(--mint)}h1,h2,h3,p{margin:0}h1{font-size:clamp(26px,2.4vw,39px);line-height:1.15;letter-spacing:-.04em;margin-top:4px;font-weight:630}.settings{gap:9px}.settings select,.dialogrow select{background:#20282b;border:1px solid var(--edge);border-radius:5px;padding:7px 9px}.deck{display:grid;grid-template-columns:minmax(0,1fr) minmax(245px,24%);gap:14px}.panel{background:var(--panel);border:1px solid var(--edge);border-radius:8px;overflow:hidden;min-width:0}.panelhead{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--edge);min-height:44px}.sectionlabel{font-weight:650;font-size:11px;color:#dce5e2;display:flex;align-items:center;gap:9px}.sectionlabel svg{width:15px;height:15px;stroke:var(--mint);fill:none;stroke-width:1.6}.status{font:10px var(--mono);color:var(--mint);display:flex;align-items:center;gap:7px}.dot{width:6px;height:6px;display:inline-block;background:var(--mint);border-radius:50%}.scene{position:relative;background:#0b141b}.scene>svg{width:100%;height:clamp(285px,33vh,410px);display:block;touch-action:none;cursor:crosshair}.plotbar{display:flex;justify-content:space-between;align-items:center;gap:8px;border-top:1px solid var(--edge);padding:9px 14px}.legend{color:var(--muted);font:10px var(--mono);gap:13px}.legend span{display:flex;align-items:center;gap:5px}.keyline{display:inline-block;width:16px;border-top:2px solid var(--mint)}.keyline.recoil{border-top:2px dashed var(--gold)}.keyline.vector{border-color:#9fbbd5}.speed{display:flex;gap:2px;align-items:center}.speed button{padding:4px 7px;background:transparent;font:11px var(--mono);border-color:transparent}.speed .active{background:#30423d;color:var(--mint);border-color:#50665e}.speed>svg{width:14px;height:14px;stroke:var(--muted);fill:none;margin-right:4px}.telemetry .panelhead{padding-inline:16px}.telebody{padding:0 16px 12px}.instrument{padding:13px 0 12px;border-bottom:1px solid var(--edge)}.micro,.spec,.foot{color:var(--muted)}.big{font:clamp(25px,2.2vw,36px)/1.05 var(--mono);letter-spacing:-.06em;margin-top:4px}.big small{font:13px var(--mono);color:var(--muted);letter-spacing:0}.oxygen,.dv{color:var(--mint)}.meter{height:4px;margin-top:9px;background:#283333;position:relative}.meter i{display:block;height:100%;background:var(--mint)}.meter:after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(to right,transparent 0 calc(5% - 2px),#162021 calc(5% - 2px) 5%)}.duo{display:grid;grid-template-columns:1fr 1fr;gap:11px}.duo b{display:block;font:19px var(--mono);letter-spacing:-.06em;margin-top:4px}.duo small{font-size:11px;color:var(--muted)}.raw{margin-top:9px;display:grid;grid-template-columns:1fr 1fr;gap:6px 10px;color:var(--muted);font:10px var(--mono)}.raw b{font-weight:400;color:#dbe7e4}.assist{background:#1e2929;border-top:1px solid var(--edge);padding:10px 16px;font:11px/1.5 var(--mono);color:#c7d6d1}.assist strong{color:var(--gold);font-weight:500}.assist .micro{font-size:9px;margin-bottom:3px}.rack{margin-top:14px}.rack .panelhead{border-bottom:0;padding-bottom:4px}.spec{font-size:10px;letter-spacing:.035em}.tools{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;padding:9px 14px 14px}.tool{position:relative;text-align:left;background:#1b2225;padding:7px 10px 10px;min-width:0}.tool.selected{background:#20312e;border-color:#81c8ad;box-shadow:inset 0 -2px #9ce8ce}.tool b,.tool small{display:block}.tool b{font-size:13px;font-weight:600}.tool small{font:10px var(--mono);color:var(--muted);margin-top:4px}.tool svg{width:100%;height:43px;display:block}.slot{position:absolute;top:7px;left:8px;color:var(--muted);font:9px var(--mono)}.tool.selected .slot{color:var(--mint)}.control{display:grid;grid-template-columns:minmax(180px,.82fr) minmax(220px,1.15fr) auto;align-items:center;gap:24px;border-top:1px solid var(--edge);padding:12px 16px;background:#192023}.heading{display:flex;align-items:center;gap:10px}.heading>svg{width:42px;height:42px;flex:none}.inc{gap:6px}.inc button{font:14px var(--mono);width:25px;height:24px}.inc output{font:18px var(--mono);min-width:47px;text-align:center}.powerrow{display:flex;justify-content:space-between;gap:10px;align-items:center}.powerrow output{font:13px var(--mono);color:var(--gold)}input[type=range]{accent-color:var(--gold);width:100%;cursor:pointer;height:14px;margin:5px 0 0}.throw{background:var(--gold);color:#231a0e;border-color:var(--gold);font-weight:700;padding:11px 18px;display:flex;align-items:center;justify-content:center;gap:9px;min-width:156px}.throw:hover:enabled{background:#ffd29a;border-color:#ffd29a}.throw svg{stroke:currentColor;fill:none;stroke-width:1.8}.advisory{display:flex;gap:13px;align-items:baseline;border-left:2px solid #718e85;padding:3px 12px;margin-top:17px;color:#c0ccca;font-size:12px}.advisory .micro{color:var(--mint);white-space:nowrap}.foot{font-size:9px;letter-spacing:.035em;display:flex;justify-content:space-between;gap:8px;margin-top:15px}.plottext{font:9px var(--mono);letter-spacing:1px}.plotvalue{font:11px var(--mono)}dialog{color:var(--ink);background:#192023;border:1px solid #536260;border-radius:10px;width:min(450px,calc(100% - 28px));padding:23px;box-shadow:0 18px 95px #0009}dialog::backdrop{background:#070c10b5}dialog h2{font-size:26px;letter-spacing:-.035em;margin:5px 0 12px}dialog p,dialog li,dialog dd{color:#c2cfcc;font-size:14px;line-height:1.55}dialog ul{padding-left:19px}dialog li{margin:7px 0}.dialogrow{display:flex;justify-content:space-between;align-items:center;margin:16px 0;gap:10px}.dialogactions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}.dialogactions button{padding:9px 14px}.primary{color:#10201a;background:var(--mint);border-color:var(--mint)}.primary:hover:enabled{background:#c0f8df}.dialogstats{display:grid;grid-template-columns:1fr auto;gap:8px 16px}.dialogstats dd{margin:0;text-align:right;font-family:var(--mono)}.dialogstats dt{color:var(--muted)}.sr{position:absolute;width:1px;height:1px;clip-path:inset(50%);overflow:hidden}[hidden]{display:none!important}
+@media(min-width:1650px){.scene>svg{height:420px}.tool svg{height:56px}}
+@media(max-width:900px){.bar,main{padding-inline:16px}.deck{grid-template-columns:minmax(0,1fr) 228px}.legend{gap:6px}.plotbar{flex-wrap:wrap}.control{gap:12px}.telebody{padding-inline:12px}.tool b{font-size:12px}.tool{padding-inline:7px}.tools{padding-inline:10px;gap:5px}.foot{flex-wrap:wrap}}
+@media(max-width:720px){main{padding-top:16px}.bar{padding-block:12px}.tag{display:none}.mission{align-items:center;flex-wrap:wrap}.deck{grid-template-columns:1fr}.scene>svg{height:clamp(260px,58vw,355px)}.telebody{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}.telebody .instrument{padding:8px 0}.telebody .duo{border-bottom:0}.raw{align-content:center}.telemetry .panelhead{min-height:35px;padding-block:8px}.assist{padding:6px 12px}.tools{grid-template-columns:repeat(3,1fr)}.control{grid-template-columns:1fr 1fr}.throw{grid-column:1/-1;width:100%}.advisory{align-items:start;flex-direction:column;gap:4px}.foot{line-height:1.6}.tool svg{height:39px}.panelhead{padding-inline:12px}}
+@media(max-width:430px){.wordmark{font-size:16px}.brand{gap:7px}.brand>svg{width:30px}.settings{gap:5px}.quiet{padding:7px 9px}.control{gap:8px;padding-inline:10px}.heading{gap:3px}.heading>svg{width:31px}.legend{font-size:9px}.settings select{padding:7px 4px}.mission{gap:10px}.foot span:last-child{display:none}}
+</style></head><body>
+<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" aria-hidden="true" style="position:absolute"><defs>
+<linearGradient id="silver" x2=".25" y2="1" gradientUnits="objectBoundingBox"><stop stop-color="#f0f2df"/><stop offset=".23" stop-color="#bdc7c6"/><stop offset=".48" stop-color="#87999f"/><stop offset=".75" stop-color="#667a85"/><stop offset="1" stop-color="#293c49"/></linearGradient>
+<linearGradient id="suit" x2=".55" y2="1"><stop stop-color="#fffeea"/><stop offset=".48" stop-color="#d6dcd3"/><stop offset=".8" stop-color="#a0adb1"/><stop offset="1" stop-color="#596f7d"/></linearGradient>
+<linearGradient id="visor" x2=".8" y2="1"><stop stop-color="#ffde9e"/><stop offset=".26" stop-color="#c39c69"/><stop offset=".52" stop-color="#5d4535"/><stop offset="1" stop-color="#152731"/></linearGradient>
+<linearGradient id="solar" x2=".45" y2="1"><stop stop-color="#718797"/><stop offset=".46" stop-color="#405666"/><stop offset="1" stop-color="#263f50"/></linearGradient>
+<pattern id="cells" width="10" height="7" patternUnits="userSpaceOnUse"><path d="M0 .5H10M.5 0V7" fill="none" stroke="#c5b998" opacity=".66" stroke-width=".65"/><path d="M2 0v7m2-7v7m2-7v7m2-7v7" stroke="#c6c8bc" opacity=".19" stroke-width=".45"/></pattern>
+<pattern id="truss" width="15" height="12" patternUnits="userSpaceOnUse"><path d="M0 0l15 12M0 12L15 0" fill="none" stroke="#a3afb1" stroke-width="1.5"/></pattern>
+<g id="wing"><path d="M-99 0H0v37h-99z" fill="url(#solar)" stroke="#beb9a4" stroke-width="1.7"/><path d="M-99 0H0v37h-99z" fill="url(#cells)"/><path d="M-74 0v37m25-37v37m25-37v37" stroke="#cabaa0" stroke-width="1.6"/></g>
+<g id="station" stroke-linejoin="round">
+<g transform="translate(-88,-4) rotate(-19)">
+<path d="M-8 -83H5v176H-8z" fill="#42545c" stroke="#acb6b4"/><path d="M-8 -83H5v176H-8z" fill="url(#truss)"/>
+<g transform="translate(-8,-87)"><use href="#wing"/><use href="#wing" transform="translate(14) scale(-1 1)"/></g>
+<g transform="translate(-8,-44)"><use href="#wing"/><use href="#wing" transform="translate(14) scale(-1 1)"/></g>
+<g transform="translate(-8,19)"><use href="#wing"/><use href="#wing" transform="translate(14) scale(-1 1)"/></g>
+<g transform="translate(-8,62)"><use href="#wing"/><use href="#wing" transform="translate(14) scale(-1 1)"/></g>
+<path d="M-138 -4H93v11h-231z" fill="#36444c" stroke="#9da8a7"/><path d="M-138 -4H93v11h-231z" fill="url(#truss)"/>
+<g stroke="#465963" stroke-width="1.2"><path d="m-119 -9 8-6h28l9 7V9l-9 6h-28l-8-6z" fill="url(#silver)"/><rect x="-85" y="-8" width="18" height="17" rx="3" fill="url(#silver)"/><path d="m-70 -11 8-6h34l7 6v22l-7 6h-34l-8-6z" fill="url(#silver)"/><path d="M-63 -14v28m6-30v32m23-32v32m5-29v27m-76-28v26m17-24v23" fill="none"/><path d="M-48 -15v-20h8v20" fill="#7d8e91"/></g>
+<g stroke="#415661" stroke-width="1.5"><path d="M-17 -16l7-9h21l8 9v30l-8 9h-21l-7-9z" fill="url(#suit)"/><path d="M-17 -7h35M-17 10h35" opacity=".75"/><path d="M17 -12l8-6h41l9 8v20l-9 7H25l-8-6z" fill="url(#silver)"/><path d="M26 -16v30m5-31v32m25-32v32m6-30v27" fill="none"/><rect x="35" y="-10" width="15" height="5" rx="1" fill="#acb8b5"/><path d="M76 -9h12v17H76z" fill="url(#silver)"/><path d="M85 -10h6v20h-6z" fill="#93aaab"/></g>
+<g fill="none" stroke="#b9c6c1" stroke-width="1.4"><path d="M-109 -12v-17l-9-8m10 7 12-7m88 19-13-15v-18m5 6-12 4"/><path d="M6 23v11h14v-6"/></g></g></g>
+<g id="astronaut" stroke="#516575" stroke-linejoin="round" stroke-linecap="round" stroke-width="1.2">
+<g transform="rotate(17)"><rect x="-17" y="-13" width="14" height="37" rx="4" fill="url(#silver)"/><path d="M-16 -5h5v18h-5" fill="#839399"/>
+<path d="m-8 15-1 11-6 9 2 6 7-2 9-12 2-10z" fill="url(#suit)"/><path d="m1 18 2 11 8 8 6-2-1-5-6-8 1-8z" fill="url(#suit)"/>
+<path d="m-15 34-4 6 1 4 7-2 3-6m17-2 4 6 7 1 1-4-5-6" fill="#9eadae"/><path d="m-11 28 6 3m-7 0 5 3m12-5 5-4m-3 6 6-4" fill="none"/>
+<path d="m-9 -10-9 4-4 11-7 4 2 5 10-3 7-11m17-10 7 1 6-8 4 2-3 13-9 6" fill="url(#suit)"/><path d="m-28 8-4 3 2 5 4-2m49-29 2-4 4 2-1 7-5-1" fill="url(#suit)"/>
+<path d="m-10 -11 15-3 9 12-3 19-8 6-14-5-3-16z" fill="url(#suit)"/><path d="M-10 11 9 14l-1 5-18-4z" fill="#7b8b91"/><rect x="-5" y="-7" width="12" height="13" rx="2" fill="#b9c8c7"/><path d="M-3 -4h7v4h-7z" fill="#4d6a79"/><circle cx="2" cy="3" r="1.1" fill="#e88e51"/><path d="m-19 0 6 3m27-5 5 2" stroke="#cb825b" stroke-width="3"/>
+<ellipse cx="0" cy="-18" rx="12.5" ry="13.8" fill="url(#suit)"/><path d="M-8 -23q7-7 16-1 5 3 2 12-8 5-16 0-4-4-2-11z" fill="url(#visor)" stroke="#6d746d"/><path d="M-5 -22q4-3 9-2" stroke="#f2dab0" stroke-width="2"/><path d="M-9 -9q9 5 17 0" stroke="#73848b" stroke-width="3"/></g></g>
+<g id="t0" transform="rotate(-29)" stroke="#43525b" stroke-width="1.5"><path d="M-27 -3h35l6-6 8-1-4 6 4 6 7-2-3 7-8 3-9-6h-36q-6-4 0-7z" fill="url(#silver)"/><circle cx="-24" cy=".4" r="1.7" fill="#28373d"/><path d="M-17 0H5" stroke="#cad3cd"/></g>
+<g id="t1" transform="rotate(-14)" stroke="#455962" stroke-width="1.4"><path d="M-21 -14h28l9 5v13H5L0 20h-10l4-18h-17z" fill="url(#suit)"/><path d="M-22 -12h9v15h-9zM15 -6h9v7h-9zM-11 17H2v6h-15z" fill="#697f87"/><path d="M24 -3h9" stroke="#b8c5c4" stroke-width="3"/><path d="M-9 -8H6" stroke="#c99458" stroke-width="5"/><path d="M-7 7h8m-9 4h8" stroke="#83999c"/></g>
+<g id="t2" transform="rotate(-28)" stroke="#43545d" stroke-width="1.4"><rect x="-22" y="-10" width="37" height="20" rx="5" fill="url(#silver)"/><path d="M-17 -10v20m3-20v20m23-20v20" stroke="#617781"/><path d="M14 -7h6v14h-6z" fill="#b6c2bf"/><path d="M21 -3h7v6h-7z" fill="#dbb37a"/><path d="M-7 -6h10v5H-7z" fill="#809593"/></g>
+<g id="t3" transform="rotate(-23)" stroke="#465962" stroke-width="1.4"><path d="m-22 -9 9-6h28l7 6v19l-8 5h-30l-6-5z" fill="url(#silver)"/><path d="M-22 -8h36l8-3M14 -8v21m-25-22V9" fill="none"/><path d="M-4 -5H8v7H-4z" fill="#d5a96e"/><path d="M-14 -16v-4h8v4m12 0v-4h7v4" fill="#9aabae"/></g>
+<g id="t4" transform="rotate(-29)" stroke="#50626a" stroke-width="1.6"><path d="M-25 -4H7v-9h10v9h7v8h-7v9H7V4h-32z" fill="url(#suit)"/><path d="M-24 -4h11v8h-11z" fill="#6f848b"/><path d="M9 -8h6m-6 16h6" stroke="#bf985e"/></g>
+<g id="t5" transform="rotate(-28)" stroke="#52636b" stroke-width="1.6"><path d="M-23 -4h31v8h-31q-5-4 0-8z" fill="url(#silver)"/><path d="M7 -9h16l4 5v9l-4 4H7z" fill="url(#suit)"/><path d="M12 -8V8m5-16V8m5-14V6" stroke="#768a92"/><circle cx="-21" cy="0" r="1.5" fill="#2e3a3f"/></g>
+<symbol id="cross" viewBox="0 0 20 20"><circle cx="10" cy="10" r="5.8"/><path d="M10 0v6m0 8v6M0 10h6m8 0h6"/></symbol><symbol id="signal" viewBox="0 0 20 20"><path d="M1 12h4l3-8 4 13 3-8h4"/></symbol><symbol id="rackicon" viewBox="0 0 20 20"><rect x="2" y="6" width="16" height="11" rx="2"/><path d="M6 6V3h8v3M2 10h16m-10 0v2h4v-2"/></symbol><symbol id="book" viewBox="0 0 20 20"><path d="M2 4q5-2 8 1 3-3 8-1v12q-4-2-8 1-4-3-8-1zM10 5v11"/></symbol><symbol id="restart" viewBox="0 0 20 20"><path d="M3 9a7 7 0 1 1 1 6M3 3v6h6"/></symbol><symbol id="launch" viewBox="0 0 20 20"><path d="m3 16 12-12M6 4h10v10M2 11l4-4"/></symbol>
+</defs></svg><header><div class="bar"><div class="brand"><svg viewBox="0 0 40 40" aria-hidden="true"><rect x="1" y="1" width="38" height="38" rx="9" fill="#a0e5cb"/><g stroke="#16362d" fill="none" stroke-width="2"><ellipse cx="20" cy="20" rx="15" ry="6" transform="rotate(-40 20 20)"/><path d="m15 24 3-13 10 6-13 7z" fill="#16362d"/></g></svg><div><div class="wordmark">UNTETHERED</div><div class="subbrand">EVA return simulator</div></div></div><div class="toptools"><span class="tag">Alpha v0.1</span><button class="quiet guide" id="guide"><svg aria-hidden="true"><use href="#book"/></svg> Flight guide</button></div></div></header>
+<main><div class="mission"><div><div class="eyebrow" id="missionId">Scenario 01 / 03</div><h1 id="missionTitle">Tether separation</h1></div><div class="settings"><select id="difficulty" aria-label="Mission difficulty"><option>Easy</option><option>Medium</option><option>Hard</option></select><button class="quiet" id="setup"><svg aria-hidden="true"><use href="#restart"/></svg> New mission</button><button class="quiet" id="pause">Start clock</button></div></div>
+<div class="deck"><section class="panel"><div class="panelhead"><h2 class="sectionlabel"><svg aria-hidden="true"><use href="#cross"/></svg> Navigation plot</h2><span class="status"><i class="dot"></i><span id="status">Standby</span></span></div>
+<div class="scene"><svg id="plot" tabindex="0" role="application" aria-label="Navigation plot. Click to aim, or use the left and right arrow keys to set throw bearing." viewBox="0 0 860 345"><defs><radialGradient id="space"><stop stop-color="#20313b"/><stop offset=".6" stop-color="#14212b"/><stop offset="1" stop-color="#0b141b"/></radialGradient><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#688392" opacity=".13"/></pattern><marker id="vTip" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="m0 0 10 5-10 5z" fill="#a4c0db"/></marker><marker id="pTip" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="m0 0 10 5-10 5z" fill="#edc080"/></marker></defs>
+<rect width="100%" height="100%" fill="url(#space)"/><rect width="100%" height="100%" fill="url(#grid)"/><g id="stars"></g><g id="rings" stroke="#78909a" fill="none" opacity=".18" stroke-width=".8"></g>
+<use id="craft" href="#station"/><g id="goal"><circle id="zone" fill="#9ce8ce" fill-opacity=".09" stroke="#9ce8ce" stroke-dasharray="3 4"/><path d="M-4 0h8m-4-4v8" stroke="#a6e6d1"/></g>
+<line id="coast" stroke="#91d8bb" stroke-width="1.1" stroke-dasharray="3 5"/><line id="trial" stroke="#e9b977" stroke-width="1.5" stroke-dasharray="6 5"/><line id="vArrow" stroke="#a4c0db" stroke-width="2" marker-end="url(#vTip)"/><g id="aim" stroke="#f4bc72" fill="none"><path d="M28 0h27m-3-3 4 3-4 3" stroke-dasharray="3 2"/><circle cx="65" cy="0" r="5"/><path d="M56 0h5m8 0h5m-9-9v5m0 8v5"/></g>
+<g id="eject" visibility="hidden"><use id="spentTool"/></g><use id="suitMan" href="#astronaut"/><g id="craftLabel"><path d="M0 0l12-16h21" fill="none" stroke="#82b4a1"/><text x="12" y="-21" class="plottext" fill="#a1deca">CAPTURE ZONE</text></g><g id="evaLabel"><path d="m0 0 9 12h12" stroke="#899ba6" fill="none"/><text x="25" y="16" class="plottext" fill="#c9d5d7">EVA–01</text></g>
+<g transform="translate(17 21)" fill="#a5b5bd" class="plottext"><text>RELATIVE MOTION / 2D</text></g><g id="scale" stroke="#95a6aa" fill="#c1cccf"><path id="scaleLine" fill="none"/><text x="0" y="-6" id="scaleText" stroke="none" class="plottext"></text></g></svg></div>
+<div class="plotbar"><div class="legend"><span><i class="keyline vector"></i>Velocity</span><span id="coastKey"><i class="keyline" style="border-top-style:dotted"></i>Coast</span><span id="trialKey"><i class="keyline recoil"></i>After throw</span></div><div class="speed" id="speeds" aria-label="Simulation speed"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7"/><path d="M10 5v6l4 2"/></svg></div></div></section>
+<section class="panel telemetry"><div class="panelhead"><h2 class="sectionlabel"><svg aria-hidden="true"><use href="#signal"/></svg> Suit telemetry</h2></div><div class="telebody"><div class="instrument"><div class="micro">Oxygen remaining</div><div class="big oxygen" id="oxygen">15:00</div><div class="meter"><i id="oxygenBar"></i></div></div><div class="instrument"><div class="micro">Remaining Δv budget</div><div class="big dv"><span id="budget"></span> <small>m/s</small></div></div><div class="duo instrument"><div><div class="micro">Hull distance</div><b id="range"></b></div><div><div class="micro">Bearing</div><b id="bearing"></b></div></div><div class="raw"><span>Vx <b id="vx"></b></span><span>Vy <b id="vy"></b></span><span>Radial <b id="radial"></b></span><span>Mass <b id="mass"></b></span></div></div><div class="assist"><div class="micro" id="assistMode"></div><div id="prediction"></div></div></section></div>
+<section class="panel rack"><div class="panelhead"><h2 class="sectionlabel"><svg aria-hidden="true"><use href="#rackicon"/></svg> Equipment rack</h2><span class="spec" id="count"></span></div><div class="tools" id="tools"></div><div class="control"><div class="heading"><svg viewBox="-22 -22 44 44" aria-hidden="true"><circle r="17" stroke="#546563" fill="#172224"/><path d="M-20 0h5m30 0h5M0-20v5m0 30v5" stroke="#749087"/><path id="needle" d="M-10 0H12m-5-4 6 4-6 4" fill="none" stroke="#f4bc72" stroke-width="2"/></svg><div><div class="micro">Throw bearing</div><div class="inc"><button id="minus" aria-label="Decrease throw bearing">−</button><output id="angle"></output><button id="plus" aria-label="Increase throw bearing">+</button></div></div></div><label><span class="powerrow"><span class="micro">Throw power</span><output id="powerLabel" for="power"></output></span><input id="power" aria-label="Throw power" type="range" min="1" max="100" value="65"></label><button class="throw" id="throw"><svg aria-hidden="true"><use href="#launch"/></svg><span id="throwText">Throw tool</span></button></div></section><div class="advisory"><span class="micro">EVA advisory</span><p id="tip"></p></div><div class="foot"><span>Click plot to aim · 1–6 select · Hold space to wind up · Release to throw</span><span>Flight time <b id="elapsed">00:00</b></span></div><div class="sr" aria-live="polite" id="announce"></div></main>
+<dialog id="modal" aria-labelledby="dialogTitle"><div class="eyebrow" id="dialogKicker"></div><h2 id="dialogTitle"></h2><div id="dialogBody"></div><div class="dialogactions" id="dialogActions"></div></dialog>
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const gear = [
+  {name:'Hatch wrench', mass:2.4, speed:5.2},
+  {name:'Power drill', mass:3.6, speed:4.2},
+  {name:'Gas cartridge', mass:1.2, speed:6.4},
+  {name:'Battery pack', mass:4.8, speed:3.8},
+  {name:'T-handle', mass:0.8, speed:7.0},
+  {name:'Socket driver', mass:0.6, speed:7.4}
+];
+const scenarios = [
+  {name:'Tether separation', x:19, y:-3.8, vx:0.018, vy:0.004, brief:'A slow outward drift from the airlock. Reverse it and aim for the green capture zone.'},
+  {name:'Lateral drift', x:15, y:4.5, vx:0.009, vy:-0.052, brief:'You are sliding across the face of the hull. Cancel your sideways drift to line up a return.'},
+  {name:'Wide separation', x:29, y:-8, vx:0.044, vy:-0.016, brief:'The airlock is falling behind. Combine heavy throws to reverse your drift and close the gap.'}
+];
+const limits = {Easy:900, Medium:600, Hard:450};
+const dryMass = 186, captureRadius = 1.2, fullMask = (1 << gear.length)-1;
+const massOf = mask => gear.reduce((sum,t,i)=>sum + ((mask & (1<<i)) ? t.mass : 0),dryMass);
+const budgets = new Map([[0,0]]);
+function budget(mask) {
+  if (!budgets.has(mask)) {
+    const mass = massOf(mask);
+    let best = 0;
+    gear.forEach((t,i) => {
+      if (mask & (1<<i)) best = Math.max(best, t.mass*t.speed/mass + budget(mask ^ (1<<i)));
+    });
+    budgets.set(mask,best);
+  }
+  return budgets.get(mask);
+}
+function course(x,y,vx,vy) {
+  const vv = vx*vx + vy*vy, dot = x*vx+y*vy;
+  const t = vv ? Math.max(0,-dot/vv) : 0;
+  const clearance = Math.max(0,Math.hypot(x+t*vx,y+t*vy)-captureRadius);
+  const c = x*x + y*y - captureRadius*captureRadius;
+  let eta = null;
+  if (c <= 0) eta = 0;
+  else if (dot < 0 && vv > 0) {
+    const disc = dot*dot-vv*c;
+    if (disc >= -1e-13) eta = c/(-dot + Math.sqrt(Math.max(0,disc)));
+  }
+  return {eta, clearance};
+}
+const radians = a => a*Math.PI/180;
+const degrees = (x,y) => (Math.atan2(y,x)*180/Math.PI+360)%360;
+const norm = a => (a%360+360)%360;
+const fmtAngle = a => String(Math.round(norm(a))%360).padStart(3,'0')+'°';
+function clock(seconds) {
+  const s = Math.max(0,seconds);
+  return String(Math.floor(s/60)).padStart(2,'0')+':'+String(Math.floor(s%60)).padStart(2,'0');
+}
+const signed = n => (n<0?'−':'+')+Math.abs(n).toFixed(3);
+const line = (id,x,y,xx,yy) => {
+  const el=$(id);
+  el.setAttribute('x1',x); el.setAttribute('y1',y);
+  el.setAttribute('x2',xx); el.setAttribute('y2',yy);
+};
+const at = (id,x,y,extra='') => $(id).setAttribute('transform','translate('+x+' '+y+') '+extra);
+const visible = (id,show) => $(id).setAttribute('visibility',show?'visible':'hidden');
+const isAvailable = i => i>=0 && Boolean(state.mask & (1<<i));
+const live = () => state.phase==='ready' || state.phase==='flying';
+let state, camera, charge=null, flash=null, anim=null, lastFrame=null, dialogKind='', previousPhase='', returnFocus=null;
+let plotW=860, plotH=345;
+function newFlight(index=0,level='Easy') {
+  const s=scenarios[index];
+  state={...s, index,level, phase:'ready', elapsed:0, oxygen:limits[level], mask:fullMask,
+    selected:0, bearing:0, power:65, rate:1, throws:0, spent:0, closest:Math.hypot(s.x,s.y)-captureRadius,
+    lastImpulse:0,tip:'Select a tool and click the plot to aim. Your suit will move in the opposite direction.'};
+  charge=null; flash=null; anim=null; lastFrame=null;
+  $('missionId').textContent='Scenario '+String(index+1).padStart(2,'0')+' / 03';
+  $('missionTitle').textContent=s.name;
+  $('difficulty').value=level; $('power').value=state.power;
+  renderGear(); render();
+}
+function impulse(i,power,bearing) {
+  if (!isAvailable(i)) return {dx:0,dy:0,ux:0,uy:0};
+  const tool=gear[i], angle=radians(bearing), speed=tool.speed*power/100;
+  const ux=speed*Math.cos(angle), uy=speed*Math.sin(angle), fraction=tool.mass/massOf(state.mask);
+  return {dx:-fraction*ux, dy:-fraction*uy, ux, uy};
+}
+function throwTool() {
+  if (!live() || !isAvailable(state.selected) || $('modal').open) return;
+  const i=state.selected, t=gear[i], kick=impulse(i,state.power,state.bearing);
+  state.vx+=kick.dx; state.vy+=kick.dy;
+  anim={x:state.x,y:state.y,vx:state.vx+kick.ux,vy:state.vy+kick.uy,age:0,i};
+  state.mask ^= 1<<i;
+  state.lastImpulse=Math.hypot(kick.dx,kick.dy); state.spent+=state.lastImpulse; state.throws++;
+  state.selected=gear.findIndex((_,k)=>isAvailable(k));
+  state.phase='flying'; lastFrame=null;
+  const report=t.name+' released · Δv '+state.lastImpulse.toFixed(3)+' m/s';
+  flash={text:report,until:performance.now()+2400}; $('announce').textContent=report;
+  state.tip=contextTip(); renderGear();
+  checkEmpty(); render();
+}
+function contextTip() {
+  const path=course(state.x,state.y,state.vx,state.vy);
+  if (state.level==='Easy' && path.eta!==null && path.eta<=state.oxygen) return 'Your coast path enters the capture zone. Save your tools and fast-forward the return.';
+  if (state.closest<5) return 'Near the hatch, a light tool gives you a smaller course correction.';
+  const tips=['Correct your lateral velocity as well as your outward drift.',
+    'Your velocity persists between throws. Use time acceleration to watch a long coast.',
+    'Moving toward the spacecraft does not guarantee an intercept.',
+    'As your suit gets lighter, each remaining tool delivers more recoil.',
+    'Keep a light tool in reserve for the final approach.'];
+  return tips[(state.throws-1+tips.length)%tips.length];
+}
+function checkEmpty() {
+  if (!state.mask) {
+    const {eta}=course(state.x,state.y,state.vx,state.vy);
+    if (eta===null || eta>state.oxygen) finish('Return lost','All equipment has been released. Your final coast cannot reach the capture zone before oxygen runs out.');
+  }
+}
+function advance(dt) {
+  if (state.phase!=='flying' || dt<=0) return;
+  const {x,y,vx,vy}=state, {eta}=course(x,y,vx,vy);
+  const step=Math.min(dt,state.oxygen,eta??Infinity);
+  const vv=vx*vx+vy*vy;
+  const closestT=vv ? Math.min(step,Math.max(0,-(x*vx+y*vy)/vv)) : 0;
+  state.closest=Math.min(state.closest,Math.max(0,Math.hypot(x+vx*closestT,y+vy*closestT)-captureRadius));
+  state.x+=vx*step; state.y+=vy*step;
+  state.oxygen=Math.max(0,state.oxygen-step); state.elapsed+=step;
+  if (anim) {anim.x+=anim.vx*step;anim.y+=anim.vy*step;anim.age+=step;if(anim.age>2.5) anim=null;}
+  if (eta!==null && eta<=step) finish('Capture confirmed','Your suit entered the airlock capture zone. You made it back.');
+  else if (state.oxygen<=0) finish('Oxygen depleted','Your oxygen supply ran out before you reached the capture zone.');
+}
+function renderGear() {
+  const count=gear.filter((_,i)=>isAvailable(i)).length;
+  $('count').textContent=count+' / 6 tools remaining';
+  [...$('tools').children].forEach((b,i)=>{
+    b.disabled=!isAvailable(i) || !live();
+    b.classList.toggle('selected',state.selected===i);
+    b.setAttribute('aria-pressed',String(state.selected===i));
+    b.querySelector('small').textContent=isAvailable(i)?gear[i].mass.toFixed(1)+' kg':'Released';
+  });
+}
+function selectTool(i) {
+  if (!live() || !isAvailable(i) || charge) return;
+  state.selected=i; renderGear();render();
+}
+function setBearing(value) {if(live()){state.bearing=norm(value);render();}}
+function render() {
+  const s=state, dist=Math.hypot(s.x,s.y), radial=(s.x*s.vx+s.y*s.vy)/(dist||1);
+  $('oxygen').textContent=clock(Math.ceil(s.oxygen)); $('oxygenBar').style.width=(100*s.oxygen/limits[s.level])+'%';
+  $('oxygen').style.color=s.oxygen<60?'var(--gold)':'';
+  $('budget').textContent=budget(s.mask).toFixed(3);
+  $('range').innerHTML=Math.max(0,dist-captureRadius).toFixed(2)+' <small>m</small>';
+  $('bearing').textContent=fmtAngle(degrees(-s.x,-s.y));
+  $('vx').textContent=signed(s.vx); $('vy').textContent=signed(s.vy);
+  $('radial').textContent=signed(radial); $('mass').textContent=massOf(s.mask).toFixed(1)+' kg';
+  $('angle').textContent=fmtAngle(s.bearing); $('needle').setAttribute('transform','rotate('+(-s.bearing)+')');
+  $('power').value=s.power; $('powerLabel').textContent=s.power+'%';
+  $('elapsed').textContent=clock(s.elapsed);
+  $('tip').textContent=s.tip;
+  $('throwText').textContent=charge?.winding?'Release to throw':'Throw tool';
+  $('throw').disabled=!live() || !s.mask;
+  for (const id of ['plus','minus','power']) $(id).disabled=!live() || !s.mask;
+  $('pause').disabled=false;
+  $('pause').textContent=({ready:'Start clock',flying:'Ⅱ  Pause',paused:'▷  Resume',ended:'Debrief'})[s.phase];
+  $('status').textContent=flash && performance.now()<flash.until && s.phase==='flying' ? flash.text :
+    ({ready:'Awaiting first throw',flying:'Live tracking',paused:'Paused',ended:'Mission ended'})[s.phase];
+  [...$('speeds').children].filter(el=>el.tagName==='BUTTON').forEach(el=>{
+    const active=Number(el.value)===s.rate;
+    el.classList.toggle('active',active);el.setAttribute('aria-pressed',String(active));
+  });
+  const k=impulse(s.selected,s.power,s.bearing), pvx=s.vx+k.dx,pvy=s.vy+k.dy;
+  const path=course(s.x,s.y,pvx,pvy);
+  const preview=s.mask?'After throw':'Current coast';
+  if(s.level==='Easy') {
+    $('assistMode').textContent=preview+' / full prediction';
+    $('prediction').innerHTML='<strong>'+signed(pvx)+', '+signed(pvy)+'</strong> m/s<br>'+
+      (path.eta===null?'Miss distance '+path.clearance.toFixed(2)+' m':'Intercept '+clock(Math.ceil(path.eta))+' · Miss 0.00 m'+(path.eta>s.oxygen?' · Low O₂':''));
+    if (s.mask && s.throws) {
+      const drift=course(s.x,s.y,s.vx,s.vy);
+      $('prediction').append(document.createElement('br'), drift.eta===null?'Coast misses by '+drift.clearance.toFixed(2)+' m':'Coast intercept '+clock(Math.ceil(drift.eta))+(drift.eta>s.oxygen?' · Low O₂':''));
+    }
+  } else if (s.level==='Medium') {
+    $('assistMode').textContent=preview+' / vector assist';
+    $('prediction').textContent=signed(pvx)+', '+signed(pvy)+' m/s';
+  } else {
+    $('assistMode').textContent='Manual navigation'; $('prediction').textContent='Read suit velocity and target bearing.';
+  }
+  $('coastKey').hidden=s.level!=='Easy'; $('trialKey').hidden=s.level==='Hard'||!s.mask;
+  renderPlot(pvx,pvy);
+}
+function renderPlot(pvx,pvy) {
+  const s=state,w=plotW,h=plotH;
+  const left=Math.min(-17,s.x-5),right=Math.max(8,s.x+8);
+  const low=Math.min(-12,s.y-5),high=Math.max(11,s.y+5);
+  const scale=Math.min((w-20)/(right-left),(h-32)/(high-low));
+  const ox=w/2-(left+right)*scale/2, oy=h/2+(low+high)*scale/2;
+  const px=ox+s.x*scale,py=oy-s.y*scale;
+  camera={px,py,ox,oy,scale};
+  const stationScale=scale*.076;
+  at('craft',ox+2*stationScale,oy+34*stationScale,'scale('+stationScale+')');
+  at('goal',ox,oy); $('zone').setAttribute('r',captureRadius*scale);
+  at('craftLabel',ox,oy-captureRadius*scale-3);
+  const suitScale=Math.min(.98,Math.max(.49,scale*.064));
+  at('suitMan',px,py,'scale('+suitScale+')');
+  at('evaLabel',Math.min(w-73,px+9*suitScale),py+26*suitScale);
+  at('aim',px,py,'rotate('+(-s.bearing)+') scale('+Math.min(1,w/600)+')');visible('aim',Boolean(s.mask));
+  at('rings',ox,oy);
+  [...$('rings').children].forEach((el,i)=>el.setAttribute('r',(i+1)*5*scale));
+  const vectorScale=430*Math.min(1.6,scale/12);
+  line('vArrow',px,py,px+s.vx*vectorScale,py-s.vy*vectorScale);
+  // Draw the measured vector above the suit, with its tail on the suit's edge.
+  const speed=Math.hypot(s.vx,s.vy);
+  if(speed>0) {
+    const sx=s.vx/speed, sy=-s.vy/speed, pad=22*suitScale;
+    line('vArrow',px+sx*pad,py+sy*pad,px+sx*(pad+speed*vectorScale),py+sy*(pad+speed*vectorScale));
+  }
+  visible('vArrow',speed>1e-9);
+  const coast=course(s.x,s.y,s.vx,s.vy);
+  const coastT=Math.min(s.oxygen,coast.eta??Infinity);
+  line('coast',px,py,px+s.vx*scale*coastT,py-s.vy*scale*coastT);
+  visible('coast',s.level==='Easy');
+  const projected=course(s.x,s.y,pvx,pvy);
+  const seconds=s.level==='Medium'?vectorScale/scale:Math.min(s.oxygen,projected.eta??Infinity);
+  line('trial',px,py,px+pvx*scale*seconds,py-pvy*scale*seconds);
+  $('trial').setAttribute('stroke-dasharray',s.level==='Medium'?'none':'6 5');
+  if(s.level==='Medium') {
+    const v=Math.hypot(pvx,pvy),pad=22*suitScale;
+    if(v>0)line('trial',px+pvx/v*pad,py-pvy/v*pad,px+pvx/v*pad+pvx*vectorScale,py-pvy/v*pad-pvy*vectorScale);
+  }
+  $('trial').setAttribute('marker-end',s.level==='Medium'?'url(#pTip)':'none');
+  visible('trial',s.level!=='Hard' && Boolean(s.mask));
+  visible('eject',Boolean(anim));
+  if(anim) {
+    at('eject',ox+anim.x*scale,oy-anim.y*scale,'rotate('+(anim.age*85)+') scale('+suitScale*.55+')');
+    $('spentTool').setAttribute('href','#t'+anim.i);$('eject').style.opacity=Math.min(1,2.5-anim.age);
+  }
+  at('scale',16,h-14);
+  const units=scale>7?5:Math.max(10,Math.round(50/scale/5)*5);
+  $('scaleLine').setAttribute('d','M0 -3v3h'+(scale*units)+'v-3'); $('scaleText').textContent=units+' M';
+}
+
+function stopCharge(restore=true) {
+  if (!charge) return;
+  if(restore) state.power=charge.base;
+  charge=null;
+}
+function toggleClock() {
+  if($('modal').open || state.phase==='ended') return;
+  stopCharge(); flash=null;
+  state.phase=state.phase==='flying'?'paused':'flying'; lastFrame=null;
+  renderGear();render();
+}
+function openDialog(kind,kicker,title,body,actions) {
+  const m=$('modal');
+  if(!m.open) {
+    previousPhase=state.phase;
+    returnFocus=document.activeElement;
+    if(state.phase==='flying') state.phase='paused';
+  }
+  stopCharge(); lastFrame=null; dialogKind=kind;
+  $('dialogKicker').textContent=kicker; $('dialogTitle').textContent=title;
+  $('dialogBody').innerHTML=body; $('dialogActions').replaceChildren();
+  actions.forEach(([label,fn,primary])=>{
+    const b=document.createElement('button');b.textContent=label;b.className=primary?'primary':'';
+    b.addEventListener('click',fn);$('dialogActions').append(b);
+  });
+  if(!m.open) m.showModal();
+  render();
+}
+function closeDialog(resume=true) {
+  if(!$('modal').open)return;
+  $('modal').close();dialogKind='';
+  if(resume && state.phase==='paused' && previousPhase==='flying')state.phase='flying';
+  lastFrame=null;renderGear();render();
+  if(returnFocus?.isConnected && !returnFocus.disabled) returnFocus.focus({preventScroll:true});
+}
+function setup(proposed=state.level) {
+  $('difficulty').value=state.level;
+  const sceneOptions=scenarios.map((v,i)=>'<option value="'+i+'"'+(i===state.index?' selected':'')+'>'+v.name+'</option>').join('');
+  const levels=Object.keys(limits).map(k=>'<option'+(k===proposed?' selected':'')+'>'+k+'</option>').join('');
+  openDialog('setup','Mission setup','New mission',
+    '<label class="dialogrow">Drift scenario <select id="scenarioChoice">'+sceneOptions+'</select></label><p id="scenarioBrief"></p>'+
+    '<label class="dialogrow">Difficulty <select id="levelChoice">'+levels+'</select></label><p id="levelBrief"></p>',
+    [['Cancel',()=>closeDialog()],['Begin mission',()=>{const index=Number($('scenarioChoice').value),level=$('levelChoice').value;closeDialog(false);newFlight(index,level);},true]]);
+  const describe=()=>{
+    $('scenarioBrief').textContent=scenarios[Number($('scenarioChoice').value)].brief;
+    const level=$('levelChoice').value;
+    $('levelBrief').textContent=clock(limits[level])+' oxygen · '+({Easy:'Full trajectory, intercept time and miss distance.',Medium:'Predicted velocity vector.',Hard:'Raw navigation telemetry.'})[level];
+  };
+  $('scenarioChoice').onchange=describe;$('levelChoice').onchange=describe;describe();
+}
+function guide() {
+  openDialog('guide','Flight manual','Get back to the hatch',
+    '<p>Your tether has parted and your thrusters are offline. Reach the mint capture circle before your oxygen runs out.</p>'+
+    '<ul><li><b>Select</b> a tool from the rack or press 1–6. A heavier or faster tool changes your velocity more.</li>'+
+    '<li><b>Aim the throw</b> by clicking or tapping the plot. The gold reticle points where the tool goes. Your suit recoils the other way. Use ← / → for 1° steps, or hold Shift for 10°.</li>'+
+    '<li><b>Choose power</b> with the slider and press Throw tool. For a timed windup, hold Space and release at the desired power. Esc cancels a windup.</li>'+
+    '<li><b>Coast</b> once you have a return path. P pauses flight. The speed controls advance motion and oxygen together.</li></ul>'+
+    '<p>Bearings run counterclockwise from right (000°) to up (090°). Vx, Vy and radial speed use m/s. Positive radial speed means you are moving away. Hull distance measures the gap to the capture circle. The Δv budget is the largest total velocity change available from full-power throws in the best order.</p>',
+    [['Back to flight',()=>closeDialog(),true]]);
+}
+function finish(title,description) {
+  state.phase='ended';state.result={title,description};stopCharge();flash=null;
+  renderGear(); summary();
+}
+function summary() {
+  const s=state;
+  openDialog('summary','Mission debrief',s.result.title,'<p>'+s.result.description+'</p><dl class="dialogstats">'+
+    [['Scenario',s.name],['Difficulty',s.level],['Flight time',clock(s.elapsed)],['Oxygen remaining',clock(Math.ceil(s.oxygen))],
+    ['Tools thrown',s.throws+' / 6'],['Δv applied',s.spent.toFixed(3)+' m/s'],['Closest approach',s.closest.toFixed(2)+' m']].map(([k,v])=>'<dt>'+k+'</dt><dd>'+v+'</dd>').join('')+'</dl>',
+    [['Review plot',()=>closeDialog()],['Fly again',()=>setup(),true]]);
+}
+function windup(time) {
+  if(!charge)return;
+  const duration=time-charge.start;
+  if(duration>=180) {
+    charge.winding=true;
+    state.power=Math.min(100,Math.max(1,Math.round((duration-180)/14)));
+  }
+}
+function beginCharge(source) {
+  if(!live() || !state.mask || $('modal').open || charge)return;
+  charge={source,start:performance.now(),base:state.power,winding:false};
+}
+function releaseCharge(source) {
+  if(charge?.source!==source)return;
+  windup(performance.now());stopCharge(false);throwTool();
+}
+function frame(now) {
+  if(lastFrame!==null && state.phase==='flying' && !$('modal').open) advance(Math.max(0,now-lastFrame)*.001*state.rate);
+  lastFrame=now;
+  windup(now);
+  if(state.phase==='flying'||charge)render();
+  requestAnimationFrame(frame);
+}
+function backgroundPause() {
+  stopCharge();lastFrame=null;
+  if(state.phase==='flying')state.phase='paused';
+  if($('modal').open && previousPhase==='flying')previousPhase='paused';
+  renderGear();render();
+}
+function init() {
+  const ns='http://www.w3.org/2000/svg';
+  let seed=73;
+  const random=()=>{seed=(Math.imul(1664525,seed)+1013904223)>>>0;return seed/4294967296;};
+  for(let i=0;i<260;i++){
+    const star=document.createElementNS(ns,'circle');
+    star.setAttribute('cx',random()*1550);star.setAttribute('cy',random()*530);
+    star.setAttribute('r',.3+random()*.6);star.setAttribute('fill','#d3e3e5');star.setAttribute('opacity',.16+random()*.58);
+    $('stars').append(star);
+  }
+  for(let i=0;i<7;i++)$('rings').append(document.createElementNS(ns,'circle'));
+  gear.forEach((t,i)=>{
+    const b=document.createElement('button');b.className='tool';
+    b.setAttribute('aria-label',(i+1)+'. '+t.name+', '+t.mass+' kilograms, maximum release speed '+t.speed+' meters per second');
+    b.title=t.name+' · '+t.mass+' kg · '+t.speed.toFixed(1)+' m/s maximum';
+    b.innerHTML='<span class="slot">0'+(i+1)+'</span><svg viewBox="-42 -27 84 54" aria-hidden="true"><use href="#t'+i+'"/></svg><b>'+t.name+'</b><small></small>';
+    b.onclick=()=>selectTool(i);$('tools').append(b);
+  });
+  for(const v of [1,2,5,10]) {
+    const b=document.createElement('button');b.value=v;b.textContent=v+'×';b.setAttribute('aria-label',v+' times simulation speed');
+    b.onclick=()=>{state.rate=v;lastFrame=null;render();};$('speeds').append(b);
+  }
+  $('plus').onclick=()=>setBearing(state.bearing+1);$('minus').onclick=()=>setBearing(state.bearing-1);
+  $('power').oninput=e=>{stopCharge(false);state.power=Number(e.target.value);render();};
+  $('plot').onpointerdown=e=>{
+    if(e.button!==0 || !live() || !state.mask)return;
+    const bounds=$('plot').getBoundingClientRect();
+    setBearing(degrees(e.clientX-bounds.left-camera.px,camera.py-(e.clientY-bounds.top)));
+    $('plot').focus({preventScroll:true});
+  };
+  $('throw').addEventListener('pointerdown',e=>{
+    if(e.button!==0)return;
+    $('throw').setPointerCapture(e.pointerId);beginCharge('pointer');
+  });
+  $('throw').addEventListener('pointerup',e=>{
+    if(e.button!==0)return;
+    const rect=$('throw').getBoundingClientRect();
+    if(e.clientX<rect.left||e.clientX>rect.right||e.clientY<rect.top||e.clientY>rect.bottom){stopCharge();render();return;}
+    releaseCharge('pointer');
+  });
+  for(const event of ['pointercancel','lostpointercapture'])$('throw').addEventListener(event,()=>{if(charge?.source==='pointer'){stopCharge();render();}});
+  $('throw').onclick=e=>{if(e.detail===0)throwTool();};
+  $('setup').onclick=()=>setup();$('difficulty').onchange=e=>setup(e.target.value);
+  $('guide').onclick=guide;$('pause').onclick=()=>state.phase==='ended'?summary():toggleClock();
+  $('modal').addEventListener('cancel',e=>{e.preventDefault();closeDialog();});
+  document.addEventListener('keydown',e=>{
+    if($('modal').open || e.altKey || e.ctrlKey || e.metaKey || ['SELECT','INPUT'].includes(e.target.tagName))return;
+    if(e.key==='Escape' && charge){stopCharge();render();return;}
+    if(e.code==='Space'){
+      if(e.target.closest('button') && e.target!==$('throw') && !e.target.closest('.tool'))return;
+      e.preventDefault();if(!e.repeat)beginCharge('key');return;
+    }
+    if(e.code==='KeyP'&&!e.repeat){e.preventDefault();toggleClock();return;}
+    if(!live())return;
+    if(/^[1-6]$/.test(e.key))selectTool(Number(e.key)-1);
+    if(['ArrowLeft','ArrowRight'].includes(e.key)){
+      e.preventDefault();setBearing(state.bearing+(e.key==='ArrowLeft'?1:-1)*(e.shiftKey?10:1));
+    }
+  });
+  document.addEventListener('keyup',e=>{if(e.code==='Space' && charge?.source==='key'){e.preventDefault();releaseCharge('key');}});
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)backgroundPause();});
+  window.addEventListener('blur',backgroundPause);
+  function resize() {
+    const b=$('plot').getBoundingClientRect(); plotW=Math.max(1,b.width);plotH=Math.max(1,b.height);
+    $('plot').setAttribute('viewBox','0 0 '+plotW+' '+plotH); if(state)render();
+  }
+  resize();newFlight();new ResizeObserver(resize).observe($('plot'));requestAnimationFrame(frame);
+}
+init();
+</script><script>
+(() => {
+  const passed=[];
+  const yes=(v,m)=>{if(!v)throw Error(m)};
+  const near=(a,b,m,tol=1e-9)=>yes(Math.abs(a-b)<tol,m+' '+a+' '+b);
+  function test(name,fn) { if($('modal').open)closeDialog(false);newFlight();fn();passed.push(name);}
+  const output=document.createElement('pre');output.id='qa-results';document.body.append(output);
+  try {
+    test('Offline initialization and six selectable tools',()=>{yes($('tools').children.length===6,'rack');yes($('oxygen').textContent==='15:00','clock');yes(state.phase==='ready','standby');yes(!performance.getEntriesByType('resource').some(r=>/^https?:/.test(r.name)),'external request')});
+    test('All 64 inventory budgets match independent brute-force enumeration',()=>{
+      function brute(items,total) {if(!items.length)return 0;return Math.max(...items.map((i,k)=>gear[i].mass*gear[i].speed/total + brute(items.filter((_,j)=>j!==k),total-gear[i].mass)));}
+      for(let mask=0;mask<=fullMask;mask++)near(budget(mask),brute(gear.map((_,i)=>i).filter(i=>mask & (1<<i)),massOf(mask)),'budget');
+    });
+    test('Momentum and release speed conserved for all tools, directions and powers',()=>{
+      for(let i=0;i<6;i++)for(const a of [0,83,185,314])for(const p of [1,35,100]) {
+        const before=massOf(state.mask),after=before-gear[i].mass,k=impulse(i,p,a);
+        for(const [v,d,u] of [[state.vx,k.dx,k.ux],[state.vy,k.dy,k.uy]])near(before*v,after*(v+d)+gear[i].mass*(v+d+u),'momentum');
+        near(Math.hypot(k.ux,k.uy),gear[i].speed*p/100,'relative speed');
+      }
+    });
+    test('First throw via button matches preview and captures inside a large time step',()=>{
+      const k=impulse(0,65,0),v=state.vx+k.dx,w=state.vy+k.dy,p=course(state.x,state.y,v,w);
+      yes(p.eta>0 && p.eta<900,'starter intercept');$('throw').click();near(state.vx,v,'vx');near(state.vy,w,'vy');
+      yes(state.throws===1&&state.mask===62&&$('tools').children[0].disabled,'gear spent');advance(1000);
+      near(state.elapsed,p.eta,'ETA');near(state.oxygen,900-p.eta,'oxygen');yes(state.result.title==='Capture confirmed','rescue');
+      $('dialogActions').firstElementChild.click();$('pause').click();yes($('modal').open && dialogKind==='summary','reopen debrief');
+    });
+    test('Same physics across modes, exact oxygen limits and predictive visibility',()=>{
+      for(const l of Object.keys(limits)){
+        newFlight(0,l);yes(state.oxygen===limits[l],'oxygen');near(impulse(0,65,0).dx,-2.4*5.2*.65/199.4,'difficulty impulse');
+        yes($('trial').getAttribute('visibility')===(l==='Hard'?'hidden':'visible'),'preview leak');
+        yes($('coast').getAttribute('visibility')===(l==='Easy'?'visible':'hidden'),'coast leak');
+        if(l!=='Easy')yes(!/intercept|miss/i.test($('prediction').textContent),'prediction text leak');
+      }
+    });
+    test('Coasting, time rates and pause consume matching simulation time',()=>{
+      for(const b of $('speeds').querySelectorAll('button')){
+        newFlight();b.click();$('pause').click();lastFrame=1000;frame(2000);near(state.elapsed,Number(b.value),'rate');near(state.x,19+.018*Number(b.value),'distance');
+        $('pause').click();const air=state.oxygen;advance(8);near(state.oxygen,air,'paused');
+      }
+      $('guide').click();yes($('modal').open,'guide');$('dialogActions').lastElementChild.click();yes(state.phase==='paused','guide keeps paused state');
+    });
+    test('All three scenarios are rescuable on Hard with rack and bearing controls',()=>{
+      for(let index=0;index<3;index++){
+        if($('modal').open)closeDialog(false);newFlight(index,'Hard');const dist=Math.hypot(state.x,state.y),ux=-state.x/dist,uy=-state.y/dist;
+        const side=state.vx*(-uy)+state.vy*ux,along=state.vx*ux+state.vy*uy;
+        const dv=gear[3].mass*gear[3].speed/massOf(state.mask)+gear[1].mass*gear[1].speed/(massOf(state.mask)-gear[3].mass);
+        const speed=along+Math.sqrt(dv*dv-side*side);
+        setBearing(Math.round(degrees(state.vx-speed*ux,state.vy-speed*uy)));
+        $('power').value=100;$('power').dispatchEvent(new Event('input'));
+        for(const i of [3,1]){$('tools').children[i].click();$('throw').click();}
+        advance(450);yes(state.result?.title==='Capture confirmed','scenario '+index);
+      }
+    });
+    test('Grazing, stationary, receding and already captured trajectories',()=>{
+      near(course(5,1.2,-1,0).eta,5,'tangent');yes(course(5,1.21,-1,0).eta===null,'near miss');yes(course(5,0,0,0).eta===null,'stationary');
+      yes(course(5,0,1,0).eta===null,'receding');near(course(0,0,0,0).eta,0,'inside');
+    });
+    test('Oxygen expiry, empty rack loss, final tool rescue and deadline tie',()=>{
+      newFlight(0,'Hard');toggleClock();advance(999);yes(state.result.title==='Oxygen depleted','oxygen end');near(state.elapsed,450,'deadline');
+      closeDialog(false);newFlight();state.mask=1;state.selected=0;state.bearing=180;throwTool();yes(state.result.title==='Return lost','empty');
+      closeDialog(false);newFlight();state.mask=1;state.selected=0;throwTool();yes(state.phase==='flying','last coast');advance(900);yes(state.result.title==='Capture confirmed','last capture');
+      closeDialog(false);newFlight();state.x=6.2;state.y=0;state.vx=-1;state.vy=0;state.oxygen=course(6.2,0,-1,0).eta;toggleClock();advance(9);yes(state.result.title==='Capture confirmed','tie');
+    });
+    test('Windup, cancel, keyboard inventory and throw controls',()=>{
+      document.body.dispatchEvent(new KeyboardEvent('keydown',{key:'4',bubbles:true}));yes(state.selected===3,'digit');
+      document.body.dispatchEvent(new KeyboardEvent('keydown',{code:'Space',bubbles:true,cancelable:true}));yes(charge?.source==='key','space');
+      charge.start=performance.now()-880;windup(performance.now());near(state.power,50,'half power',1.1);
+      document.body.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true}));yes(state.throws===0 && state.power===65 && charge===null,'cancel');
+      beginCharge('key');charge.start=performance.now()-1900;document.body.dispatchEvent(new KeyboardEvent('keyup',{code:'Space',bubbles:true}));
+      yes(state.power===100&&state.throws===1,'release');
+    });
+    test('Menu configuration, reset, plot aim and narrow layout',()=>{
+      $('setup').click();$('scenarioChoice').value='2';$('levelChoice').value='Medium';$('dialogActions').lastElementChild.click();
+      yes(state.index===2 && state.oxygen===600 && state.throws===0 && state.mask===63,'reset');
+      const b=$('plot').getBoundingClientRect();
+      $('plot').dispatchEvent(new PointerEvent('pointerdown',{clientX:b.left+camera.px,clientY:b.top+camera.py-50,button:0}));
+      near(state.bearing,90,'aim',1);
+      yes(document.documentElement.scrollWidth<=innerWidth+1,'horizontal overflow '+document.documentElement.scrollWidth+' '+innerWidth);
+    });
+    output.textContent='PASS '+passed.length+' groups at '+innerWidth+'px: '+passed.join(' | ');
+  }catch(e){output.textContent='FAIL after '+passed.length+': '+e.message+' / '+e.stack;}
+})();
+</script></body></html>
