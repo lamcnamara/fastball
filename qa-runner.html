@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101517"><title>UNTETHERED · EVA return simulator</title><style>
-:root{color-scheme:dark;--bg:#0e1113;--panel:#181c1e;--edge:#343b3e;--muted:#a0aaaa;--mint:#a9c4b7;--ink:#e5e8e5;--gold:#d4b48b;--mono:Consolas,"SFMono-Regular","Liberation Mono",monospace;--sans:"Segoe UI",Arial,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px var(--sans)}button,select,input{font:inherit}button,select{color:var(--ink);cursor:pointer}button{background:#20282b;border:1px solid var(--edge);border-radius:5px}button:hover:enabled,select:hover{background:#2a3437;border-color:#6b7d81}button:focus-visible,select:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--mint);outline-offset:3px}button:disabled{cursor:default;opacity:.45}button svg{width:15px;height:15px;vertical-align:-3px}header{border-bottom:1px solid var(--edge);background:#14191b}.bar,main{width:min(1512px,100%);margin:auto}.bar{display:flex;align-items:center;justify-content:space-between;padding:17px clamp(16px,3.6vw,58px);gap:12px}.brand{display:flex;align-items:center;gap:13px}.brand>svg{width:38px;height:38px}.wordmark{font-weight:750;letter-spacing:.18em;font-size:20px;line-height:1.1}.subbrand,.micro,.sectionlabel,.spec,.tag,.plotlabel,.foot,.eyebrow{font:10px/1.45 var(--mono);letter-spacing:.105em;text-transform:uppercase}.subbrand{color:var(--muted);letter-spacing:.17em;font-size:9px;margin-top:4px}.toptools,.actions,.caption,.settings,.row,.chips,.legend,.cardhead,.inc,.fr{display:flex;align-items:center;gap:10px}.toptools{gap:17px}.tag{border:1px solid #435050;color:#bccac7;border-radius:4px;padding:4px 7px;letter-spacing:.08em}.quiet{padding:8px 11px;display:inline-flex;align-items:center;gap:7px}.quiet svg{fill:none;stroke:currentColor;stroke-width:1.6}.guide{background:transparent}main{padding:24px clamp(16px,3.6vw,58px) 22px}.mission{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:17px}.eyebrow,.plotlabel{color:var(--mint)}h1,h2,h3,p{margin:0}h1{font-size:clamp(26px,2.4vw,39px);line-height:1.15;letter-spacing:-.04em;margin-top:4px;font-weight:630}.settings{gap:9px}.settings select,.dialogrow select{background:#20282b;border:1px solid var(--edge);border-radius:5px;padding:7px 9px}.panel{background:var(--panel);border:1px solid var(--edge);border-radius:8px;overflow:hidden;min-width:0}.panelhead{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--edge);min-height:44px}.sectionlabel{font-weight:650;font-size:11px;color:#dce5e2;display:flex;align-items:center;gap:9px}.sectionlabel svg{width:15px;height:15px;stroke:var(--mint);fill:none;stroke-width:1.6}.status{font:10px var(--mono);color:var(--mint);display:flex;align-items:center;gap:7px}.dot{width:6px;height:6px;display:inline-block;background:var(--mint);border-radius:50%}.micro,.spec,.foot{color:var(--muted)}.big{font:clamp(25px,2.2vw,36px)/1.05 var(--mono);letter-spacing:-.06em;margin-top:4px}.big small{font:13px var(--mono);color:var(--muted);letter-spacing:0}.oxygen,.dv{color:var(--mint)}.meter{height:4px;margin-top:9px;background:#283333;position:relative}.meter i{display:block;height:100%;background:var(--mint)}.meter:after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(to right,transparent 0 calc(5% - 2px),#162021 calc(5% - 2px) 5%)}.rack{margin-top:14px}.rack .panelhead{border-bottom:0;padding-bottom:4px}.spec{font-size:10px;letter-spacing:.035em}.tools{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;padding:9px 14px 14px}.tool{position:relative;text-align:left;background:#1b2225;padding:7px 10px 10px;min-width:0}.tool.selected{background:#20312e;border-color:#81c8ad;box-shadow:inset 0 -2px #a9c4b7}.tool b,.tool small{display:block}.tool b{font-size:13px;font-weight:600}.tool small{font:10px var(--mono);color:var(--muted);margin-top:4px}.tool svg{width:100%;height:43px;display:block}.slot{position:absolute;top:7px;left:8px;color:var(--muted);font:9px var(--mono)}.tool.selected .slot{color:var(--mint)}.foot{font-size:9px;letter-spacing:.035em;display:flex;justify-content:space-between;gap:8px;margin-top:15px}.plottext{font:9px var(--mono);letter-spacing:1px}.plotvalue{font:11px var(--mono)}dialog{color:var(--ink);background:#192023;border:1px solid #536260;border-radius:10px;width:min(450px,calc(100% - 28px));padding:23px;box-shadow:0 18px 95px #0009}dialog::backdrop{background:#070c10b5}dialog h2{font-size:26px;letter-spacing:-.035em;margin:5px 0 12px}dialog p,dialog li,dialog dd{color:#c2cfcc;font-size:14px;line-height:1.55}dialog ul{padding-left:19px}dialog li{margin:7px 0}.dialogrow{display:flex;justify-content:space-between;align-items:center;margin:16px 0;gap:10px}.dialogactions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}.dialogactions button{padding:9px 14px}.primary{color:#10201a;background:var(--mint);border-color:var(--mint)}.primary:hover:enabled{background:#c0f8df}.dialogstats{display:grid;grid-template-columns:1fr auto;gap:8px 16px}.dialogstats dd{margin:0;text-align:right;font-family:var(--mono)}.dialogstats dt{color:var(--muted)}.sr{position:absolute;width:1px;height:1px;clip-path:inset(50%);overflow:hidden}[hidden]{display:none!important}
+:root{color-scheme:dark;--bg:#0e1113;--panel:#181c1e;--edge:#343b3e;--muted:#c1cecf;--oxygen-fill:#a4ead0;--mint:#a9c4b7;--ink:#e5e8e5;--gold:#d4b48b;--mono:Consolas,"SFMono-Regular","Liberation Mono",monospace;--sans:"Segoe UI",Arial,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px var(--sans)}button,select,input{font:inherit}button,select{color:var(--ink);cursor:pointer}button{background:#20282b;border:1px solid var(--edge);border-radius:5px}button:hover:enabled,select:hover{background:#2a3437;border-color:#6b7d81}button:focus-visible,select:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--mint);outline-offset:3px}button:disabled{cursor:default;color:var(--muted)}.tool:disabled svg{opacity:.52}button svg{width:15px;height:15px;vertical-align:-3px}header{border-bottom:1px solid var(--edge);background:#14191b}.bar,main{width:min(1512px,100%);margin:auto}.bar{display:flex;align-items:center;justify-content:space-between;padding:17px clamp(16px,3.6vw,58px);gap:12px}.brand{display:flex;align-items:center;gap:13px}.brand>svg{width:38px;height:38px}.wordmark{font-weight:750;letter-spacing:.18em;font-size:20px;line-height:1.1}.subbrand,.micro,.sectionlabel,.spec,.tag,.plotlabel,.foot,.eyebrow{font:500 13px/1.35 var(--sans);letter-spacing:.012em}.subbrand{color:var(--muted);letter-spacing:.02em;font-size:12px;margin-top:2px}.toptools,.actions,.caption,.settings,.row,.chips,.legend,.cardhead,.inc,.fr{display:flex;align-items:center;gap:10px}.toptools{gap:17px}.tag{border:1px solid #435050;color:#bccac7;border-radius:4px;padding:4px 7px;letter-spacing:.025em}.quiet{padding:8px 11px;display:inline-flex;align-items:center;gap:7px}.quiet svg{fill:none;stroke:currentColor;stroke-width:1.6}.guide{background:transparent}main{padding:24px clamp(16px,3.6vw,58px) 22px}.mission{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:17px}.eyebrow,.plotlabel{color:var(--mint)}h1,h2,h3,p{margin:0}h1{font-size:clamp(26px,2.4vw,39px);line-height:1.15;letter-spacing:-.04em;margin-top:4px;font-weight:630}.settings{gap:9px}.settings select,.dialogrow select{background:#20282b;border:1px solid var(--edge);border-radius:5px;padding:7px 9px}.panel{background:var(--panel);border:1px solid var(--edge);border-radius:8px;overflow:hidden;min-width:0}.panelhead{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--edge);min-height:44px}.sectionlabel{font-weight:650;font-size:14px;color:#dce5e2;display:flex;align-items:center;gap:9px}.sectionlabel svg{width:15px;height:15px;stroke:var(--mint);fill:none;stroke-width:1.6}.status{font:12px/1.3 var(--sans);color:var(--mint);display:flex;align-items:center;gap:7px}.dot{width:6px;height:6px;display:inline-block;background:var(--mint);border-radius:50%}.micro,.spec,.foot{color:var(--muted)}.big{font:clamp(25px,2.2vw,36px)/1.05 var(--mono);letter-spacing:-.06em;margin-top:4px}.big small{font:13px var(--mono);color:var(--muted);letter-spacing:0}.oxygen,.dv{color:var(--mint)}.rack{margin-top:14px}.rack .panelhead{border-bottom:0;padding-bottom:4px}.spec{font-variant-numeric:tabular-nums}.tools{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;padding:9px 14px 14px}.tool{position:relative;text-align:left;background:#1b2225;padding:7px 10px 10px;min-width:0}.tool.selected{background:#20312e;border-color:#81c8ad;box-shadow:inset 0 -2px #a9c4b7}.tool b,.tool small{display:block}.tool b{font-size:13px;font-weight:600}.tool small{font:12px/1.3 var(--sans);color:var(--muted);margin-top:4px}.tool svg{width:100%;height:43px;display:block}.slot{position:absolute;top:7px;left:8px;color:var(--muted);font:11px var(--mono)}.tool.selected .slot{color:var(--mint)}.foot{display:flex;justify-content:space-between;gap:8px;margin-top:15px}.plottext{font:500 12px var(--sans);paint-order:stroke;stroke:#10181d;stroke-width:2.5px;stroke-linejoin:round}.plotvalue{font:11px var(--mono)}dialog{color:var(--ink);background:#192023;border:1px solid #536260;border-radius:10px;width:min(450px,calc(100% - 28px));padding:23px;box-shadow:0 18px 95px #0009}dialog::backdrop{background:#070c10b5}dialog h2{font-size:26px;letter-spacing:-.035em;margin:5px 0 12px}dialog p,dialog li,dialog dd{color:#c2cfcc;font-size:14px;line-height:1.55}dialog ul{padding-left:19px}dialog li{margin:7px 0}.dialogrow{display:flex;justify-content:space-between;align-items:center;margin:16px 0;gap:10px}.dialogactions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}.dialogactions button{padding:9px 14px}.primary{color:#10201a;background:var(--mint);border-color:var(--mint)}.primary:hover:enabled{background:#c0f8df}.dialogstats{display:grid;grid-template-columns:1fr auto;gap:8px 16px}.dialogstats dd{margin:0;text-align:right;font-family:var(--mono)}.dialogstats dt{color:var(--muted)}.sr{position:absolute;width:1px;height:1px;clip-path:inset(50%);overflow:hidden}[hidden]{display:none!important}
 
 .bar,main { width:min(1920px,100%); padding-inline:clamp(12px,3vw,58px) }
 .bar { padding-block:11px }
@@ -25,20 +25,22 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
 .hud.right { right:var(--inset); text-align:right }
 .primary-hud { top:var(--inset); padding:2px 10px 4px; border-left:2px solid #7c8d85; background:linear-gradient(90deg,#11191d99,transparent) }
 .primary-hud.right { border:0; border-right:2px solid #7c8d85; background:linear-gradient(270deg,#11191d99,transparent) }
-.hud .micro { color:#acb8b8; font-size:9px }
+.hud .micro { color:var(--muted) }
 .big { margin-top:1px; font-size:clamp(25px,2.2vw,36px); color:#d7e6dd }
-.big small,.hud small { color:var(--muted); font:10px var(--mono) }
-.meter { height:3px; width:104px; margin-top:6px }
+.big small,.hud small { color:var(--muted); font:12px var(--mono) }
+.meter { position:relative; width:clamp(110px,9vw,136px); height:8px; margin-top:6px; border:1px solid #879b9d; border-radius:2px; overflow:hidden; background:#1e3036 }
+.meter i { display:block; height:100%; background:var(--oxygen-fill) }
+.meter::after { content:""; position:absolute; inset:0; background:repeating-linear-gradient(90deg,transparent 0 calc(10% - 1px),#13252c99 calc(10% - 1px) 10%) }
 .side-hud { top:44%; display:grid; gap:13px }
 .side-hud b { display:block; margin-top:2px; font:17px/1.15 var(--mono); letter-spacing:-.035em }
-.raw { display:grid; grid-template-columns:auto auto; gap:6px 13px; align-items:baseline; font:10px var(--mono); color:var(--muted) }
+.raw { display:grid; grid-template-columns:auto auto; gap:5px 13px; align-items:baseline; font:12px var(--sans); color:var(--muted) }
 .raw b { font:12px var(--mono); color:var(--ink); margin:0 }
 .raw span { text-align:left }
 .assist { text-align:right; padding-right:10px; border-right:2px solid #827764; color:#c8cecd; font:11px/1.5 var(--mono); background:linear-gradient(270deg,#0c1013bb,transparent) }
 .assist .micro { color:var(--gold); margin-bottom:2px }
 .assist strong { font-weight:normal; color:var(--ink) }
 .plotbar { position:relative; display:flex; align-items:center; justify-content:space-between; gap:12px; border-top:1px solid var(--edge); padding:5px 14px; min-height:33px }
-.legend,.speed,.flight-time { color:var(--muted); font:10px var(--mono) }
+.legend,.speed,.flight-time { color:var(--muted); font:12px/1.35 var(--sans) }
 .legend { gap:15px }
 .legend span { display:flex; align-items:center; gap:5px }
 .keyline { width:15px; border-top:2px dotted var(--mint) }
@@ -46,7 +48,7 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
 .keyline.recoil { border-top:2px dashed var(--gold) }
 .speed { display:flex; align-items:center; gap:2px }
 .speed>svg { width:14px; height:14px; stroke:var(--muted); fill:none; margin-right:3px }
-.speed button { padding:4px 7px; background:transparent; font:11px var(--mono); border-color:transparent }
+.speed button { padding:4px 7px; background:transparent; font:12px var(--mono); border-color:transparent }
 .speed .active { color:var(--mint); background:#29332f; border-color:#4c5c54 }
 .flight-time { margin-left:auto; font-variant-numeric:tabular-nums }
 .flight-time b { color:var(--ink); font-weight:400 }
@@ -61,13 +63,14 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
 .throw-vector .micro { margin-right:6px }
 .lower-hud { inset:auto 0 0; padding:0 var(--inset) 10px; background:linear-gradient(0deg,#050b11df,transparent) }
 .lower-readouts { display:flex; align-items:flex-end; justify-content:space-between; gap:12px; margin-bottom:9px }
-.plot-scale { width:94px; height:23px; flex:none }
+.plot-scale { height:23px; flex:none }
 .advisory { display:flex; align-items:baseline; gap:13px; padding-top:8px; border-top:1px solid #a9c4b74d; color:var(--ink); font-size:12px; line-height:1.45 }
 .advisory .micro { display:inline-flex; align-items:center; gap:6px; flex:none; color:var(--mint) }
 .advisory svg { width:15px; height:15px; align-self:center; fill:none; stroke:currentColor; stroke-width:1.5 }
 .earth-view { pointer-events:none }
-.reticle-text { font:10px var(--mono); fill:var(--gold); paint-order:stroke; stroke:#0c1013; stroke-width:3px; stroke-linejoin:round }
+.reticle-text { font:11px var(--mono); fill:var(--gold); paint-order:stroke; stroke:#0c1013; stroke-width:3px; stroke-linejoin:round }
 @media(max-width:940px) {
+  .side-hud { top:78px; gap:7px }
   .tool { display:block; padding:6px 9px 9px }
   .tool svg { height:33px }
 }
@@ -75,16 +78,14 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
   .bar,main { padding-inline:12px }
   .mission { align-items:center; flex-wrap:wrap; margin-bottom:10px }
   .primary-hud { padding-inline:7px }
-  .side-hud { top:82px; gap:7px }
   .side-hud b { font-size:13px }
-  .raw { gap:3px 8px }
+  .raw { gap:2px 8px }
   .raw b { font-size:11px }
   .tools { grid-template-columns:repeat(3,minmax(0,1fr)) }
   .tool { display:grid; min-height:55px }
   .throwstrip { align-items:flex-start; flex-wrap:wrap; gap:4px 12px }
-  .assist { font-size:10px; max-width:72% }
+  .assist { min-width:0 }
   .plotbar { flex-wrap:wrap }
-  .flight-time { font-size:9px }
   .lower-readouts { gap:6px }
 }
 @media(max-width:450px) {
@@ -94,19 +95,23 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
   .brand>svg { width:27px; height:27px }
   .tag { display:none }
   .settings { gap:5px }
+  .settings .quiet,.settings select { padding:6px; font-size:12px; white-space:nowrap }
   .scene>svg { height:clamp(405px,58svh,545px) }
   .panelhead { padding-inline:9px }
-  .status { font-size:9px; max-width:49%; text-align:right }
+  .sectionlabel { white-space:nowrap }
+  section[aria-label="Navigation"]>.panelhead { flex-direction:column; align-items:flex-start; gap:3px }
+  .side-hud.left { top:83px }
+  .side-hud.right { top:66px }
   .plotbar { padding:5px 6px; gap:4px }
-  .legend { font-size:9px; gap:6px }
+  .legend { gap:8px }
   .keyline { width:9px }
   .speed { gap:0 }
   .speed>svg { display:none }
-  .speed button { padding:5px 4px; font-size:10px }
+  .speed button { padding:5px 4px }
   .tools { padding:4px 6px 7px; gap:4px }
   .tool { display:block; min-height:67px; padding:4px 5px 6px }
   .tool svg { height:30px }
-  .tool b { font-size:11px }
+  .tool b { font-size:12px }
   .advisory { display:grid; gap:2px; padding-top:6px }
   .lower-hud { padding-bottom:8px }
   .earth-view { x:-25%; width:150% }
@@ -116,21 +121,59 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
 <linearGradient id="silver" x2=".25" y2="1" gradientUnits="objectBoundingBox"><stop stop-color="#f0f2df"/><stop offset=".23" stop-color="#bdc7c6"/><stop offset=".48" stop-color="#87999f"/><stop offset=".75" stop-color="#667a85"/><stop offset="1" stop-color="#293c49"/></linearGradient>
 <linearGradient id="suit" x2=".55" y2="1"><stop stop-color="#e3e5dd"/><stop offset=".48" stop-color="#bfc5c2"/><stop offset=".8" stop-color="#a0adb1"/><stop offset="1" stop-color="#596f7d"/></linearGradient>
 <linearGradient id="visor" x2=".8" y2="1"><stop stop-color="#a1a59c"/><stop offset=".26" stop-color="#545d59"/><stop offset=".52" stop-color="#232c2d"/><stop offset="1" stop-color="#151c1f"/></linearGradient>
-<linearGradient id="solar" x2=".45" y2="1"><stop stop-color="#718797"/><stop offset=".46" stop-color="#405666"/><stop offset="1" stop-color="#263f50"/></linearGradient>
-<pattern id="cells" width="10" height="7" patternUnits="userSpaceOnUse"><path d="M0 .5H10M.5 0V7" fill="none" stroke="#c5b998" opacity=".66" stroke-width=".65"/><path d="M2 0v7m2-7v7m2-7v7m2-7v7" stroke="#c6c8bc" opacity=".19" stroke-width=".45"/></pattern>
-<pattern id="truss" width="15" height="12" patternUnits="userSpaceOnUse"><path d="M0 0l15 12M0 12L15 0" fill="none" stroke="#a3afb1" stroke-width="1.5"/></pattern>
-<g id="wing"><path d="M-99 0H0v37h-99z" fill="url(#solar)" stroke="#beb9a4" stroke-width="1.7"/><path d="M-99 0H0v37h-99z" fill="url(#cells)"/><path d="M-74 0v37m25-37v37m25-37v37" stroke="#cabaa0" stroke-width="1.6"/></g>
-<g id="station" stroke-linejoin="round">
-<g transform="translate(-88,-4) rotate(-19)">
-<path d="M-8 -83H5v176H-8z" fill="#42545c" stroke="#acb6b4"/><path d="M-8 -83H5v176H-8z" fill="url(#truss)"/>
-<g transform="translate(-8,-87)"><use href="#wing"/><use href="#wing" transform="translate(14) scale(-1 1)"/></g>
-<g transform="translate(-8,-44)"><use href="#wing"/><use href="#wing" transform="translate(14) scale(-1 1)"/></g>
-<g transform="translate(-8,19)"><use href="#wing"/><use href="#wing" transform="translate(14) scale(-1 1)"/></g>
-<g transform="translate(-8,62)"><use href="#wing"/><use href="#wing" transform="translate(14) scale(-1 1)"/></g>
-<path d="M-138 -4H93v11h-231z" fill="#36444c" stroke="#9da8a7"/><path d="M-138 -4H93v11h-231z" fill="url(#truss)"/>
-<g stroke="#465963" stroke-width="1.2"><path d="m-119 -9 8-6h28l9 7V9l-9 6h-28l-8-6z" fill="url(#silver)"/><rect x="-85" y="-8" width="18" height="17" rx="3" fill="url(#silver)"/><path d="m-70 -11 8-6h34l7 6v22l-7 6h-34l-8-6z" fill="url(#silver)"/><path d="M-63 -14v28m6-30v32m23-32v32m5-29v27m-76-28v26m17-24v23" fill="none"/><path d="M-48 -15v-20h8v20" fill="#7d8e91"/></g>
-<g stroke="#415661" stroke-width="1.5"><path d="M-17 -16l7-9h21l8 9v30l-8 9h-21l-7-9z" fill="url(#suit)"/><path d="M-17 -7h35M-17 10h35" opacity=".75"/><path d="M17 -12l8-6h41l9 8v20l-9 7H25l-8-6z" fill="url(#silver)"/><path d="M26 -16v30m5-31v32m25-32v32m6-30v27" fill="none"/><rect x="35" y="-10" width="15" height="5" rx="1" fill="#acb8b5"/><path d="M76 -9h12v17H76z" fill="url(#silver)"/><path d="M85 -10h6v20h-6z" fill="#93aaab"/></g>
-<g fill="none" stroke="#b9c6c1" stroke-width="1.4"><path d="M-109 -12v-17l-9-8m10 7 12-7m88 19-13-15v-18m5 6-12 4"/><path d="M6 23v11h14v-6"/></g></g></g>
+<linearGradient id="solar" x2=".35" y2="1"><stop stop-color="#526ca0"/><stop offset=".5" stop-color="#324b75"/><stop offset="1" stop-color="#21344f"/></linearGradient>
+<linearGradient id="radiator" x2=".22" y2="1"><stop stop-color="#fffef2"/><stop offset=".62" stop-color="#dce4e3"/><stop offset="1" stop-color="#a1afb6"/></linearGradient>
+<pattern id="cells" width="8" height="6" patternUnits="userSpaceOnUse"><path d="M0 .6h8M.6 0v6" fill="none" stroke="#9faecb" stroke-width=".65"/></pattern>
+<pattern id="truss" width="10" height="12" patternUnits="userSpaceOnUse"><path d="M1 0l8 6-8 6" stroke="#bdc7c7" stroke-width="1.25" fill="none"/></pattern>
+<g id="solarWing">
+  <path d="M0 -2h83v4H0z" fill="#a09980"/>
+  <g transform="translate(8,-13)">
+    <rect width="75" height="26" fill="url(#solar)" stroke="#bcab8c" stroke-width="1.6"/>
+    <rect width="75" height="26" fill="url(#cells)"/>
+    <path d="M25 0v26m25-26v26" stroke="#cfb389" stroke-width="1.8"/>
+    <path d="M0 24.5h75" stroke="#151e30"/>
+  </g>
+</g>
+<g id="radiatorWing">
+  <path d="M0 0h68" stroke="#909fa8" stroke-width="3"/>
+  <path d="M6 -3l53 14m-18-12 21-8" fill="none" stroke="#828e95" stroke-width="1.4"/>
+  <g fill="url(#radiator)" stroke="#6e8089" stroke-width="1">
+    <rect x="10" y="-9" width="18" height="18" rx="1.4"/>
+    <rect x="30" y="-9" width="18" height="18" rx="1.4"/>
+    <rect x="50" y="-9" width="18" height="18" rx="1.4"/>
+  </g>
+  <path d="M13 -5h12m8 0h12m8 0h12M13 5h12m8 0h12m8 0h12" fill="none" stroke="#a8b6bd" stroke-width=".9"/>
+</g>
+<g id="station" transform="rotate(-16)" stroke-linejoin="round">
+  <!-- The hatch face is the local origin, shared with the capture circle. -->
+  <g transform="translate(-137)">
+    <rect x="-4.5" y="-89" width="9" height="178" fill="#283943" stroke="#a2b1b5" stroke-width="1.2"/>
+    <rect x="-4.5" y="-89" width="9" height="178" fill="url(#truss)"/>
+    <g transform="translate(0,-87)"><use href="#solarWing"/><use href="#solarWing" transform="scale(-1 1)"/></g>
+    <g transform="translate(0,-43)"><use href="#radiatorWing"/><use href="#radiatorWing" transform="scale(-1 1)"/></g>
+    <g transform="translate(0,43)"><use href="#radiatorWing"/><use href="#radiatorWing" transform="scale(-1 1)"/></g>
+    <g transform="translate(0,87)"><use href="#solarWing"/><use href="#solarWing" transform="scale(-1 1)"/></g>
+    <g fill="#c1ab83" stroke="#56616a"><circle cy="-87" r="4.5"/><circle cy="87" r="4.5"/></g>
+  </g>
+  <g stroke="#4c6069" stroke-width="1.4">
+    <path d="M-203 -7l8-5h25l8 5V7l-8 5h-25l-8-5z" fill="url(#silver)"/>
+    <rect x="-167" y="-7" width="18" height="14" rx="3" fill="url(#silver)"/>
+    <path d="M-154 -11l8-7h30l8 7v22l-8 7h-30l-8-7z" fill="url(#suit)"/>
+    <path d="M-110 -9l9-5h41l8 5V9l-8 5h-41l-9-5z" fill="url(#silver)"/>
+    <path d="M-53 -8h11l5 4v8l-5 4h-11z" fill="#87999e"/>
+    <path d="M-193 -11V11m19-22v22m27-26v30m26-31v32m19-29v26m5-27v28m31-27v26" fill="none"/>
+    <rect x="-93" y="-9" width="13" height="4" rx="1" fill="#d7c8a5" stroke="none"/>
+    <path d="M-183 -12v-13l-8-6m8 6 10-5m53 12 6-12h11" fill="none" stroke="#b3c1bf"/>
+  </g>
+  <g stroke="#52636d" stroke-width="1.2">
+    <path d="M-41 -7l7-4h13l5 4H0V7h-16l-5 4h-13l-7-4z" fill="url(#silver)"/>
+    <path d="M-32 -10v20m9-20v20m12-17v14" fill="none"/>
+    <path d="M-8 -11H0v22h-8c-5-3-5-19 0-22z" fill="#899a9d"/>
+    <ellipse rx="6.5" ry="11.5" fill="#dce1d7"/>
+    <ellipse rx="4.3" ry="8.4" fill="#172a34" stroke="#748f93"/>
+    <path d="M-1 -10h2m-2 20h2" stroke="#f0c987" stroke-width="2.4"/>
+  </g>
+</g>
 <g id="astronaut" transform="rotate(14)" stroke="#465056" stroke-linejoin="round" stroke-linecap="round" stroke-width=".85">
   <!-- Life-support pack behind the pressure garment, in three-quarter view. -->
   <path d="m-13-20 11-1 3 3-1 32-4 3-12-2-2-5 1-25z" fill="#5a666b"/>
@@ -179,7 +222,7 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
 <g id="rings" stroke="#78909a" fill="none" opacity=".13" stroke-width=".8"></g>
 <use id="craft" href="#station"/><g id="goal"><circle id="zone" fill="#a9c4b7" fill-opacity=".09" stroke="#a9c4b7" stroke-dasharray="3 4"/><path d="M-4 0h8m-4-4v8" stroke="var(--mint)"/></g>
 <line id="coast" stroke="var(--mint)" stroke-width="1.1" stroke-dasharray="3 5"/><line id="trial" stroke="var(--gold)" stroke-width="1.5" stroke-dasharray="6 5"/><line id="vArrow" stroke="#a9b8c5" stroke-width="2" marker-end="url(#vTip)"/>
-<g id="eject" visibility="hidden"><use id="spentTool"/></g><use id="suitMan" href="#astronaut"/><g id="craftLabel"><path d="M0 0l12-16h21" fill="none" stroke="#82b4a1"/><text x="12" y="-21" class="plottext" fill="var(--mint)">CAPTURE ZONE</text></g><g id="evaLabel"><path d="m0 0 9 12h12" stroke="#899ba6" fill="none"/><text x="25" y="16" class="plottext" fill="#c9d5d7">EVA–01</text></g>
+<g id="eject" visibility="hidden"><use id="spentTool"/></g><use id="suitMan" href="#astronaut"/><g id="craftLabel"><path d="M0 0l12-16h21" fill="none" stroke="#82b4a1"/><text x="12" y="-21" class="plottext" fill="var(--mint)">Capture zone</text></g><g id="evaLabel"><path d="m0 0 9 12h12" stroke="#899ba6" fill="none"/><text x="25" y="16" class="plottext" fill="#c9d5d7">EVA–01</text></g>
 <g id="aim" stroke="var(--gold)" fill="none">
   <circle id="powerRing" stroke-opacity=".35" stroke-dasharray="2 7" visibility="hidden"/><line id="targetLine" stroke-dasharray="3 3"/>
   <g id="reticle"><circle r="7" fill="#111719" fill-opacity=".75"/><path d="M-12 0h7m10 0h7M0-12v7m0 10v7"/><circle r="1.3" fill="var(--gold)" stroke="none"/></g>
@@ -189,12 +232,12 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
   <div role="group" aria-label="Suit telemetry">
     <div class="hud left primary-hud"><div class="micro">Oxygen remaining</div><div class="big" id="oxygen">15:00</div><div class="meter"><i id="oxygenBar"></i></div></div>
     <div class="hud right primary-hud"><div class="micro">Δv budget</div><div class="big"><span id="budget"></span> <small>m/s</small></div></div>
-    <div class="hud left side-hud"><div><div class="micro">Hull distance</div><b id="range"></b></div><div><div class="micro">Hatch bearing</div><b id="bearing"></b></div></div>
+    <div class="hud left side-hud"><div><div class="micro">Hatch distance</div><b id="range"></b></div><div><div class="micro">Hatch bearing</div><b id="bearing"></b></div></div>
     <div class="hud right side-hud"><div class="micro">Velocity · m/s</div><div class="raw"><span>Vx</span><b id="vx"></b><span>Vy</span><b id="vy"></b><span>Radial</span><b id="radial"></b><span>Mass</span><b id="mass"></b></div></div>
   </div>
   <div class="hud lower-hud">
     <div class="lower-readouts">
-      <svg class="plot-scale" viewBox="0 0 94 23" preserveAspectRatio="xMinYMax meet" aria-hidden="true">
+      <svg class="plot-scale" id="plotScale" width="94" height="23" aria-hidden="true">
         <g transform="translate(0 21)" stroke="#95a6aa" fill="#c1cccf"><path id="scaleLine" fill="none"/><text x="0" y="-6" id="scaleText" stroke="none" class="plottext"></text></g>
       </svg>
       <div class="assist"><div class="micro" id="assistMode"></div><div id="prediction"></div></div>
@@ -405,8 +448,8 @@ function plotCamera(s,w,h) {
 function renderPlot(pvx,pvy) {
   const s=state,w=plotW,h=plotH;
   const {px,py,ox,oy,scale,reach,inner}=camera;
-  const stationScale=Math.min(.66,scale*.062);
-  at('craft',ox+2*stationScale,oy+34*stationScale,'scale('+stationScale+')');
+  const stationScale=Math.min(.78,scale*.065);
+  at('craft',ox,oy,'scale('+stationScale+')');
   at('goal',ox,oy); $('zone').setAttribute('r',captureRadius*scale);
   at('craftLabel',ox,oy-captureRadius*scale-3);
   const suitScale=Math.min(.57,Math.max(.39,scale*.042));
@@ -455,7 +498,8 @@ function renderPlot(pvx,pvy) {
     $('spentTool').setAttribute('href','#t'+anim.i);$('eject').style.opacity=Math.min(1,2.5-anim.age);
   }
   const units=scale>7?5:Math.max(10,Math.round(50/scale/5)*5);
-  $('scaleLine').setAttribute('d','M0 -3v3h'+(scale*units)+'v-3'); $('scaleText').textContent=units+' M';
+  $('plotScale').setAttribute('width',Math.ceil(scale*units)+1);
+  $('scaleLine').setAttribute('d','M0 -3v3h'+(scale*units)+'v-3'); $('scaleText').textContent=units+' m';
 }
 
 function trackTarget() {
@@ -551,7 +595,7 @@ function guide() {
     '<li><b>Release to throw.</b> A click or tap without dragging previews the aim. Escape or release outside the plot to cancel a drag.</li>'+
     '<li><b>Keyboard controls.</b> Left and right change bearing by 1° (Shift for 10°). Up and down change power by 1% (Shift for 10%). Press Enter on the plot to throw, or hold Space to wind up and release to throw. Escape cancels the windup.</li>'+
     '<li><b>Coast</b> once you have a return path. P pauses flight. The speed controls advance motion and oxygen together.</li></ul>'+
-    '<p>Bearings run counterclockwise from right (000°) to up (090°). Vx, Vy and radial speed use m/s. Positive radial speed means you are moving away. Hull distance measures the gap to the capture circle. The Δv budget is the largest total velocity change available from full-power throws in the best order.</p>',
+    '<p>Bearings run counterclockwise from right (000°) to up (090°). Vx, Vy and radial speed use m/s. Positive radial speed means you are moving away. Hatch distance measures the gap to the capture circle. The Δv budget is the largest total velocity change available from full-power throws in the best order.</p>',
     [['Back to flight',()=>closeDialog(),true]]);
 }
 function finish(title,description) {
@@ -688,7 +732,7 @@ init();
   function key(k,shiftKey=false) {
     $('plot').dispatchEvent(new KeyboardEvent('keydown',{key:k,bubbles:true,cancelable:true,shiftKey}));
   }
-  const output=document.createElement('pre');output.id='qa-results';document.body.append(output);
+  const output=document.createElement('pre');output.id='qa-results';
   try {
     test('Offline initialization and six selectable tools',()=>{yes($('tools').children.length===6,'rack');yes($('oxygen').textContent==='15:00','clock');yes(state.phase==='ready','standby');yes(!performance.getEntriesByType('resource').some(r=>/^https?:/.test(r.name)),'external request')});
     test('All 64 inventory budgets match independent brute-force enumeration',()=>{
@@ -812,6 +856,25 @@ init();
       for(let i=0;i<10;i++)key('ArrowDown',true);near(state.power,10,'floor');
       key('Enter');yes(state.throws===1,'keyboard release');
     });
+    test('Docking hatch stays centered on the capture zone in each scenario',()=>{
+      for(let index=0;index<scenarios.length;index++) {
+        newFlight(index);
+        const hatch=new DOMPoint(0,0).matrixTransform($('craft').getScreenCTM());
+        const goal=new DOMPoint(0,0).matrixTransform($('goal').getScreenCTM());
+        near(hatch.x,goal.x,'hatch x',.01);near(hatch.y,goal.y,'hatch y',.01);
+      }
+    });
+    test('HUD labels use readable mixed case and the oxygen gauge follows the reserve',()=>{
+      for(const label of document.querySelectorAll('.hud .micro,.spec,.throw-vector .micro')) {
+        const style=getComputedStyle(label);
+        yes(style.textTransform==='none' && parseFloat(style.fontSize)>=12,label.textContent);
+      }
+      const bar=$('oxygenBar'), full=bar.getBoundingClientRect();
+      yes(full.height>=5 && full.width>0,'visible reserve');
+      toggleClock();advance(limits.Easy/2);render();
+      near(bar.getBoundingClientRect().width,full.width/2,'half-full bar',.1);
+      yes($('oxygen').textContent==='07:30','remaining oxygen');
+    });
     test('The advisory updates inside the plot without blocking aim or covering the scale and forecast',()=>{
       const plot=$('plot'), tip=$('tip'), advisory=tip.closest('.advisory');
       const before=tip.textContent;
@@ -835,5 +898,6 @@ init();
     });
     output.textContent='PASS '+passed.length+' groups at '+innerWidth+'px: '+passed.join(' | ');
   }catch(e){output.textContent='FAIL after '+passed.length+': '+e.message+' / '+e.stack;}
+  document.body.append(output);
 })();
 </script></body></html>

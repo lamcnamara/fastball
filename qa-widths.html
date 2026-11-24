@@ -1,6 +1,6 @@
 <!doctype html><html><body><pre id="width-results"></pre><script>function check(el){document.getElementById("width-results").append(el.contentDocument.querySelector("#qa-results")?.textContent+"\n");}</script><iframe style="border:0;width:320px;height:844px" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;&lt;meta name=&quot;theme-color&quot; content=&quot;#101517&quot;&gt;&lt;title&gt;UNTETHERED · EVA return simulator&lt;/title&gt;&lt;style&gt;
-:root{color-scheme:dark;--bg:#0e1113;--panel:#181c1e;--edge:#343b3e;--muted:#a0aaaa;--mint:#a9c4b7;--ink:#e5e8e5;--gold:#d4b48b;--mono:Consolas,&quot;SFMono-Regular&quot;,&quot;Liberation Mono&quot;,monospace;--sans:&quot;Segoe UI&quot;,Arial,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px var(--sans)}button,select,input{font:inherit}button,select{color:var(--ink);cursor:pointer}button{background:#20282b;border:1px solid var(--edge);border-radius:5px}button:hover:enabled,select:hover{background:#2a3437;border-color:#6b7d81}button:focus-visible,select:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--mint);outline-offset:3px}button:disabled{cursor:default;opacity:.45}button svg{width:15px;height:15px;vertical-align:-3px}header{border-bottom:1px solid var(--edge);background:#14191b}.bar,main{width:min(1512px,100%);margin:auto}.bar{display:flex;align-items:center;justify-content:space-between;padding:17px clamp(16px,3.6vw,58px);gap:12px}.brand{display:flex;align-items:center;gap:13px}.brand&gt;svg{width:38px;height:38px}.wordmark{font-weight:750;letter-spacing:.18em;font-size:20px;line-height:1.1}.subbrand,.micro,.sectionlabel,.spec,.tag,.plotlabel,.foot,.eyebrow{font:10px/1.45 var(--mono);letter-spacing:.105em;text-transform:uppercase}.subbrand{color:var(--muted);letter-spacing:.17em;font-size:9px;margin-top:4px}.toptools,.actions,.caption,.settings,.row,.chips,.legend,.cardhead,.inc,.fr{display:flex;align-items:center;gap:10px}.toptools{gap:17px}.tag{border:1px solid #435050;color:#bccac7;border-radius:4px;padding:4px 7px;letter-spacing:.08em}.quiet{padding:8px 11px;display:inline-flex;align-items:center;gap:7px}.quiet svg{fill:none;stroke:currentColor;stroke-width:1.6}.guide{background:transparent}main{padding:24px clamp(16px,3.6vw,58px) 22px}.mission{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:17px}.eyebrow,.plotlabel{color:var(--mint)}h1,h2,h3,p{margin:0}h1{font-size:clamp(26px,2.4vw,39px);line-height:1.15;letter-spacing:-.04em;margin-top:4px;font-weight:630}.settings{gap:9px}.settings select,.dialogrow select{background:#20282b;border:1px solid var(--edge);border-radius:5px;padding:7px 9px}.panel{background:var(--panel);border:1px solid var(--edge);border-radius:8px;overflow:hidden;min-width:0}.panelhead{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--edge);min-height:44px}.sectionlabel{font-weight:650;font-size:11px;color:#dce5e2;display:flex;align-items:center;gap:9px}.sectionlabel svg{width:15px;height:15px;stroke:var(--mint);fill:none;stroke-width:1.6}.status{font:10px var(--mono);color:var(--mint);display:flex;align-items:center;gap:7px}.dot{width:6px;height:6px;display:inline-block;background:var(--mint);border-radius:50%}.micro,.spec,.foot{color:var(--muted)}.big{font:clamp(25px,2.2vw,36px)/1.05 var(--mono);letter-spacing:-.06em;margin-top:4px}.big small{font:13px var(--mono);color:var(--muted);letter-spacing:0}.oxygen,.dv{color:var(--mint)}.meter{height:4px;margin-top:9px;background:#283333;position:relative}.meter i{display:block;height:100%;background:var(--mint)}.meter:after{content:&quot;&quot;;position:absolute;inset:0;background:repeating-linear-gradient(to right,transparent 0 calc(5% - 2px),#162021 calc(5% - 2px) 5%)}.rack{margin-top:14px}.rack .panelhead{border-bottom:0;padding-bottom:4px}.spec{font-size:10px;letter-spacing:.035em}.tools{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;padding:9px 14px 14px}.tool{position:relative;text-align:left;background:#1b2225;padding:7px 10px 10px;min-width:0}.tool.selected{background:#20312e;border-color:#81c8ad;box-shadow:inset 0 -2px #a9c4b7}.tool b,.tool small{display:block}.tool b{font-size:13px;font-weight:600}.tool small{font:10px var(--mono);color:var(--muted);margin-top:4px}.tool svg{width:100%;height:43px;display:block}.slot{position:absolute;top:7px;left:8px;color:var(--muted);font:9px var(--mono)}.tool.selected .slot{color:var(--mint)}.foot{font-size:9px;letter-spacing:.035em;display:flex;justify-content:space-between;gap:8px;margin-top:15px}.plottext{font:9px var(--mono);letter-spacing:1px}.plotvalue{font:11px var(--mono)}dialog{color:var(--ink);background:#192023;border:1px solid #536260;border-radius:10px;width:min(450px,calc(100% - 28px));padding:23px;box-shadow:0 18px 95px #0009}dialog::backdrop{background:#070c10b5}dialog h2{font-size:26px;letter-spacing:-.035em;margin:5px 0 12px}dialog p,dialog li,dialog dd{color:#c2cfcc;font-size:14px;line-height:1.55}dialog ul{padding-left:19px}dialog li{margin:7px 0}.dialogrow{display:flex;justify-content:space-between;align-items:center;margin:16px 0;gap:10px}.dialogactions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}.dialogactions button{padding:9px 14px}.primary{color:#10201a;background:var(--mint);border-color:var(--mint)}.primary:hover:enabled{background:#c0f8df}.dialogstats{display:grid;grid-template-columns:1fr auto;gap:8px 16px}.dialogstats dd{margin:0;text-align:right;font-family:var(--mono)}.dialogstats dt{color:var(--muted)}.sr{position:absolute;width:1px;height:1px;clip-path:inset(50%);overflow:hidden}[hidden]{display:none!important}
+:root{color-scheme:dark;--bg:#0e1113;--panel:#181c1e;--edge:#343b3e;--muted:#c1cecf;--oxygen-fill:#a4ead0;--mint:#a9c4b7;--ink:#e5e8e5;--gold:#d4b48b;--mono:Consolas,&quot;SFMono-Regular&quot;,&quot;Liberation Mono&quot;,monospace;--sans:&quot;Segoe UI&quot;,Arial,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px var(--sans)}button,select,input{font:inherit}button,select{color:var(--ink);cursor:pointer}button{background:#20282b;border:1px solid var(--edge);border-radius:5px}button:hover:enabled,select:hover{background:#2a3437;border-color:#6b7d81}button:focus-visible,select:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--mint);outline-offset:3px}button:disabled{cursor:default;color:var(--muted)}.tool:disabled svg{opacity:.52}button svg{width:15px;height:15px;vertical-align:-3px}header{border-bottom:1px solid var(--edge);background:#14191b}.bar,main{width:min(1512px,100%);margin:auto}.bar{display:flex;align-items:center;justify-content:space-between;padding:17px clamp(16px,3.6vw,58px);gap:12px}.brand{display:flex;align-items:center;gap:13px}.brand&gt;svg{width:38px;height:38px}.wordmark{font-weight:750;letter-spacing:.18em;font-size:20px;line-height:1.1}.subbrand,.micro,.sectionlabel,.spec,.tag,.plotlabel,.foot,.eyebrow{font:500 13px/1.35 var(--sans);letter-spacing:.012em}.subbrand{color:var(--muted);letter-spacing:.02em;font-size:12px;margin-top:2px}.toptools,.actions,.caption,.settings,.row,.chips,.legend,.cardhead,.inc,.fr{display:flex;align-items:center;gap:10px}.toptools{gap:17px}.tag{border:1px solid #435050;color:#bccac7;border-radius:4px;padding:4px 7px;letter-spacing:.025em}.quiet{padding:8px 11px;display:inline-flex;align-items:center;gap:7px}.quiet svg{fill:none;stroke:currentColor;stroke-width:1.6}.guide{background:transparent}main{padding:24px clamp(16px,3.6vw,58px) 22px}.mission{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:17px}.eyebrow,.plotlabel{color:var(--mint)}h1,h2,h3,p{margin:0}h1{font-size:clamp(26px,2.4vw,39px);line-height:1.15;letter-spacing:-.04em;margin-top:4px;font-weight:630}.settings{gap:9px}.settings select,.dialogrow select{background:#20282b;border:1px solid var(--edge);border-radius:5px;padding:7px 9px}.panel{background:var(--panel);border:1px solid var(--edge);border-radius:8px;overflow:hidden;min-width:0}.panelhead{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--edge);min-height:44px}.sectionlabel{font-weight:650;font-size:14px;color:#dce5e2;display:flex;align-items:center;gap:9px}.sectionlabel svg{width:15px;height:15px;stroke:var(--mint);fill:none;stroke-width:1.6}.status{font:12px/1.3 var(--sans);color:var(--mint);display:flex;align-items:center;gap:7px}.dot{width:6px;height:6px;display:inline-block;background:var(--mint);border-radius:50%}.micro,.spec,.foot{color:var(--muted)}.big{font:clamp(25px,2.2vw,36px)/1.05 var(--mono);letter-spacing:-.06em;margin-top:4px}.big small{font:13px var(--mono);color:var(--muted);letter-spacing:0}.oxygen,.dv{color:var(--mint)}.rack{margin-top:14px}.rack .panelhead{border-bottom:0;padding-bottom:4px}.spec{font-variant-numeric:tabular-nums}.tools{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;padding:9px 14px 14px}.tool{position:relative;text-align:left;background:#1b2225;padding:7px 10px 10px;min-width:0}.tool.selected{background:#20312e;border-color:#81c8ad;box-shadow:inset 0 -2px #a9c4b7}.tool b,.tool small{display:block}.tool b{font-size:13px;font-weight:600}.tool small{font:12px/1.3 var(--sans);color:var(--muted);margin-top:4px}.tool svg{width:100%;height:43px;display:block}.slot{position:absolute;top:7px;left:8px;color:var(--muted);font:11px var(--mono)}.tool.selected .slot{color:var(--mint)}.foot{display:flex;justify-content:space-between;gap:8px;margin-top:15px}.plottext{font:500 12px var(--sans);paint-order:stroke;stroke:#10181d;stroke-width:2.5px;stroke-linejoin:round}.plotvalue{font:11px var(--mono)}dialog{color:var(--ink);background:#192023;border:1px solid #536260;border-radius:10px;width:min(450px,calc(100% - 28px));padding:23px;box-shadow:0 18px 95px #0009}dialog::backdrop{background:#070c10b5}dialog h2{font-size:26px;letter-spacing:-.035em;margin:5px 0 12px}dialog p,dialog li,dialog dd{color:#c2cfcc;font-size:14px;line-height:1.55}dialog ul{padding-left:19px}dialog li{margin:7px 0}.dialogrow{display:flex;justify-content:space-between;align-items:center;margin:16px 0;gap:10px}.dialogactions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}.dialogactions button{padding:9px 14px}.primary{color:#10201a;background:var(--mint);border-color:var(--mint)}.primary:hover:enabled{background:#c0f8df}.dialogstats{display:grid;grid-template-columns:1fr auto;gap:8px 16px}.dialogstats dd{margin:0;text-align:right;font-family:var(--mono)}.dialogstats dt{color:var(--muted)}.sr{position:absolute;width:1px;height:1px;clip-path:inset(50%);overflow:hidden}[hidden]{display:none!important}
 
 .bar,main { width:min(1920px,100%); padding-inline:clamp(12px,3vw,58px) }
 .bar { padding-block:11px }
@@ -25,20 +25,22 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
 .hud.right { right:var(--inset); text-align:right }
 .primary-hud { top:var(--inset); padding:2px 10px 4px; border-left:2px solid #7c8d85; background:linear-gradient(90deg,#11191d99,transparent) }
 .primary-hud.right { border:0; border-right:2px solid #7c8d85; background:linear-gradient(270deg,#11191d99,transparent) }
-.hud .micro { color:#acb8b8; font-size:9px }
+.hud .micro { color:var(--muted) }
 .big { margin-top:1px; font-size:clamp(25px,2.2vw,36px); color:#d7e6dd }
-.big small,.hud small { color:var(--muted); font:10px var(--mono) }
-.meter { height:3px; width:104px; margin-top:6px }
+.big small,.hud small { color:var(--muted); font:12px var(--mono) }
+.meter { position:relative; width:clamp(110px,9vw,136px); height:8px; margin-top:6px; border:1px solid #879b9d; border-radius:2px; overflow:hidden; background:#1e3036 }
+.meter i { display:block; height:100%; background:var(--oxygen-fill) }
+.meter::after { content:&quot;&quot;; position:absolute; inset:0; background:repeating-linear-gradient(90deg,transparent 0 calc(10% - 1px),#13252c99 calc(10% - 1px) 10%) }
 .side-hud { top:44%; display:grid; gap:13px }
 .side-hud b { display:block; margin-top:2px; font:17px/1.15 var(--mono); letter-spacing:-.035em }
-.raw { display:grid; grid-template-columns:auto auto; gap:6px 13px; align-items:baseline; font:10px var(--mono); color:var(--muted) }
+.raw { display:grid; grid-template-columns:auto auto; gap:5px 13px; align-items:baseline; font:12px var(--sans); color:var(--muted) }
 .raw b { font:12px var(--mono); color:var(--ink); margin:0 }
 .raw span { text-align:left }
 .assist { text-align:right; padding-right:10px; border-right:2px solid #827764; color:#c8cecd; font:11px/1.5 var(--mono); background:linear-gradient(270deg,#0c1013bb,transparent) }
 .assist .micro { color:var(--gold); margin-bottom:2px }
 .assist strong { font-weight:normal; color:var(--ink) }
 .plotbar { position:relative; display:flex; align-items:center; justify-content:space-between; gap:12px; border-top:1px solid var(--edge); padding:5px 14px; min-height:33px }
-.legend,.speed,.flight-time { color:var(--muted); font:10px var(--mono) }
+.legend,.speed,.flight-time { color:var(--muted); font:12px/1.35 var(--sans) }
 .legend { gap:15px }
 .legend span { display:flex; align-items:center; gap:5px }
 .keyline { width:15px; border-top:2px dotted var(--mint) }
@@ -46,7 +48,7 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
 .keyline.recoil { border-top:2px dashed var(--gold) }
 .speed { display:flex; align-items:center; gap:2px }
 .speed&gt;svg { width:14px; height:14px; stroke:var(--muted); fill:none; margin-right:3px }
-.speed button { padding:4px 7px; background:transparent; font:11px var(--mono); border-color:transparent }
+.speed button { padding:4px 7px; background:transparent; font:12px var(--mono); border-color:transparent }
 .speed .active { color:var(--mint); background:#29332f; border-color:#4c5c54 }
 .flight-time { margin-left:auto; font-variant-numeric:tabular-nums }
 .flight-time b { color:var(--ink); font-weight:400 }
@@ -61,13 +63,14 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
 .throw-vector .micro { margin-right:6px }
 .lower-hud { inset:auto 0 0; padding:0 var(--inset) 10px; background:linear-gradient(0deg,#050b11df,transparent) }
 .lower-readouts { display:flex; align-items:flex-end; justify-content:space-between; gap:12px; margin-bottom:9px }
-.plot-scale { width:94px; height:23px; flex:none }
+.plot-scale { height:23px; flex:none }
 .advisory { display:flex; align-items:baseline; gap:13px; padding-top:8px; border-top:1px solid #a9c4b74d; color:var(--ink); font-size:12px; line-height:1.45 }
 .advisory .micro { display:inline-flex; align-items:center; gap:6px; flex:none; color:var(--mint) }
 .advisory svg { width:15px; height:15px; align-self:center; fill:none; stroke:currentColor; stroke-width:1.5 }
 .earth-view { pointer-events:none }
-.reticle-text { font:10px var(--mono); fill:var(--gold); paint-order:stroke; stroke:#0c1013; stroke-width:3px; stroke-linejoin:round }
+.reticle-text { font:11px var(--mono); fill:var(--gold); paint-order:stroke; stroke:#0c1013; stroke-width:3px; stroke-linejoin:round }
 @media(max-width:940px) {
+  .side-hud { top:78px; gap:7px }
   .tool { display:block; padding:6px 9px 9px }
   .tool svg { height:33px }
 }
@@ -75,16 +78,14 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
   .bar,main { padding-inline:12px }
   .mission { align-items:center; flex-wrap:wrap; margin-bottom:10px }
   .primary-hud { padding-inline:7px }
-  .side-hud { top:82px; gap:7px }
   .side-hud b { font-size:13px }
-  .raw { gap:3px 8px }
+  .raw { gap:2px 8px }
   .raw b { font-size:11px }
   .tools { grid-template-columns:repeat(3,minmax(0,1fr)) }
   .tool { display:grid; min-height:55px }
   .throwstrip { align-items:flex-start; flex-wrap:wrap; gap:4px 12px }
-  .assist { font-size:10px; max-width:72% }
+  .assist { min-width:0 }
   .plotbar { flex-wrap:wrap }
-  .flight-time { font-size:9px }
   .lower-readouts { gap:6px }
 }
 @media(max-width:450px) {
@@ -94,19 +95,23 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
   .brand&gt;svg { width:27px; height:27px }
   .tag { display:none }
   .settings { gap:5px }
+  .settings .quiet,.settings select { padding:6px; font-size:12px; white-space:nowrap }
   .scene&gt;svg { height:clamp(405px,58svh,545px) }
   .panelhead { padding-inline:9px }
-  .status { font-size:9px; max-width:49%; text-align:right }
+  .sectionlabel { white-space:nowrap }
+  section[aria-label=&quot;Navigation&quot;]&gt;.panelhead { flex-direction:column; align-items:flex-start; gap:3px }
+  .side-hud.left { top:83px }
+  .side-hud.right { top:66px }
   .plotbar { padding:5px 6px; gap:4px }
-  .legend { font-size:9px; gap:6px }
+  .legend { gap:8px }
   .keyline { width:9px }
   .speed { gap:0 }
   .speed&gt;svg { display:none }
-  .speed button { padding:5px 4px; font-size:10px }
+  .speed button { padding:5px 4px }
   .tools { padding:4px 6px 7px; gap:4px }
   .tool { display:block; min-height:67px; padding:4px 5px 6px }
   .tool svg { height:30px }
-  .tool b { font-size:11px }
+  .tool b { font-size:12px }
   .advisory { display:grid; gap:2px; padding-top:6px }
   .lower-hud { padding-bottom:8px }
   .earth-view { x:-25%; width:150% }
@@ -116,21 +121,59 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
 &lt;linearGradient id=&quot;silver&quot; x2=&quot;.25&quot; y2=&quot;1&quot; gradientUnits=&quot;objectBoundingBox&quot;&gt;&lt;stop stop-color=&quot;#f0f2df&quot;/&gt;&lt;stop offset=&quot;.23&quot; stop-color=&quot;#bdc7c6&quot;/&gt;&lt;stop offset=&quot;.48&quot; stop-color=&quot;#87999f&quot;/&gt;&lt;stop offset=&quot;.75&quot; stop-color=&quot;#667a85&quot;/&gt;&lt;stop offset=&quot;1&quot; stop-color=&quot;#293c49&quot;/&gt;&lt;/linearGradient&gt;
 &lt;linearGradient id=&quot;suit&quot; x2=&quot;.55&quot; y2=&quot;1&quot;&gt;&lt;stop stop-color=&quot;#e3e5dd&quot;/&gt;&lt;stop offset=&quot;.48&quot; stop-color=&quot;#bfc5c2&quot;/&gt;&lt;stop offset=&quot;.8&quot; stop-color=&quot;#a0adb1&quot;/&gt;&lt;stop offset=&quot;1&quot; stop-color=&quot;#596f7d&quot;/&gt;&lt;/linearGradient&gt;
 &lt;linearGradient id=&quot;visor&quot; x2=&quot;.8&quot; y2=&quot;1&quot;&gt;&lt;stop stop-color=&quot;#a1a59c&quot;/&gt;&lt;stop offset=&quot;.26&quot; stop-color=&quot;#545d59&quot;/&gt;&lt;stop offset=&quot;.52&quot; stop-color=&quot;#232c2d&quot;/&gt;&lt;stop offset=&quot;1&quot; stop-color=&quot;#151c1f&quot;/&gt;&lt;/linearGradient&gt;
-&lt;linearGradient id=&quot;solar&quot; x2=&quot;.45&quot; y2=&quot;1&quot;&gt;&lt;stop stop-color=&quot;#718797&quot;/&gt;&lt;stop offset=&quot;.46&quot; stop-color=&quot;#405666&quot;/&gt;&lt;stop offset=&quot;1&quot; stop-color=&quot;#263f50&quot;/&gt;&lt;/linearGradient&gt;
-&lt;pattern id=&quot;cells&quot; width=&quot;10&quot; height=&quot;7&quot; patternUnits=&quot;userSpaceOnUse&quot;&gt;&lt;path d=&quot;M0 .5H10M.5 0V7&quot; fill=&quot;none&quot; stroke=&quot;#c5b998&quot; opacity=&quot;.66&quot; stroke-width=&quot;.65&quot;/&gt;&lt;path d=&quot;M2 0v7m2-7v7m2-7v7m2-7v7&quot; stroke=&quot;#c6c8bc&quot; opacity=&quot;.19&quot; stroke-width=&quot;.45&quot;/&gt;&lt;/pattern&gt;
-&lt;pattern id=&quot;truss&quot; width=&quot;15&quot; height=&quot;12&quot; patternUnits=&quot;userSpaceOnUse&quot;&gt;&lt;path d=&quot;M0 0l15 12M0 12L15 0&quot; fill=&quot;none&quot; stroke=&quot;#a3afb1&quot; stroke-width=&quot;1.5&quot;/&gt;&lt;/pattern&gt;
-&lt;g id=&quot;wing&quot;&gt;&lt;path d=&quot;M-99 0H0v37h-99z&quot; fill=&quot;url(#solar)&quot; stroke=&quot;#beb9a4&quot; stroke-width=&quot;1.7&quot;/&gt;&lt;path d=&quot;M-99 0H0v37h-99z&quot; fill=&quot;url(#cells)&quot;/&gt;&lt;path d=&quot;M-74 0v37m25-37v37m25-37v37&quot; stroke=&quot;#cabaa0&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;/g&gt;
-&lt;g id=&quot;station&quot; stroke-linejoin=&quot;round&quot;&gt;
-&lt;g transform=&quot;translate(-88,-4) rotate(-19)&quot;&gt;
-&lt;path d=&quot;M-8 -83H5v176H-8z&quot; fill=&quot;#42545c&quot; stroke=&quot;#acb6b4&quot;/&gt;&lt;path d=&quot;M-8 -83H5v176H-8z&quot; fill=&quot;url(#truss)&quot;/&gt;
-&lt;g transform=&quot;translate(-8,-87)&quot;&gt;&lt;use href=&quot;#wing&quot;/&gt;&lt;use href=&quot;#wing&quot; transform=&quot;translate(14) scale(-1 1)&quot;/&gt;&lt;/g&gt;
-&lt;g transform=&quot;translate(-8,-44)&quot;&gt;&lt;use href=&quot;#wing&quot;/&gt;&lt;use href=&quot;#wing&quot; transform=&quot;translate(14) scale(-1 1)&quot;/&gt;&lt;/g&gt;
-&lt;g transform=&quot;translate(-8,19)&quot;&gt;&lt;use href=&quot;#wing&quot;/&gt;&lt;use href=&quot;#wing&quot; transform=&quot;translate(14) scale(-1 1)&quot;/&gt;&lt;/g&gt;
-&lt;g transform=&quot;translate(-8,62)&quot;&gt;&lt;use href=&quot;#wing&quot;/&gt;&lt;use href=&quot;#wing&quot; transform=&quot;translate(14) scale(-1 1)&quot;/&gt;&lt;/g&gt;
-&lt;path d=&quot;M-138 -4H93v11h-231z&quot; fill=&quot;#36444c&quot; stroke=&quot;#9da8a7&quot;/&gt;&lt;path d=&quot;M-138 -4H93v11h-231z&quot; fill=&quot;url(#truss)&quot;/&gt;
-&lt;g stroke=&quot;#465963&quot; stroke-width=&quot;1.2&quot;&gt;&lt;path d=&quot;m-119 -9 8-6h28l9 7V9l-9 6h-28l-8-6z&quot; fill=&quot;url(#silver)&quot;/&gt;&lt;rect x=&quot;-85&quot; y=&quot;-8&quot; width=&quot;18&quot; height=&quot;17&quot; rx=&quot;3&quot; fill=&quot;url(#silver)&quot;/&gt;&lt;path d=&quot;m-70 -11 8-6h34l7 6v22l-7 6h-34l-8-6z&quot; fill=&quot;url(#silver)&quot;/&gt;&lt;path d=&quot;M-63 -14v28m6-30v32m23-32v32m5-29v27m-76-28v26m17-24v23&quot; fill=&quot;none&quot;/&gt;&lt;path d=&quot;M-48 -15v-20h8v20&quot; fill=&quot;#7d8e91&quot;/&gt;&lt;/g&gt;
-&lt;g stroke=&quot;#415661&quot; stroke-width=&quot;1.5&quot;&gt;&lt;path d=&quot;M-17 -16l7-9h21l8 9v30l-8 9h-21l-7-9z&quot; fill=&quot;url(#suit)&quot;/&gt;&lt;path d=&quot;M-17 -7h35M-17 10h35&quot; opacity=&quot;.75&quot;/&gt;&lt;path d=&quot;M17 -12l8-6h41l9 8v20l-9 7H25l-8-6z&quot; fill=&quot;url(#silver)&quot;/&gt;&lt;path d=&quot;M26 -16v30m5-31v32m25-32v32m6-30v27&quot; fill=&quot;none&quot;/&gt;&lt;rect x=&quot;35&quot; y=&quot;-10&quot; width=&quot;15&quot; height=&quot;5&quot; rx=&quot;1&quot; fill=&quot;#acb8b5&quot;/&gt;&lt;path d=&quot;M76 -9h12v17H76z&quot; fill=&quot;url(#silver)&quot;/&gt;&lt;path d=&quot;M85 -10h6v20h-6z&quot; fill=&quot;#93aaab&quot;/&gt;&lt;/g&gt;
-&lt;g fill=&quot;none&quot; stroke=&quot;#b9c6c1&quot; stroke-width=&quot;1.4&quot;&gt;&lt;path d=&quot;M-109 -12v-17l-9-8m10 7 12-7m88 19-13-15v-18m5 6-12 4&quot;/&gt;&lt;path d=&quot;M6 23v11h14v-6&quot;/&gt;&lt;/g&gt;&lt;/g&gt;&lt;/g&gt;
+&lt;linearGradient id=&quot;solar&quot; x2=&quot;.35&quot; y2=&quot;1&quot;&gt;&lt;stop stop-color=&quot;#526ca0&quot;/&gt;&lt;stop offset=&quot;.5&quot; stop-color=&quot;#324b75&quot;/&gt;&lt;stop offset=&quot;1&quot; stop-color=&quot;#21344f&quot;/&gt;&lt;/linearGradient&gt;
+&lt;linearGradient id=&quot;radiator&quot; x2=&quot;.22&quot; y2=&quot;1&quot;&gt;&lt;stop stop-color=&quot;#fffef2&quot;/&gt;&lt;stop offset=&quot;.62&quot; stop-color=&quot;#dce4e3&quot;/&gt;&lt;stop offset=&quot;1&quot; stop-color=&quot;#a1afb6&quot;/&gt;&lt;/linearGradient&gt;
+&lt;pattern id=&quot;cells&quot; width=&quot;8&quot; height=&quot;6&quot; patternUnits=&quot;userSpaceOnUse&quot;&gt;&lt;path d=&quot;M0 .6h8M.6 0v6&quot; fill=&quot;none&quot; stroke=&quot;#9faecb&quot; stroke-width=&quot;.65&quot;/&gt;&lt;/pattern&gt;
+&lt;pattern id=&quot;truss&quot; width=&quot;10&quot; height=&quot;12&quot; patternUnits=&quot;userSpaceOnUse&quot;&gt;&lt;path d=&quot;M1 0l8 6-8 6&quot; stroke=&quot;#bdc7c7&quot; stroke-width=&quot;1.25&quot; fill=&quot;none&quot;/&gt;&lt;/pattern&gt;
+&lt;g id=&quot;solarWing&quot;&gt;
+  &lt;path d=&quot;M0 -2h83v4H0z&quot; fill=&quot;#a09980&quot;/&gt;
+  &lt;g transform=&quot;translate(8,-13)&quot;&gt;
+    &lt;rect width=&quot;75&quot; height=&quot;26&quot; fill=&quot;url(#solar)&quot; stroke=&quot;#bcab8c&quot; stroke-width=&quot;1.6&quot;/&gt;
+    &lt;rect width=&quot;75&quot; height=&quot;26&quot; fill=&quot;url(#cells)&quot;/&gt;
+    &lt;path d=&quot;M25 0v26m25-26v26&quot; stroke=&quot;#cfb389&quot; stroke-width=&quot;1.8&quot;/&gt;
+    &lt;path d=&quot;M0 24.5h75&quot; stroke=&quot;#151e30&quot;/&gt;
+  &lt;/g&gt;
+&lt;/g&gt;
+&lt;g id=&quot;radiatorWing&quot;&gt;
+  &lt;path d=&quot;M0 0h68&quot; stroke=&quot;#909fa8&quot; stroke-width=&quot;3&quot;/&gt;
+  &lt;path d=&quot;M6 -3l53 14m-18-12 21-8&quot; fill=&quot;none&quot; stroke=&quot;#828e95&quot; stroke-width=&quot;1.4&quot;/&gt;
+  &lt;g fill=&quot;url(#radiator)&quot; stroke=&quot;#6e8089&quot; stroke-width=&quot;1&quot;&gt;
+    &lt;rect x=&quot;10&quot; y=&quot;-9&quot; width=&quot;18&quot; height=&quot;18&quot; rx=&quot;1.4&quot;/&gt;
+    &lt;rect x=&quot;30&quot; y=&quot;-9&quot; width=&quot;18&quot; height=&quot;18&quot; rx=&quot;1.4&quot;/&gt;
+    &lt;rect x=&quot;50&quot; y=&quot;-9&quot; width=&quot;18&quot; height=&quot;18&quot; rx=&quot;1.4&quot;/&gt;
+  &lt;/g&gt;
+  &lt;path d=&quot;M13 -5h12m8 0h12m8 0h12M13 5h12m8 0h12m8 0h12&quot; fill=&quot;none&quot; stroke=&quot;#a8b6bd&quot; stroke-width=&quot;.9&quot;/&gt;
+&lt;/g&gt;
+&lt;g id=&quot;station&quot; transform=&quot;rotate(-16)&quot; stroke-linejoin=&quot;round&quot;&gt;
+  &lt;!-- The hatch face is the local origin, shared with the capture circle. --&gt;
+  &lt;g transform=&quot;translate(-137)&quot;&gt;
+    &lt;rect x=&quot;-4.5&quot; y=&quot;-89&quot; width=&quot;9&quot; height=&quot;178&quot; fill=&quot;#283943&quot; stroke=&quot;#a2b1b5&quot; stroke-width=&quot;1.2&quot;/&gt;
+    &lt;rect x=&quot;-4.5&quot; y=&quot;-89&quot; width=&quot;9&quot; height=&quot;178&quot; fill=&quot;url(#truss)&quot;/&gt;
+    &lt;g transform=&quot;translate(0,-87)&quot;&gt;&lt;use href=&quot;#solarWing&quot;/&gt;&lt;use href=&quot;#solarWing&quot; transform=&quot;scale(-1 1)&quot;/&gt;&lt;/g&gt;
+    &lt;g transform=&quot;translate(0,-43)&quot;&gt;&lt;use href=&quot;#radiatorWing&quot;/&gt;&lt;use href=&quot;#radiatorWing&quot; transform=&quot;scale(-1 1)&quot;/&gt;&lt;/g&gt;
+    &lt;g transform=&quot;translate(0,43)&quot;&gt;&lt;use href=&quot;#radiatorWing&quot;/&gt;&lt;use href=&quot;#radiatorWing&quot; transform=&quot;scale(-1 1)&quot;/&gt;&lt;/g&gt;
+    &lt;g transform=&quot;translate(0,87)&quot;&gt;&lt;use href=&quot;#solarWing&quot;/&gt;&lt;use href=&quot;#solarWing&quot; transform=&quot;scale(-1 1)&quot;/&gt;&lt;/g&gt;
+    &lt;g fill=&quot;#c1ab83&quot; stroke=&quot;#56616a&quot;&gt;&lt;circle cy=&quot;-87&quot; r=&quot;4.5&quot;/&gt;&lt;circle cy=&quot;87&quot; r=&quot;4.5&quot;/&gt;&lt;/g&gt;
+  &lt;/g&gt;
+  &lt;g stroke=&quot;#4c6069&quot; stroke-width=&quot;1.4&quot;&gt;
+    &lt;path d=&quot;M-203 -7l8-5h25l8 5V7l-8 5h-25l-8-5z&quot; fill=&quot;url(#silver)&quot;/&gt;
+    &lt;rect x=&quot;-167&quot; y=&quot;-7&quot; width=&quot;18&quot; height=&quot;14&quot; rx=&quot;3&quot; fill=&quot;url(#silver)&quot;/&gt;
+    &lt;path d=&quot;M-154 -11l8-7h30l8 7v22l-8 7h-30l-8-7z&quot; fill=&quot;url(#suit)&quot;/&gt;
+    &lt;path d=&quot;M-110 -9l9-5h41l8 5V9l-8 5h-41l-9-5z&quot; fill=&quot;url(#silver)&quot;/&gt;
+    &lt;path d=&quot;M-53 -8h11l5 4v8l-5 4h-11z&quot; fill=&quot;#87999e&quot;/&gt;
+    &lt;path d=&quot;M-193 -11V11m19-22v22m27-26v30m26-31v32m19-29v26m5-27v28m31-27v26&quot; fill=&quot;none&quot;/&gt;
+    &lt;rect x=&quot;-93&quot; y=&quot;-9&quot; width=&quot;13&quot; height=&quot;4&quot; rx=&quot;1&quot; fill=&quot;#d7c8a5&quot; stroke=&quot;none&quot;/&gt;
+    &lt;path d=&quot;M-183 -12v-13l-8-6m8 6 10-5m53 12 6-12h11&quot; fill=&quot;none&quot; stroke=&quot;#b3c1bf&quot;/&gt;
+  &lt;/g&gt;
+  &lt;g stroke=&quot;#52636d&quot; stroke-width=&quot;1.2&quot;&gt;
+    &lt;path d=&quot;M-41 -7l7-4h13l5 4H0V7h-16l-5 4h-13l-7-4z&quot; fill=&quot;url(#silver)&quot;/&gt;
+    &lt;path d=&quot;M-32 -10v20m9-20v20m12-17v14&quot; fill=&quot;none&quot;/&gt;
+    &lt;path d=&quot;M-8 -11H0v22h-8c-5-3-5-19 0-22z&quot; fill=&quot;#899a9d&quot;/&gt;
+    &lt;ellipse rx=&quot;6.5&quot; ry=&quot;11.5&quot; fill=&quot;#dce1d7&quot;/&gt;
+    &lt;ellipse rx=&quot;4.3&quot; ry=&quot;8.4&quot; fill=&quot;#172a34&quot; stroke=&quot;#748f93&quot;/&gt;
+    &lt;path d=&quot;M-1 -10h2m-2 20h2&quot; stroke=&quot;#f0c987&quot; stroke-width=&quot;2.4&quot;/&gt;
+  &lt;/g&gt;
+&lt;/g&gt;
 &lt;g id=&quot;astronaut&quot; transform=&quot;rotate(14)&quot; stroke=&quot;#465056&quot; stroke-linejoin=&quot;round&quot; stroke-linecap=&quot;round&quot; stroke-width=&quot;.85&quot;&gt;
   &lt;!-- Life-support pack behind the pressure garment, in three-quarter view. --&gt;
   &lt;path d=&quot;m-13-20 11-1 3 3-1 32-4 3-12-2-2-5 1-25z&quot; fill=&quot;#5a666b&quot;/&gt;
@@ -179,7 +222,7 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
 &lt;g id=&quot;rings&quot; stroke=&quot;#78909a&quot; fill=&quot;none&quot; opacity=&quot;.13&quot; stroke-width=&quot;.8&quot;&gt;&lt;/g&gt;
 &lt;use id=&quot;craft&quot; href=&quot;#station&quot;/&gt;&lt;g id=&quot;goal&quot;&gt;&lt;circle id=&quot;zone&quot; fill=&quot;#a9c4b7&quot; fill-opacity=&quot;.09&quot; stroke=&quot;#a9c4b7&quot; stroke-dasharray=&quot;3 4&quot;/&gt;&lt;path d=&quot;M-4 0h8m-4-4v8&quot; stroke=&quot;var(--mint)&quot;/&gt;&lt;/g&gt;
 &lt;line id=&quot;coast&quot; stroke=&quot;var(--mint)&quot; stroke-width=&quot;1.1&quot; stroke-dasharray=&quot;3 5&quot;/&gt;&lt;line id=&quot;trial&quot; stroke=&quot;var(--gold)&quot; stroke-width=&quot;1.5&quot; stroke-dasharray=&quot;6 5&quot;/&gt;&lt;line id=&quot;vArrow&quot; stroke=&quot;#a9b8c5&quot; stroke-width=&quot;2&quot; marker-end=&quot;url(#vTip)&quot;/&gt;
-&lt;g id=&quot;eject&quot; visibility=&quot;hidden&quot;&gt;&lt;use id=&quot;spentTool&quot;/&gt;&lt;/g&gt;&lt;use id=&quot;suitMan&quot; href=&quot;#astronaut&quot;/&gt;&lt;g id=&quot;craftLabel&quot;&gt;&lt;path d=&quot;M0 0l12-16h21&quot; fill=&quot;none&quot; stroke=&quot;#82b4a1&quot;/&gt;&lt;text x=&quot;12&quot; y=&quot;-21&quot; class=&quot;plottext&quot; fill=&quot;var(--mint)&quot;&gt;CAPTURE ZONE&lt;/text&gt;&lt;/g&gt;&lt;g id=&quot;evaLabel&quot;&gt;&lt;path d=&quot;m0 0 9 12h12&quot; stroke=&quot;#899ba6&quot; fill=&quot;none&quot;/&gt;&lt;text x=&quot;25&quot; y=&quot;16&quot; class=&quot;plottext&quot; fill=&quot;#c9d5d7&quot;&gt;EVA–01&lt;/text&gt;&lt;/g&gt;
+&lt;g id=&quot;eject&quot; visibility=&quot;hidden&quot;&gt;&lt;use id=&quot;spentTool&quot;/&gt;&lt;/g&gt;&lt;use id=&quot;suitMan&quot; href=&quot;#astronaut&quot;/&gt;&lt;g id=&quot;craftLabel&quot;&gt;&lt;path d=&quot;M0 0l12-16h21&quot; fill=&quot;none&quot; stroke=&quot;#82b4a1&quot;/&gt;&lt;text x=&quot;12&quot; y=&quot;-21&quot; class=&quot;plottext&quot; fill=&quot;var(--mint)&quot;&gt;Capture zone&lt;/text&gt;&lt;/g&gt;&lt;g id=&quot;evaLabel&quot;&gt;&lt;path d=&quot;m0 0 9 12h12&quot; stroke=&quot;#899ba6&quot; fill=&quot;none&quot;/&gt;&lt;text x=&quot;25&quot; y=&quot;16&quot; class=&quot;plottext&quot; fill=&quot;#c9d5d7&quot;&gt;EVA–01&lt;/text&gt;&lt;/g&gt;
 &lt;g id=&quot;aim&quot; stroke=&quot;var(--gold)&quot; fill=&quot;none&quot;&gt;
   &lt;circle id=&quot;powerRing&quot; stroke-opacity=&quot;.35&quot; stroke-dasharray=&quot;2 7&quot; visibility=&quot;hidden&quot;/&gt;&lt;line id=&quot;targetLine&quot; stroke-dasharray=&quot;3 3&quot;/&gt;
   &lt;g id=&quot;reticle&quot;&gt;&lt;circle r=&quot;7&quot; fill=&quot;#111719&quot; fill-opacity=&quot;.75&quot;/&gt;&lt;path d=&quot;M-12 0h7m10 0h7M0-12v7m0 10v7&quot;/&gt;&lt;circle r=&quot;1.3&quot; fill=&quot;var(--gold)&quot; stroke=&quot;none&quot;/&gt;&lt;/g&gt;
@@ -189,12 +232,12 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
   &lt;div role=&quot;group&quot; aria-label=&quot;Suit telemetry&quot;&gt;
     &lt;div class=&quot;hud left primary-hud&quot;&gt;&lt;div class=&quot;micro&quot;&gt;Oxygen remaining&lt;/div&gt;&lt;div class=&quot;big&quot; id=&quot;oxygen&quot;&gt;15:00&lt;/div&gt;&lt;div class=&quot;meter&quot;&gt;&lt;i id=&quot;oxygenBar&quot;&gt;&lt;/i&gt;&lt;/div&gt;&lt;/div&gt;
     &lt;div class=&quot;hud right primary-hud&quot;&gt;&lt;div class=&quot;micro&quot;&gt;Δv budget&lt;/div&gt;&lt;div class=&quot;big&quot;&gt;&lt;span id=&quot;budget&quot;&gt;&lt;/span&gt; &lt;small&gt;m/s&lt;/small&gt;&lt;/div&gt;&lt;/div&gt;
-    &lt;div class=&quot;hud left side-hud&quot;&gt;&lt;div&gt;&lt;div class=&quot;micro&quot;&gt;Hull distance&lt;/div&gt;&lt;b id=&quot;range&quot;&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;div class=&quot;micro&quot;&gt;Hatch bearing&lt;/div&gt;&lt;b id=&quot;bearing&quot;&gt;&lt;/b&gt;&lt;/div&gt;&lt;/div&gt;
+    &lt;div class=&quot;hud left side-hud&quot;&gt;&lt;div&gt;&lt;div class=&quot;micro&quot;&gt;Hatch distance&lt;/div&gt;&lt;b id=&quot;range&quot;&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;div class=&quot;micro&quot;&gt;Hatch bearing&lt;/div&gt;&lt;b id=&quot;bearing&quot;&gt;&lt;/b&gt;&lt;/div&gt;&lt;/div&gt;
     &lt;div class=&quot;hud right side-hud&quot;&gt;&lt;div class=&quot;micro&quot;&gt;Velocity · m/s&lt;/div&gt;&lt;div class=&quot;raw&quot;&gt;&lt;span&gt;Vx&lt;/span&gt;&lt;b id=&quot;vx&quot;&gt;&lt;/b&gt;&lt;span&gt;Vy&lt;/span&gt;&lt;b id=&quot;vy&quot;&gt;&lt;/b&gt;&lt;span&gt;Radial&lt;/span&gt;&lt;b id=&quot;radial&quot;&gt;&lt;/b&gt;&lt;span&gt;Mass&lt;/span&gt;&lt;b id=&quot;mass&quot;&gt;&lt;/b&gt;&lt;/div&gt;&lt;/div&gt;
   &lt;/div&gt;
   &lt;div class=&quot;hud lower-hud&quot;&gt;
     &lt;div class=&quot;lower-readouts&quot;&gt;
-      &lt;svg class=&quot;plot-scale&quot; viewBox=&quot;0 0 94 23&quot; preserveAspectRatio=&quot;xMinYMax meet&quot; aria-hidden=&quot;true&quot;&gt;
+      &lt;svg class=&quot;plot-scale&quot; id=&quot;plotScale&quot; width=&quot;94&quot; height=&quot;23&quot; aria-hidden=&quot;true&quot;&gt;
         &lt;g transform=&quot;translate(0 21)&quot; stroke=&quot;#95a6aa&quot; fill=&quot;#c1cccf&quot;&gt;&lt;path id=&quot;scaleLine&quot; fill=&quot;none&quot;/&gt;&lt;text x=&quot;0&quot; y=&quot;-6&quot; id=&quot;scaleText&quot; stroke=&quot;none&quot; class=&quot;plottext&quot;&gt;&lt;/text&gt;&lt;/g&gt;
       &lt;/svg&gt;
       &lt;div class=&quot;assist&quot;&gt;&lt;div class=&quot;micro&quot; id=&quot;assistMode&quot;&gt;&lt;/div&gt;&lt;div id=&quot;prediction&quot;&gt;&lt;/div&gt;&lt;/div&gt;
@@ -405,8 +448,8 @@ function plotCamera(s,w,h) {
 function renderPlot(pvx,pvy) {
   const s=state,w=plotW,h=plotH;
   const {px,py,ox,oy,scale,reach,inner}=camera;
-  const stationScale=Math.min(.66,scale*.062);
-  at(&#x27;craft&#x27;,ox+2*stationScale,oy+34*stationScale,&#x27;scale(&#x27;+stationScale+&#x27;)&#x27;);
+  const stationScale=Math.min(.78,scale*.065);
+  at(&#x27;craft&#x27;,ox,oy,&#x27;scale(&#x27;+stationScale+&#x27;)&#x27;);
   at(&#x27;goal&#x27;,ox,oy); $(&#x27;zone&#x27;).setAttribute(&#x27;r&#x27;,captureRadius*scale);
   at(&#x27;craftLabel&#x27;,ox,oy-captureRadius*scale-3);
   const suitScale=Math.min(.57,Math.max(.39,scale*.042));
@@ -455,7 +498,8 @@ function renderPlot(pvx,pvy) {
     $(&#x27;spentTool&#x27;).setAttribute(&#x27;href&#x27;,&#x27;#t&#x27;+anim.i);$(&#x27;eject&#x27;).style.opacity=Math.min(1,2.5-anim.age);
   }
   const units=scale&gt;7?5:Math.max(10,Math.round(50/scale/5)*5);
-  $(&#x27;scaleLine&#x27;).setAttribute(&#x27;d&#x27;,&#x27;M0 -3v3h&#x27;+(scale*units)+&#x27;v-3&#x27;); $(&#x27;scaleText&#x27;).textContent=units+&#x27; M&#x27;;
+  $(&#x27;plotScale&#x27;).setAttribute(&#x27;width&#x27;,Math.ceil(scale*units)+1);
+  $(&#x27;scaleLine&#x27;).setAttribute(&#x27;d&#x27;,&#x27;M0 -3v3h&#x27;+(scale*units)+&#x27;v-3&#x27;); $(&#x27;scaleText&#x27;).textContent=units+&#x27; m&#x27;;
 }
 
 function trackTarget() {
@@ -551,7 +595,7 @@ function guide() {
     &#x27;&lt;li&gt;&lt;b&gt;Release to throw.&lt;/b&gt; A click or tap without dragging previews the aim. Escape or release outside the plot to cancel a drag.&lt;/li&gt;&#x27;+
     &#x27;&lt;li&gt;&lt;b&gt;Keyboard controls.&lt;/b&gt; Left and right change bearing by 1° (Shift for 10°). Up and down change power by 1% (Shift for 10%). Press Enter on the plot to throw, or hold Space to wind up and release to throw. Escape cancels the windup.&lt;/li&gt;&#x27;+
     &#x27;&lt;li&gt;&lt;b&gt;Coast&lt;/b&gt; once you have a return path. P pauses flight. The speed controls advance motion and oxygen together.&lt;/li&gt;&lt;/ul&gt;&#x27;+
-    &#x27;&lt;p&gt;Bearings run counterclockwise from right (000°) to up (090°). Vx, Vy and radial speed use m/s. Positive radial speed means you are moving away. Hull distance measures the gap to the capture circle. The Δv budget is the largest total velocity change available from full-power throws in the best order.&lt;/p&gt;&#x27;,
+    &#x27;&lt;p&gt;Bearings run counterclockwise from right (000°) to up (090°). Vx, Vy and radial speed use m/s. Positive radial speed means you are moving away. Hatch distance measures the gap to the capture circle. The Δv budget is the largest total velocity change available from full-power throws in the best order.&lt;/p&gt;&#x27;,
     [[&#x27;Back to flight&#x27;,()=&gt;closeDialog(),true]]);
 }
 function finish(title,description) {
@@ -688,7 +732,7 @@ init();
   function key(k,shiftKey=false) {
     $(&#x27;plot&#x27;).dispatchEvent(new KeyboardEvent(&#x27;keydown&#x27;,{key:k,bubbles:true,cancelable:true,shiftKey}));
   }
-  const output=document.createElement(&#x27;pre&#x27;);output.id=&#x27;qa-results&#x27;;document.body.append(output);
+  const output=document.createElement(&#x27;pre&#x27;);output.id=&#x27;qa-results&#x27;;
   try {
     test(&#x27;Offline initialization and six selectable tools&#x27;,()=&gt;{yes($(&#x27;tools&#x27;).children.length===6,&#x27;rack&#x27;);yes($(&#x27;oxygen&#x27;).textContent===&#x27;15:00&#x27;,&#x27;clock&#x27;);yes(state.phase===&#x27;ready&#x27;,&#x27;standby&#x27;);yes(!performance.getEntriesByType(&#x27;resource&#x27;).some(r=&gt;/^https?:/.test(r.name)),&#x27;external request&#x27;)});
     test(&#x27;All 64 inventory budgets match independent brute-force enumeration&#x27;,()=&gt;{
@@ -812,6 +856,25 @@ init();
       for(let i=0;i&lt;10;i++)key(&#x27;ArrowDown&#x27;,true);near(state.power,10,&#x27;floor&#x27;);
       key(&#x27;Enter&#x27;);yes(state.throws===1,&#x27;keyboard release&#x27;);
     });
+    test(&#x27;Docking hatch stays centered on the capture zone in each scenario&#x27;,()=&gt;{
+      for(let index=0;index&lt;scenarios.length;index++) {
+        newFlight(index);
+        const hatch=new DOMPoint(0,0).matrixTransform($(&#x27;craft&#x27;).getScreenCTM());
+        const goal=new DOMPoint(0,0).matrixTransform($(&#x27;goal&#x27;).getScreenCTM());
+        near(hatch.x,goal.x,&#x27;hatch x&#x27;,.01);near(hatch.y,goal.y,&#x27;hatch y&#x27;,.01);
+      }
+    });
+    test(&#x27;HUD labels use readable mixed case and the oxygen gauge follows the reserve&#x27;,()=&gt;{
+      for(const label of document.querySelectorAll(&#x27;.hud .micro,.spec,.throw-vector .micro&#x27;)) {
+        const style=getComputedStyle(label);
+        yes(style.textTransform===&#x27;none&#x27; &amp;&amp; parseFloat(style.fontSize)&gt;=12,label.textContent);
+      }
+      const bar=$(&#x27;oxygenBar&#x27;), full=bar.getBoundingClientRect();
+      yes(full.height&gt;=5 &amp;&amp; full.width&gt;0,&#x27;visible reserve&#x27;);
+      toggleClock();advance(limits.Easy/2);render();
+      near(bar.getBoundingClientRect().width,full.width/2,&#x27;half-full bar&#x27;,.1);
+      yes($(&#x27;oxygen&#x27;).textContent===&#x27;07:30&#x27;,&#x27;remaining oxygen&#x27;);
+    });
     test(&#x27;The advisory updates inside the plot without blocking aim or covering the scale and forecast&#x27;,()=&gt;{
       const plot=$(&#x27;plot&#x27;), tip=$(&#x27;tip&#x27;), advisory=tip.closest(&#x27;.advisory&#x27;);
       const before=tip.textContent;
@@ -835,11 +898,12 @@ init();
     });
     output.textContent=&#x27;PASS &#x27;+passed.length+&#x27; groups at &#x27;+innerWidth+&#x27;px: &#x27;+passed.join(&#x27; | &#x27;);
   }catch(e){output.textContent=&#x27;FAIL after &#x27;+passed.length+&#x27;: &#x27;+e.message+&#x27; / &#x27;+e.stack;}
+  document.body.append(output);
 })();
 &lt;/script&gt;&lt;/body&gt;&lt;/html&gt;
 " onload="check(this)"></iframe><iframe style="border:0;width:390px;height:844px" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;&lt;meta name=&quot;theme-color&quot; content=&quot;#101517&quot;&gt;&lt;title&gt;UNTETHERED · EVA return simulator&lt;/title&gt;&lt;style&gt;
-:root{color-scheme:dark;--bg:#0e1113;--panel:#181c1e;--edge:#343b3e;--muted:#a0aaaa;--mint:#a9c4b7;--ink:#e5e8e5;--gold:#d4b48b;--mono:Consolas,&quot;SFMono-Regular&quot;,&quot;Liberation Mono&quot;,monospace;--sans:&quot;Segoe UI&quot;,Arial,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px var(--sans)}button,select,input{font:inherit}button,select{color:var(--ink);cursor:pointer}button{background:#20282b;border:1px solid var(--edge);border-radius:5px}button:hover:enabled,select:hover{background:#2a3437;border-color:#6b7d81}button:focus-visible,select:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--mint);outline-offset:3px}button:disabled{cursor:default;opacity:.45}button svg{width:15px;height:15px;vertical-align:-3px}header{border-bottom:1px solid var(--edge);background:#14191b}.bar,main{width:min(1512px,100%);margin:auto}.bar{display:flex;align-items:center;justify-content:space-between;padding:17px clamp(16px,3.6vw,58px);gap:12px}.brand{display:flex;align-items:center;gap:13px}.brand&gt;svg{width:38px;height:38px}.wordmark{font-weight:750;letter-spacing:.18em;font-size:20px;line-height:1.1}.subbrand,.micro,.sectionlabel,.spec,.tag,.plotlabel,.foot,.eyebrow{font:10px/1.45 var(--mono);letter-spacing:.105em;text-transform:uppercase}.subbrand{color:var(--muted);letter-spacing:.17em;font-size:9px;margin-top:4px}.toptools,.actions,.caption,.settings,.row,.chips,.legend,.cardhead,.inc,.fr{display:flex;align-items:center;gap:10px}.toptools{gap:17px}.tag{border:1px solid #435050;color:#bccac7;border-radius:4px;padding:4px 7px;letter-spacing:.08em}.quiet{padding:8px 11px;display:inline-flex;align-items:center;gap:7px}.quiet svg{fill:none;stroke:currentColor;stroke-width:1.6}.guide{background:transparent}main{padding:24px clamp(16px,3.6vw,58px) 22px}.mission{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:17px}.eyebrow,.plotlabel{color:var(--mint)}h1,h2,h3,p{margin:0}h1{font-size:clamp(26px,2.4vw,39px);line-height:1.15;letter-spacing:-.04em;margin-top:4px;font-weight:630}.settings{gap:9px}.settings select,.dialogrow select{background:#20282b;border:1px solid var(--edge);border-radius:5px;padding:7px 9px}.panel{background:var(--panel);border:1px solid var(--edge);border-radius:8px;overflow:hidden;min-width:0}.panelhead{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--edge);min-height:44px}.sectionlabel{font-weight:650;font-size:11px;color:#dce5e2;display:flex;align-items:center;gap:9px}.sectionlabel svg{width:15px;height:15px;stroke:var(--mint);fill:none;stroke-width:1.6}.status{font:10px var(--mono);color:var(--mint);display:flex;align-items:center;gap:7px}.dot{width:6px;height:6px;display:inline-block;background:var(--mint);border-radius:50%}.micro,.spec,.foot{color:var(--muted)}.big{font:clamp(25px,2.2vw,36px)/1.05 var(--mono);letter-spacing:-.06em;margin-top:4px}.big small{font:13px var(--mono);color:var(--muted);letter-spacing:0}.oxygen,.dv{color:var(--mint)}.meter{height:4px;margin-top:9px;background:#283333;position:relative}.meter i{display:block;height:100%;background:var(--mint)}.meter:after{content:&quot;&quot;;position:absolute;inset:0;background:repeating-linear-gradient(to right,transparent 0 calc(5% - 2px),#162021 calc(5% - 2px) 5%)}.rack{margin-top:14px}.rack .panelhead{border-bottom:0;padding-bottom:4px}.spec{font-size:10px;letter-spacing:.035em}.tools{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;padding:9px 14px 14px}.tool{position:relative;text-align:left;background:#1b2225;padding:7px 10px 10px;min-width:0}.tool.selected{background:#20312e;border-color:#81c8ad;box-shadow:inset 0 -2px #a9c4b7}.tool b,.tool small{display:block}.tool b{font-size:13px;font-weight:600}.tool small{font:10px var(--mono);color:var(--muted);margin-top:4px}.tool svg{width:100%;height:43px;display:block}.slot{position:absolute;top:7px;left:8px;color:var(--muted);font:9px var(--mono)}.tool.selected .slot{color:var(--mint)}.foot{font-size:9px;letter-spacing:.035em;display:flex;justify-content:space-between;gap:8px;margin-top:15px}.plottext{font:9px var(--mono);letter-spacing:1px}.plotvalue{font:11px var(--mono)}dialog{color:var(--ink);background:#192023;border:1px solid #536260;border-radius:10px;width:min(450px,calc(100% - 28px));padding:23px;box-shadow:0 18px 95px #0009}dialog::backdrop{background:#070c10b5}dialog h2{font-size:26px;letter-spacing:-.035em;margin:5px 0 12px}dialog p,dialog li,dialog dd{color:#c2cfcc;font-size:14px;line-height:1.55}dialog ul{padding-left:19px}dialog li{margin:7px 0}.dialogrow{display:flex;justify-content:space-between;align-items:center;margin:16px 0;gap:10px}.dialogactions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}.dialogactions button{padding:9px 14px}.primary{color:#10201a;background:var(--mint);border-color:var(--mint)}.primary:hover:enabled{background:#c0f8df}.dialogstats{display:grid;grid-template-columns:1fr auto;gap:8px 16px}.dialogstats dd{margin:0;text-align:right;font-family:var(--mono)}.dialogstats dt{color:var(--muted)}.sr{position:absolute;width:1px;height:1px;clip-path:inset(50%);overflow:hidden}[hidden]{display:none!important}
+:root{color-scheme:dark;--bg:#0e1113;--panel:#181c1e;--edge:#343b3e;--muted:#c1cecf;--oxygen-fill:#a4ead0;--mint:#a9c4b7;--ink:#e5e8e5;--gold:#d4b48b;--mono:Consolas,&quot;SFMono-Regular&quot;,&quot;Liberation Mono&quot;,monospace;--sans:&quot;Segoe UI&quot;,Arial,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px var(--sans)}button,select,input{font:inherit}button,select{color:var(--ink);cursor:pointer}button{background:#20282b;border:1px solid var(--edge);border-radius:5px}button:hover:enabled,select:hover{background:#2a3437;border-color:#6b7d81}button:focus-visible,select:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--mint);outline-offset:3px}button:disabled{cursor:default;color:var(--muted)}.tool:disabled svg{opacity:.52}button svg{width:15px;height:15px;vertical-align:-3px}header{border-bottom:1px solid var(--edge);background:#14191b}.bar,main{width:min(1512px,100%);margin:auto}.bar{display:flex;align-items:center;justify-content:space-between;padding:17px clamp(16px,3.6vw,58px);gap:12px}.brand{display:flex;align-items:center;gap:13px}.brand&gt;svg{width:38px;height:38px}.wordmark{font-weight:750;letter-spacing:.18em;font-size:20px;line-height:1.1}.subbrand,.micro,.sectionlabel,.spec,.tag,.plotlabel,.foot,.eyebrow{font:500 13px/1.35 var(--sans);letter-spacing:.012em}.subbrand{color:var(--muted);letter-spacing:.02em;font-size:12px;margin-top:2px}.toptools,.actions,.caption,.settings,.row,.chips,.legend,.cardhead,.inc,.fr{display:flex;align-items:center;gap:10px}.toptools{gap:17px}.tag{border:1px solid #435050;color:#bccac7;border-radius:4px;padding:4px 7px;letter-spacing:.025em}.quiet{padding:8px 11px;display:inline-flex;align-items:center;gap:7px}.quiet svg{fill:none;stroke:currentColor;stroke-width:1.6}.guide{background:transparent}main{padding:24px clamp(16px,3.6vw,58px) 22px}.mission{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:17px}.eyebrow,.plotlabel{color:var(--mint)}h1,h2,h3,p{margin:0}h1{font-size:clamp(26px,2.4vw,39px);line-height:1.15;letter-spacing:-.04em;margin-top:4px;font-weight:630}.settings{gap:9px}.settings select,.dialogrow select{background:#20282b;border:1px solid var(--edge);border-radius:5px;padding:7px 9px}.panel{background:var(--panel);border:1px solid var(--edge);border-radius:8px;overflow:hidden;min-width:0}.panelhead{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--edge);min-height:44px}.sectionlabel{font-weight:650;font-size:14px;color:#dce5e2;display:flex;align-items:center;gap:9px}.sectionlabel svg{width:15px;height:15px;stroke:var(--mint);fill:none;stroke-width:1.6}.status{font:12px/1.3 var(--sans);color:var(--mint);display:flex;align-items:center;gap:7px}.dot{width:6px;height:6px;display:inline-block;background:var(--mint);border-radius:50%}.micro,.spec,.foot{color:var(--muted)}.big{font:clamp(25px,2.2vw,36px)/1.05 var(--mono);letter-spacing:-.06em;margin-top:4px}.big small{font:13px var(--mono);color:var(--muted);letter-spacing:0}.oxygen,.dv{color:var(--mint)}.rack{margin-top:14px}.rack .panelhead{border-bottom:0;padding-bottom:4px}.spec{font-variant-numeric:tabular-nums}.tools{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;padding:9px 14px 14px}.tool{position:relative;text-align:left;background:#1b2225;padding:7px 10px 10px;min-width:0}.tool.selected{background:#20312e;border-color:#81c8ad;box-shadow:inset 0 -2px #a9c4b7}.tool b,.tool small{display:block}.tool b{font-size:13px;font-weight:600}.tool small{font:12px/1.3 var(--sans);color:var(--muted);margin-top:4px}.tool svg{width:100%;height:43px;display:block}.slot{position:absolute;top:7px;left:8px;color:var(--muted);font:11px var(--mono)}.tool.selected .slot{color:var(--mint)}.foot{display:flex;justify-content:space-between;gap:8px;margin-top:15px}.plottext{font:500 12px var(--sans);paint-order:stroke;stroke:#10181d;stroke-width:2.5px;stroke-linejoin:round}.plotvalue{font:11px var(--mono)}dialog{color:var(--ink);background:#192023;border:1px solid #536260;border-radius:10px;width:min(450px,calc(100% - 28px));padding:23px;box-shadow:0 18px 95px #0009}dialog::backdrop{background:#070c10b5}dialog h2{font-size:26px;letter-spacing:-.035em;margin:5px 0 12px}dialog p,dialog li,dialog dd{color:#c2cfcc;font-size:14px;line-height:1.55}dialog ul{padding-left:19px}dialog li{margin:7px 0}.dialogrow{display:flex;justify-content:space-between;align-items:center;margin:16px 0;gap:10px}.dialogactions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}.dialogactions button{padding:9px 14px}.primary{color:#10201a;background:var(--mint);border-color:var(--mint)}.primary:hover:enabled{background:#c0f8df}.dialogstats{display:grid;grid-template-columns:1fr auto;gap:8px 16px}.dialogstats dd{margin:0;text-align:right;font-family:var(--mono)}.dialogstats dt{color:var(--muted)}.sr{position:absolute;width:1px;height:1px;clip-path:inset(50%);overflow:hidden}[hidden]{display:none!important}
 
 .bar,main { width:min(1920px,100%); padding-inline:clamp(12px,3vw,58px) }
 .bar { padding-block:11px }
@@ -864,20 +928,22 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
 .hud.right { right:var(--inset); text-align:right }
 .primary-hud { top:var(--inset); padding:2px 10px 4px; border-left:2px solid #7c8d85; background:linear-gradient(90deg,#11191d99,transparent) }
 .primary-hud.right { border:0; border-right:2px solid #7c8d85; background:linear-gradient(270deg,#11191d99,transparent) }
-.hud .micro { color:#acb8b8; font-size:9px }
+.hud .micro { color:var(--muted) }
 .big { margin-top:1px; font-size:clamp(25px,2.2vw,36px); color:#d7e6dd }
-.big small,.hud small { color:var(--muted); font:10px var(--mono) }
-.meter { height:3px; width:104px; margin-top:6px }
+.big small,.hud small { color:var(--muted); font:12px var(--mono) }
+.meter { position:relative; width:clamp(110px,9vw,136px); height:8px; margin-top:6px; border:1px solid #879b9d; border-radius:2px; overflow:hidden; background:#1e3036 }
+.meter i { display:block; height:100%; background:var(--oxygen-fill) }
+.meter::after { content:&quot;&quot;; position:absolute; inset:0; background:repeating-linear-gradient(90deg,transparent 0 calc(10% - 1px),#13252c99 calc(10% - 1px) 10%) }
 .side-hud { top:44%; display:grid; gap:13px }
 .side-hud b { display:block; margin-top:2px; font:17px/1.15 var(--mono); letter-spacing:-.035em }
-.raw { display:grid; grid-template-columns:auto auto; gap:6px 13px; align-items:baseline; font:10px var(--mono); color:var(--muted) }
+.raw { display:grid; grid-template-columns:auto auto; gap:5px 13px; align-items:baseline; font:12px var(--sans); color:var(--muted) }
 .raw b { font:12px var(--mono); color:var(--ink); margin:0 }
 .raw span { text-align:left }
 .assist { text-align:right; padding-right:10px; border-right:2px solid #827764; color:#c8cecd; font:11px/1.5 var(--mono); background:linear-gradient(270deg,#0c1013bb,transparent) }
 .assist .micro { color:var(--gold); margin-bottom:2px }
 .assist strong { font-weight:normal; color:var(--ink) }
 .plotbar { position:relative; display:flex; align-items:center; justify-content:space-between; gap:12px; border-top:1px solid var(--edge); padding:5px 14px; min-height:33px }
-.legend,.speed,.flight-time { color:var(--muted); font:10px var(--mono) }
+.legend,.speed,.flight-time { color:var(--muted); font:12px/1.35 var(--sans) }
 .legend { gap:15px }
 .legend span { display:flex; align-items:center; gap:5px }
 .keyline { width:15px; border-top:2px dotted var(--mint) }
@@ -885,7 +951,7 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
 .keyline.recoil { border-top:2px dashed var(--gold) }
 .speed { display:flex; align-items:center; gap:2px }
 .speed&gt;svg { width:14px; height:14px; stroke:var(--muted); fill:none; margin-right:3px }
-.speed button { padding:4px 7px; background:transparent; font:11px var(--mono); border-color:transparent }
+.speed button { padding:4px 7px; background:transparent; font:12px var(--mono); border-color:transparent }
 .speed .active { color:var(--mint); background:#29332f; border-color:#4c5c54 }
 .flight-time { margin-left:auto; font-variant-numeric:tabular-nums }
 .flight-time b { color:var(--ink); font-weight:400 }
@@ -900,13 +966,14 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
 .throw-vector .micro { margin-right:6px }
 .lower-hud { inset:auto 0 0; padding:0 var(--inset) 10px; background:linear-gradient(0deg,#050b11df,transparent) }
 .lower-readouts { display:flex; align-items:flex-end; justify-content:space-between; gap:12px; margin-bottom:9px }
-.plot-scale { width:94px; height:23px; flex:none }
+.plot-scale { height:23px; flex:none }
 .advisory { display:flex; align-items:baseline; gap:13px; padding-top:8px; border-top:1px solid #a9c4b74d; color:var(--ink); font-size:12px; line-height:1.45 }
 .advisory .micro { display:inline-flex; align-items:center; gap:6px; flex:none; color:var(--mint) }
 .advisory svg { width:15px; height:15px; align-self:center; fill:none; stroke:currentColor; stroke-width:1.5 }
 .earth-view { pointer-events:none }
-.reticle-text { font:10px var(--mono); fill:var(--gold); paint-order:stroke; stroke:#0c1013; stroke-width:3px; stroke-linejoin:round }
+.reticle-text { font:11px var(--mono); fill:var(--gold); paint-order:stroke; stroke:#0c1013; stroke-width:3px; stroke-linejoin:round }
 @media(max-width:940px) {
+  .side-hud { top:78px; gap:7px }
   .tool { display:block; padding:6px 9px 9px }
   .tool svg { height:33px }
 }
@@ -914,16 +981,14 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
   .bar,main { padding-inline:12px }
   .mission { align-items:center; flex-wrap:wrap; margin-bottom:10px }
   .primary-hud { padding-inline:7px }
-  .side-hud { top:82px; gap:7px }
   .side-hud b { font-size:13px }
-  .raw { gap:3px 8px }
+  .raw { gap:2px 8px }
   .raw b { font-size:11px }
   .tools { grid-template-columns:repeat(3,minmax(0,1fr)) }
   .tool { display:grid; min-height:55px }
   .throwstrip { align-items:flex-start; flex-wrap:wrap; gap:4px 12px }
-  .assist { font-size:10px; max-width:72% }
+  .assist { min-width:0 }
   .plotbar { flex-wrap:wrap }
-  .flight-time { font-size:9px }
   .lower-readouts { gap:6px }
 }
 @media(max-width:450px) {
@@ -933,19 +998,23 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
   .brand&gt;svg { width:27px; height:27px }
   .tag { display:none }
   .settings { gap:5px }
+  .settings .quiet,.settings select { padding:6px; font-size:12px; white-space:nowrap }
   .scene&gt;svg { height:clamp(405px,58svh,545px) }
   .panelhead { padding-inline:9px }
-  .status { font-size:9px; max-width:49%; text-align:right }
+  .sectionlabel { white-space:nowrap }
+  section[aria-label=&quot;Navigation&quot;]&gt;.panelhead { flex-direction:column; align-items:flex-start; gap:3px }
+  .side-hud.left { top:83px }
+  .side-hud.right { top:66px }
   .plotbar { padding:5px 6px; gap:4px }
-  .legend { font-size:9px; gap:6px }
+  .legend { gap:8px }
   .keyline { width:9px }
   .speed { gap:0 }
   .speed&gt;svg { display:none }
-  .speed button { padding:5px 4px; font-size:10px }
+  .speed button { padding:5px 4px }
   .tools { padding:4px 6px 7px; gap:4px }
   .tool { display:block; min-height:67px; padding:4px 5px 6px }
   .tool svg { height:30px }
-  .tool b { font-size:11px }
+  .tool b { font-size:12px }
   .advisory { display:grid; gap:2px; padding-top:6px }
   .lower-hud { padding-bottom:8px }
   .earth-view { x:-25%; width:150% }
@@ -955,21 +1024,59 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
 &lt;linearGradient id=&quot;silver&quot; x2=&quot;.25&quot; y2=&quot;1&quot; gradientUnits=&quot;objectBoundingBox&quot;&gt;&lt;stop stop-color=&quot;#f0f2df&quot;/&gt;&lt;stop offset=&quot;.23&quot; stop-color=&quot;#bdc7c6&quot;/&gt;&lt;stop offset=&quot;.48&quot; stop-color=&quot;#87999f&quot;/&gt;&lt;stop offset=&quot;.75&quot; stop-color=&quot;#667a85&quot;/&gt;&lt;stop offset=&quot;1&quot; stop-color=&quot;#293c49&quot;/&gt;&lt;/linearGradient&gt;
 &lt;linearGradient id=&quot;suit&quot; x2=&quot;.55&quot; y2=&quot;1&quot;&gt;&lt;stop stop-color=&quot;#e3e5dd&quot;/&gt;&lt;stop offset=&quot;.48&quot; stop-color=&quot;#bfc5c2&quot;/&gt;&lt;stop offset=&quot;.8&quot; stop-color=&quot;#a0adb1&quot;/&gt;&lt;stop offset=&quot;1&quot; stop-color=&quot;#596f7d&quot;/&gt;&lt;/linearGradient&gt;
 &lt;linearGradient id=&quot;visor&quot; x2=&quot;.8&quot; y2=&quot;1&quot;&gt;&lt;stop stop-color=&quot;#a1a59c&quot;/&gt;&lt;stop offset=&quot;.26&quot; stop-color=&quot;#545d59&quot;/&gt;&lt;stop offset=&quot;.52&quot; stop-color=&quot;#232c2d&quot;/&gt;&lt;stop offset=&quot;1&quot; stop-color=&quot;#151c1f&quot;/&gt;&lt;/linearGradient&gt;
-&lt;linearGradient id=&quot;solar&quot; x2=&quot;.45&quot; y2=&quot;1&quot;&gt;&lt;stop stop-color=&quot;#718797&quot;/&gt;&lt;stop offset=&quot;.46&quot; stop-color=&quot;#405666&quot;/&gt;&lt;stop offset=&quot;1&quot; stop-color=&quot;#263f50&quot;/&gt;&lt;/linearGradient&gt;
-&lt;pattern id=&quot;cells&quot; width=&quot;10&quot; height=&quot;7&quot; patternUnits=&quot;userSpaceOnUse&quot;&gt;&lt;path d=&quot;M0 .5H10M.5 0V7&quot; fill=&quot;none&quot; stroke=&quot;#c5b998&quot; opacity=&quot;.66&quot; stroke-width=&quot;.65&quot;/&gt;&lt;path d=&quot;M2 0v7m2-7v7m2-7v7m2-7v7&quot; stroke=&quot;#c6c8bc&quot; opacity=&quot;.19&quot; stroke-width=&quot;.45&quot;/&gt;&lt;/pattern&gt;
-&lt;pattern id=&quot;truss&quot; width=&quot;15&quot; height=&quot;12&quot; patternUnits=&quot;userSpaceOnUse&quot;&gt;&lt;path d=&quot;M0 0l15 12M0 12L15 0&quot; fill=&quot;none&quot; stroke=&quot;#a3afb1&quot; stroke-width=&quot;1.5&quot;/&gt;&lt;/pattern&gt;
-&lt;g id=&quot;wing&quot;&gt;&lt;path d=&quot;M-99 0H0v37h-99z&quot; fill=&quot;url(#solar)&quot; stroke=&quot;#beb9a4&quot; stroke-width=&quot;1.7&quot;/&gt;&lt;path d=&quot;M-99 0H0v37h-99z&quot; fill=&quot;url(#cells)&quot;/&gt;&lt;path d=&quot;M-74 0v37m25-37v37m25-37v37&quot; stroke=&quot;#cabaa0&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;/g&gt;
-&lt;g id=&quot;station&quot; stroke-linejoin=&quot;round&quot;&gt;
-&lt;g transform=&quot;translate(-88,-4) rotate(-19)&quot;&gt;
-&lt;path d=&quot;M-8 -83H5v176H-8z&quot; fill=&quot;#42545c&quot; stroke=&quot;#acb6b4&quot;/&gt;&lt;path d=&quot;M-8 -83H5v176H-8z&quot; fill=&quot;url(#truss)&quot;/&gt;
-&lt;g transform=&quot;translate(-8,-87)&quot;&gt;&lt;use href=&quot;#wing&quot;/&gt;&lt;use href=&quot;#wing&quot; transform=&quot;translate(14) scale(-1 1)&quot;/&gt;&lt;/g&gt;
-&lt;g transform=&quot;translate(-8,-44)&quot;&gt;&lt;use href=&quot;#wing&quot;/&gt;&lt;use href=&quot;#wing&quot; transform=&quot;translate(14) scale(-1 1)&quot;/&gt;&lt;/g&gt;
-&lt;g transform=&quot;translate(-8,19)&quot;&gt;&lt;use href=&quot;#wing&quot;/&gt;&lt;use href=&quot;#wing&quot; transform=&quot;translate(14) scale(-1 1)&quot;/&gt;&lt;/g&gt;
-&lt;g transform=&quot;translate(-8,62)&quot;&gt;&lt;use href=&quot;#wing&quot;/&gt;&lt;use href=&quot;#wing&quot; transform=&quot;translate(14) scale(-1 1)&quot;/&gt;&lt;/g&gt;
-&lt;path d=&quot;M-138 -4H93v11h-231z&quot; fill=&quot;#36444c&quot; stroke=&quot;#9da8a7&quot;/&gt;&lt;path d=&quot;M-138 -4H93v11h-231z&quot; fill=&quot;url(#truss)&quot;/&gt;
-&lt;g stroke=&quot;#465963&quot; stroke-width=&quot;1.2&quot;&gt;&lt;path d=&quot;m-119 -9 8-6h28l9 7V9l-9 6h-28l-8-6z&quot; fill=&quot;url(#silver)&quot;/&gt;&lt;rect x=&quot;-85&quot; y=&quot;-8&quot; width=&quot;18&quot; height=&quot;17&quot; rx=&quot;3&quot; fill=&quot;url(#silver)&quot;/&gt;&lt;path d=&quot;m-70 -11 8-6h34l7 6v22l-7 6h-34l-8-6z&quot; fill=&quot;url(#silver)&quot;/&gt;&lt;path d=&quot;M-63 -14v28m6-30v32m23-32v32m5-29v27m-76-28v26m17-24v23&quot; fill=&quot;none&quot;/&gt;&lt;path d=&quot;M-48 -15v-20h8v20&quot; fill=&quot;#7d8e91&quot;/&gt;&lt;/g&gt;
-&lt;g stroke=&quot;#415661&quot; stroke-width=&quot;1.5&quot;&gt;&lt;path d=&quot;M-17 -16l7-9h21l8 9v30l-8 9h-21l-7-9z&quot; fill=&quot;url(#suit)&quot;/&gt;&lt;path d=&quot;M-17 -7h35M-17 10h35&quot; opacity=&quot;.75&quot;/&gt;&lt;path d=&quot;M17 -12l8-6h41l9 8v20l-9 7H25l-8-6z&quot; fill=&quot;url(#silver)&quot;/&gt;&lt;path d=&quot;M26 -16v30m5-31v32m25-32v32m6-30v27&quot; fill=&quot;none&quot;/&gt;&lt;rect x=&quot;35&quot; y=&quot;-10&quot; width=&quot;15&quot; height=&quot;5&quot; rx=&quot;1&quot; fill=&quot;#acb8b5&quot;/&gt;&lt;path d=&quot;M76 -9h12v17H76z&quot; fill=&quot;url(#silver)&quot;/&gt;&lt;path d=&quot;M85 -10h6v20h-6z&quot; fill=&quot;#93aaab&quot;/&gt;&lt;/g&gt;
-&lt;g fill=&quot;none&quot; stroke=&quot;#b9c6c1&quot; stroke-width=&quot;1.4&quot;&gt;&lt;path d=&quot;M-109 -12v-17l-9-8m10 7 12-7m88 19-13-15v-18m5 6-12 4&quot;/&gt;&lt;path d=&quot;M6 23v11h14v-6&quot;/&gt;&lt;/g&gt;&lt;/g&gt;&lt;/g&gt;
+&lt;linearGradient id=&quot;solar&quot; x2=&quot;.35&quot; y2=&quot;1&quot;&gt;&lt;stop stop-color=&quot;#526ca0&quot;/&gt;&lt;stop offset=&quot;.5&quot; stop-color=&quot;#324b75&quot;/&gt;&lt;stop offset=&quot;1&quot; stop-color=&quot;#21344f&quot;/&gt;&lt;/linearGradient&gt;
+&lt;linearGradient id=&quot;radiator&quot; x2=&quot;.22&quot; y2=&quot;1&quot;&gt;&lt;stop stop-color=&quot;#fffef2&quot;/&gt;&lt;stop offset=&quot;.62&quot; stop-color=&quot;#dce4e3&quot;/&gt;&lt;stop offset=&quot;1&quot; stop-color=&quot;#a1afb6&quot;/&gt;&lt;/linearGradient&gt;
+&lt;pattern id=&quot;cells&quot; width=&quot;8&quot; height=&quot;6&quot; patternUnits=&quot;userSpaceOnUse&quot;&gt;&lt;path d=&quot;M0 .6h8M.6 0v6&quot; fill=&quot;none&quot; stroke=&quot;#9faecb&quot; stroke-width=&quot;.65&quot;/&gt;&lt;/pattern&gt;
+&lt;pattern id=&quot;truss&quot; width=&quot;10&quot; height=&quot;12&quot; patternUnits=&quot;userSpaceOnUse&quot;&gt;&lt;path d=&quot;M1 0l8 6-8 6&quot; stroke=&quot;#bdc7c7&quot; stroke-width=&quot;1.25&quot; fill=&quot;none&quot;/&gt;&lt;/pattern&gt;
+&lt;g id=&quot;solarWing&quot;&gt;
+  &lt;path d=&quot;M0 -2h83v4H0z&quot; fill=&quot;#a09980&quot;/&gt;
+  &lt;g transform=&quot;translate(8,-13)&quot;&gt;
+    &lt;rect width=&quot;75&quot; height=&quot;26&quot; fill=&quot;url(#solar)&quot; stroke=&quot;#bcab8c&quot; stroke-width=&quot;1.6&quot;/&gt;
+    &lt;rect width=&quot;75&quot; height=&quot;26&quot; fill=&quot;url(#cells)&quot;/&gt;
+    &lt;path d=&quot;M25 0v26m25-26v26&quot; stroke=&quot;#cfb389&quot; stroke-width=&quot;1.8&quot;/&gt;
+    &lt;path d=&quot;M0 24.5h75&quot; stroke=&quot;#151e30&quot;/&gt;
+  &lt;/g&gt;
+&lt;/g&gt;
+&lt;g id=&quot;radiatorWing&quot;&gt;
+  &lt;path d=&quot;M0 0h68&quot; stroke=&quot;#909fa8&quot; stroke-width=&quot;3&quot;/&gt;
+  &lt;path d=&quot;M6 -3l53 14m-18-12 21-8&quot; fill=&quot;none&quot; stroke=&quot;#828e95&quot; stroke-width=&quot;1.4&quot;/&gt;
+  &lt;g fill=&quot;url(#radiator)&quot; stroke=&quot;#6e8089&quot; stroke-width=&quot;1&quot;&gt;
+    &lt;rect x=&quot;10&quot; y=&quot;-9&quot; width=&quot;18&quot; height=&quot;18&quot; rx=&quot;1.4&quot;/&gt;
+    &lt;rect x=&quot;30&quot; y=&quot;-9&quot; width=&quot;18&quot; height=&quot;18&quot; rx=&quot;1.4&quot;/&gt;
+    &lt;rect x=&quot;50&quot; y=&quot;-9&quot; width=&quot;18&quot; height=&quot;18&quot; rx=&quot;1.4&quot;/&gt;
+  &lt;/g&gt;
+  &lt;path d=&quot;M13 -5h12m8 0h12m8 0h12M13 5h12m8 0h12m8 0h12&quot; fill=&quot;none&quot; stroke=&quot;#a8b6bd&quot; stroke-width=&quot;.9&quot;/&gt;
+&lt;/g&gt;
+&lt;g id=&quot;station&quot; transform=&quot;rotate(-16)&quot; stroke-linejoin=&quot;round&quot;&gt;
+  &lt;!-- The hatch face is the local origin, shared with the capture circle. --&gt;
+  &lt;g transform=&quot;translate(-137)&quot;&gt;
+    &lt;rect x=&quot;-4.5&quot; y=&quot;-89&quot; width=&quot;9&quot; height=&quot;178&quot; fill=&quot;#283943&quot; stroke=&quot;#a2b1b5&quot; stroke-width=&quot;1.2&quot;/&gt;
+    &lt;rect x=&quot;-4.5&quot; y=&quot;-89&quot; width=&quot;9&quot; height=&quot;178&quot; fill=&quot;url(#truss)&quot;/&gt;
+    &lt;g transform=&quot;translate(0,-87)&quot;&gt;&lt;use href=&quot;#solarWing&quot;/&gt;&lt;use href=&quot;#solarWing&quot; transform=&quot;scale(-1 1)&quot;/&gt;&lt;/g&gt;
+    &lt;g transform=&quot;translate(0,-43)&quot;&gt;&lt;use href=&quot;#radiatorWing&quot;/&gt;&lt;use href=&quot;#radiatorWing&quot; transform=&quot;scale(-1 1)&quot;/&gt;&lt;/g&gt;
+    &lt;g transform=&quot;translate(0,43)&quot;&gt;&lt;use href=&quot;#radiatorWing&quot;/&gt;&lt;use href=&quot;#radiatorWing&quot; transform=&quot;scale(-1 1)&quot;/&gt;&lt;/g&gt;
+    &lt;g transform=&quot;translate(0,87)&quot;&gt;&lt;use href=&quot;#solarWing&quot;/&gt;&lt;use href=&quot;#solarWing&quot; transform=&quot;scale(-1 1)&quot;/&gt;&lt;/g&gt;
+    &lt;g fill=&quot;#c1ab83&quot; stroke=&quot;#56616a&quot;&gt;&lt;circle cy=&quot;-87&quot; r=&quot;4.5&quot;/&gt;&lt;circle cy=&quot;87&quot; r=&quot;4.5&quot;/&gt;&lt;/g&gt;
+  &lt;/g&gt;
+  &lt;g stroke=&quot;#4c6069&quot; stroke-width=&quot;1.4&quot;&gt;
+    &lt;path d=&quot;M-203 -7l8-5h25l8 5V7l-8 5h-25l-8-5z&quot; fill=&quot;url(#silver)&quot;/&gt;
+    &lt;rect x=&quot;-167&quot; y=&quot;-7&quot; width=&quot;18&quot; height=&quot;14&quot; rx=&quot;3&quot; fill=&quot;url(#silver)&quot;/&gt;
+    &lt;path d=&quot;M-154 -11l8-7h30l8 7v22l-8 7h-30l-8-7z&quot; fill=&quot;url(#suit)&quot;/&gt;
+    &lt;path d=&quot;M-110 -9l9-5h41l8 5V9l-8 5h-41l-9-5z&quot; fill=&quot;url(#silver)&quot;/&gt;
+    &lt;path d=&quot;M-53 -8h11l5 4v8l-5 4h-11z&quot; fill=&quot;#87999e&quot;/&gt;
+    &lt;path d=&quot;M-193 -11V11m19-22v22m27-26v30m26-31v32m19-29v26m5-27v28m31-27v26&quot; fill=&quot;none&quot;/&gt;
+    &lt;rect x=&quot;-93&quot; y=&quot;-9&quot; width=&quot;13&quot; height=&quot;4&quot; rx=&quot;1&quot; fill=&quot;#d7c8a5&quot; stroke=&quot;none&quot;/&gt;
+    &lt;path d=&quot;M-183 -12v-13l-8-6m8 6 10-5m53 12 6-12h11&quot; fill=&quot;none&quot; stroke=&quot;#b3c1bf&quot;/&gt;
+  &lt;/g&gt;
+  &lt;g stroke=&quot;#52636d&quot; stroke-width=&quot;1.2&quot;&gt;
+    &lt;path d=&quot;M-41 -7l7-4h13l5 4H0V7h-16l-5 4h-13l-7-4z&quot; fill=&quot;url(#silver)&quot;/&gt;
+    &lt;path d=&quot;M-32 -10v20m9-20v20m12-17v14&quot; fill=&quot;none&quot;/&gt;
+    &lt;path d=&quot;M-8 -11H0v22h-8c-5-3-5-19 0-22z&quot; fill=&quot;#899a9d&quot;/&gt;
+    &lt;ellipse rx=&quot;6.5&quot; ry=&quot;11.5&quot; fill=&quot;#dce1d7&quot;/&gt;
+    &lt;ellipse rx=&quot;4.3&quot; ry=&quot;8.4&quot; fill=&quot;#172a34&quot; stroke=&quot;#748f93&quot;/&gt;
+    &lt;path d=&quot;M-1 -10h2m-2 20h2&quot; stroke=&quot;#f0c987&quot; stroke-width=&quot;2.4&quot;/&gt;
+  &lt;/g&gt;
+&lt;/g&gt;
 &lt;g id=&quot;astronaut&quot; transform=&quot;rotate(14)&quot; stroke=&quot;#465056&quot; stroke-linejoin=&quot;round&quot; stroke-linecap=&quot;round&quot; stroke-width=&quot;.85&quot;&gt;
   &lt;!-- Life-support pack behind the pressure garment, in three-quarter view. --&gt;
   &lt;path d=&quot;m-13-20 11-1 3 3-1 32-4 3-12-2-2-5 1-25z&quot; fill=&quot;#5a666b&quot;/&gt;
@@ -1018,7 +1125,7 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
 &lt;g id=&quot;rings&quot; stroke=&quot;#78909a&quot; fill=&quot;none&quot; opacity=&quot;.13&quot; stroke-width=&quot;.8&quot;&gt;&lt;/g&gt;
 &lt;use id=&quot;craft&quot; href=&quot;#station&quot;/&gt;&lt;g id=&quot;goal&quot;&gt;&lt;circle id=&quot;zone&quot; fill=&quot;#a9c4b7&quot; fill-opacity=&quot;.09&quot; stroke=&quot;#a9c4b7&quot; stroke-dasharray=&quot;3 4&quot;/&gt;&lt;path d=&quot;M-4 0h8m-4-4v8&quot; stroke=&quot;var(--mint)&quot;/&gt;&lt;/g&gt;
 &lt;line id=&quot;coast&quot; stroke=&quot;var(--mint)&quot; stroke-width=&quot;1.1&quot; stroke-dasharray=&quot;3 5&quot;/&gt;&lt;line id=&quot;trial&quot; stroke=&quot;var(--gold)&quot; stroke-width=&quot;1.5&quot; stroke-dasharray=&quot;6 5&quot;/&gt;&lt;line id=&quot;vArrow&quot; stroke=&quot;#a9b8c5&quot; stroke-width=&quot;2&quot; marker-end=&quot;url(#vTip)&quot;/&gt;
-&lt;g id=&quot;eject&quot; visibility=&quot;hidden&quot;&gt;&lt;use id=&quot;spentTool&quot;/&gt;&lt;/g&gt;&lt;use id=&quot;suitMan&quot; href=&quot;#astronaut&quot;/&gt;&lt;g id=&quot;craftLabel&quot;&gt;&lt;path d=&quot;M0 0l12-16h21&quot; fill=&quot;none&quot; stroke=&quot;#82b4a1&quot;/&gt;&lt;text x=&quot;12&quot; y=&quot;-21&quot; class=&quot;plottext&quot; fill=&quot;var(--mint)&quot;&gt;CAPTURE ZONE&lt;/text&gt;&lt;/g&gt;&lt;g id=&quot;evaLabel&quot;&gt;&lt;path d=&quot;m0 0 9 12h12&quot; stroke=&quot;#899ba6&quot; fill=&quot;none&quot;/&gt;&lt;text x=&quot;25&quot; y=&quot;16&quot; class=&quot;plottext&quot; fill=&quot;#c9d5d7&quot;&gt;EVA–01&lt;/text&gt;&lt;/g&gt;
+&lt;g id=&quot;eject&quot; visibility=&quot;hidden&quot;&gt;&lt;use id=&quot;spentTool&quot;/&gt;&lt;/g&gt;&lt;use id=&quot;suitMan&quot; href=&quot;#astronaut&quot;/&gt;&lt;g id=&quot;craftLabel&quot;&gt;&lt;path d=&quot;M0 0l12-16h21&quot; fill=&quot;none&quot; stroke=&quot;#82b4a1&quot;/&gt;&lt;text x=&quot;12&quot; y=&quot;-21&quot; class=&quot;plottext&quot; fill=&quot;var(--mint)&quot;&gt;Capture zone&lt;/text&gt;&lt;/g&gt;&lt;g id=&quot;evaLabel&quot;&gt;&lt;path d=&quot;m0 0 9 12h12&quot; stroke=&quot;#899ba6&quot; fill=&quot;none&quot;/&gt;&lt;text x=&quot;25&quot; y=&quot;16&quot; class=&quot;plottext&quot; fill=&quot;#c9d5d7&quot;&gt;EVA–01&lt;/text&gt;&lt;/g&gt;
 &lt;g id=&quot;aim&quot; stroke=&quot;var(--gold)&quot; fill=&quot;none&quot;&gt;
   &lt;circle id=&quot;powerRing&quot; stroke-opacity=&quot;.35&quot; stroke-dasharray=&quot;2 7&quot; visibility=&quot;hidden&quot;/&gt;&lt;line id=&quot;targetLine&quot; stroke-dasharray=&quot;3 3&quot;/&gt;
   &lt;g id=&quot;reticle&quot;&gt;&lt;circle r=&quot;7&quot; fill=&quot;#111719&quot; fill-opacity=&quot;.75&quot;/&gt;&lt;path d=&quot;M-12 0h7m10 0h7M0-12v7m0 10v7&quot;/&gt;&lt;circle r=&quot;1.3&quot; fill=&quot;var(--gold)&quot; stroke=&quot;none&quot;/&gt;&lt;/g&gt;
@@ -1028,12 +1135,12 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
   &lt;div role=&quot;group&quot; aria-label=&quot;Suit telemetry&quot;&gt;
     &lt;div class=&quot;hud left primary-hud&quot;&gt;&lt;div class=&quot;micro&quot;&gt;Oxygen remaining&lt;/div&gt;&lt;div class=&quot;big&quot; id=&quot;oxygen&quot;&gt;15:00&lt;/div&gt;&lt;div class=&quot;meter&quot;&gt;&lt;i id=&quot;oxygenBar&quot;&gt;&lt;/i&gt;&lt;/div&gt;&lt;/div&gt;
     &lt;div class=&quot;hud right primary-hud&quot;&gt;&lt;div class=&quot;micro&quot;&gt;Δv budget&lt;/div&gt;&lt;div class=&quot;big&quot;&gt;&lt;span id=&quot;budget&quot;&gt;&lt;/span&gt; &lt;small&gt;m/s&lt;/small&gt;&lt;/div&gt;&lt;/div&gt;
-    &lt;div class=&quot;hud left side-hud&quot;&gt;&lt;div&gt;&lt;div class=&quot;micro&quot;&gt;Hull distance&lt;/div&gt;&lt;b id=&quot;range&quot;&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;div class=&quot;micro&quot;&gt;Hatch bearing&lt;/div&gt;&lt;b id=&quot;bearing&quot;&gt;&lt;/b&gt;&lt;/div&gt;&lt;/div&gt;
+    &lt;div class=&quot;hud left side-hud&quot;&gt;&lt;div&gt;&lt;div class=&quot;micro&quot;&gt;Hatch distance&lt;/div&gt;&lt;b id=&quot;range&quot;&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;div class=&quot;micro&quot;&gt;Hatch bearing&lt;/div&gt;&lt;b id=&quot;bearing&quot;&gt;&lt;/b&gt;&lt;/div&gt;&lt;/div&gt;
     &lt;div class=&quot;hud right side-hud&quot;&gt;&lt;div class=&quot;micro&quot;&gt;Velocity · m/s&lt;/div&gt;&lt;div class=&quot;raw&quot;&gt;&lt;span&gt;Vx&lt;/span&gt;&lt;b id=&quot;vx&quot;&gt;&lt;/b&gt;&lt;span&gt;Vy&lt;/span&gt;&lt;b id=&quot;vy&quot;&gt;&lt;/b&gt;&lt;span&gt;Radial&lt;/span&gt;&lt;b id=&quot;radial&quot;&gt;&lt;/b&gt;&lt;span&gt;Mass&lt;/span&gt;&lt;b id=&quot;mass&quot;&gt;&lt;/b&gt;&lt;/div&gt;&lt;/div&gt;
   &lt;/div&gt;
   &lt;div class=&quot;hud lower-hud&quot;&gt;
     &lt;div class=&quot;lower-readouts&quot;&gt;
-      &lt;svg class=&quot;plot-scale&quot; viewBox=&quot;0 0 94 23&quot; preserveAspectRatio=&quot;xMinYMax meet&quot; aria-hidden=&quot;true&quot;&gt;
+      &lt;svg class=&quot;plot-scale&quot; id=&quot;plotScale&quot; width=&quot;94&quot; height=&quot;23&quot; aria-hidden=&quot;true&quot;&gt;
         &lt;g transform=&quot;translate(0 21)&quot; stroke=&quot;#95a6aa&quot; fill=&quot;#c1cccf&quot;&gt;&lt;path id=&quot;scaleLine&quot; fill=&quot;none&quot;/&gt;&lt;text x=&quot;0&quot; y=&quot;-6&quot; id=&quot;scaleText&quot; stroke=&quot;none&quot; class=&quot;plottext&quot;&gt;&lt;/text&gt;&lt;/g&gt;
       &lt;/svg&gt;
       &lt;div class=&quot;assist&quot;&gt;&lt;div class=&quot;micro&quot; id=&quot;assistMode&quot;&gt;&lt;/div&gt;&lt;div id=&quot;prediction&quot;&gt;&lt;/div&gt;&lt;/div&gt;
@@ -1244,8 +1351,8 @@ function plotCamera(s,w,h) {
 function renderPlot(pvx,pvy) {
   const s=state,w=plotW,h=plotH;
   const {px,py,ox,oy,scale,reach,inner}=camera;
-  const stationScale=Math.min(.66,scale*.062);
-  at(&#x27;craft&#x27;,ox+2*stationScale,oy+34*stationScale,&#x27;scale(&#x27;+stationScale+&#x27;)&#x27;);
+  const stationScale=Math.min(.78,scale*.065);
+  at(&#x27;craft&#x27;,ox,oy,&#x27;scale(&#x27;+stationScale+&#x27;)&#x27;);
   at(&#x27;goal&#x27;,ox,oy); $(&#x27;zone&#x27;).setAttribute(&#x27;r&#x27;,captureRadius*scale);
   at(&#x27;craftLabel&#x27;,ox,oy-captureRadius*scale-3);
   const suitScale=Math.min(.57,Math.max(.39,scale*.042));
@@ -1294,7 +1401,8 @@ function renderPlot(pvx,pvy) {
     $(&#x27;spentTool&#x27;).setAttribute(&#x27;href&#x27;,&#x27;#t&#x27;+anim.i);$(&#x27;eject&#x27;).style.opacity=Math.min(1,2.5-anim.age);
   }
   const units=scale&gt;7?5:Math.max(10,Math.round(50/scale/5)*5);
-  $(&#x27;scaleLine&#x27;).setAttribute(&#x27;d&#x27;,&#x27;M0 -3v3h&#x27;+(scale*units)+&#x27;v-3&#x27;); $(&#x27;scaleText&#x27;).textContent=units+&#x27; M&#x27;;
+  $(&#x27;plotScale&#x27;).setAttribute(&#x27;width&#x27;,Math.ceil(scale*units)+1);
+  $(&#x27;scaleLine&#x27;).setAttribute(&#x27;d&#x27;,&#x27;M0 -3v3h&#x27;+(scale*units)+&#x27;v-3&#x27;); $(&#x27;scaleText&#x27;).textContent=units+&#x27; m&#x27;;
 }
 
 function trackTarget() {
@@ -1390,7 +1498,7 @@ function guide() {
     &#x27;&lt;li&gt;&lt;b&gt;Release to throw.&lt;/b&gt; A click or tap without dragging previews the aim. Escape or release outside the plot to cancel a drag.&lt;/li&gt;&#x27;+
     &#x27;&lt;li&gt;&lt;b&gt;Keyboard controls.&lt;/b&gt; Left and right change bearing by 1° (Shift for 10°). Up and down change power by 1% (Shift for 10%). Press Enter on the plot to throw, or hold Space to wind up and release to throw. Escape cancels the windup.&lt;/li&gt;&#x27;+
     &#x27;&lt;li&gt;&lt;b&gt;Coast&lt;/b&gt; once you have a return path. P pauses flight. The speed controls advance motion and oxygen together.&lt;/li&gt;&lt;/ul&gt;&#x27;+
-    &#x27;&lt;p&gt;Bearings run counterclockwise from right (000°) to up (090°). Vx, Vy and radial speed use m/s. Positive radial speed means you are moving away. Hull distance measures the gap to the capture circle. The Δv budget is the largest total velocity change available from full-power throws in the best order.&lt;/p&gt;&#x27;,
+    &#x27;&lt;p&gt;Bearings run counterclockwise from right (000°) to up (090°). Vx, Vy and radial speed use m/s. Positive radial speed means you are moving away. Hatch distance measures the gap to the capture circle. The Δv budget is the largest total velocity change available from full-power throws in the best order.&lt;/p&gt;&#x27;,
     [[&#x27;Back to flight&#x27;,()=&gt;closeDialog(),true]]);
 }
 function finish(title,description) {
@@ -1527,7 +1635,7 @@ init();
   function key(k,shiftKey=false) {
     $(&#x27;plot&#x27;).dispatchEvent(new KeyboardEvent(&#x27;keydown&#x27;,{key:k,bubbles:true,cancelable:true,shiftKey}));
   }
-  const output=document.createElement(&#x27;pre&#x27;);output.id=&#x27;qa-results&#x27;;document.body.append(output);
+  const output=document.createElement(&#x27;pre&#x27;);output.id=&#x27;qa-results&#x27;;
   try {
     test(&#x27;Offline initialization and six selectable tools&#x27;,()=&gt;{yes($(&#x27;tools&#x27;).children.length===6,&#x27;rack&#x27;);yes($(&#x27;oxygen&#x27;).textContent===&#x27;15:00&#x27;,&#x27;clock&#x27;);yes(state.phase===&#x27;ready&#x27;,&#x27;standby&#x27;);yes(!performance.getEntriesByType(&#x27;resource&#x27;).some(r=&gt;/^https?:/.test(r.name)),&#x27;external request&#x27;)});
     test(&#x27;All 64 inventory budgets match independent brute-force enumeration&#x27;,()=&gt;{
@@ -1651,6 +1759,25 @@ init();
       for(let i=0;i&lt;10;i++)key(&#x27;ArrowDown&#x27;,true);near(state.power,10,&#x27;floor&#x27;);
       key(&#x27;Enter&#x27;);yes(state.throws===1,&#x27;keyboard release&#x27;);
     });
+    test(&#x27;Docking hatch stays centered on the capture zone in each scenario&#x27;,()=&gt;{
+      for(let index=0;index&lt;scenarios.length;index++) {
+        newFlight(index);
+        const hatch=new DOMPoint(0,0).matrixTransform($(&#x27;craft&#x27;).getScreenCTM());
+        const goal=new DOMPoint(0,0).matrixTransform($(&#x27;goal&#x27;).getScreenCTM());
+        near(hatch.x,goal.x,&#x27;hatch x&#x27;,.01);near(hatch.y,goal.y,&#x27;hatch y&#x27;,.01);
+      }
+    });
+    test(&#x27;HUD labels use readable mixed case and the oxygen gauge follows the reserve&#x27;,()=&gt;{
+      for(const label of document.querySelectorAll(&#x27;.hud .micro,.spec,.throw-vector .micro&#x27;)) {
+        const style=getComputedStyle(label);
+        yes(style.textTransform===&#x27;none&#x27; &amp;&amp; parseFloat(style.fontSize)&gt;=12,label.textContent);
+      }
+      const bar=$(&#x27;oxygenBar&#x27;), full=bar.getBoundingClientRect();
+      yes(full.height&gt;=5 &amp;&amp; full.width&gt;0,&#x27;visible reserve&#x27;);
+      toggleClock();advance(limits.Easy/2);render();
+      near(bar.getBoundingClientRect().width,full.width/2,&#x27;half-full bar&#x27;,.1);
+      yes($(&#x27;oxygen&#x27;).textContent===&#x27;07:30&#x27;,&#x27;remaining oxygen&#x27;);
+    });
     test(&#x27;The advisory updates inside the plot without blocking aim or covering the scale and forecast&#x27;,()=&gt;{
       const plot=$(&#x27;plot&#x27;), tip=$(&#x27;tip&#x27;), advisory=tip.closest(&#x27;.advisory&#x27;);
       const before=tip.textContent;
@@ -1674,11 +1801,12 @@ init();
     });
     output.textContent=&#x27;PASS &#x27;+passed.length+&#x27; groups at &#x27;+innerWidth+&#x27;px: &#x27;+passed.join(&#x27; | &#x27;);
   }catch(e){output.textContent=&#x27;FAIL after &#x27;+passed.length+&#x27;: &#x27;+e.message+&#x27; / &#x27;+e.stack;}
+  document.body.append(output);
 })();
 &lt;/script&gt;&lt;/body&gt;&lt;/html&gt;
 " onload="check(this)"></iframe><iframe style="border:0;width:768px;height:844px" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;&lt;meta name=&quot;theme-color&quot; content=&quot;#101517&quot;&gt;&lt;title&gt;UNTETHERED · EVA return simulator&lt;/title&gt;&lt;style&gt;
-:root{color-scheme:dark;--bg:#0e1113;--panel:#181c1e;--edge:#343b3e;--muted:#a0aaaa;--mint:#a9c4b7;--ink:#e5e8e5;--gold:#d4b48b;--mono:Consolas,&quot;SFMono-Regular&quot;,&quot;Liberation Mono&quot;,monospace;--sans:&quot;Segoe UI&quot;,Arial,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px var(--sans)}button,select,input{font:inherit}button,select{color:var(--ink);cursor:pointer}button{background:#20282b;border:1px solid var(--edge);border-radius:5px}button:hover:enabled,select:hover{background:#2a3437;border-color:#6b7d81}button:focus-visible,select:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--mint);outline-offset:3px}button:disabled{cursor:default;opacity:.45}button svg{width:15px;height:15px;vertical-align:-3px}header{border-bottom:1px solid var(--edge);background:#14191b}.bar,main{width:min(1512px,100%);margin:auto}.bar{display:flex;align-items:center;justify-content:space-between;padding:17px clamp(16px,3.6vw,58px);gap:12px}.brand{display:flex;align-items:center;gap:13px}.brand&gt;svg{width:38px;height:38px}.wordmark{font-weight:750;letter-spacing:.18em;font-size:20px;line-height:1.1}.subbrand,.micro,.sectionlabel,.spec,.tag,.plotlabel,.foot,.eyebrow{font:10px/1.45 var(--mono);letter-spacing:.105em;text-transform:uppercase}.subbrand{color:var(--muted);letter-spacing:.17em;font-size:9px;margin-top:4px}.toptools,.actions,.caption,.settings,.row,.chips,.legend,.cardhead,.inc,.fr{display:flex;align-items:center;gap:10px}.toptools{gap:17px}.tag{border:1px solid #435050;color:#bccac7;border-radius:4px;padding:4px 7px;letter-spacing:.08em}.quiet{padding:8px 11px;display:inline-flex;align-items:center;gap:7px}.quiet svg{fill:none;stroke:currentColor;stroke-width:1.6}.guide{background:transparent}main{padding:24px clamp(16px,3.6vw,58px) 22px}.mission{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:17px}.eyebrow,.plotlabel{color:var(--mint)}h1,h2,h3,p{margin:0}h1{font-size:clamp(26px,2.4vw,39px);line-height:1.15;letter-spacing:-.04em;margin-top:4px;font-weight:630}.settings{gap:9px}.settings select,.dialogrow select{background:#20282b;border:1px solid var(--edge);border-radius:5px;padding:7px 9px}.panel{background:var(--panel);border:1px solid var(--edge);border-radius:8px;overflow:hidden;min-width:0}.panelhead{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--edge);min-height:44px}.sectionlabel{font-weight:650;font-size:11px;color:#dce5e2;display:flex;align-items:center;gap:9px}.sectionlabel svg{width:15px;height:15px;stroke:var(--mint);fill:none;stroke-width:1.6}.status{font:10px var(--mono);color:var(--mint);display:flex;align-items:center;gap:7px}.dot{width:6px;height:6px;display:inline-block;background:var(--mint);border-radius:50%}.micro,.spec,.foot{color:var(--muted)}.big{font:clamp(25px,2.2vw,36px)/1.05 var(--mono);letter-spacing:-.06em;margin-top:4px}.big small{font:13px var(--mono);color:var(--muted);letter-spacing:0}.oxygen,.dv{color:var(--mint)}.meter{height:4px;margin-top:9px;background:#283333;position:relative}.meter i{display:block;height:100%;background:var(--mint)}.meter:after{content:&quot;&quot;;position:absolute;inset:0;background:repeating-linear-gradient(to right,transparent 0 calc(5% - 2px),#162021 calc(5% - 2px) 5%)}.rack{margin-top:14px}.rack .panelhead{border-bottom:0;padding-bottom:4px}.spec{font-size:10px;letter-spacing:.035em}.tools{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;padding:9px 14px 14px}.tool{position:relative;text-align:left;background:#1b2225;padding:7px 10px 10px;min-width:0}.tool.selected{background:#20312e;border-color:#81c8ad;box-shadow:inset 0 -2px #a9c4b7}.tool b,.tool small{display:block}.tool b{font-size:13px;font-weight:600}.tool small{font:10px var(--mono);color:var(--muted);margin-top:4px}.tool svg{width:100%;height:43px;display:block}.slot{position:absolute;top:7px;left:8px;color:var(--muted);font:9px var(--mono)}.tool.selected .slot{color:var(--mint)}.foot{font-size:9px;letter-spacing:.035em;display:flex;justify-content:space-between;gap:8px;margin-top:15px}.plottext{font:9px var(--mono);letter-spacing:1px}.plotvalue{font:11px var(--mono)}dialog{color:var(--ink);background:#192023;border:1px solid #536260;border-radius:10px;width:min(450px,calc(100% - 28px));padding:23px;box-shadow:0 18px 95px #0009}dialog::backdrop{background:#070c10b5}dialog h2{font-size:26px;letter-spacing:-.035em;margin:5px 0 12px}dialog p,dialog li,dialog dd{color:#c2cfcc;font-size:14px;line-height:1.55}dialog ul{padding-left:19px}dialog li{margin:7px 0}.dialogrow{display:flex;justify-content:space-between;align-items:center;margin:16px 0;gap:10px}.dialogactions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}.dialogactions button{padding:9px 14px}.primary{color:#10201a;background:var(--mint);border-color:var(--mint)}.primary:hover:enabled{background:#c0f8df}.dialogstats{display:grid;grid-template-columns:1fr auto;gap:8px 16px}.dialogstats dd{margin:0;text-align:right;font-family:var(--mono)}.dialogstats dt{color:var(--muted)}.sr{position:absolute;width:1px;height:1px;clip-path:inset(50%);overflow:hidden}[hidden]{display:none!important}
+:root{color-scheme:dark;--bg:#0e1113;--panel:#181c1e;--edge:#343b3e;--muted:#c1cecf;--oxygen-fill:#a4ead0;--mint:#a9c4b7;--ink:#e5e8e5;--gold:#d4b48b;--mono:Consolas,&quot;SFMono-Regular&quot;,&quot;Liberation Mono&quot;,monospace;--sans:&quot;Segoe UI&quot;,Arial,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px var(--sans)}button,select,input{font:inherit}button,select{color:var(--ink);cursor:pointer}button{background:#20282b;border:1px solid var(--edge);border-radius:5px}button:hover:enabled,select:hover{background:#2a3437;border-color:#6b7d81}button:focus-visible,select:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--mint);outline-offset:3px}button:disabled{cursor:default;color:var(--muted)}.tool:disabled svg{opacity:.52}button svg{width:15px;height:15px;vertical-align:-3px}header{border-bottom:1px solid var(--edge);background:#14191b}.bar,main{width:min(1512px,100%);margin:auto}.bar{display:flex;align-items:center;justify-content:space-between;padding:17px clamp(16px,3.6vw,58px);gap:12px}.brand{display:flex;align-items:center;gap:13px}.brand&gt;svg{width:38px;height:38px}.wordmark{font-weight:750;letter-spacing:.18em;font-size:20px;line-height:1.1}.subbrand,.micro,.sectionlabel,.spec,.tag,.plotlabel,.foot,.eyebrow{font:500 13px/1.35 var(--sans);letter-spacing:.012em}.subbrand{color:var(--muted);letter-spacing:.02em;font-size:12px;margin-top:2px}.toptools,.actions,.caption,.settings,.row,.chips,.legend,.cardhead,.inc,.fr{display:flex;align-items:center;gap:10px}.toptools{gap:17px}.tag{border:1px solid #435050;color:#bccac7;border-radius:4px;padding:4px 7px;letter-spacing:.025em}.quiet{padding:8px 11px;display:inline-flex;align-items:center;gap:7px}.quiet svg{fill:none;stroke:currentColor;stroke-width:1.6}.guide{background:transparent}main{padding:24px clamp(16px,3.6vw,58px) 22px}.mission{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:17px}.eyebrow,.plotlabel{color:var(--mint)}h1,h2,h3,p{margin:0}h1{font-size:clamp(26px,2.4vw,39px);line-height:1.15;letter-spacing:-.04em;margin-top:4px;font-weight:630}.settings{gap:9px}.settings select,.dialogrow select{background:#20282b;border:1px solid var(--edge);border-radius:5px;padding:7px 9px}.panel{background:var(--panel);border:1px solid var(--edge);border-radius:8px;overflow:hidden;min-width:0}.panelhead{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--edge);min-height:44px}.sectionlabel{font-weight:650;font-size:14px;color:#dce5e2;display:flex;align-items:center;gap:9px}.sectionlabel svg{width:15px;height:15px;stroke:var(--mint);fill:none;stroke-width:1.6}.status{font:12px/1.3 var(--sans);color:var(--mint);display:flex;align-items:center;gap:7px}.dot{width:6px;height:6px;display:inline-block;background:var(--mint);border-radius:50%}.micro,.spec,.foot{color:var(--muted)}.big{font:clamp(25px,2.2vw,36px)/1.05 var(--mono);letter-spacing:-.06em;margin-top:4px}.big small{font:13px var(--mono);color:var(--muted);letter-spacing:0}.oxygen,.dv{color:var(--mint)}.rack{margin-top:14px}.rack .panelhead{border-bottom:0;padding-bottom:4px}.spec{font-variant-numeric:tabular-nums}.tools{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;padding:9px 14px 14px}.tool{position:relative;text-align:left;background:#1b2225;padding:7px 10px 10px;min-width:0}.tool.selected{background:#20312e;border-color:#81c8ad;box-shadow:inset 0 -2px #a9c4b7}.tool b,.tool small{display:block}.tool b{font-size:13px;font-weight:600}.tool small{font:12px/1.3 var(--sans);color:var(--muted);margin-top:4px}.tool svg{width:100%;height:43px;display:block}.slot{position:absolute;top:7px;left:8px;color:var(--muted);font:11px var(--mono)}.tool.selected .slot{color:var(--mint)}.foot{display:flex;justify-content:space-between;gap:8px;margin-top:15px}.plottext{font:500 12px var(--sans);paint-order:stroke;stroke:#10181d;stroke-width:2.5px;stroke-linejoin:round}.plotvalue{font:11px var(--mono)}dialog{color:var(--ink);background:#192023;border:1px solid #536260;border-radius:10px;width:min(450px,calc(100% - 28px));padding:23px;box-shadow:0 18px 95px #0009}dialog::backdrop{background:#070c10b5}dialog h2{font-size:26px;letter-spacing:-.035em;margin:5px 0 12px}dialog p,dialog li,dialog dd{color:#c2cfcc;font-size:14px;line-height:1.55}dialog ul{padding-left:19px}dialog li{margin:7px 0}.dialogrow{display:flex;justify-content:space-between;align-items:center;margin:16px 0;gap:10px}.dialogactions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}.dialogactions button{padding:9px 14px}.primary{color:#10201a;background:var(--mint);border-color:var(--mint)}.primary:hover:enabled{background:#c0f8df}.dialogstats{display:grid;grid-template-columns:1fr auto;gap:8px 16px}.dialogstats dd{margin:0;text-align:right;font-family:var(--mono)}.dialogstats dt{color:var(--muted)}.sr{position:absolute;width:1px;height:1px;clip-path:inset(50%);overflow:hidden}[hidden]{display:none!important}
 
 .bar,main { width:min(1920px,100%); padding-inline:clamp(12px,3vw,58px) }
 .bar { padding-block:11px }
@@ -1703,20 +1831,22 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
 .hud.right { right:var(--inset); text-align:right }
 .primary-hud { top:var(--inset); padding:2px 10px 4px; border-left:2px solid #7c8d85; background:linear-gradient(90deg,#11191d99,transparent) }
 .primary-hud.right { border:0; border-right:2px solid #7c8d85; background:linear-gradient(270deg,#11191d99,transparent) }
-.hud .micro { color:#acb8b8; font-size:9px }
+.hud .micro { color:var(--muted) }
 .big { margin-top:1px; font-size:clamp(25px,2.2vw,36px); color:#d7e6dd }
-.big small,.hud small { color:var(--muted); font:10px var(--mono) }
-.meter { height:3px; width:104px; margin-top:6px }
+.big small,.hud small { color:var(--muted); font:12px var(--mono) }
+.meter { position:relative; width:clamp(110px,9vw,136px); height:8px; margin-top:6px; border:1px solid #879b9d; border-radius:2px; overflow:hidden; background:#1e3036 }
+.meter i { display:block; height:100%; background:var(--oxygen-fill) }
+.meter::after { content:&quot;&quot;; position:absolute; inset:0; background:repeating-linear-gradient(90deg,transparent 0 calc(10% - 1px),#13252c99 calc(10% - 1px) 10%) }
 .side-hud { top:44%; display:grid; gap:13px }
 .side-hud b { display:block; margin-top:2px; font:17px/1.15 var(--mono); letter-spacing:-.035em }
-.raw { display:grid; grid-template-columns:auto auto; gap:6px 13px; align-items:baseline; font:10px var(--mono); color:var(--muted) }
+.raw { display:grid; grid-template-columns:auto auto; gap:5px 13px; align-items:baseline; font:12px var(--sans); color:var(--muted) }
 .raw b { font:12px var(--mono); color:var(--ink); margin:0 }
 .raw span { text-align:left }
 .assist { text-align:right; padding-right:10px; border-right:2px solid #827764; color:#c8cecd; font:11px/1.5 var(--mono); background:linear-gradient(270deg,#0c1013bb,transparent) }
 .assist .micro { color:var(--gold); margin-bottom:2px }
 .assist strong { font-weight:normal; color:var(--ink) }
 .plotbar { position:relative; display:flex; align-items:center; justify-content:space-between; gap:12px; border-top:1px solid var(--edge); padding:5px 14px; min-height:33px }
-.legend,.speed,.flight-time { color:var(--muted); font:10px var(--mono) }
+.legend,.speed,.flight-time { color:var(--muted); font:12px/1.35 var(--sans) }
 .legend { gap:15px }
 .legend span { display:flex; align-items:center; gap:5px }
 .keyline { width:15px; border-top:2px dotted var(--mint) }
@@ -1724,7 +1854,7 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
 .keyline.recoil { border-top:2px dashed var(--gold) }
 .speed { display:flex; align-items:center; gap:2px }
 .speed&gt;svg { width:14px; height:14px; stroke:var(--muted); fill:none; margin-right:3px }
-.speed button { padding:4px 7px; background:transparent; font:11px var(--mono); border-color:transparent }
+.speed button { padding:4px 7px; background:transparent; font:12px var(--mono); border-color:transparent }
 .speed .active { color:var(--mint); background:#29332f; border-color:#4c5c54 }
 .flight-time { margin-left:auto; font-variant-numeric:tabular-nums }
 .flight-time b { color:var(--ink); font-weight:400 }
@@ -1739,13 +1869,14 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
 .throw-vector .micro { margin-right:6px }
 .lower-hud { inset:auto 0 0; padding:0 var(--inset) 10px; background:linear-gradient(0deg,#050b11df,transparent) }
 .lower-readouts { display:flex; align-items:flex-end; justify-content:space-between; gap:12px; margin-bottom:9px }
-.plot-scale { width:94px; height:23px; flex:none }
+.plot-scale { height:23px; flex:none }
 .advisory { display:flex; align-items:baseline; gap:13px; padding-top:8px; border-top:1px solid #a9c4b74d; color:var(--ink); font-size:12px; line-height:1.45 }
 .advisory .micro { display:inline-flex; align-items:center; gap:6px; flex:none; color:var(--mint) }
 .advisory svg { width:15px; height:15px; align-self:center; fill:none; stroke:currentColor; stroke-width:1.5 }
 .earth-view { pointer-events:none }
-.reticle-text { font:10px var(--mono); fill:var(--gold); paint-order:stroke; stroke:#0c1013; stroke-width:3px; stroke-linejoin:round }
+.reticle-text { font:11px var(--mono); fill:var(--gold); paint-order:stroke; stroke:#0c1013; stroke-width:3px; stroke-linejoin:round }
 @media(max-width:940px) {
+  .side-hud { top:78px; gap:7px }
   .tool { display:block; padding:6px 9px 9px }
   .tool svg { height:33px }
 }
@@ -1753,16 +1884,14 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
   .bar,main { padding-inline:12px }
   .mission { align-items:center; flex-wrap:wrap; margin-bottom:10px }
   .primary-hud { padding-inline:7px }
-  .side-hud { top:82px; gap:7px }
   .side-hud b { font-size:13px }
-  .raw { gap:3px 8px }
+  .raw { gap:2px 8px }
   .raw b { font-size:11px }
   .tools { grid-template-columns:repeat(3,minmax(0,1fr)) }
   .tool { display:grid; min-height:55px }
   .throwstrip { align-items:flex-start; flex-wrap:wrap; gap:4px 12px }
-  .assist { font-size:10px; max-width:72% }
+  .assist { min-width:0 }
   .plotbar { flex-wrap:wrap }
-  .flight-time { font-size:9px }
   .lower-readouts { gap:6px }
 }
 @media(max-width:450px) {
@@ -1772,19 +1901,23 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
   .brand&gt;svg { width:27px; height:27px }
   .tag { display:none }
   .settings { gap:5px }
+  .settings .quiet,.settings select { padding:6px; font-size:12px; white-space:nowrap }
   .scene&gt;svg { height:clamp(405px,58svh,545px) }
   .panelhead { padding-inline:9px }
-  .status { font-size:9px; max-width:49%; text-align:right }
+  .sectionlabel { white-space:nowrap }
+  section[aria-label=&quot;Navigation&quot;]&gt;.panelhead { flex-direction:column; align-items:flex-start; gap:3px }
+  .side-hud.left { top:83px }
+  .side-hud.right { top:66px }
   .plotbar { padding:5px 6px; gap:4px }
-  .legend { font-size:9px; gap:6px }
+  .legend { gap:8px }
   .keyline { width:9px }
   .speed { gap:0 }
   .speed&gt;svg { display:none }
-  .speed button { padding:5px 4px; font-size:10px }
+  .speed button { padding:5px 4px }
   .tools { padding:4px 6px 7px; gap:4px }
   .tool { display:block; min-height:67px; padding:4px 5px 6px }
   .tool svg { height:30px }
-  .tool b { font-size:11px }
+  .tool b { font-size:12px }
   .advisory { display:grid; gap:2px; padding-top:6px }
   .lower-hud { padding-bottom:8px }
   .earth-view { x:-25%; width:150% }
@@ -1794,21 +1927,59 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
 &lt;linearGradient id=&quot;silver&quot; x2=&quot;.25&quot; y2=&quot;1&quot; gradientUnits=&quot;objectBoundingBox&quot;&gt;&lt;stop stop-color=&quot;#f0f2df&quot;/&gt;&lt;stop offset=&quot;.23&quot; stop-color=&quot;#bdc7c6&quot;/&gt;&lt;stop offset=&quot;.48&quot; stop-color=&quot;#87999f&quot;/&gt;&lt;stop offset=&quot;.75&quot; stop-color=&quot;#667a85&quot;/&gt;&lt;stop offset=&quot;1&quot; stop-color=&quot;#293c49&quot;/&gt;&lt;/linearGradient&gt;
 &lt;linearGradient id=&quot;suit&quot; x2=&quot;.55&quot; y2=&quot;1&quot;&gt;&lt;stop stop-color=&quot;#e3e5dd&quot;/&gt;&lt;stop offset=&quot;.48&quot; stop-color=&quot;#bfc5c2&quot;/&gt;&lt;stop offset=&quot;.8&quot; stop-color=&quot;#a0adb1&quot;/&gt;&lt;stop offset=&quot;1&quot; stop-color=&quot;#596f7d&quot;/&gt;&lt;/linearGradient&gt;
 &lt;linearGradient id=&quot;visor&quot; x2=&quot;.8&quot; y2=&quot;1&quot;&gt;&lt;stop stop-color=&quot;#a1a59c&quot;/&gt;&lt;stop offset=&quot;.26&quot; stop-color=&quot;#545d59&quot;/&gt;&lt;stop offset=&quot;.52&quot; stop-color=&quot;#232c2d&quot;/&gt;&lt;stop offset=&quot;1&quot; stop-color=&quot;#151c1f&quot;/&gt;&lt;/linearGradient&gt;
-&lt;linearGradient id=&quot;solar&quot; x2=&quot;.45&quot; y2=&quot;1&quot;&gt;&lt;stop stop-color=&quot;#718797&quot;/&gt;&lt;stop offset=&quot;.46&quot; stop-color=&quot;#405666&quot;/&gt;&lt;stop offset=&quot;1&quot; stop-color=&quot;#263f50&quot;/&gt;&lt;/linearGradient&gt;
-&lt;pattern id=&quot;cells&quot; width=&quot;10&quot; height=&quot;7&quot; patternUnits=&quot;userSpaceOnUse&quot;&gt;&lt;path d=&quot;M0 .5H10M.5 0V7&quot; fill=&quot;none&quot; stroke=&quot;#c5b998&quot; opacity=&quot;.66&quot; stroke-width=&quot;.65&quot;/&gt;&lt;path d=&quot;M2 0v7m2-7v7m2-7v7m2-7v7&quot; stroke=&quot;#c6c8bc&quot; opacity=&quot;.19&quot; stroke-width=&quot;.45&quot;/&gt;&lt;/pattern&gt;
-&lt;pattern id=&quot;truss&quot; width=&quot;15&quot; height=&quot;12&quot; patternUnits=&quot;userSpaceOnUse&quot;&gt;&lt;path d=&quot;M0 0l15 12M0 12L15 0&quot; fill=&quot;none&quot; stroke=&quot;#a3afb1&quot; stroke-width=&quot;1.5&quot;/&gt;&lt;/pattern&gt;
-&lt;g id=&quot;wing&quot;&gt;&lt;path d=&quot;M-99 0H0v37h-99z&quot; fill=&quot;url(#solar)&quot; stroke=&quot;#beb9a4&quot; stroke-width=&quot;1.7&quot;/&gt;&lt;path d=&quot;M-99 0H0v37h-99z&quot; fill=&quot;url(#cells)&quot;/&gt;&lt;path d=&quot;M-74 0v37m25-37v37m25-37v37&quot; stroke=&quot;#cabaa0&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;/g&gt;
-&lt;g id=&quot;station&quot; stroke-linejoin=&quot;round&quot;&gt;
-&lt;g transform=&quot;translate(-88,-4) rotate(-19)&quot;&gt;
-&lt;path d=&quot;M-8 -83H5v176H-8z&quot; fill=&quot;#42545c&quot; stroke=&quot;#acb6b4&quot;/&gt;&lt;path d=&quot;M-8 -83H5v176H-8z&quot; fill=&quot;url(#truss)&quot;/&gt;
-&lt;g transform=&quot;translate(-8,-87)&quot;&gt;&lt;use href=&quot;#wing&quot;/&gt;&lt;use href=&quot;#wing&quot; transform=&quot;translate(14) scale(-1 1)&quot;/&gt;&lt;/g&gt;
-&lt;g transform=&quot;translate(-8,-44)&quot;&gt;&lt;use href=&quot;#wing&quot;/&gt;&lt;use href=&quot;#wing&quot; transform=&quot;translate(14) scale(-1 1)&quot;/&gt;&lt;/g&gt;
-&lt;g transform=&quot;translate(-8,19)&quot;&gt;&lt;use href=&quot;#wing&quot;/&gt;&lt;use href=&quot;#wing&quot; transform=&quot;translate(14) scale(-1 1)&quot;/&gt;&lt;/g&gt;
-&lt;g transform=&quot;translate(-8,62)&quot;&gt;&lt;use href=&quot;#wing&quot;/&gt;&lt;use href=&quot;#wing&quot; transform=&quot;translate(14) scale(-1 1)&quot;/&gt;&lt;/g&gt;
-&lt;path d=&quot;M-138 -4H93v11h-231z&quot; fill=&quot;#36444c&quot; stroke=&quot;#9da8a7&quot;/&gt;&lt;path d=&quot;M-138 -4H93v11h-231z&quot; fill=&quot;url(#truss)&quot;/&gt;
-&lt;g stroke=&quot;#465963&quot; stroke-width=&quot;1.2&quot;&gt;&lt;path d=&quot;m-119 -9 8-6h28l9 7V9l-9 6h-28l-8-6z&quot; fill=&quot;url(#silver)&quot;/&gt;&lt;rect x=&quot;-85&quot; y=&quot;-8&quot; width=&quot;18&quot; height=&quot;17&quot; rx=&quot;3&quot; fill=&quot;url(#silver)&quot;/&gt;&lt;path d=&quot;m-70 -11 8-6h34l7 6v22l-7 6h-34l-8-6z&quot; fill=&quot;url(#silver)&quot;/&gt;&lt;path d=&quot;M-63 -14v28m6-30v32m23-32v32m5-29v27m-76-28v26m17-24v23&quot; fill=&quot;none&quot;/&gt;&lt;path d=&quot;M-48 -15v-20h8v20&quot; fill=&quot;#7d8e91&quot;/&gt;&lt;/g&gt;
-&lt;g stroke=&quot;#415661&quot; stroke-width=&quot;1.5&quot;&gt;&lt;path d=&quot;M-17 -16l7-9h21l8 9v30l-8 9h-21l-7-9z&quot; fill=&quot;url(#suit)&quot;/&gt;&lt;path d=&quot;M-17 -7h35M-17 10h35&quot; opacity=&quot;.75&quot;/&gt;&lt;path d=&quot;M17 -12l8-6h41l9 8v20l-9 7H25l-8-6z&quot; fill=&quot;url(#silver)&quot;/&gt;&lt;path d=&quot;M26 -16v30m5-31v32m25-32v32m6-30v27&quot; fill=&quot;none&quot;/&gt;&lt;rect x=&quot;35&quot; y=&quot;-10&quot; width=&quot;15&quot; height=&quot;5&quot; rx=&quot;1&quot; fill=&quot;#acb8b5&quot;/&gt;&lt;path d=&quot;M76 -9h12v17H76z&quot; fill=&quot;url(#silver)&quot;/&gt;&lt;path d=&quot;M85 -10h6v20h-6z&quot; fill=&quot;#93aaab&quot;/&gt;&lt;/g&gt;
-&lt;g fill=&quot;none&quot; stroke=&quot;#b9c6c1&quot; stroke-width=&quot;1.4&quot;&gt;&lt;path d=&quot;M-109 -12v-17l-9-8m10 7 12-7m88 19-13-15v-18m5 6-12 4&quot;/&gt;&lt;path d=&quot;M6 23v11h14v-6&quot;/&gt;&lt;/g&gt;&lt;/g&gt;&lt;/g&gt;
+&lt;linearGradient id=&quot;solar&quot; x2=&quot;.35&quot; y2=&quot;1&quot;&gt;&lt;stop stop-color=&quot;#526ca0&quot;/&gt;&lt;stop offset=&quot;.5&quot; stop-color=&quot;#324b75&quot;/&gt;&lt;stop offset=&quot;1&quot; stop-color=&quot;#21344f&quot;/&gt;&lt;/linearGradient&gt;
+&lt;linearGradient id=&quot;radiator&quot; x2=&quot;.22&quot; y2=&quot;1&quot;&gt;&lt;stop stop-color=&quot;#fffef2&quot;/&gt;&lt;stop offset=&quot;.62&quot; stop-color=&quot;#dce4e3&quot;/&gt;&lt;stop offset=&quot;1&quot; stop-color=&quot;#a1afb6&quot;/&gt;&lt;/linearGradient&gt;
+&lt;pattern id=&quot;cells&quot; width=&quot;8&quot; height=&quot;6&quot; patternUnits=&quot;userSpaceOnUse&quot;&gt;&lt;path d=&quot;M0 .6h8M.6 0v6&quot; fill=&quot;none&quot; stroke=&quot;#9faecb&quot; stroke-width=&quot;.65&quot;/&gt;&lt;/pattern&gt;
+&lt;pattern id=&quot;truss&quot; width=&quot;10&quot; height=&quot;12&quot; patternUnits=&quot;userSpaceOnUse&quot;&gt;&lt;path d=&quot;M1 0l8 6-8 6&quot; stroke=&quot;#bdc7c7&quot; stroke-width=&quot;1.25&quot; fill=&quot;none&quot;/&gt;&lt;/pattern&gt;
+&lt;g id=&quot;solarWing&quot;&gt;
+  &lt;path d=&quot;M0 -2h83v4H0z&quot; fill=&quot;#a09980&quot;/&gt;
+  &lt;g transform=&quot;translate(8,-13)&quot;&gt;
+    &lt;rect width=&quot;75&quot; height=&quot;26&quot; fill=&quot;url(#solar)&quot; stroke=&quot;#bcab8c&quot; stroke-width=&quot;1.6&quot;/&gt;
+    &lt;rect width=&quot;75&quot; height=&quot;26&quot; fill=&quot;url(#cells)&quot;/&gt;
+    &lt;path d=&quot;M25 0v26m25-26v26&quot; stroke=&quot;#cfb389&quot; stroke-width=&quot;1.8&quot;/&gt;
+    &lt;path d=&quot;M0 24.5h75&quot; stroke=&quot;#151e30&quot;/&gt;
+  &lt;/g&gt;
+&lt;/g&gt;
+&lt;g id=&quot;radiatorWing&quot;&gt;
+  &lt;path d=&quot;M0 0h68&quot; stroke=&quot;#909fa8&quot; stroke-width=&quot;3&quot;/&gt;
+  &lt;path d=&quot;M6 -3l53 14m-18-12 21-8&quot; fill=&quot;none&quot; stroke=&quot;#828e95&quot; stroke-width=&quot;1.4&quot;/&gt;
+  &lt;g fill=&quot;url(#radiator)&quot; stroke=&quot;#6e8089&quot; stroke-width=&quot;1&quot;&gt;
+    &lt;rect x=&quot;10&quot; y=&quot;-9&quot; width=&quot;18&quot; height=&quot;18&quot; rx=&quot;1.4&quot;/&gt;
+    &lt;rect x=&quot;30&quot; y=&quot;-9&quot; width=&quot;18&quot; height=&quot;18&quot; rx=&quot;1.4&quot;/&gt;
+    &lt;rect x=&quot;50&quot; y=&quot;-9&quot; width=&quot;18&quot; height=&quot;18&quot; rx=&quot;1.4&quot;/&gt;
+  &lt;/g&gt;
+  &lt;path d=&quot;M13 -5h12m8 0h12m8 0h12M13 5h12m8 0h12m8 0h12&quot; fill=&quot;none&quot; stroke=&quot;#a8b6bd&quot; stroke-width=&quot;.9&quot;/&gt;
+&lt;/g&gt;
+&lt;g id=&quot;station&quot; transform=&quot;rotate(-16)&quot; stroke-linejoin=&quot;round&quot;&gt;
+  &lt;!-- The hatch face is the local origin, shared with the capture circle. --&gt;
+  &lt;g transform=&quot;translate(-137)&quot;&gt;
+    &lt;rect x=&quot;-4.5&quot; y=&quot;-89&quot; width=&quot;9&quot; height=&quot;178&quot; fill=&quot;#283943&quot; stroke=&quot;#a2b1b5&quot; stroke-width=&quot;1.2&quot;/&gt;
+    &lt;rect x=&quot;-4.5&quot; y=&quot;-89&quot; width=&quot;9&quot; height=&quot;178&quot; fill=&quot;url(#truss)&quot;/&gt;
+    &lt;g transform=&quot;translate(0,-87)&quot;&gt;&lt;use href=&quot;#solarWing&quot;/&gt;&lt;use href=&quot;#solarWing&quot; transform=&quot;scale(-1 1)&quot;/&gt;&lt;/g&gt;
+    &lt;g transform=&quot;translate(0,-43)&quot;&gt;&lt;use href=&quot;#radiatorWing&quot;/&gt;&lt;use href=&quot;#radiatorWing&quot; transform=&quot;scale(-1 1)&quot;/&gt;&lt;/g&gt;
+    &lt;g transform=&quot;translate(0,43)&quot;&gt;&lt;use href=&quot;#radiatorWing&quot;/&gt;&lt;use href=&quot;#radiatorWing&quot; transform=&quot;scale(-1 1)&quot;/&gt;&lt;/g&gt;
+    &lt;g transform=&quot;translate(0,87)&quot;&gt;&lt;use href=&quot;#solarWing&quot;/&gt;&lt;use href=&quot;#solarWing&quot; transform=&quot;scale(-1 1)&quot;/&gt;&lt;/g&gt;
+    &lt;g fill=&quot;#c1ab83&quot; stroke=&quot;#56616a&quot;&gt;&lt;circle cy=&quot;-87&quot; r=&quot;4.5&quot;/&gt;&lt;circle cy=&quot;87&quot; r=&quot;4.5&quot;/&gt;&lt;/g&gt;
+  &lt;/g&gt;
+  &lt;g stroke=&quot;#4c6069&quot; stroke-width=&quot;1.4&quot;&gt;
+    &lt;path d=&quot;M-203 -7l8-5h25l8 5V7l-8 5h-25l-8-5z&quot; fill=&quot;url(#silver)&quot;/&gt;
+    &lt;rect x=&quot;-167&quot; y=&quot;-7&quot; width=&quot;18&quot; height=&quot;14&quot; rx=&quot;3&quot; fill=&quot;url(#silver)&quot;/&gt;
+    &lt;path d=&quot;M-154 -11l8-7h30l8 7v22l-8 7h-30l-8-7z&quot; fill=&quot;url(#suit)&quot;/&gt;
+    &lt;path d=&quot;M-110 -9l9-5h41l8 5V9l-8 5h-41l-9-5z&quot; fill=&quot;url(#silver)&quot;/&gt;
+    &lt;path d=&quot;M-53 -8h11l5 4v8l-5 4h-11z&quot; fill=&quot;#87999e&quot;/&gt;
+    &lt;path d=&quot;M-193 -11V11m19-22v22m27-26v30m26-31v32m19-29v26m5-27v28m31-27v26&quot; fill=&quot;none&quot;/&gt;
+    &lt;rect x=&quot;-93&quot; y=&quot;-9&quot; width=&quot;13&quot; height=&quot;4&quot; rx=&quot;1&quot; fill=&quot;#d7c8a5&quot; stroke=&quot;none&quot;/&gt;
+    &lt;path d=&quot;M-183 -12v-13l-8-6m8 6 10-5m53 12 6-12h11&quot; fill=&quot;none&quot; stroke=&quot;#b3c1bf&quot;/&gt;
+  &lt;/g&gt;
+  &lt;g stroke=&quot;#52636d&quot; stroke-width=&quot;1.2&quot;&gt;
+    &lt;path d=&quot;M-41 -7l7-4h13l5 4H0V7h-16l-5 4h-13l-7-4z&quot; fill=&quot;url(#silver)&quot;/&gt;
+    &lt;path d=&quot;M-32 -10v20m9-20v20m12-17v14&quot; fill=&quot;none&quot;/&gt;
+    &lt;path d=&quot;M-8 -11H0v22h-8c-5-3-5-19 0-22z&quot; fill=&quot;#899a9d&quot;/&gt;
+    &lt;ellipse rx=&quot;6.5&quot; ry=&quot;11.5&quot; fill=&quot;#dce1d7&quot;/&gt;
+    &lt;ellipse rx=&quot;4.3&quot; ry=&quot;8.4&quot; fill=&quot;#172a34&quot; stroke=&quot;#748f93&quot;/&gt;
+    &lt;path d=&quot;M-1 -10h2m-2 20h2&quot; stroke=&quot;#f0c987&quot; stroke-width=&quot;2.4&quot;/&gt;
+  &lt;/g&gt;
+&lt;/g&gt;
 &lt;g id=&quot;astronaut&quot; transform=&quot;rotate(14)&quot; stroke=&quot;#465056&quot; stroke-linejoin=&quot;round&quot; stroke-linecap=&quot;round&quot; stroke-width=&quot;.85&quot;&gt;
   &lt;!-- Life-support pack behind the pressure garment, in three-quarter view. --&gt;
   &lt;path d=&quot;m-13-20 11-1 3 3-1 32-4 3-12-2-2-5 1-25z&quot; fill=&quot;#5a666b&quot;/&gt;
@@ -1857,7 +2028,7 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
 &lt;g id=&quot;rings&quot; stroke=&quot;#78909a&quot; fill=&quot;none&quot; opacity=&quot;.13&quot; stroke-width=&quot;.8&quot;&gt;&lt;/g&gt;
 &lt;use id=&quot;craft&quot; href=&quot;#station&quot;/&gt;&lt;g id=&quot;goal&quot;&gt;&lt;circle id=&quot;zone&quot; fill=&quot;#a9c4b7&quot; fill-opacity=&quot;.09&quot; stroke=&quot;#a9c4b7&quot; stroke-dasharray=&quot;3 4&quot;/&gt;&lt;path d=&quot;M-4 0h8m-4-4v8&quot; stroke=&quot;var(--mint)&quot;/&gt;&lt;/g&gt;
 &lt;line id=&quot;coast&quot; stroke=&quot;var(--mint)&quot; stroke-width=&quot;1.1&quot; stroke-dasharray=&quot;3 5&quot;/&gt;&lt;line id=&quot;trial&quot; stroke=&quot;var(--gold)&quot; stroke-width=&quot;1.5&quot; stroke-dasharray=&quot;6 5&quot;/&gt;&lt;line id=&quot;vArrow&quot; stroke=&quot;#a9b8c5&quot; stroke-width=&quot;2&quot; marker-end=&quot;url(#vTip)&quot;/&gt;
-&lt;g id=&quot;eject&quot; visibility=&quot;hidden&quot;&gt;&lt;use id=&quot;spentTool&quot;/&gt;&lt;/g&gt;&lt;use id=&quot;suitMan&quot; href=&quot;#astronaut&quot;/&gt;&lt;g id=&quot;craftLabel&quot;&gt;&lt;path d=&quot;M0 0l12-16h21&quot; fill=&quot;none&quot; stroke=&quot;#82b4a1&quot;/&gt;&lt;text x=&quot;12&quot; y=&quot;-21&quot; class=&quot;plottext&quot; fill=&quot;var(--mint)&quot;&gt;CAPTURE ZONE&lt;/text&gt;&lt;/g&gt;&lt;g id=&quot;evaLabel&quot;&gt;&lt;path d=&quot;m0 0 9 12h12&quot; stroke=&quot;#899ba6&quot; fill=&quot;none&quot;/&gt;&lt;text x=&quot;25&quot; y=&quot;16&quot; class=&quot;plottext&quot; fill=&quot;#c9d5d7&quot;&gt;EVA–01&lt;/text&gt;&lt;/g&gt;
+&lt;g id=&quot;eject&quot; visibility=&quot;hidden&quot;&gt;&lt;use id=&quot;spentTool&quot;/&gt;&lt;/g&gt;&lt;use id=&quot;suitMan&quot; href=&quot;#astronaut&quot;/&gt;&lt;g id=&quot;craftLabel&quot;&gt;&lt;path d=&quot;M0 0l12-16h21&quot; fill=&quot;none&quot; stroke=&quot;#82b4a1&quot;/&gt;&lt;text x=&quot;12&quot; y=&quot;-21&quot; class=&quot;plottext&quot; fill=&quot;var(--mint)&quot;&gt;Capture zone&lt;/text&gt;&lt;/g&gt;&lt;g id=&quot;evaLabel&quot;&gt;&lt;path d=&quot;m0 0 9 12h12&quot; stroke=&quot;#899ba6&quot; fill=&quot;none&quot;/&gt;&lt;text x=&quot;25&quot; y=&quot;16&quot; class=&quot;plottext&quot; fill=&quot;#c9d5d7&quot;&gt;EVA–01&lt;/text&gt;&lt;/g&gt;
 &lt;g id=&quot;aim&quot; stroke=&quot;var(--gold)&quot; fill=&quot;none&quot;&gt;
   &lt;circle id=&quot;powerRing&quot; stroke-opacity=&quot;.35&quot; stroke-dasharray=&quot;2 7&quot; visibility=&quot;hidden&quot;/&gt;&lt;line id=&quot;targetLine&quot; stroke-dasharray=&quot;3 3&quot;/&gt;
   &lt;g id=&quot;reticle&quot;&gt;&lt;circle r=&quot;7&quot; fill=&quot;#111719&quot; fill-opacity=&quot;.75&quot;/&gt;&lt;path d=&quot;M-12 0h7m10 0h7M0-12v7m0 10v7&quot;/&gt;&lt;circle r=&quot;1.3&quot; fill=&quot;var(--gold)&quot; stroke=&quot;none&quot;/&gt;&lt;/g&gt;
@@ -1867,12 +2038,12 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
   &lt;div role=&quot;group&quot; aria-label=&quot;Suit telemetry&quot;&gt;
     &lt;div class=&quot;hud left primary-hud&quot;&gt;&lt;div class=&quot;micro&quot;&gt;Oxygen remaining&lt;/div&gt;&lt;div class=&quot;big&quot; id=&quot;oxygen&quot;&gt;15:00&lt;/div&gt;&lt;div class=&quot;meter&quot;&gt;&lt;i id=&quot;oxygenBar&quot;&gt;&lt;/i&gt;&lt;/div&gt;&lt;/div&gt;
     &lt;div class=&quot;hud right primary-hud&quot;&gt;&lt;div class=&quot;micro&quot;&gt;Δv budget&lt;/div&gt;&lt;div class=&quot;big&quot;&gt;&lt;span id=&quot;budget&quot;&gt;&lt;/span&gt; &lt;small&gt;m/s&lt;/small&gt;&lt;/div&gt;&lt;/div&gt;
-    &lt;div class=&quot;hud left side-hud&quot;&gt;&lt;div&gt;&lt;div class=&quot;micro&quot;&gt;Hull distance&lt;/div&gt;&lt;b id=&quot;range&quot;&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;div class=&quot;micro&quot;&gt;Hatch bearing&lt;/div&gt;&lt;b id=&quot;bearing&quot;&gt;&lt;/b&gt;&lt;/div&gt;&lt;/div&gt;
+    &lt;div class=&quot;hud left side-hud&quot;&gt;&lt;div&gt;&lt;div class=&quot;micro&quot;&gt;Hatch distance&lt;/div&gt;&lt;b id=&quot;range&quot;&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;div class=&quot;micro&quot;&gt;Hatch bearing&lt;/div&gt;&lt;b id=&quot;bearing&quot;&gt;&lt;/b&gt;&lt;/div&gt;&lt;/div&gt;
     &lt;div class=&quot;hud right side-hud&quot;&gt;&lt;div class=&quot;micro&quot;&gt;Velocity · m/s&lt;/div&gt;&lt;div class=&quot;raw&quot;&gt;&lt;span&gt;Vx&lt;/span&gt;&lt;b id=&quot;vx&quot;&gt;&lt;/b&gt;&lt;span&gt;Vy&lt;/span&gt;&lt;b id=&quot;vy&quot;&gt;&lt;/b&gt;&lt;span&gt;Radial&lt;/span&gt;&lt;b id=&quot;radial&quot;&gt;&lt;/b&gt;&lt;span&gt;Mass&lt;/span&gt;&lt;b id=&quot;mass&quot;&gt;&lt;/b&gt;&lt;/div&gt;&lt;/div&gt;
   &lt;/div&gt;
   &lt;div class=&quot;hud lower-hud&quot;&gt;
     &lt;div class=&quot;lower-readouts&quot;&gt;
-      &lt;svg class=&quot;plot-scale&quot; viewBox=&quot;0 0 94 23&quot; preserveAspectRatio=&quot;xMinYMax meet&quot; aria-hidden=&quot;true&quot;&gt;
+      &lt;svg class=&quot;plot-scale&quot; id=&quot;plotScale&quot; width=&quot;94&quot; height=&quot;23&quot; aria-hidden=&quot;true&quot;&gt;
         &lt;g transform=&quot;translate(0 21)&quot; stroke=&quot;#95a6aa&quot; fill=&quot;#c1cccf&quot;&gt;&lt;path id=&quot;scaleLine&quot; fill=&quot;none&quot;/&gt;&lt;text x=&quot;0&quot; y=&quot;-6&quot; id=&quot;scaleText&quot; stroke=&quot;none&quot; class=&quot;plottext&quot;&gt;&lt;/text&gt;&lt;/g&gt;
       &lt;/svg&gt;
       &lt;div class=&quot;assist&quot;&gt;&lt;div class=&quot;micro&quot; id=&quot;assistMode&quot;&gt;&lt;/div&gt;&lt;div id=&quot;prediction&quot;&gt;&lt;/div&gt;&lt;/div&gt;
@@ -2083,8 +2254,8 @@ function plotCamera(s,w,h) {
 function renderPlot(pvx,pvy) {
   const s=state,w=plotW,h=plotH;
   const {px,py,ox,oy,scale,reach,inner}=camera;
-  const stationScale=Math.min(.66,scale*.062);
-  at(&#x27;craft&#x27;,ox+2*stationScale,oy+34*stationScale,&#x27;scale(&#x27;+stationScale+&#x27;)&#x27;);
+  const stationScale=Math.min(.78,scale*.065);
+  at(&#x27;craft&#x27;,ox,oy,&#x27;scale(&#x27;+stationScale+&#x27;)&#x27;);
   at(&#x27;goal&#x27;,ox,oy); $(&#x27;zone&#x27;).setAttribute(&#x27;r&#x27;,captureRadius*scale);
   at(&#x27;craftLabel&#x27;,ox,oy-captureRadius*scale-3);
   const suitScale=Math.min(.57,Math.max(.39,scale*.042));
@@ -2133,7 +2304,8 @@ function renderPlot(pvx,pvy) {
     $(&#x27;spentTool&#x27;).setAttribute(&#x27;href&#x27;,&#x27;#t&#x27;+anim.i);$(&#x27;eject&#x27;).style.opacity=Math.min(1,2.5-anim.age);
   }
   const units=scale&gt;7?5:Math.max(10,Math.round(50/scale/5)*5);
-  $(&#x27;scaleLine&#x27;).setAttribute(&#x27;d&#x27;,&#x27;M0 -3v3h&#x27;+(scale*units)+&#x27;v-3&#x27;); $(&#x27;scaleText&#x27;).textContent=units+&#x27; M&#x27;;
+  $(&#x27;plotScale&#x27;).setAttribute(&#x27;width&#x27;,Math.ceil(scale*units)+1);
+  $(&#x27;scaleLine&#x27;).setAttribute(&#x27;d&#x27;,&#x27;M0 -3v3h&#x27;+(scale*units)+&#x27;v-3&#x27;); $(&#x27;scaleText&#x27;).textContent=units+&#x27; m&#x27;;
 }
 
 function trackTarget() {
@@ -2229,7 +2401,7 @@ function guide() {
     &#x27;&lt;li&gt;&lt;b&gt;Release to throw.&lt;/b&gt; A click or tap without dragging previews the aim. Escape or release outside the plot to cancel a drag.&lt;/li&gt;&#x27;+
     &#x27;&lt;li&gt;&lt;b&gt;Keyboard controls.&lt;/b&gt; Left and right change bearing by 1° (Shift for 10°). Up and down change power by 1% (Shift for 10%). Press Enter on the plot to throw, or hold Space to wind up and release to throw. Escape cancels the windup.&lt;/li&gt;&#x27;+
     &#x27;&lt;li&gt;&lt;b&gt;Coast&lt;/b&gt; once you have a return path. P pauses flight. The speed controls advance motion and oxygen together.&lt;/li&gt;&lt;/ul&gt;&#x27;+
-    &#x27;&lt;p&gt;Bearings run counterclockwise from right (000°) to up (090°). Vx, Vy and radial speed use m/s. Positive radial speed means you are moving away. Hull distance measures the gap to the capture circle. The Δv budget is the largest total velocity change available from full-power throws in the best order.&lt;/p&gt;&#x27;,
+    &#x27;&lt;p&gt;Bearings run counterclockwise from right (000°) to up (090°). Vx, Vy and radial speed use m/s. Positive radial speed means you are moving away. Hatch distance measures the gap to the capture circle. The Δv budget is the largest total velocity change available from full-power throws in the best order.&lt;/p&gt;&#x27;,
     [[&#x27;Back to flight&#x27;,()=&gt;closeDialog(),true]]);
 }
 function finish(title,description) {
@@ -2366,7 +2538,7 @@ init();
   function key(k,shiftKey=false) {
     $(&#x27;plot&#x27;).dispatchEvent(new KeyboardEvent(&#x27;keydown&#x27;,{key:k,bubbles:true,cancelable:true,shiftKey}));
   }
-  const output=document.createElement(&#x27;pre&#x27;);output.id=&#x27;qa-results&#x27;;document.body.append(output);
+  const output=document.createElement(&#x27;pre&#x27;);output.id=&#x27;qa-results&#x27;;
   try {
     test(&#x27;Offline initialization and six selectable tools&#x27;,()=&gt;{yes($(&#x27;tools&#x27;).children.length===6,&#x27;rack&#x27;);yes($(&#x27;oxygen&#x27;).textContent===&#x27;15:00&#x27;,&#x27;clock&#x27;);yes(state.phase===&#x27;ready&#x27;,&#x27;standby&#x27;);yes(!performance.getEntriesByType(&#x27;resource&#x27;).some(r=&gt;/^https?:/.test(r.name)),&#x27;external request&#x27;)});
     test(&#x27;All 64 inventory budgets match independent brute-force enumeration&#x27;,()=&gt;{
@@ -2490,6 +2662,25 @@ init();
       for(let i=0;i&lt;10;i++)key(&#x27;ArrowDown&#x27;,true);near(state.power,10,&#x27;floor&#x27;);
       key(&#x27;Enter&#x27;);yes(state.throws===1,&#x27;keyboard release&#x27;);
     });
+    test(&#x27;Docking hatch stays centered on the capture zone in each scenario&#x27;,()=&gt;{
+      for(let index=0;index&lt;scenarios.length;index++) {
+        newFlight(index);
+        const hatch=new DOMPoint(0,0).matrixTransform($(&#x27;craft&#x27;).getScreenCTM());
+        const goal=new DOMPoint(0,0).matrixTransform($(&#x27;goal&#x27;).getScreenCTM());
+        near(hatch.x,goal.x,&#x27;hatch x&#x27;,.01);near(hatch.y,goal.y,&#x27;hatch y&#x27;,.01);
+      }
+    });
+    test(&#x27;HUD labels use readable mixed case and the oxygen gauge follows the reserve&#x27;,()=&gt;{
+      for(const label of document.querySelectorAll(&#x27;.hud .micro,.spec,.throw-vector .micro&#x27;)) {
+        const style=getComputedStyle(label);
+        yes(style.textTransform===&#x27;none&#x27; &amp;&amp; parseFloat(style.fontSize)&gt;=12,label.textContent);
+      }
+      const bar=$(&#x27;oxygenBar&#x27;), full=bar.getBoundingClientRect();
+      yes(full.height&gt;=5 &amp;&amp; full.width&gt;0,&#x27;visible reserve&#x27;);
+      toggleClock();advance(limits.Easy/2);render();
+      near(bar.getBoundingClientRect().width,full.width/2,&#x27;half-full bar&#x27;,.1);
+      yes($(&#x27;oxygen&#x27;).textContent===&#x27;07:30&#x27;,&#x27;remaining oxygen&#x27;);
+    });
     test(&#x27;The advisory updates inside the plot without blocking aim or covering the scale and forecast&#x27;,()=&gt;{
       const plot=$(&#x27;plot&#x27;), tip=$(&#x27;tip&#x27;), advisory=tip.closest(&#x27;.advisory&#x27;);
       const before=tip.textContent;
@@ -2513,6 +2704,7 @@ init();
     });
     output.textContent=&#x27;PASS &#x27;+passed.length+&#x27; groups at &#x27;+innerWidth+&#x27;px: &#x27;+passed.join(&#x27; | &#x27;);
   }catch(e){output.textContent=&#x27;FAIL after &#x27;+passed.length+&#x27;: &#x27;+e.message+&#x27; / &#x27;+e.stack;}
+  document.body.append(output);
 })();
 &lt;/script&gt;&lt;/body&gt;&lt;/html&gt;
 " onload="check(this)"></iframe></body></html>
