@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101517"><meta name="description" content="You were the star pitcher in high school. Now your tether has snapped. Throw the tools on your belt to get back to the airlock in Fastball, a browser game about momentum."><title>Fastball · EVA return simulator</title><style>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101517"><meta name="description" content="You were the star pitcher in high school. Now your tether has snapped. Pitch your repair tools to get back to the airlock in Fastball, a browser game about momentum."><title>Fastball · Alpha v0.2 · EVA return simulator</title><style>
 :root{color-scheme:dark;--bg:#0e1113;--panel:#181c1e;--edge:#343b3e;--muted:#c1cecf;--oxygen-fill:#a4ead0;--mint:#a9c4b7;--ink:#e5e8e5;--gold:#d4b48b;--mono:Consolas,"SFMono-Regular","Liberation Mono",monospace;--sans:"Segoe UI",Arial,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px var(--sans)}button,select,input{font:inherit}button,select{color:var(--ink);cursor:pointer}button{background:#20282b;border:1px solid var(--edge);border-radius:5px}button:hover:enabled,select:hover{background:#2a3437;border-color:#6b7d81}button:focus-visible,select:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--mint);outline-offset:3px}button:disabled{cursor:default;color:var(--muted)}.tool:disabled svg{opacity:.52}button svg{width:15px;height:15px;vertical-align:-3px}header{border-bottom:1px solid var(--edge);background:#14191b}.bar,main{width:min(1512px,100%);margin:auto}.bar{display:flex;align-items:center;justify-content:space-between;padding:17px clamp(16px,3.6vw,58px);gap:12px}.brand{display:flex;align-items:center;gap:13px}.brand>svg{width:38px;height:38px}.wordmark{font-weight:750;letter-spacing:.18em;font-size:20px;line-height:1.1}.subbrand,.micro,.sectionlabel,.spec,.tag,.plotlabel,.foot,.eyebrow{font:500 13px/1.35 var(--sans);letter-spacing:.012em}.subbrand{color:var(--muted);letter-spacing:.02em;font-size:12px;margin-top:2px}.toptools,.actions,.caption,.settings,.row,.chips,.legend,.cardhead,.inc,.fr{display:flex;align-items:center;gap:10px}.toptools{gap:17px}.tag{border:1px solid #435050;color:#bccac7;border-radius:4px;padding:4px 7px;letter-spacing:.025em}.quiet{padding:8px 11px;display:inline-flex;align-items:center;gap:7px}.quiet svg{fill:none;stroke:currentColor;stroke-width:1.6}.guide{background:transparent}main{padding:24px clamp(16px,3.6vw,58px) 22px}.mission{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:17px}.eyebrow,.plotlabel{color:var(--mint)}h1,h2,h3,p{margin:0}h1{font-size:clamp(26px,2.4vw,39px);line-height:1.15;letter-spacing:-.04em;margin-top:4px;font-weight:630}.settings{gap:9px}.settings select,.dialogrow select{background:#20282b;border:1px solid var(--edge);border-radius:5px;padding:7px 9px}.panel{background:var(--panel);border:1px solid var(--edge);border-radius:8px;overflow:hidden;min-width:0}.panelhead{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--edge);min-height:44px}.sectionlabel{font-weight:650;font-size:14px;color:#dce5e2;display:flex;align-items:center;gap:9px}.sectionlabel svg{width:15px;height:15px;stroke:var(--mint);fill:none;stroke-width:1.6}.status{font:12px/1.3 var(--sans);color:var(--mint);display:flex;align-items:center;gap:7px}.dot{width:6px;height:6px;display:inline-block;background:var(--mint);border-radius:50%}.micro,.spec,.foot{color:var(--muted)}.big{font:clamp(25px,2.2vw,36px)/1.05 var(--mono);letter-spacing:-.06em;margin-top:4px}.big small{font:13px var(--mono);color:var(--muted);letter-spacing:0}.oxygen,.dv{color:var(--mint)}.rack{margin-top:14px}.rack .panelhead{border-bottom:0;padding-bottom:4px}.spec{font-variant-numeric:tabular-nums}.tools{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;padding:9px 14px 14px}.tool{position:relative;text-align:left;background:#1b2225;padding:7px 10px 10px;min-width:0}.tool.selected{background:#20312e;border-color:#81c8ad;box-shadow:inset 0 -2px #a9c4b7}.tool b,.tool small{display:block}.tool b{font-size:13px;font-weight:600}.tool small{font:12px/1.3 var(--sans);color:var(--muted);margin-top:4px}.tool svg{width:100%;height:43px;display:block}.slot{position:absolute;top:7px;left:8px;color:var(--muted);font:11px var(--mono)}.tool.selected .slot{color:var(--mint)}.foot{display:flex;justify-content:space-between;gap:8px;margin-top:15px}.plottext{font:500 12px var(--sans);paint-order:stroke;stroke:#10181d;stroke-width:2.5px;stroke-linejoin:round}.plotvalue{font:11px var(--mono)}dialog{color:var(--ink);background:#192023;border:1px solid #536260;border-radius:10px;width:min(450px,calc(100% - 28px));padding:23px;box-shadow:0 18px 95px #0009}dialog::backdrop{background:#070c10b5}dialog h2{font-size:26px;letter-spacing:-.035em;margin:5px 0 12px}dialog p,dialog li,dialog dd{color:#c2cfcc;font-size:14px;line-height:1.55}dialog ul{padding-left:19px}dialog li{margin:7px 0}.dialogrow{display:flex;justify-content:space-between;align-items:center;margin:16px 0;gap:10px}.dialogactions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}.dialogactions button{padding:9px 14px}.primary{color:#10201a;background:var(--mint);border-color:var(--mint)}.primary:hover:enabled{background:#c0f8df}.dialogstats{display:grid;grid-template-columns:1fr auto;gap:8px 16px}.dialogstats dd{margin:0;text-align:right;font-family:var(--mono)}.dialogstats dt{color:var(--muted)}.sr{position:absolute;width:1px;height:1px;clip-path:inset(50%);overflow:hidden}[hidden]{display:none!important}
 
 .bar,main { width:min(1920px,100%); padding-inline:clamp(12px,3vw,58px) }
@@ -26,6 +26,8 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
 .primary-hud { top:var(--inset); padding:2px 10px 4px; border-left:2px solid #7c8d85; background:linear-gradient(90deg,#11191d99,transparent) }
 .primary-hud.right { border:0; border-right:2px solid #7c8d85; background:linear-gradient(270deg,#11191d99,transparent) }
 .hud .micro { color:var(--muted) }
+.reserve-label { max-width:24ch }
+.left-instruments { display:contents }
 .big { margin-top:1px; font-size:clamp(25px,2.2vw,36px); color:#d7e6dd }
 .big small,.hud small { color:var(--muted); font:12px var(--mono) }
 .meter { position:relative; width:clamp(110px,9vw,136px); height:8px; margin-top:6px; border:1px solid #879b9d; border-radius:2px; overflow:hidden; background:#1e3036 }
@@ -76,6 +78,8 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
 .reticle-text { font:11px var(--mono); fill:var(--gold); paint-order:stroke; stroke:#0c1013; stroke-width:3px; stroke-linejoin:round }
 @media(max-width:940px) {
   .side-hud { top:78px; gap:7px }
+  .left-instruments { position:absolute; top:var(--inset); left:var(--inset); display:grid; gap:10px; pointer-events:none }
+  .left-instruments .hud { position:static }
   .tool { display:block; padding:6px 9px 9px }
   .tool svg { height:33px }
 }
@@ -98,14 +102,15 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
   .brand { gap:7px }
   .wordmark { font-size:15px }
   .brand>svg { width:27px; height:27px }
-  .tag { display:none }
+  .toptools { flex-direction:column-reverse; align-items:flex-end; gap:2px }
+  .tag { border:0; padding:0; font-size:11px }
   .settings { gap:5px }
   .settings .quiet,.settings select { padding:6px; font-size:12px; white-space:nowrap }
   .scene>svg { height:clamp(405px,58svh,545px) }
   .panelhead { padding-inline:9px }
   .sectionlabel { white-space:nowrap }
   section[aria-label="Navigation"]>.panelhead { flex-direction:column; align-items:flex-start; gap:3px }
-  .side-hud.left { top:83px }
+  .reserve-label { max-width:17ch }
   .side-hud.right { top:66px }
   .plotbar { padding:5px 6px; gap:4px }
   .legend { gap:8px }
@@ -153,7 +158,10 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
 @media(max-width:720px) {
   .scene:has(.speedometer:not([hidden])) { display:flex; flex-direction:column }
   .scene:has(.speedometer:not([hidden])) [aria-label="Suit telemetry"] { order:-1; display:grid; grid-template-columns:1fr 1fr; gap:7px 12px; padding:9px 12px; background:#141e23; border-bottom:1px solid var(--edge) }
-  .scene:has(.speedometer:not([hidden])) [aria-label="Suit telemetry"]>.hud { position:static; padding:0; border:0; background:none }
+  .scene:has(.speedometer:not([hidden])) .left-instruments { display:contents }
+  .scene:has(.speedometer:not([hidden])) [aria-label="Suit telemetry"] .hud { position:static; padding:0; border:0; background:none }
+  .scene:has(.speedometer:not([hidden])) .primary-hud { grid-row:1 }
+  .scene:has(.speedometer:not([hidden])) .side-hud { grid-row:2 }
   .scene:has(.speedometer:not([hidden])) .side-hud { gap:3px }
   .scene:has(.speedometer:not([hidden])) .side-hud.right { justify-self:end }
   .scene:has(.speedometer:not([hidden])) .primary-hud .big { font-size:23px }
@@ -191,7 +199,7 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
   <path d="M13 -5h12m8 0h12m8 0h12M13 5h12m8 0h12m8 0h12" fill="none" stroke="#a8b6bd" stroke-width=".9"/>
 </g>
 <g id="station" transform="rotate(-16)" stroke-linejoin="round">
-  <!-- The hatch face is the local origin, shared with the capture circle. -->
+  <!-- The hatch face is the local origin, shared with the handrail reach zone. -->
   <g transform="translate(-137)">
     <rect x="-4.5" y="-89" width="9" height="178" fill="#283943" stroke="#a2b1b5" stroke-width="1.2"/>
     <rect x="-4.5" y="-89" width="9" height="178" fill="url(#truss)"/>
@@ -246,14 +254,20 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
   <path d="m-2-25 4-2 4 1" fill="none" stroke="#c2c3b0" stroke-width=".85"/>
   <path d="m-7-25 3-1v5l-3 1z" fill="#8b9391"/>
 </g>
-<g id="t0" transform="rotate(-29)" stroke="#43525b" stroke-width="1.5"><path d="M-27 -3h35l6-6 8-1-4 6 4 6 7-2-3 7-8 3-9-6h-36q-6-4 0-7z" fill="url(#silver)"/><circle cx="-24" cy=".4" r="1.7" fill="#28373d"/><path d="M-17 0H5" stroke="#cad3cd"/></g>
+<g id="t0" transform="rotate(-12)" stroke="#43525b" stroke-width="1.5" stroke-linejoin="round">
+  <path d="M-24-9h49l-2 24-5 4h-37l-5-5z" fill="#ac9879"/>
+  <path d="m3 2 8-18-1-5 5-4-1 6 4 2 4-5 1 6-6 4L10 4z" fill="url(#silver)"/>
+  <g fill="url(#silver)"><rect x="-18" y="-16" width="8" height="16" rx="2"/><rect x="-7" y="-13" width="8" height="13" rx="2"/></g>
+  <path d="M-25-8h50v7l-7 4h-36l-7-4z" fill="#d2b892"/><path d="M-18 9h36" fill="none" stroke="#756b5d" stroke-dasharray="2 2"/>
+  <rect x="-3" y="-4" width="7" height="8" rx="1.5" fill="#6b7879"/>
+</g>
 <g id="t1" transform="rotate(-14)" stroke="#455962" stroke-width="1.4"><path d="M-21 -14h28l9 5v13H5L0 20h-10l4-18h-17z" fill="url(#suit)"/><path d="M-22 -12h9v15h-9zM15 -6h9v7h-9zM-11 17H2v6h-15z" fill="#697f87"/><path d="M24 -3h9" stroke="#b8c5c4" stroke-width="3"/><path d="M-9 -8H6" stroke="#c99458" stroke-width="5"/><path d="M-7 7h8m-9 4h8" stroke="#83999c"/></g>
 <g id="t2" transform="rotate(-28)" stroke="#43545d" stroke-width="1.4"><rect x="-22" y="-10" width="37" height="20" rx="5" fill="url(#silver)"/><path d="M-17 -10v20m3-20v20m23-20v20" stroke="#617781"/><path d="M14 -7h6v14h-6z" fill="#b6c2bf"/><path d="M21 -3h7v6h-7z" fill="#dbb37a"/><path d="M-7 -6h10v5H-7z" fill="#809593"/></g>
 <g id="t3" transform="rotate(-23)" stroke="#465962" stroke-width="1.4"><path d="m-22 -9 9-6h28l7 6v19l-8 5h-30l-6-5z" fill="url(#silver)"/><path d="M-22 -8h36l8-3M14 -8v21m-25-22V9" fill="none"/><path d="M-4 -5H8v7H-4z" fill="#d5a96e"/><path d="M-14 -16v-4h8v4m12 0v-4h7v4" fill="#9aabae"/></g>
 <g id="t4" transform="rotate(-29)" stroke="#50626a" stroke-width="1.6"><path d="M-25 -4H7v-9h10v9h7v8h-7v9H7V4h-32z" fill="url(#suit)"/><path d="M-24 -4h11v8h-11z" fill="#6f848b"/><path d="M9 -8h6m-6 16h6" stroke="#bf985e"/></g>
 <g id="t5" transform="rotate(-28)" stroke="#52636b" stroke-width="1.6"><path d="M-23 -4h31v8h-31q-5-4 0-8z" fill="url(#silver)"/><path d="M7 -9h16l4 5v9l-4 4H7z" fill="url(#suit)"/><path d="M12 -8V8m5-16V8m5-14V6" stroke="#768a92"/><circle cx="-21" cy="0" r="1.5" fill="#2e3a3f"/></g>
 <symbol id="cross" viewBox="0 0 20 20"><circle cx="10" cy="10" r="5.8"/><path d="M10 0v6m0 8v6M0 10h6m8 0h6"/></symbol><symbol id="signal" viewBox="0 0 20 20"><path d="M1 12h4l3-8 4 13 3-8h4"/></symbol><symbol id="rackicon" viewBox="0 0 20 20"><rect x="2" y="6" width="16" height="11" rx="2"/><path d="M6 6V3h8v3M2 10h16m-10 0v2h4v-2"/></symbol><symbol id="book" viewBox="0 0 20 20"><path d="M2 4q5-2 8 1 3-3 8-1v12q-4-2-8 1-4-3-8-1zM10 5v11"/></symbol><symbol id="restart" viewBox="0 0 20 20"><path d="M3 9a7 7 0 1 1 1 6M3 3v6h6"/></symbol><symbol id="launch" viewBox="0 0 20 20"><path d="m3 16 12-12M6 4h10v10M2 11l4-4"/></symbol>
-</defs></svg><header><div class="bar"><div class="brand"><svg viewBox="0 0 40 40" aria-hidden="true"><rect x="1" y="1" width="38" height="38" rx="9" fill="#b1c2b7"/><g stroke="#25332d" fill="none" stroke-width="2"><ellipse cx="20" cy="20" rx="15" ry="6" transform="rotate(-40 20 20)"/><path d="m15 24 3-13 10 6-13 7z" fill="#25332d"/></g></svg><div><div class="wordmark">FASTBALL</div><div class="subbrand">EVA return simulator</div></div></div><div class="toptools"><span class="tag">Alpha v0.1</span><button class="quiet guide" id="guide"><svg aria-hidden="true"><use href="#book"/></svg> Flight guide</button></div></div></header>
+</defs></svg><header><div class="bar"><div class="brand"><svg viewBox="0 0 40 40" aria-hidden="true"><rect x="1" y="1" width="38" height="38" rx="9" fill="#b1c2b7"/><g stroke="#25332d" fill="none" stroke-width="2"><ellipse cx="20" cy="20" rx="15" ry="6" transform="rotate(-40 20 20)"/><path d="m15 24 3-13 10 6-13 7z" fill="#25332d"/></g></svg><div><div class="wordmark">FASTBALL</div><div class="subbrand">EVA return simulator</div></div></div><div class="toptools"><span class="tag">Alpha v0.2</span><button class="quiet guide" id="guide"><svg aria-hidden="true"><use href="#book"/></svg> Flight guide</button></div></div></header>
 <main><div class="mission"><div><div class="eyebrow" id="missionId">Scenario 01 / 03</div><h1 id="missionTitle">Tether separation</h1></div><div class="settings"><select id="difficulty" aria-label="Mission difficulty"><option>Story</option><option selected>Easy</option><option>Medium</option><option>Hard</option></select><button class="quiet" id="setup"><svg aria-hidden="true"><use href="#restart"/></svg> New mission</button><button class="quiet" id="pause">Start clock</button></div></div>
 <section class="panel" aria-label="Navigation"><div class="panelhead"><h2 class="sectionlabel"><svg aria-hidden="true"><use href="#cross"/></svg> Navigation plot</h2><span class="status"><i class="dot"></i><span id="status">Standby</span></span></div>
 <div class="flight-scene"><aside class="lesson" id="lesson" aria-label="Guided first rescue" hidden>
@@ -272,7 +286,7 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
 <g id="rings" stroke="#78909a" fill="none" opacity=".13" stroke-width=".8"></g>
 <use id="craft" href="#station"/><g id="goal"><circle id="zone" fill="#a9c4b7" fill-opacity=".09" stroke="#a9c4b7" stroke-dasharray="3 4"/><path d="M-4 0h8m-4-4v8" stroke="var(--mint)"/></g>
 <line id="coast" stroke="var(--mint)" stroke-width="1.1" stroke-dasharray="3 5"/><line id="trial" stroke="var(--gold)" stroke-width="1.5" stroke-dasharray="6 5"/><line id="vArrow" stroke="#a9b8c5" stroke-width="2" marker-end="url(#vTip)"/>
-<g id="eject" visibility="hidden"><use id="spentTool"/></g><use id="suitMan" href="#astronaut"/><g id="craftLabel"><path d="M0 0l12-16h21" fill="none" stroke="#82b4a1"/><text x="12" y="-21" class="plottext" fill="var(--mint)">Capture zone</text></g><g id="evaLabel"><path d="m0 0 9 12h12" stroke="#899ba6" fill="none"/><text x="25" y="16" class="plottext" fill="#c9d5d7">EVA–01</text></g>
+<g id="eject" visibility="hidden"><use id="spentTool"/></g><use id="suitMan" href="#astronaut"/><g id="craftLabel"><path d="M0 0l12-16h21" fill="none" stroke="#82b4a1"/><text x="12" y="-21" class="plottext" fill="var(--mint)">Handrail reach zone</text></g><g id="evaLabel"><path d="m0 0 9 12h12" stroke="#899ba6" fill="none"/><text x="25" y="16" class="plottext" fill="#c9d5d7">EVA–01</text></g>
 <g id="aim" stroke="var(--gold)" fill="none">
   <circle id="powerRing" stroke-opacity=".35" stroke-dasharray="2 7" visibility="hidden"/><line id="targetLine" stroke-dasharray="3 3"/>
   <g id="reticle"><circle r="7" fill="#111719" fill-opacity=".75"/><path d="M-12 0h7m10 0h7M0-12v7m0 10v7"/><circle r="1.3" fill="var(--gold)" stroke="none"/></g>
@@ -281,17 +295,19 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
 <g id="railCatch" visibility="hidden" aria-hidden="true"><circle r="11" fill="none" stroke="var(--oxygen-fill)" stroke-width="2.5"/><path d="m-5 0 3 3 7-7" fill="none" stroke="var(--oxygen-fill)" stroke-width="2"/></g>
 <g id="lessonMarks" class="lesson-mark" visibility="hidden" aria-hidden="true">
   <g id="lessonTarget"><circle r="18" fill="#d4b48b" fill-opacity=".13" stroke="var(--gold)" stroke-width="2" stroke-dasharray="4 3"/></g>
-  <text id="wrenchCaption" fill="var(--gold)">Wrench goes here</text>
+  <text id="pouchCaption" fill="var(--gold)">Pouch goes here</text>
   <text id="driftCaption" fill="var(--oxygen-fill)">Your path</text>
 </g>
 </svg>
   <div role="group" aria-label="Suit telemetry">
-    <div class="hud left primary-hud"><div class="micro">Oxygen remaining</div><div class="big" id="oxygen">15:00</div><div class="meter"><i id="oxygenBar"></i></div></div>
+    <div class="left-instruments">
+      <div class="hud left primary-hud"><div class="micro reserve-label">Time to reach the rail on emergency reserve</div><div class="big" id="oxygen">15:00</div><div class="meter"><i id="oxygenBar"></i></div></div>
+      <div class="hud left side-hud"><div><div class="micro">Hatch distance</div><b id="range"></b></div><div><div class="micro">Hatch bearing</div><b id="bearing"></b></div></div>
+    </div>
     <div class="hud right primary-hud"><div class="micro">Δv budget</div><div class="big"><span id="budget"></span> <small>m/s</small></div></div>
       <div id="speedometer" class="hud right speedometer" hidden><span class="micro">Approach speed</span><output class="speed-number" id="speedNumber"></output>
         <div id="speedGauge" class="speed-track" role="meter" aria-label="Approach speed" aria-valuemin="0"><i id="speedFill"></i></div><span class="speed-limit" id="speedLimit"></span>
       </div>
-    <div class="hud left side-hud"><div><div class="micro">Hatch distance</div><b id="range"></b></div><div><div class="micro">Hatch bearing</div><b id="bearing"></b></div></div>
     <div class="hud right side-hud"><div class="micro">Velocity · m/s</div><div class="raw"><span>Vx</span><b id="vx"></b><span>Vy</span><b id="vy"></b><span>Radial</span><b id="radial"></b><span>Mass</span><b id="mass"></b></div></div>
   </div>
   <div class="hud lower-hud">
@@ -308,7 +324,7 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
   </div>
 </div></div>
 <div class="plotbar"><div class="legend"><span><i class="keyline vector"></i>Velocity</span><span id="coastKey"><i class="keyline" style="border-top-style:dotted"></i>Coast</span><span id="trialKey"><i class="keyline recoil"></i>After throw</span></div><span class="flight-time">Flight time <b id="elapsed">00:00</b></span><div class="speed" id="speeds" aria-label="Simulation speed"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7"/><path d="M10 5v6l4 2"/></svg></div></div>
-<div class="flight-controls"><button id="throwButton">Throw wrench</button><button id="coastButton" class="primary" hidden>Coast to hatch</button><span id="objectiveStatus" hidden></span></div></section>
+<div class="flight-controls"><button id="throwButton">Throw pouch</button><button id="coastButton" class="primary" hidden>Coast to halfway</button><span id="objectiveStatus" hidden></span></div></section>
 <section class="panel rack"><div class="panelhead"><h2 class="sectionlabel"><svg aria-hidden="true"><use href="#rackicon"/></svg> Equipment rack</h2><span class="spec" id="count"></span></div><div class="tools" id="tools"></div><div class="throwstrip"><p id="aimHint">Click to aim. Drag to set direction and power, then release to throw.</p><span class="throw-vector"><span class="micro">Throw vector</span><span id="angle"></span> / <span id="powerLabel"></span></span></div></section>
 <span class="sr" id="plotKeys">1 to 6 select a tool. Left and right adjust bearing. Up and down adjust power. Enter throws. Escape cancels a drag.</span><div class="sr" aria-live="polite" id="announce"></div></main>
 <dialog id="modal" aria-labelledby="dialogTitle"><div class="eyebrow" id="dialogKicker"></div><h2 id="dialogTitle"></h2><div id="dialogBody"></div><div class="dialogactions" id="dialogActions"></div></dialog>
@@ -316,15 +332,15 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
 'use strict';
 const $ = id => document.getElementById(id);
 const gear = [
-  {name:'Hatch wrench', mass:2.4, speed:5.2},
+  {name:'Socket-and-wrench pouch', mass:2.4, speed:5.2},
   {name:'Power drill', mass:3.6, speed:4.2},
-  {name:'Gas cartridge', mass:1.2, speed:6.4},
-  {name:'Battery pack', mass:4.8, speed:3.8},
+  {name:'Worksite gas cartridge', mass:1.2, speed:6.4},
+  {name:'Spare repair battery', mass:4.8, speed:3.8},
   {name:'T-handle', mass:0.8, speed:7.0},
   {name:'Socket driver', mass:0.6, speed:7.4}
 ];
 const scenarios = [
-  {name:'Tether separation', x:19, y:-3.8, vx:0.018, vy:0.004, brief:'A slow outward drift from the airlock. Reverse it and aim for the green capture zone.'},
+  {name:'Tether separation', x:19, y:-3.8, vx:0.018, vy:0.004, brief:'A slow outward drift from the airlock. Reverse it and aim for the green handrail reach zone.'},
   {name:'Lateral drift', x:15, y:4.5, vx:0.009, vy:-0.052, brief:'You are sliding across the face of the hull. Cancel your sideways drift to line up a return.'},
   {name:'Wide separation', x:29, y:-8, vx:0.044, vy:-0.016, brief:'The airlock is falling behind. Combine heavy throws to reverse your drift and close the gap.'}
 ];
@@ -352,11 +368,11 @@ function budget(mask) {
   }
   return budgets.get(mask);
 }
-function course(x,y,vx,vy) {
+function course(x,y,vx,vy,radius=captureRadius) {
   const vv = vx*vx + vy*vy, dot = x*vx+y*vy;
   const t = vv ? Math.max(0,-dot/vv) : 0;
-  const clearance = Math.max(0,Math.hypot(x+t*vx,y+t*vy)-captureRadius);
-  const c = x*x + y*y - captureRadius*captureRadius;
+  const clearance = Math.max(0,Math.hypot(x+t*vx,y+t*vy)-radius);
+  const c = x*x + y*y - radius*radius;
   let eta = null;
   if (c <= 0) eta = 0;
   else if (dot < 0 && vv > 0) {
@@ -393,10 +409,11 @@ function newFlight(index=0,level='Easy',objective='none',lesson='') {
   clearTimeout(debriefTimer);debriefTimer=null;
   endDrag(true);
   const s=scenarios[index];
+  const startingGap=Math.hypot(s.x,s.y)-captureRadius;
   state={...s, index,level, phase:'ready', elapsed:0, oxygen:limits[level], mask:fullMask,
     selected:0, bearing:0, power:65, rate:1, throws:0, spent:0, usedMask:0, objective, lesson,
-    previewing:false, finalRate:0, closest:Math.hypot(s.x,s.y)-captureRadius,
-    lastImpulse:0,tip:lesson?'Line up your predicted path with the hatch before you release the wrench.':softCapture(level)?captureBrief(level):level==='Story'?'Tools reload after every throw. Stay in view and aim for the hatch.':'Throw equipment away from the hatch to push your suit toward it.'};
+    previewing:false, finalRate:0, closest:startingGap, halfwayGap:startingGap/2, midpointThrow:null,
+    lastImpulse:0,tip:lesson?'Line up your predicted path with the hatch before you release the pouch.':softCapture(level)?captureBrief(level):level==='Story'?'Tools reload after every throw. Stay in view and aim for the hatch.':'Throw equipment away from the hatch to push your suit toward it.'};
   charge=null; flash=null; anim=null; lastFrame=null;
   $('missionId').textContent='Scenario '+String(index+1).padStart(2,'0')+' / 03';
   $('missionTitle').textContent=s.name;
@@ -407,7 +424,7 @@ function newFlight(index=0,level='Easy',objective='none',lesson='') {
 }
 function captureBrief(level) {
   const limit=captureSpeedLimit.toFixed(3)+' m/s';
-  return 'Enter the hatch at '+limit+' or slower. Throw along your motion to brake.'+
+  return 'Reach the handrail at '+limit+' or slower. Throw along your motion to brake.'+
     (level==='Hard'?' Each release can stray by up to ±'+hardBearingError+'°.':'');
 }
 function safeCoast(path) {
@@ -458,10 +475,23 @@ function contextTip() {
     'Keep a light tool in reserve for the final approach.'];
   return tips[(state.throws-1+tips.length)%tips.length];
 }
+function midpointTip(path) {
+  const {x,y,vx,vy,level,oxygen,mask}=state;
+  if (!mask && overRedline(level,vx,vy)) return 'The rail is ahead, but you’re above the redline and the rack is empty.';
+  if (vx===0 && vy===0) return 'You’ve stopped relative to the rail. Throw away from it to start closing again.';
+  if (x*vx+y*vy>=0) return 'The rail is slipping away. Throw along your outward drift to reverse it.';
+  if (overRedline(level,vx,vy)) return 'You’re closing above the redline. Throw along your velocity arrow to brake.';
+  if (path.eta===null) {
+    const railOnLeft=x*vy-y*vx>0;
+    return 'Sight along your velocity arrow. '+(railOnLeft?'Rail to the left. Throw a light tool right':'Rail to the right. Throw a light tool left')+' to trim your path.';
+  }
+  if (path.eta>oxygen) return 'You’re lined up, but the reserve will run out first. Throw away from the rail to close faster.';
+  return 'Your path reaches the rail'+(softCapture(level)?' within the speed limit':'')+'. '+(mask?'Save your next tool and coast.':'Hold this coast.');
+}
 function checkEmpty() {
   if (!state.mask) {
     const {eta}=course(state.x,state.y,state.vx,state.vy);
-    if (eta===null || eta>state.oxygen) finish('Return lost','All equipment has been released. Your final coast cannot reach the capture zone before oxygen runs out.');
+    if (eta===null || eta>state.oxygen) finish('Return lost','All equipment has been released. Your final coast cannot reach the handrail reach zone before the reserve expires.');
   }
 }
 function advance(dt) {
@@ -472,16 +502,18 @@ function advance(dt) {
   const vv=vx*vx+vy*vy;
   const closestT=vv ? Math.min(step,Math.max(0,-(x*vx+y*vy)/vv)) : 0;
   state.closest=Math.min(state.closest,Math.max(0,Math.hypot(x+vx*closestT,y+vy*closestT)-captureRadius));
+  // The segment can enter and leave the halfway circle in one accelerated step.
+  if (state.midpointThrow===null && state.closest<=state.halfwayGap+1e-9) state.midpointThrow=state.throws;
   state.x+=vx*step; state.y+=vy*step;
   state.oxygen=Math.max(0,state.oxygen-step); state.elapsed+=step;
   if (anim) {anim.x+=anim.vx*step;anim.y+=anim.vy*step;anim.age+=step;if(anim.age>2.5) anim=null;}
   if (eta!==null && eta<=step) {
     if(overRedline(state.level,vx,vy))
-      finish('Approach too fast','You reached the hatch at '+formatSpeed(vx,vy)+' m/s. The handrail slipped past. Brake to '+captureSpeedLimit.toFixed(3)+' m/s or below before crossing the capture ring.');
+      finish('Approach too fast','You reached the hatch at '+formatSpeed(vx,vy)+' m/s. The handrail slipped past. Brake to '+captureSpeedLimit.toFixed(3)+' m/s or below before entering the handrail reach zone.');
     else finish('Capture confirmed','Your glove closes around the handrail. “We’ve got you. Welcome back.”');
   }
   else if (exitTime<=step) finish('Drifted out of view','Your suit drifted completely beyond the navigation plot.');
-  else if (state.oxygen<=0) finish('Oxygen depleted','Your oxygen supply ran out before you reached the capture zone.');
+  else if (state.oxygen<=0) finish('Reserve expired','Your time to reach the rail on emergency reserve has run out.');
 }
 function renderGear() {
   const count=gear.filter((_,i)=>isAvailable(i)).length;
@@ -519,6 +551,14 @@ function coastToHatch() {
   if(state.phase!=='flying' || drag || charge || $('modal').open)return;
   const path=course(state.x,state.y,state.vx,state.vy);
   if(!safeCoast(path))return;
+  if (state.midpointThrow===null) {
+    const halfway=course(state.x,state.y,state.vx,state.vy,state.halfwayGap+captureRadius);
+    if (halfway.eta>0) {
+      advance(halfway.eta);
+      state.previewing=false; lastFrame=null; render();
+      return;
+    }
+  }
   const lastMetre=Math.min(path.eta,1/Math.hypot(state.vx,state.vy));
   advance(path.eta-lastMetre);
   state.finalRate=Math.max(1,lastMetre/2);
@@ -559,16 +599,20 @@ function renderLesson(coast) {
   let heading, copy, action;
   if(step==='aim'){
     heading='First rescue · Aim';
-    copy='Your tether snapped. Eighteen metres to the hatch. You were the star pitcher in high school. Let’s hope you’ve still got it. Tap the gold ring to aim the wrench.';
+    copy='Your tether snapped. Your prototype suit’s thrusters are stuck closed. Eighteen metres to the rail. You were the star pitcher in high school. Tap the gold ring to aim the pouch.';
     action='Aim at the ring';
   } else if(step==='throw'){
     heading='First rescue · Throw';
-    copy='The wrench flies toward the crosshair. The dashed line shows where you will drift. Tap to change aim, then use Throw wrench. You can also drag and release.';
-    action='Throw wrench';
+    copy='The pouch flies toward the crosshair. Your lighter suit gets more recoil from each pitch. Follow the dashed line to see where you’ll drift.';
+    action='Throw pouch';
+  } else if(state.midpointThrow!==null && good){
+    heading='First rescue · Course check';
+    copy='Check the coast line. It crosses the handrail reach zone, and you have time to get there. Save your next tool.';
+    action='Coast to rail';
   } else {
     heading='First rescue · Coast';
-    copy=good?'The wrench is gone and you’re moving home. Keep the next tool. Coast through the quiet stretch to the handrail.':'Your path misses the return window. Try the first throw again, or skip guidance and correct with another tool.';
-    action=good?'Coast to hatch':'Try first throw again';
+    copy=good?'You’re moving home. Coast until the hatch distance has halved, then check whether your path still crosses the rail.':'Your path misses the return window. Try the first throw again, or skip guidance and correct with another tool.';
+    action=good?'Coast to halfway':'Try first throw again';
   }
   $('lessonTitle').textContent=heading;
   if($('lessonText').textContent!==copy)$('lessonText').textContent=copy;
@@ -579,7 +623,7 @@ function renderLesson(coast) {
 function forecastText(path) {
   if(path.eta===null)return 'Miss by '+path.clearance.toFixed(2)+' m';
   const eta=clock(Math.ceil(path.eta));
-  return path.eta<=state.oxygen?'On course · hatch in '+eta:'Hatch in '+eta+' · oxygen runs out first';
+  return path.eta<=state.oxygen?'On course · hatch in '+eta:'Hatch in '+eta+' · reserve runs out first';
 }
 function renderForecast(pvx,pvy,coast) {
   const s=state, aiming=s.phase!=='ended' && s.mask && (s.phase==='ready' || s.previewing || drag || charge);
@@ -617,7 +661,6 @@ function render() {
   $('angle').textContent=s.mask?fmtAngle(s.bearing):'—';
   $('powerLabel').textContent=s.mask?s.power+'%':'—';
   $('elapsed').textContent=clock(s.elapsed);
-  if ($('tip').textContent!==s.tip) $('tip').textContent=s.tip;
   $('pause').disabled=trainingAim();
   $('pause').textContent=({ready:'Start clock',flying:'Ⅱ  Pause',paused:'▷  Resume',ended:'Debrief'})[s.phase];
   $('status').textContent=drag?.moved ? (drag.inside?'Release '+gear[s.selected].name.toLowerCase():'Release to cancel') :
@@ -629,12 +672,16 @@ function render() {
   });
   const k=impulse(s.selected,s.power,s.bearing), pvx=s.vx+k.dx,pvy=s.vy+k.dy;
   const coast=course(s.x,s.y,s.vx,s.vy);
+  const checkingCourse=s.midpointThrow===s.throws && s.phase!=='ended';
+  const tip=checkingCourse?'Halfway course check. '+midpointTip(coast):s.tip;
+  if($('tip').textContent!==tip)$('tip').textContent=tip;
   renderForecast(pvx,pvy,coast);
   renderSpeedometer();
   renderLesson(coast);
   $('throwButton').textContent=s.mask?'Throw '+gear[s.selected].name.toLowerCase():'Rack empty';
   $('throwButton').disabled=!live() || !s.mask || !!drag || !!charge;
   $('coastButton').hidden=s.phase!=='flying' || !safeCoast(coast) || !!s.finalRate || !!drag || !!charge;
+  $('coastButton').textContent=s.midpointThrow===null?'Coast to halfway':'Coast to rail';
   $('objectiveStatus').hidden=s.objective==='none';
   $('objectiveStatus').textContent=replayGoals[s.objective]+(objectiveIntact()?'':' · missed');
   $('coastKey').hidden=!fullGuidance(s.level); $('trialKey').hidden=s.level==='Hard'||!s.mask;
@@ -697,8 +744,8 @@ function renderPlot(pvx,pvy) {
   if(trainingAim()) {
     at('lessonTarget',px+trainingRange(),py);
     const clampX=x=>Math.min(w-62,Math.max(62,x));
-    at('wrenchCaption',clampX(tx),ty-29);
-    $('wrenchCaption').setAttribute('text-anchor','middle');
+    at('pouchCaption',clampX(tx),ty-29);
+    $('pouchCaption').setAttribute('text-anchor','middle');
     const speed=Math.hypot(pvx,pvy)||1;
     at('driftCaption',clampX(px+pvx/speed*Math.min(reach,72)),py-pvy/speed*Math.min(reach,72)+21);
     $('driftCaption').setAttribute('text-anchor','middle');
@@ -822,7 +869,7 @@ function setup(proposed=state.level,goal=state.objective) {
     const level=$('levelChoice').value;
     $('levelBrief').textContent=level==='Story'
       ? 'Unlimited oxygen and reloading tools. Full trajectory guidance. Reach the hatch before your suit drifts off the plot.'
-      : clock(limits[level])+' oxygen · '+({Easy:'Full trajectory, intercept time and miss distance.',Medium:'Predicted velocity vector.',Hard:'Raw navigation telemetry.'})[level]+(softCapture(level)?' '+captureBrief(level):'');
+      : clock(limits[level])+' to reach the rail on emergency reserve · '+({Easy:'Full trajectory, intercept time and miss distance.',Medium:'Predicted velocity vector.',Hard:'Raw navigation telemetry.'})[level]+(softCapture(level)?' '+captureBrief(level):'');
   };
   $('scenarioChoice').onchange=describe;$('levelChoice').onchange=describe;describe();
 }
@@ -832,15 +879,16 @@ function localCrewVoice() {
 function guide() {
   const voice=localCrewVoice();
   openDialog('guide','Flight manual','Get back to the hatch',
-    '<p>Back in high school, you were the star pitcher. Today your tether has parted, your thrusters are offline, and the closest thing you have to a baseball is a hatch wrench. Every tool you throw pushes you the other way. Use that recoil to reach the airlock capture circle.</p>'+
-    (state.level==='Story'?'<p><b>Story mode.</b> Oxygen is unlimited and the selected tool reloads immediately. Your flight ends when you reach the hatch or your whole suit leaves the plot. Throw along your velocity arrow to brake.</p>':'<p>Reach the hatch before your oxygen runs out.</p>')+
+    '<p>You were the star pitcher in high school. Now your tether has parted and your prototype suit’s integrated thruster valves are stuck closed. This new suit carries less mass than the older EVA suits. The same pitch gives you more recoil. That might be just enough to get you home.</p>'+
+    (state.level==='Story'?'<p><b>Story mode.</b> Oxygen is unlimited and the selected tool reloads immediately. Your flight ends when you reach the hatch or your whole suit leaves the plot. Throw along your velocity arrow to brake.</p>':'<p>Reach the handrail before your emergency return window closes. The clock allows time for the crew to get you inside.</p>')+
     (softCapture(state.level)?'<p>'+captureBrief(state.level)+'</p>':'')+
+    '<p>Your socket-and-wrench pouch, spare battery and gas cartridge were packed for the repair job. Choose one to unclip and throw.</p>'+
     '<ul><li><b>Select</b> a tool from the rack or press 1–6. A heavier or faster tool changes your velocity more.</li>'+
     '<li><b>Drag on the plot</b> or grab the reticle. Point where the tool should travel. Your suit recoils in the opposite direction. Distance from your suit sets power, from 10% up to 100% at the dotted ring.</li>'+
     '<li><b>Release to throw.</b> A click or tap previews your aim. The Throw button commits it. Escape or release outside the plot to cancel a drag.</li>'+
     '<li><b>Keyboard controls.</b> Left and right change bearing by 1° (Shift for 10°). Up and down change power by 1% (Shift for 10%). Press Enter on the plot to throw, or hold Space to wind up and release to throw. Escape cancels the windup.</li>'+
-    '<li><b>Coast</b> once you have a return path. P pauses flight. Use the speed controls to fast-forward a long coast.</li></ul>'+
-    '<p>Bearings run counterclockwise from right (000°) to up (090°). Vx, Vy and radial speed use m/s. Green hatch distance and negative radial speed mean you are closing in. Red distance and positive radial speed mean you are moving away. Hatch distance measures the gap to the capture circle.</p>'+
+    '<li><b>Check your course halfway home.</b> When the original gap to the handrail reach zone has halved, the station calls once. Check your path and approach speed before spending another tool. The coast shortcut stops there first. P pauses flight.</li></ul>'+
+    '<p>Bearings run counterclockwise from right (000°) to up (090°). Vx, Vy and radial speed use m/s. Green hatch distance and negative radial speed mean you are closing in. Red distance and positive radial speed mean you are moving away. Hatch distance measures the gap to the edge of the handrail reach zone. Between throws you coast in a straight line.</p>'+
     (state.level==='Story'?'':'<p>The Δv budget is the largest total velocity change available from full-power throws in the best order.</p>')+
     (voice?'<label><input type="checkbox" id="crewAudio"'+(crewVoiceEnabled?' checked':'')+'> Voice the station’s capture call</label>':''),
     [['Restart guided first rescue',()=>{closeDialog(false);newFlight(0,'Easy','none','aim');}],['Back to flight',()=>closeDialog(),true]]);
@@ -868,7 +916,7 @@ function summary() {
   clearTimeout(debriefTimer);debriefTimer=null;
   const s=state;
   openDialog('summary','Mission debrief',s.result.title,'<p>'+s.result.description+'</p><dl class="dialogstats">'+
-    [['Scenario',s.name],['Difficulty',s.level],['Flight time',clock(s.elapsed)],['Oxygen remaining',clock(Math.ceil(s.oxygen))],
+    [['Scenario',s.name],['Difficulty',s.level],['Flight time',clock(s.elapsed)],['Emergency reserve remaining',clock(Math.ceil(s.oxygen))],
     ['Tools thrown',s.level==='Story'?s.throws:s.throws+' / 6'],['Δv applied',s.spent.toFixed(3)+' m/s'],['Closest approach',s.closest.toFixed(2)+' m'],
       ...(s.objective==='none'?[]:[['Bonus objective',replayGoals[s.objective]+' · '+(s.result.title==='Capture confirmed' && objectiveIntact()?'Earned':'Missed')]])].map(([k,v])=>'<dt>'+k+'</dt><dd>'+v+'</dd>').join('')+'</dl>',
     [['Review plot',()=>closeDialog()],['Retry this flight',()=>{closeDialog(false);newFlight(s.index,s.level,s.objective,s.lesson?'aim':'');}],
@@ -1052,7 +1100,7 @@ init();
         const guided=l==='Easy' || l==='Story';
         yes($('coast').getAttribute('visibility')===(guided?'visible':'hidden'),'coast visibility');
         yes($('coastKey').hidden===!guided,'coast legend');
-        yes(/on course|miss by|oxygen runs out first/i.test($('prediction').textContent)===guided,'prediction text');
+        yes(/on course|miss by|reserve runs out first/i.test($('prediction').textContent)===guided,'prediction text');
       }
     });
     test('Story is optional, starts from the difficulty menu and reloads the selected tool',()=>{
@@ -1087,7 +1135,7 @@ init();
       yes(state.result?.title==='Capture confirmed','capture before far edge');
       near(state.x,captureRadius,'capture position');near(state.elapsed,86400+(5-captureRadius)/32,'capture time');
       const stats=$('dialogBody').querySelector('dl');
-      yes(stats.textContent.includes('Oxygen remainingUnlimited') && stats.textContent.includes('Tools thrown0Δv'),'story debrief');
+      yes(stats.textContent.includes('Emergency reserve remainingUnlimited') && stats.textContent.includes('Tools thrown0Δv'),'story debrief');
     });
     test('Story holds the camera and ends only after the whole suit crosses each plot edge',()=>{
       for(const [vx,vy] of [[12,0],[-12,0],[0,12],[0,-12]]){
@@ -1153,7 +1201,7 @@ init();
       yes(course(5,0,1,0).eta===null,'receding');near(course(0,0,0,0).eta,0,'inside');
     });
     test('Oxygen expiry, empty rack loss, final tool rescue and deadline tie',()=>{
-      newFlight(0,'Hard');toggleClock();advance(999);yes(state.result.title==='Oxygen depleted','oxygen end');near(state.elapsed,450,'deadline');
+      newFlight(0,'Hard');toggleClock();advance(999);yes(state.result.title==='Reserve expired','oxygen end');near(state.elapsed,450,'deadline');
       closeDialog(false);newFlight();state.mask=1;state.selected=0;state.bearing=180;throwTool();yes(state.result.title==='Return lost','empty');
       closeDialog(false);newFlight();state.mask=1;state.selected=0;throwTool();yes(state.phase==='flying','last coast');advance(900);yes(state.result.title==='Capture confirmed','last capture');
       closeDialog(false);newFlight();state.x=6.2;state.y=0;state.vx=-1;state.vy=0;state.oxygen=course(6.2,0,-1,0).eta;toggleClock();advance(9);yes(state.result.title==='Capture confirmed','tie');
@@ -1260,6 +1308,9 @@ init();
       $('lessonAction').click();yes(state.lesson==='coast' && state.throws===1 && !$('coastButton').hidden,'first release');
       yes($('assistMode').textContent==='Current coast' && /On course/.test($('prediction').querySelector('strong').textContent),'primary coast');
       const eta=course(state.x,state.y,state.vx,state.vy).eta;
+      $('lessonAction').click();render();
+      near(Math.hypot(state.x,state.y)-captureRadius,state.halfwayGap,'shortcut stops at half the original gap');
+      yes(!state.finalRate && $('lessonTitle').textContent.includes('Course check') && $('lessonAction').textContent==='Coast to rail','review before final coast');
       $('lessonAction').click();yes(state.phase==='flying' && state.finalRate && state.elapsed>700 && state.elapsed<eta,'last metre remains');
       advance(1000);near(state.elapsed,eta,'coast charges full time');yes(state.result.title==='Capture confirmed' && $('railCatch').getAttribute('visibility')==='visible','handrail');
       closeDialog(false);newFlight(0,'Easy','none','aim');$('lessonAction').click();key('ArrowLeft',true);$('throwButton').click();
@@ -1267,6 +1318,49 @@ init();
       $('lessonAction').click();yes(state.throws===0 && state.lesson==='aim' && state.mask===fullMask,'fresh guided try');
       $('skipLesson').click();yes($('lesson').hidden && !$('pause').disabled,'skip releases controls');
       $('guide').click();$('dialogActions').firstElementChild.click();yes(state.lesson==='aim' && !$('lesson').hidden,'guide replay');
+    });
+    test('Midpoint uses half the initial HUD gap and fires once per flight in every mode',()=>{
+      for(const level of Object.keys(limits))for(let index=0;index<scenarios.length;index++){
+        newFlight(index,level);
+        const range=Math.hypot(state.x,state.y), gap=range-captureRadius;
+        const speed=.07;
+        state.vx=-speed*state.x/range;state.vy=-speed*state.y/range;
+        toggleClock();advance(gap/(2*speed)-.01);render();
+        yes(state.midpointThrow===null && !$('tip').textContent.includes('Halfway'),'early cue');
+        advance(.02);render();
+        yes(state.midpointThrow===0 && $('tip').textContent.includes('Halfway course check'),'midpoint call '+level);
+        yes($('tip').textContent.includes('Save your next tool'),'safe coast cue');
+        if(softCapture(level))yes(!$('speedometer').hidden && $('tip').textContent.includes('speed limit'),'redline check');
+        throwTool();state.vx=-state.vx;state.vy=-state.vy;advance(1);
+        state.vx=-state.vx;state.vy=-state.vy;advance(2);render();
+        yes(state.midpointThrow===0 && !$('tip').textContent.includes('Halfway'),'no second call');
+      }
+    });
+    test('Midpoint can detect a missed pass inside a single step and explain a correction',()=>{
+      for(const level of ['Medium','Hard']){
+        newFlight(0,level);
+        state.x=14;state.y=2;state.vx=-.07;state.vy=0;toggleClock();
+        advance(90);render();yes($('tip').textContent.includes('Rail to the left'),'sideways miss');
+        state.vx=-.10;render();yes($('tip').textContent.includes('above the redline'),'brake');
+        newFlight(0,level);state.x=14;state.y=2;state.vx=-.07;state.vy=0;toggleClock();
+        advance(400);render();
+        yes(Math.hypot(state.x,state.y)-captureRadius>state.halfwayGap && state.midpointThrow===0,'enters and exits halfway zone');
+        yes($('tip').textContent.includes('slipping away'),'opening range');
+      }
+    });
+    test('Alpha 0.2 identifies the repair loadout, reach zone and return reserve',()=>{
+      yes(document.title.includes('v0.2') && document.querySelector('.tag').textContent.includes('v0.2'),'version');
+      yes(gear[0].name==='Socket-and-wrench pouch' && gear[0].mass===2.4 && gear[3].mass===4.8,'equipment mass');
+      yes(gear[2].name.includes('Worksite') && gear[3].name.includes('Spare repair'),'repair equipment');
+      yes($('craftLabel').textContent==='Handrail reach zone' && document.querySelector('.reserve-label').textContent.includes('Time to reach the rail on emergency reserve'),'HUD wording');
+      for(const level of Object.keys(limits)){
+        newFlight(0,level);
+        const clockBox=$('oxygen').closest('.hud').getBoundingClientRect();
+        const rangeBox=$('range').closest('.hud').getBoundingClientRect();
+        yes(clockBox.bottom<=rangeBox.top,'reserve overlaps hatch distance in '+level);
+      }
+      $('guide').click();
+      yes(/integrated thruster valves are stuck closed/.test($('dialogBody').textContent) && /less mass/.test($('dialogBody').textContent),'prototype suit');
     });
     test('Approach gauge and first-crossing outcomes use total speed at the exact deadline',()=>{
       for(const level of Object.keys(limits))for(const factor of [.99,1,1.001]){
