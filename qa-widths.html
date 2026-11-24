@@ -121,6 +121,47 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
   .lower-hud { padding-bottom:8px }
   .earth-view { x:-25%; width:150% }
 }
+:root { --danger:#ffaaa0 }
+.flight-controls,.lesson-actions,.dialogactions { display:flex; align-items:center; flex-wrap:wrap; gap:8px }
+.flight-controls { padding:7px 14px; border-top:1px solid var(--edge) }
+.flight-controls button,.lesson-actions button { padding:7px 12px; min-height:34px }
+#objectiveStatus { margin-left:auto; color:var(--mint) }
+.lesson { padding:12px clamp(12px,2vw,28px); background:#192b2a; border-bottom:1px solid #456059 }
+.lesson h3 { font-size:17px; font-weight:600; color:var(--oxygen-fill) }
+.lesson p { margin:4px 0 8px; line-height:1.45; max-width:76ch }
+.lesson-actions .skip { background:transparent; color:var(--muted) }
+.lesson-mark { pointer-events:none }
+.lesson-mark text { font:600 12px var(--sans); paint-order:stroke; stroke:#10181d; stroke-width:3px }
+.speedometer { width:clamp(120px,12vw,162px); top:calc(var(--inset) + 64px); padding-inline:10px }
+.speedometer .speed-number { display:block; font:600 15px var(--mono); color:var(--oxygen-fill) }
+.speedometer[data-over=&quot;true&quot;] .speed-number,.speedometer[data-over=&quot;true&quot;] .speed-limit { color:var(--danger) }
+.speed-track { position:relative; height:8px; margin:4px 0; background:linear-gradient(to right,#253833 75%,#593b39 75%); border:1px solid #80918b }
+.speed-track i { display:block; height:100%; background:var(--oxygen-fill) }
+.speedometer[data-over=&quot;true&quot;] .speed-track i { background:var(--danger) }
+.speed-track::after { position:absolute; content:&quot;&quot;; left:75%; top:-3px; bottom:-3px; width:3px; background:#f77569; box-shadow:0 0 0 1px #161d20 }
+.speed-limit { color:var(--muted); font-size:12px }
+.assist strong { font:600 14px/1.4 var(--sans); color:var(--oxygen-fill) }
+.assist .secondary { font:12px/1.4 var(--sans); color:var(--muted) }
+.flight-scene { position:relative }
+#plot[data-forecast=&quot;coast&quot;] #coast { stroke:var(--oxygen-fill); stroke-width:2 }
+#plot[data-forecast=&quot;coast&quot;] #trial { opacity:.32 }
+@media(min-width:1000px) {
+  .lesson { position:absolute; top:14px; left:50%; transform:translateX(-50%); width:min(52%,590px); z-index:1; border:1px solid #456059; border-radius:6px; background:#18282bf2; padding:11px 16px }
+}
+@media(max-width:940px) { .scene:has(.speedometer:not([hidden])) .side-hud.right { top:155px } }
+@media(max-width:720px) { .flight-controls { padding:7px 9px } .lesson { padding:9px 10px } }
+@media(max-width:720px) {
+  .scene:has(.speedometer:not([hidden])) { display:flex; flex-direction:column }
+  .scene:has(.speedometer:not([hidden])) [aria-label=&quot;Suit telemetry&quot;] { order:-1; display:grid; grid-template-columns:1fr 1fr; gap:7px 12px; padding:9px 12px; background:#141e23; border-bottom:1px solid var(--edge) }
+  .scene:has(.speedometer:not([hidden])) [aria-label=&quot;Suit telemetry&quot;]&gt;.hud { position:static; padding:0; border:0; background:none }
+  .scene:has(.speedometer:not([hidden])) .side-hud { gap:3px }
+  .scene:has(.speedometer:not([hidden])) .side-hud.right { justify-self:end }
+  .scene:has(.speedometer:not([hidden])) .primary-hud .big { font-size:23px }
+  .scene:has(.speedometer:not([hidden]))&gt;svg { height:clamp(300px,45svh,400px) }
+  .speedometer { order:1; width:100%; display:grid; grid-template-columns:auto 1fr auto; text-align:left!important; grid-column:1/-1; gap:3px 8px; align-items:baseline }
+  .speedometer .speed-number { text-align:right }
+  .speedometer .speed-track { grid-column:1/-1; grid-row:2 }
+}
 &lt;/style&gt;&lt;/head&gt;&lt;body&gt;
 &lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;0&quot; height=&quot;0&quot; aria-hidden=&quot;true&quot; style=&quot;position:absolute&quot;&gt;&lt;defs&gt;
 &lt;linearGradient id=&quot;silver&quot; x2=&quot;.25&quot; y2=&quot;1&quot; gradientUnits=&quot;objectBoundingBox&quot;&gt;&lt;stop stop-color=&quot;#f0f2df&quot;/&gt;&lt;stop offset=&quot;.23&quot; stop-color=&quot;#bdc7c6&quot;/&gt;&lt;stop offset=&quot;.48&quot; stop-color=&quot;#87999f&quot;/&gt;&lt;stop offset=&quot;.75&quot; stop-color=&quot;#667a85&quot;/&gt;&lt;stop offset=&quot;1&quot; stop-color=&quot;#293c49&quot;/&gt;&lt;/linearGradient&gt;
@@ -215,6 +256,10 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
 &lt;/defs&gt;&lt;/svg&gt;&lt;header&gt;&lt;div class=&quot;bar&quot;&gt;&lt;div class=&quot;brand&quot;&gt;&lt;svg viewBox=&quot;0 0 40 40&quot; aria-hidden=&quot;true&quot;&gt;&lt;rect x=&quot;1&quot; y=&quot;1&quot; width=&quot;38&quot; height=&quot;38&quot; rx=&quot;9&quot; fill=&quot;#b1c2b7&quot;/&gt;&lt;g stroke=&quot;#25332d&quot; fill=&quot;none&quot; stroke-width=&quot;2&quot;&gt;&lt;ellipse cx=&quot;20&quot; cy=&quot;20&quot; rx=&quot;15&quot; ry=&quot;6&quot; transform=&quot;rotate(-40 20 20)&quot;/&gt;&lt;path d=&quot;m15 24 3-13 10 6-13 7z&quot; fill=&quot;#25332d&quot;/&gt;&lt;/g&gt;&lt;/svg&gt;&lt;div&gt;&lt;div class=&quot;wordmark&quot;&gt;UNTETHERED&lt;/div&gt;&lt;div class=&quot;subbrand&quot;&gt;EVA return simulator&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;toptools&quot;&gt;&lt;span class=&quot;tag&quot;&gt;Alpha v0.1&lt;/span&gt;&lt;button class=&quot;quiet guide&quot; id=&quot;guide&quot;&gt;&lt;svg aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#book&quot;/&gt;&lt;/svg&gt; Flight guide&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;/header&gt;
 &lt;main&gt;&lt;div class=&quot;mission&quot;&gt;&lt;div&gt;&lt;div class=&quot;eyebrow&quot; id=&quot;missionId&quot;&gt;Scenario 01 / 03&lt;/div&gt;&lt;h1 id=&quot;missionTitle&quot;&gt;Tether separation&lt;/h1&gt;&lt;/div&gt;&lt;div class=&quot;settings&quot;&gt;&lt;select id=&quot;difficulty&quot; aria-label=&quot;Mission difficulty&quot;&gt;&lt;option&gt;Story&lt;/option&gt;&lt;option selected&gt;Easy&lt;/option&gt;&lt;option&gt;Medium&lt;/option&gt;&lt;option&gt;Hard&lt;/option&gt;&lt;/select&gt;&lt;button class=&quot;quiet&quot; id=&quot;setup&quot;&gt;&lt;svg aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#restart&quot;/&gt;&lt;/svg&gt; New mission&lt;/button&gt;&lt;button class=&quot;quiet&quot; id=&quot;pause&quot;&gt;Start clock&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;section class=&quot;panel&quot; aria-label=&quot;Navigation&quot;&gt;&lt;div class=&quot;panelhead&quot;&gt;&lt;h2 class=&quot;sectionlabel&quot;&gt;&lt;svg aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#cross&quot;/&gt;&lt;/svg&gt; Navigation plot&lt;/h2&gt;&lt;span class=&quot;status&quot;&gt;&lt;i class=&quot;dot&quot;&gt;&lt;/i&gt;&lt;span id=&quot;status&quot;&gt;Standby&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;
+&lt;div class=&quot;flight-scene&quot;&gt;&lt;aside class=&quot;lesson&quot; id=&quot;lesson&quot; aria-label=&quot;Guided first rescue&quot; hidden&gt;
+  &lt;h3 id=&quot;lessonTitle&quot;&gt;&lt;/h3&gt;&lt;p id=&quot;lessonText&quot; aria-live=&quot;polite&quot;&gt;&lt;/p&gt;
+  &lt;div class=&quot;lesson-actions&quot;&gt;&lt;button class=&quot;primary&quot; id=&quot;lessonAction&quot;&gt;&lt;/button&gt;&lt;button id=&quot;retryThrow&quot; hidden&gt;Try first throw again&lt;/button&gt;&lt;button class=&quot;skip&quot; id=&quot;skipLesson&quot;&gt;Skip guidance&lt;/button&gt;&lt;/div&gt;
+&lt;/aside&gt;
 &lt;div class=&quot;scene&quot;&gt;&lt;svg id=&quot;plot&quot; tabindex=&quot;0&quot; role=&quot;application&quot; aria-label=&quot;Navigation plot&quot; aria-describedby=&quot;aimHint plotKeys&quot; viewBox=&quot;0 0 860 345&quot;&gt;&lt;defs&gt;&lt;radialGradient id=&quot;space&quot; cx=&quot;38%&quot; cy=&quot;47%&quot; r=&quot;82%&quot;&gt;&lt;stop stop-color=&quot;#18232c&quot;/&gt;&lt;stop offset=&quot;.6&quot; stop-color=&quot;#0d151c&quot;/&gt;&lt;stop offset=&quot;1&quot; stop-color=&quot;#070b11&quot;/&gt;&lt;/radialGradient&gt;&lt;pattern id=&quot;grid&quot; width=&quot;64&quot; height=&quot;64&quot; patternUnits=&quot;userSpaceOnUse&quot;&gt;&lt;path d=&quot;M64 0H0V64&quot; fill=&quot;none&quot; stroke=&quot;#688392&quot; opacity=&quot;.10&quot;/&gt;&lt;/pattern&gt;&lt;marker id=&quot;vTip&quot; viewBox=&quot;0 0 10 10&quot; refX=&quot;8&quot; refY=&quot;5&quot; markerWidth=&quot;5&quot; markerHeight=&quot;5&quot; orient=&quot;auto&quot;&gt;&lt;path d=&quot;m0 0 10 5-10 5z&quot; fill=&quot;#a9b8c5&quot;/&gt;&lt;/marker&gt;&lt;marker id=&quot;pTip&quot; viewBox=&quot;0 0 10 10&quot; refX=&quot;8&quot; refY=&quot;5&quot; markerWidth=&quot;5&quot; markerHeight=&quot;5&quot; orient=&quot;auto&quot;&gt;&lt;path d=&quot;m0 0 10 5-10 5z&quot; fill=&quot;var(--gold)&quot;/&gt;&lt;/marker&gt;&lt;/defs&gt;
 &lt;rect width=&quot;100%&quot; height=&quot;100%&quot; fill=&quot;url(#space)&quot;/&gt;&lt;rect width=&quot;100%&quot; height=&quot;100%&quot; fill=&quot;url(#grid)&quot;/&gt;&lt;svg width=&quot;100%&quot; height=&quot;100%&quot; viewBox=&quot;0 0 1600 800&quot; preserveAspectRatio=&quot;xMidYMid slice&quot;&gt;&lt;g id=&quot;stars&quot;&gt;&lt;/g&gt;&lt;/svg&gt;
 &lt;svg class=&quot;earth-view&quot; y=&quot;52%&quot; width=&quot;100%&quot; height=&quot;48%&quot; viewBox=&quot;0 0 2172 724&quot; preserveAspectRatio=&quot;none&quot; aria-hidden=&quot;true&quot;&gt;
@@ -233,10 +278,19 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
   &lt;g id=&quot;reticle&quot;&gt;&lt;circle r=&quot;7&quot; fill=&quot;#111719&quot; fill-opacity=&quot;.75&quot;/&gt;&lt;path d=&quot;M-12 0h7m10 0h7M0-12v7m0 10v7&quot;/&gt;&lt;circle r=&quot;1.3&quot; fill=&quot;var(--gold)&quot; stroke=&quot;none&quot;/&gt;&lt;/g&gt;
   &lt;text id=&quot;reticleLabel&quot; class=&quot;reticle-text&quot;&gt;&lt;/text&gt;
 &lt;/g&gt;
+&lt;g id=&quot;railCatch&quot; visibility=&quot;hidden&quot; aria-hidden=&quot;true&quot;&gt;&lt;circle r=&quot;11&quot; fill=&quot;none&quot; stroke=&quot;var(--oxygen-fill)&quot; stroke-width=&quot;2.5&quot;/&gt;&lt;path d=&quot;m-5 0 3 3 7-7&quot; fill=&quot;none&quot; stroke=&quot;var(--oxygen-fill)&quot; stroke-width=&quot;2&quot;/&gt;&lt;/g&gt;
+&lt;g id=&quot;lessonMarks&quot; class=&quot;lesson-mark&quot; visibility=&quot;hidden&quot; aria-hidden=&quot;true&quot;&gt;
+  &lt;g id=&quot;lessonTarget&quot;&gt;&lt;circle r=&quot;18&quot; fill=&quot;#d4b48b&quot; fill-opacity=&quot;.13&quot; stroke=&quot;var(--gold)&quot; stroke-width=&quot;2&quot; stroke-dasharray=&quot;4 3&quot;/&gt;&lt;/g&gt;
+  &lt;text id=&quot;wrenchCaption&quot; fill=&quot;var(--gold)&quot;&gt;Wrench goes here&lt;/text&gt;
+  &lt;text id=&quot;driftCaption&quot; fill=&quot;var(--oxygen-fill)&quot;&gt;Your path&lt;/text&gt;
+&lt;/g&gt;
 &lt;/svg&gt;
   &lt;div role=&quot;group&quot; aria-label=&quot;Suit telemetry&quot;&gt;
     &lt;div class=&quot;hud left primary-hud&quot;&gt;&lt;div class=&quot;micro&quot;&gt;Oxygen remaining&lt;/div&gt;&lt;div class=&quot;big&quot; id=&quot;oxygen&quot;&gt;15:00&lt;/div&gt;&lt;div class=&quot;meter&quot;&gt;&lt;i id=&quot;oxygenBar&quot;&gt;&lt;/i&gt;&lt;/div&gt;&lt;/div&gt;
     &lt;div class=&quot;hud right primary-hud&quot;&gt;&lt;div class=&quot;micro&quot;&gt;Δv budget&lt;/div&gt;&lt;div class=&quot;big&quot;&gt;&lt;span id=&quot;budget&quot;&gt;&lt;/span&gt; &lt;small&gt;m/s&lt;/small&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;div id=&quot;speedometer&quot; class=&quot;hud right speedometer&quot; hidden&gt;&lt;span class=&quot;micro&quot;&gt;Approach speed&lt;/span&gt;&lt;output class=&quot;speed-number&quot; id=&quot;speedNumber&quot;&gt;&lt;/output&gt;
+        &lt;div id=&quot;speedGauge&quot; class=&quot;speed-track&quot; role=&quot;meter&quot; aria-label=&quot;Approach speed&quot; aria-valuemin=&quot;0&quot;&gt;&lt;i id=&quot;speedFill&quot;&gt;&lt;/i&gt;&lt;/div&gt;&lt;span class=&quot;speed-limit&quot; id=&quot;speedLimit&quot;&gt;&lt;/span&gt;
+      &lt;/div&gt;
     &lt;div class=&quot;hud left side-hud&quot;&gt;&lt;div&gt;&lt;div class=&quot;micro&quot;&gt;Hatch distance&lt;/div&gt;&lt;b id=&quot;range&quot;&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;div class=&quot;micro&quot;&gt;Hatch bearing&lt;/div&gt;&lt;b id=&quot;bearing&quot;&gt;&lt;/b&gt;&lt;/div&gt;&lt;/div&gt;
     &lt;div class=&quot;hud right side-hud&quot;&gt;&lt;div class=&quot;micro&quot;&gt;Velocity · m/s&lt;/div&gt;&lt;div class=&quot;raw&quot;&gt;&lt;span&gt;Vx&lt;/span&gt;&lt;b id=&quot;vx&quot;&gt;&lt;/b&gt;&lt;span&gt;Vy&lt;/span&gt;&lt;b id=&quot;vy&quot;&gt;&lt;/b&gt;&lt;span&gt;Radial&lt;/span&gt;&lt;b id=&quot;radial&quot;&gt;&lt;/b&gt;&lt;span&gt;Mass&lt;/span&gt;&lt;b id=&quot;mass&quot;&gt;&lt;/b&gt;&lt;/div&gt;&lt;/div&gt;
   &lt;/div&gt;
@@ -252,8 +306,9 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
       &lt;p id=&quot;tip&quot; role=&quot;status&quot;&gt;&lt;/p&gt;
     &lt;/aside&gt;
   &lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;plotbar&quot;&gt;&lt;div class=&quot;legend&quot;&gt;&lt;span&gt;&lt;i class=&quot;keyline vector&quot;&gt;&lt;/i&gt;Velocity&lt;/span&gt;&lt;span id=&quot;coastKey&quot;&gt;&lt;i class=&quot;keyline&quot; style=&quot;border-top-style:dotted&quot;&gt;&lt;/i&gt;Coast&lt;/span&gt;&lt;span id=&quot;trialKey&quot;&gt;&lt;i class=&quot;keyline recoil&quot;&gt;&lt;/i&gt;After throw&lt;/span&gt;&lt;/div&gt;&lt;span class=&quot;flight-time&quot;&gt;Flight time &lt;b id=&quot;elapsed&quot;&gt;00:00&lt;/b&gt;&lt;/span&gt;&lt;div class=&quot;speed&quot; id=&quot;speeds&quot; aria-label=&quot;Simulation speed&quot;&gt;&lt;svg viewBox=&quot;0 0 20 20&quot; aria-hidden=&quot;true&quot;&gt;&lt;circle cx=&quot;10&quot; cy=&quot;10&quot; r=&quot;7&quot;/&gt;&lt;path d=&quot;M10 5v6l4 2&quot;/&gt;&lt;/svg&gt;&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
+&lt;/div&gt;&lt;/div&gt;
+&lt;div class=&quot;plotbar&quot;&gt;&lt;div class=&quot;legend&quot;&gt;&lt;span&gt;&lt;i class=&quot;keyline vector&quot;&gt;&lt;/i&gt;Velocity&lt;/span&gt;&lt;span id=&quot;coastKey&quot;&gt;&lt;i class=&quot;keyline&quot; style=&quot;border-top-style:dotted&quot;&gt;&lt;/i&gt;Coast&lt;/span&gt;&lt;span id=&quot;trialKey&quot;&gt;&lt;i class=&quot;keyline recoil&quot;&gt;&lt;/i&gt;After throw&lt;/span&gt;&lt;/div&gt;&lt;span class=&quot;flight-time&quot;&gt;Flight time &lt;b id=&quot;elapsed&quot;&gt;00:00&lt;/b&gt;&lt;/span&gt;&lt;div class=&quot;speed&quot; id=&quot;speeds&quot; aria-label=&quot;Simulation speed&quot;&gt;&lt;svg viewBox=&quot;0 0 20 20&quot; aria-hidden=&quot;true&quot;&gt;&lt;circle cx=&quot;10&quot; cy=&quot;10&quot; r=&quot;7&quot;/&gt;&lt;path d=&quot;M10 5v6l4 2&quot;/&gt;&lt;/svg&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;div class=&quot;flight-controls&quot;&gt;&lt;button id=&quot;throwButton&quot;&gt;Throw wrench&lt;/button&gt;&lt;button id=&quot;coastButton&quot; class=&quot;primary&quot; hidden&gt;Coast to hatch&lt;/button&gt;&lt;span id=&quot;objectiveStatus&quot; hidden&gt;&lt;/span&gt;&lt;/div&gt;&lt;/section&gt;
 &lt;section class=&quot;panel rack&quot;&gt;&lt;div class=&quot;panelhead&quot;&gt;&lt;h2 class=&quot;sectionlabel&quot;&gt;&lt;svg aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#rackicon&quot;/&gt;&lt;/svg&gt; Equipment rack&lt;/h2&gt;&lt;span class=&quot;spec&quot; id=&quot;count&quot;&gt;&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;tools&quot; id=&quot;tools&quot;&gt;&lt;/div&gt;&lt;div class=&quot;throwstrip&quot;&gt;&lt;p id=&quot;aimHint&quot;&gt;Click to aim. Drag to set direction and power, then release to throw.&lt;/p&gt;&lt;span class=&quot;throw-vector&quot;&gt;&lt;span class=&quot;micro&quot;&gt;Throw vector&lt;/span&gt;&lt;span id=&quot;angle&quot;&gt;&lt;/span&gt; / &lt;span id=&quot;powerLabel&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/section&gt;
 &lt;span class=&quot;sr&quot; id=&quot;plotKeys&quot;&gt;1 to 6 select a tool. Left and right adjust bearing. Up and down adjust power. Enter throws. Escape cancels a drag.&lt;/span&gt;&lt;div class=&quot;sr&quot; aria-live=&quot;polite&quot; id=&quot;announce&quot;&gt;&lt;/div&gt;&lt;/main&gt;
 &lt;dialog id=&quot;modal&quot; aria-labelledby=&quot;dialogTitle&quot;&gt;&lt;div class=&quot;eyebrow&quot; id=&quot;dialogKicker&quot;&gt;&lt;/div&gt;&lt;h2 id=&quot;dialogTitle&quot;&gt;&lt;/h2&gt;&lt;div id=&quot;dialogBody&quot;&gt;&lt;/div&gt;&lt;div class=&quot;dialogactions&quot; id=&quot;dialogActions&quot;&gt;&lt;/div&gt;&lt;/dialog&gt;
@@ -274,6 +329,14 @@ const scenarios = [
   {name:&#x27;Wide separation&#x27;, x:29, y:-8, vx:0.044, vy:-0.016, brief:&#x27;The airlock is falling behind. Combine heavy throws to reverse your drift and close the gap.&#x27;}
 ];
 const limits = {Story:Infinity, Easy:900, Medium:600, Hard:450};
+const captureSpeedLimit = 0.080, hardBearingError = 2;
+const softCapture = level =&gt; level===&#x27;Medium&#x27; || level===&#x27;Hard&#x27;;
+const overRedline = (level,vx,vy) =&gt; softCapture(level) &amp;&amp; Math.hypot(vx,vy)&gt;captureSpeedLimit+1e-12;
+const replayGoals = {
+  none:&#x27;Return to the hatch&#x27;,
+  drill:&#x27;Keep the power drill holstered&#x27;,
+  two:&#x27;Return in two throws or fewer&#x27;
+};
 const fullGuidance = level =&gt; level===&#x27;Story&#x27; || level===&#x27;Easy&#x27;;
 const dryMass = 186, captureRadius = 1.2, fullMask = (1 &lt;&lt; gear.length)-1;
 const massOf = mask =&gt; gear.reduce((sum,t,i)=&gt;sum + ((mask &amp; (1&lt;&lt;i)) ? t.mass : 0),dryMass);
@@ -324,18 +387,36 @@ const isAvailable = i =&gt; i&gt;=0 &amp;&amp; Boolean(state.mask &amp; (1&lt;&l
 const live = () =&gt; state.phase===&#x27;ready&#x27; || state.phase===&#x27;flying&#x27;;
 const suitBounds = DOMRect.fromRect($(&#x27;suitMan&#x27;).getBBox());
 let state, camera, charge=null, flash=null, anim=null, lastFrame=null, dialogKind=&#x27;&#x27;, previousPhase=&#x27;&#x27;, returnFocus=null;
-let plotW=860, plotH=345, drag=null;
-function newFlight(index=0,level=&#x27;Easy&#x27;) {
+let plotW=860, plotH=345, drag=null, debriefTimer=null;
+let crewVoiceEnabled=false;
+function newFlight(index=0,level=&#x27;Easy&#x27;,objective=&#x27;none&#x27;,lesson=&#x27;&#x27;) {
+  clearTimeout(debriefTimer);debriefTimer=null;
   endDrag(true);
   const s=scenarios[index];
   state={...s, index,level, phase:&#x27;ready&#x27;, elapsed:0, oxygen:limits[level], mask:fullMask,
-    selected:0, bearing:0, power:65, rate:1, throws:0, spent:0, closest:Math.hypot(s.x,s.y)-captureRadius,
-    lastImpulse:0,tip:level===&#x27;Story&#x27;?&#x27;Tools reload after every throw. Stay in view and aim for the hatch.&#x27;:&#x27;Throw equipment away from the hatch to push your suit toward it.&#x27;};
+    selected:0, bearing:0, power:65, rate:1, throws:0, spent:0, usedMask:0, objective, lesson,
+    previewing:false, finalRate:0, closest:Math.hypot(s.x,s.y)-captureRadius,
+    lastImpulse:0,tip:lesson?&#x27;Line up your predicted path with the hatch before you release the wrench.&#x27;:softCapture(level)?captureBrief(level):level===&#x27;Story&#x27;?&#x27;Tools reload after every throw. Stay in view and aim for the hatch.&#x27;:&#x27;Throw equipment away from the hatch to push your suit toward it.&#x27;};
   charge=null; flash=null; anim=null; lastFrame=null;
   $(&#x27;missionId&#x27;).textContent=&#x27;Scenario &#x27;+String(index+1).padStart(2,&#x27;0&#x27;)+&#x27; / 03&#x27;;
   $(&#x27;missionTitle&#x27;).textContent=s.name;
   $(&#x27;difficulty&#x27;).value=level;
-  renderGear(); render();
+  $(&#x27;speedometer&#x27;).hidden=!softCapture(level);
+  $(&#x27;lesson&#x27;).hidden=!lesson;
+  measurePlot();renderGear();render();
+}
+function captureBrief(level) {
+  const limit=captureSpeedLimit.toFixed(3)+&#x27; m/s&#x27;;
+  return &#x27;Enter the hatch at &#x27;+limit+&#x27; or slower. Throw along your motion to brake.&#x27;+
+    (level===&#x27;Hard&#x27;?&#x27; Each release can stray by up to ±&#x27;+hardBearingError+&#x27;°.&#x27;:&#x27;&#x27;);
+}
+function safeCoast(path) {
+  return path.eta!==null &amp;&amp; path.eta&lt;=state.oxygen &amp;&amp; !overRedline(state.level,state.vx,state.vy);
+}
+function objectiveIntact() {
+  if(state.objective===&#x27;drill&#x27;)return !(state.usedMask &amp; (1&lt;&lt;1));
+  if(state.objective===&#x27;two&#x27;)return state.throws&lt;=2;
+  return true;
 }
 function impulse(i,power,bearing) {
   if (!isAvailable(i)) return {dx:0,dy:0,ux:0,uy:0};
@@ -345,7 +426,12 @@ function impulse(i,power,bearing) {
 }
 function throwTool() {
   if (!live() || !isAvailable(state.selected) || $(&#x27;modal&#x27;).open) return;
-  const i=state.selected, t=gear[i], kick=impulse(i,state.power,state.bearing);
+  const i=state.selected, t=gear[i];
+  const offset=state.level===&#x27;Hard&#x27;?(Math.random()*2-1)*hardBearingError:0;
+  const released=norm(state.bearing+offset), kick=impulse(i,state.power,released);
+  state.lastBearing=released; state.usedMask|=1&lt;&lt;i;
+  state.previewing=false; state.finalRate=0;
+  if(state.lesson)state.lesson=&#x27;coast&#x27;;
   state.vx+=kick.dx; state.vy+=kick.dy;
   anim={x:state.x,y:state.y,vx:state.vx+kick.ux,vy:state.vy+kick.uy,age:0,i};
   if (state.level!==&#x27;Story&#x27;) {
@@ -354,14 +440,15 @@ function throwTool() {
   }
   state.lastImpulse=Math.hypot(kick.dx,kick.dy); state.spent+=state.lastImpulse; state.throws++;
   state.phase=&#x27;flying&#x27;; lastFrame=null;
-  const report=t.name+&#x27; released · Δv &#x27;+state.lastImpulse.toFixed(3)+&#x27; m/s&#x27;;
+  const report=t.name+&#x27; released · Δv &#x27;+state.lastImpulse.toFixed(3)+&#x27; m/s&#x27;+(state.level===&#x27;Hard&#x27;?&#x27; · Released at &#x27;+released.toFixed(1)+&#x27;°&#x27;:&#x27;&#x27;);
   flash={text:report,until:performance.now()+2400}; $(&#x27;announce&#x27;).textContent=report;
   state.tip=contextTip(); renderGear();
   checkEmpty(); render();
 }
 function contextTip() {
   const path=course(state.x,state.y,state.vx,state.vy);
-  if (fullGuidance(state.level) &amp;&amp; path.eta!==null &amp;&amp; path.eta&lt;=state.oxygen) return &#x27;Your coast path enters the capture zone. Fast-forward to reach the hatch.&#x27;;
+  if(overRedline(state.level,state.vx,state.vy))return &#x27;Above capture speed. Throw along the velocity arrow to brake before reaching the hatch.&#x27;;
+  if (safeCoast(path)) return &#x27;You are on course. Hold this coast to reach the hatch.&#x27;;
   if (state.closest&lt;5) return &#x27;Near the hatch, a light tool gives you a smaller course correction.&#x27;;
   if (state.level===&#x27;Story&#x27;) return &#x27;To slow down, throw in the direction of your velocity arrow. Repeat as needed.&#x27;;
   const tips=[&#x27;Correct your lateral velocity as well as your outward drift.&#x27;,
@@ -388,7 +475,11 @@ function advance(dt) {
   state.x+=vx*step; state.y+=vy*step;
   state.oxygen=Math.max(0,state.oxygen-step); state.elapsed+=step;
   if (anim) {anim.x+=anim.vx*step;anim.y+=anim.vy*step;anim.age+=step;if(anim.age&gt;2.5) anim=null;}
-  if (eta!==null &amp;&amp; eta&lt;=step) finish(&#x27;Capture confirmed&#x27;,&#x27;Your suit entered the airlock capture zone. You made it back.&#x27;);
+  if (eta!==null &amp;&amp; eta&lt;=step) {
+    if(overRedline(state.level,vx,vy))
+      finish(&#x27;Approach too fast&#x27;,&#x27;You reached the hatch at &#x27;+formatSpeed(vx,vy)+&#x27; m/s. The handrail slipped past. Brake to &#x27;+captureSpeedLimit.toFixed(3)+&#x27; m/s or below before crossing the capture ring.&#x27;);
+    else finish(&#x27;Capture confirmed&#x27;,&#x27;Your glove closes around the handrail. “We’ve got you. Welcome back.”&#x27;);
+  }
   else if (exitTime&lt;=step) finish(&#x27;Drifted out of view&#x27;,&#x27;Your suit drifted completely beyond the navigation plot.&#x27;);
   else if (state.oxygen&lt;=0) finish(&#x27;Oxygen depleted&#x27;,&#x27;Your oxygen supply ran out before you reached the capture zone.&#x27;);
 }
@@ -396,15 +487,117 @@ function renderGear() {
   const count=gear.filter((_,i)=&gt;isAvailable(i)).length;
   $(&#x27;count&#x27;).textContent=state.level===&#x27;Story&#x27;?&#x27;Tools reload on release&#x27;:count+&#x27; / 6 tools remaining&#x27;;
   [...$(&#x27;tools&#x27;).children].forEach((b,i)=&gt;{
-    b.disabled=!isAvailable(i) || !live();
+    b.disabled=!isAvailable(i) || !live() || (trainingAim() &amp;&amp; i!==0);
     b.classList.toggle(&#x27;selected&#x27;,state.selected===i);
     b.setAttribute(&#x27;aria-pressed&#x27;,String(state.selected===i));
     b.querySelector(&#x27;small&#x27;).textContent=isAvailable(i)?gear[i].mass.toFixed(1)+&#x27; kg&#x27;:&#x27;Released&#x27;;
   });
 }
 function selectTool(i) {
-  if (!live() || !isAvailable(i) || charge || drag) return;
-  state.selected=i; renderGear();render();
+  if (!live() || !isAvailable(i) || charge || drag || (trainingAim() &amp;&amp; i!==0)) return;
+  state.previewing=true; state.selected=i; renderGear();render();
+}
+function formatSpeed(vx,vy) {
+  const speed=Math.hypot(vx,vy);
+  // Keep a marginally unsafe reading visibly above the printed limit.
+  return (speed&gt;captureSpeedLimit+1e-12 ? Math.max(captureSpeedLimit+.001,speed) : speed).toFixed(3);
+}
+function renderSpeedometer() {
+  const s=state, meter=$(&#x27;speedometer&#x27;);
+  if(meter.hidden)return;
+  const speed=Math.hypot(s.vx,s.vy), over=overRedline(s.level,s.vx,s.vy);
+  const label=formatSpeed(s.vx,s.vy)+&#x27; m/s&#x27;, max=captureSpeedLimit/0.75;
+  meter.dataset.over=String(over);
+  $(&#x27;speedNumber&#x27;).textContent=label;
+  $(&#x27;speedLimit&#x27;).textContent=(over?&#x27;Over limit&#x27;:&#x27;Limit&#x27;)+&#x27; · &#x27;+captureSpeedLimit.toFixed(3);
+  $(&#x27;speedFill&#x27;).style.width=Math.min(100,100*speed/max)+&#x27;%&#x27;;
+  $(&#x27;speedGauge&#x27;).setAttribute(&#x27;aria-valuemax&#x27;,max.toFixed(4));
+  $(&#x27;speedGauge&#x27;).setAttribute(&#x27;aria-valuenow&#x27;,Math.min(speed,max).toFixed(4));
+  $(&#x27;speedGauge&#x27;).setAttribute(&#x27;aria-valuetext&#x27;,label+&#x27;, &#x27;+$(&#x27;speedLimit&#x27;).textContent+&#x27; m/s&#x27;);
+}
+function coastToHatch() {
+  if(state.phase!==&#x27;flying&#x27; || drag || charge || $(&#x27;modal&#x27;).open)return;
+  const path=course(state.x,state.y,state.vx,state.vy);
+  if(!safeCoast(path))return;
+  const lastMetre=Math.min(path.eta,1/Math.hypot(state.vx,state.vy));
+  advance(path.eta-lastMetre);
+  state.finalRate=Math.max(1,lastMetre/2);
+  state.previewing=false; lastFrame=null; render();
+}
+function trainingAim() {
+  return state.lesson===&#x27;aim&#x27; || state.lesson===&#x27;throw&#x27;;
+}
+function firstRescueWanted() {
+  try {return !localStorage.getItem(&#x27;untethered.firstRescueSeen&#x27;);} catch {return true;}
+}
+function rememberLesson() {
+  try {localStorage.setItem(&#x27;untethered.firstRescueSeen&#x27;,&#x27;1&#x27;);} catch { /* Storage is optional offline. */ }
+}
+function markAim() {
+  state.previewing=true;
+  if(trainingAim())state.lesson=&#x27;throw&#x27;;
+}
+function trainingRange() {
+  return camera.inner+(camera.reach-camera.inner)*55/90;
+}
+function useTrainingAim() {
+  state.bearing=0; state.power=65; markAim(); render();
+}
+function lessonAction() {
+  if(state.lesson===&#x27;aim&#x27;)useTrainingAim();
+  else if(state.lesson===&#x27;throw&#x27;)throwTool();
+  else if(state.lesson===&#x27;coast&#x27;){
+    if(safeCoast(course(state.x,state.y,state.vx,state.vy)))coastToHatch();
+    else newFlight(0,&#x27;Easy&#x27;,&#x27;none&#x27;,&#x27;aim&#x27;);
+  }
+}
+function renderLesson(coast) {
+  const step=state.lesson;
+  $(&#x27;lesson&#x27;).hidden=!step || state.phase===&#x27;ended&#x27;;
+  if($(&#x27;lesson&#x27;).hidden)return;
+  const good=safeCoast(coast);
+  let heading, copy, action;
+  if(step===&#x27;aim&#x27;){
+    heading=&#x27;First rescue · Aim&#x27;;
+    copy=&#x27;Your tether snapped. Your thrusters are silent. Eighteen metres to the hatch. “First time anyone on this station has had to throw their way home.” Tap the gold ring to aim the wrench.&#x27;;
+    action=&#x27;Aim at the ring&#x27;;
+  } else if(step===&#x27;throw&#x27;){
+    heading=&#x27;First rescue · Throw&#x27;;
+    copy=&#x27;The wrench flies toward the crosshair. The dashed line shows where you will drift. Tap to change aim, then use Throw wrench. You can also drag and release.&#x27;;
+    action=&#x27;Throw wrench&#x27;;
+  } else {
+    heading=&#x27;First rescue · Coast&#x27;;
+    copy=good?&#x27;The wrench is gone and you’re moving home. Keep the next tool. Coast through the quiet stretch to the handrail.&#x27;:&#x27;Your path misses the return window. Try the first throw again, or skip guidance and correct with another tool.&#x27;;
+    action=good?&#x27;Coast to hatch&#x27;:&#x27;Try first throw again&#x27;;
+  }
+  $(&#x27;lessonTitle&#x27;).textContent=heading;
+  if($(&#x27;lessonText&#x27;).textContent!==copy)$(&#x27;lessonText&#x27;).textContent=copy;
+  $(&#x27;lessonAction&#x27;).textContent=state.finalRate?&#x27;Final approach…&#x27;:action;
+  $(&#x27;lessonAction&#x27;).disabled=!!state.finalRate || !live();
+  $(&#x27;retryThrow&#x27;).hidden=step!==&#x27;coast&#x27; || !good;
+}
+function forecastText(path) {
+  if(path.eta===null)return &#x27;Miss by &#x27;+path.clearance.toFixed(2)+&#x27; m&#x27;;
+  const eta=clock(Math.ceil(path.eta));
+  return path.eta&lt;=state.oxygen?&#x27;On course · hatch in &#x27;+eta:&#x27;Hatch in &#x27;+eta+&#x27; · oxygen runs out first&#x27;;
+}
+function renderForecast(pvx,pvy,coast) {
+  const s=state, aiming=s.phase!==&#x27;ended&#x27; &amp;&amp; s.mask &amp;&amp; (s.phase===&#x27;ready&#x27; || s.previewing || drag || charge);
+  $(&#x27;plot&#x27;).dataset.forecast=fullGuidance(s.level) &amp;&amp; !aiming?&#x27;coast&#x27;:&#x27;aim&#x27;;
+  if(fullGuidance(s.level)){
+    const trial=course(s.x,s.y,pvx,pvy);
+    $(&#x27;assistMode&#x27;).textContent=aiming?&#x27;If you throw now&#x27;:&#x27;Current coast&#x27;;
+    const vector=aiming?&#x27;&lt;div class=&quot;secondary&quot;&gt;&#x27;+signed(pvx)+&#x27;, &#x27;+signed(pvy)+&#x27; m/s&lt;/div&gt;&#x27;:&#x27;&#x27;;
+    const note=s.phase!==&#x27;ended&#x27; &amp;&amp; s.throws &amp;&amp; s.mask ? (aiming?&#x27;Current coast · &#x27;+forecastText(coast):&#x27;Next throw · &#x27;+forecastText(trial)) : &#x27;&#x27;;
+    $(&#x27;prediction&#x27;).innerHTML=&#x27;&lt;strong&gt;&#x27;+forecastText(aiming?trial:coast)+&#x27;&lt;/strong&gt;&#x27;+vector+(note?&#x27;&lt;div class=&quot;secondary&quot;&gt;&#x27;+note+&#x27;&lt;/div&gt;&#x27;:&#x27;&#x27;);
+  } else if(s.level===&#x27;Medium&#x27;){
+    $(&#x27;assistMode&#x27;).textContent=aiming?&#x27;If you throw now&#x27;:&#x27;Current velocity&#x27;;
+    const x=aiming?pvx:s.vx,y=aiming?pvy:s.vy;
+    $(&#x27;prediction&#x27;).textContent=signed(x)+&#x27;, &#x27;+signed(y)+&#x27; m/s · &#x27;+(overRedline(s.level,x,y)?&#x27;Above redline&#x27;:&#x27;Within speed limit&#x27;);
+  } else {
+    $(&#x27;assistMode&#x27;).textContent=&#x27;Manual navigation&#x27;;
+    $(&#x27;prediction&#x27;).textContent=&#x27;Release bearing varies by ±&#x27;+hardBearingError+&#x27;°&#x27;;
+  }
 }
 function render() {
   const s=state, dist=Math.hypot(s.x,s.y), radial=(s.x*s.vx+s.y*s.vy)/(dist||1);
@@ -425,7 +618,7 @@ function render() {
   $(&#x27;powerLabel&#x27;).textContent=s.mask?s.power+&#x27;%&#x27;:&#x27;—&#x27;;
   $(&#x27;elapsed&#x27;).textContent=clock(s.elapsed);
   if ($(&#x27;tip&#x27;).textContent!==s.tip) $(&#x27;tip&#x27;).textContent=s.tip;
-  $(&#x27;pause&#x27;).disabled=false;
+  $(&#x27;pause&#x27;).disabled=trainingAim();
   $(&#x27;pause&#x27;).textContent=({ready:&#x27;Start clock&#x27;,flying:&#x27;Ⅱ  Pause&#x27;,paused:&#x27;▷  Resume&#x27;,ended:&#x27;Debrief&#x27;})[s.phase];
   $(&#x27;status&#x27;).textContent=drag?.moved ? (drag.inside?&#x27;Release &#x27;+gear[s.selected].name.toLowerCase():&#x27;Release to cancel&#x27;) :
     flash &amp;&amp; performance.now()&lt;flash.until &amp;&amp; s.phase===&#x27;flying&#x27; ? flash.text :
@@ -435,22 +628,15 @@ function render() {
     el.classList.toggle(&#x27;active&#x27;,active);el.setAttribute(&#x27;aria-pressed&#x27;,String(active));
   });
   const k=impulse(s.selected,s.power,s.bearing), pvx=s.vx+k.dx,pvy=s.vy+k.dy;
-  const path=course(s.x,s.y,pvx,pvy);
-  const preview=s.mask?&#x27;After throw&#x27;:&#x27;Current coast&#x27;;
-  if(fullGuidance(s.level)) {
-    $(&#x27;assistMode&#x27;).textContent=preview+&#x27; / full prediction&#x27;;
-    $(&#x27;prediction&#x27;).innerHTML=&#x27;&lt;strong&gt;&#x27;+signed(pvx)+&#x27;, &#x27;+signed(pvy)+&#x27;&lt;/strong&gt; m/s&lt;br&gt;&#x27;+
-      (path.eta===null?&#x27;Miss distance &#x27;+path.clearance.toFixed(2)+&#x27; m&#x27;:&#x27;Intercept &#x27;+clock(Math.ceil(path.eta))+&#x27; · Miss 0.00 m&#x27;+(path.eta&gt;s.oxygen?&#x27; · Low O₂&#x27;:&#x27;&#x27;));
-    if (s.mask &amp;&amp; s.throws) {
-      const drift=course(s.x,s.y,s.vx,s.vy);
-      $(&#x27;prediction&#x27;).append(document.createElement(&#x27;br&#x27;), drift.eta===null?&#x27;Coast misses by &#x27;+drift.clearance.toFixed(2)+&#x27; m&#x27;:&#x27;Coast intercept &#x27;+clock(Math.ceil(drift.eta))+(drift.eta&gt;s.oxygen?&#x27; · Low O₂&#x27;:&#x27;&#x27;));
-    }
-  } else if (s.level===&#x27;Medium&#x27;) {
-    $(&#x27;assistMode&#x27;).textContent=preview+&#x27; / vector assist&#x27;;
-    $(&#x27;prediction&#x27;).textContent=signed(pvx)+&#x27;, &#x27;+signed(pvy)+&#x27; m/s&#x27;;
-  } else {
-    $(&#x27;assistMode&#x27;).textContent=&#x27;Manual navigation&#x27;; $(&#x27;prediction&#x27;).textContent=&#x27;Read suit velocity and target bearing.&#x27;;
-  }
+  const coast=course(s.x,s.y,s.vx,s.vy);
+  renderForecast(pvx,pvy,coast);
+  renderSpeedometer();
+  renderLesson(coast);
+  $(&#x27;throwButton&#x27;).textContent=s.mask?&#x27;Throw &#x27;+gear[s.selected].name.toLowerCase():&#x27;Rack empty&#x27;;
+  $(&#x27;throwButton&#x27;).disabled=!live() || !s.mask || !!drag || !!charge;
+  $(&#x27;coastButton&#x27;).hidden=s.phase!==&#x27;flying&#x27; || !safeCoast(coast) || !!s.finalRate || !!drag || !!charge;
+  $(&#x27;objectiveStatus&#x27;).hidden=s.objective===&#x27;none&#x27;;
+  $(&#x27;objectiveStatus&#x27;).textContent=replayGoals[s.objective]+(objectiveIntact()?&#x27;&#x27;:&#x27; · missed&#x27;);
   $(&#x27;coastKey&#x27;).hidden=!fullGuidance(s.level); $(&#x27;trialKey&#x27;).hidden=s.level===&#x27;Hard&#x27;||!s.mask;
   renderPlot(pvx,pvy);
 }
@@ -505,6 +691,18 @@ function renderPlot(pvx,pvy) {
   at(&#x27;reticleLabel&#x27;,tx+(alignRight?-12:12),ty-12);
   $(&#x27;reticleLabel&#x27;).setAttribute(&#x27;text-anchor&#x27;,alignRight?&#x27;end&#x27;:&#x27;start&#x27;);
   $(&#x27;reticleLabel&#x27;).textContent=fmtAngle(s.bearing)+&#x27; / &#x27;+s.power+&#x27;%&#x27;;
+  visible(&#x27;lessonMarks&#x27;,trainingAim());
+  visible(&#x27;railCatch&#x27;,s.result?.title===&#x27;Capture confirmed&#x27;);
+  at(&#x27;railCatch&#x27;,ox,oy);
+  if(trainingAim()) {
+    at(&#x27;lessonTarget&#x27;,px+trainingRange(),py);
+    const clampX=x=&gt;Math.min(w-62,Math.max(62,x));
+    at(&#x27;wrenchCaption&#x27;,clampX(tx),ty-29);
+    $(&#x27;wrenchCaption&#x27;).setAttribute(&#x27;text-anchor&#x27;,&#x27;middle&#x27;);
+    const speed=Math.hypot(pvx,pvy)||1;
+    at(&#x27;driftCaption&#x27;,clampX(px+pvx/speed*Math.min(reach,72)),py-pvy/speed*Math.min(reach,72)+21);
+    $(&#x27;driftCaption&#x27;).setAttribute(&#x27;text-anchor&#x27;,&#x27;middle&#x27;);
+  }
   at(&#x27;rings&#x27;,ox,oy);
   [...$(&#x27;rings&#x27;).children].forEach((el,i)=&gt;el.setAttribute(&#x27;r&#x27;,(i+1)*5*scale));
   const vectorScale=430*Math.min(1.6,scale/12);
@@ -581,8 +779,8 @@ function stopCharge(restore=true) {
   charge=null;
 }
 function toggleClock() {
-  if($(&#x27;modal&#x27;).open || state.phase===&#x27;ended&#x27;) return;
-  endDrag(true);stopCharge(); flash=null;
+  if($(&#x27;modal&#x27;).open || state.phase===&#x27;ended&#x27; || trainingAim()) return;
+  endDrag(true);stopCharge(); flash=null; state.finalRate=0;
   state.phase=state.phase===&#x27;flying&#x27;?&#x27;paused&#x27;:&#x27;flying&#x27;; lastFrame=null;
   renderGear();render();
 }
@@ -610,46 +808,71 @@ function closeDialog(resume=true) {
   lastFrame=null;renderGear();render();
   if(returnFocus?.isConnected &amp;&amp; !returnFocus.disabled) returnFocus.focus({preventScroll:true});
 }
-function setup(proposed=state.level) {
+function setup(proposed=state.level,goal=state.objective) {
   $(&#x27;difficulty&#x27;).value=state.level;
   const sceneOptions=scenarios.map((v,i)=&gt;&#x27;&lt;option value=&quot;&#x27;+i+&#x27;&quot;&#x27;+(i===state.index?&#x27; selected&#x27;:&#x27;&#x27;)+&#x27;&gt;&#x27;+v.name+&#x27;&lt;/option&gt;&#x27;).join(&#x27;&#x27;);
   const levels=Object.keys(limits).map(k=&gt;&#x27;&lt;option&#x27;+(k===proposed?&#x27; selected&#x27;:&#x27;&#x27;)+&#x27;&gt;&#x27;+k+&#x27;&lt;/option&gt;&#x27;).join(&#x27;&#x27;);
   openDialog(&#x27;setup&#x27;,&#x27;Mission setup&#x27;,&#x27;New mission&#x27;,
     &#x27;&lt;label class=&quot;dialogrow&quot;&gt;Drift scenario &lt;select id=&quot;scenarioChoice&quot;&gt;&#x27;+sceneOptions+&#x27;&lt;/select&gt;&lt;/label&gt;&lt;p id=&quot;scenarioBrief&quot;&gt;&lt;/p&gt;&#x27;+
-    &#x27;&lt;label class=&quot;dialogrow&quot;&gt;Difficulty &lt;select id=&quot;levelChoice&quot;&gt;&#x27;+levels+&#x27;&lt;/select&gt;&lt;/label&gt;&lt;p id=&quot;levelBrief&quot;&gt;&lt;/p&gt;&#x27;,
-    [[&#x27;Cancel&#x27;,()=&gt;closeDialog()],[&#x27;Begin mission&#x27;,()=&gt;{const index=Number($(&#x27;scenarioChoice&#x27;).value),level=$(&#x27;levelChoice&#x27;).value;closeDialog(false);newFlight(index,level);},true]]);
+    &#x27;&lt;label class=&quot;dialogrow&quot;&gt;Difficulty &lt;select id=&quot;levelChoice&quot;&gt;&#x27;+levels+&#x27;&lt;/select&gt;&lt;/label&gt;&lt;p id=&quot;levelBrief&quot;&gt;&lt;/p&gt;&#x27;+
+    &#x27;&lt;label class=&quot;dialogrow&quot;&gt;Bonus objective &lt;select id=&quot;goalChoice&quot;&gt;&#x27;+Object.entries(replayGoals).map(([key,label])=&gt;&#x27;&lt;option value=&quot;&#x27;+key+&#x27;&quot;&#x27;+(key===goal?&#x27; selected&#x27;:&#x27;&#x27;)+&#x27;&gt;&#x27;+label+&#x27;&lt;/option&gt;&#x27;).join(&#x27;&#x27;)+&#x27;&lt;/select&gt;&lt;/label&gt;&#x27;,
+    [[&#x27;Cancel&#x27;,()=&gt;closeDialog()],[&#x27;Begin mission&#x27;,()=&gt;{const index=Number($(&#x27;scenarioChoice&#x27;).value),level=$(&#x27;levelChoice&#x27;).value,objective=$(&#x27;goalChoice&#x27;).value;closeDialog(false);newFlight(index,level,objective);},true]]);
   const describe=()=&gt;{
     $(&#x27;scenarioBrief&#x27;).textContent=scenarios[Number($(&#x27;scenarioChoice&#x27;).value)].brief;
     const level=$(&#x27;levelChoice&#x27;).value;
     $(&#x27;levelBrief&#x27;).textContent=level===&#x27;Story&#x27;
       ? &#x27;Unlimited oxygen and reloading tools. Full trajectory guidance. Reach the hatch before your suit drifts off the plot.&#x27;
-      : clock(limits[level])+&#x27; oxygen · &#x27;+({Easy:&#x27;Full trajectory, intercept time and miss distance.&#x27;,Medium:&#x27;Predicted velocity vector.&#x27;,Hard:&#x27;Raw navigation telemetry.&#x27;})[level];
+      : clock(limits[level])+&#x27; oxygen · &#x27;+({Easy:&#x27;Full trajectory, intercept time and miss distance.&#x27;,Medium:&#x27;Predicted velocity vector.&#x27;,Hard:&#x27;Raw navigation telemetry.&#x27;})[level]+(softCapture(level)?&#x27; &#x27;+captureBrief(level):&#x27;&#x27;);
   };
   $(&#x27;scenarioChoice&#x27;).onchange=describe;$(&#x27;levelChoice&#x27;).onchange=describe;describe();
 }
+function localCrewVoice() {
+  return window.speechSynthesis?.getVoices().find(voice=&gt;voice.localService &amp;&amp; /^en(?:-|$)/i.test(voice.lang));
+}
 function guide() {
+  const voice=localCrewVoice();
   openDialog(&#x27;guide&#x27;,&#x27;Flight manual&#x27;,&#x27;Get back to the hatch&#x27;,
     &#x27;&lt;p&gt;Your tether has parted and your thrusters are offline. Throw equipment to reach the airlock capture circle.&lt;/p&gt;&#x27;+
     (state.level===&#x27;Story&#x27;?&#x27;&lt;p&gt;&lt;b&gt;Story mode.&lt;/b&gt; Oxygen is unlimited and the selected tool reloads immediately. Your flight ends when you reach the hatch or your whole suit leaves the plot. Throw along your velocity arrow to brake.&lt;/p&gt;&#x27;:&#x27;&lt;p&gt;Reach the hatch before your oxygen runs out.&lt;/p&gt;&#x27;)+
+    (softCapture(state.level)?&#x27;&lt;p&gt;&#x27;+captureBrief(state.level)+&#x27;&lt;/p&gt;&#x27;:&#x27;&#x27;)+
     &#x27;&lt;ul&gt;&lt;li&gt;&lt;b&gt;Select&lt;/b&gt; a tool from the rack or press 1–6. A heavier or faster tool changes your velocity more.&lt;/li&gt;&#x27;+
     &#x27;&lt;li&gt;&lt;b&gt;Drag on the plot&lt;/b&gt; or grab the reticle. Point where the tool should travel. Your suit recoils in the opposite direction. Distance from your suit sets power, from 10% up to 100% at the dotted ring.&lt;/li&gt;&#x27;+
-    &#x27;&lt;li&gt;&lt;b&gt;Release to throw.&lt;/b&gt; A click or tap without dragging previews the aim. Escape or release outside the plot to cancel a drag.&lt;/li&gt;&#x27;+
+    &#x27;&lt;li&gt;&lt;b&gt;Release to throw.&lt;/b&gt; A click or tap previews your aim. The Throw button commits it. Escape or release outside the plot to cancel a drag.&lt;/li&gt;&#x27;+
     &#x27;&lt;li&gt;&lt;b&gt;Keyboard controls.&lt;/b&gt; Left and right change bearing by 1° (Shift for 10°). Up and down change power by 1% (Shift for 10%). Press Enter on the plot to throw, or hold Space to wind up and release to throw. Escape cancels the windup.&lt;/li&gt;&#x27;+
     &#x27;&lt;li&gt;&lt;b&gt;Coast&lt;/b&gt; once you have a return path. P pauses flight. Use the speed controls to fast-forward a long coast.&lt;/li&gt;&lt;/ul&gt;&#x27;+
     &#x27;&lt;p&gt;Bearings run counterclockwise from right (000°) to up (090°). Vx, Vy and radial speed use m/s. Green hatch distance and negative radial speed mean you are closing in. Red distance and positive radial speed mean you are moving away. Hatch distance measures the gap to the capture circle.&lt;/p&gt;&#x27;+
-    (state.level===&#x27;Story&#x27;?&#x27;&#x27;:&#x27;&lt;p&gt;The Δv budget is the largest total velocity change available from full-power throws in the best order.&lt;/p&gt;&#x27;),
-    [[&#x27;Back to flight&#x27;,()=&gt;closeDialog(),true]]);
+    (state.level===&#x27;Story&#x27;?&#x27;&#x27;:&#x27;&lt;p&gt;The Δv budget is the largest total velocity change available from full-power throws in the best order.&lt;/p&gt;&#x27;)+
+    (voice?&#x27;&lt;label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;crewAudio&quot;&#x27;+(crewVoiceEnabled?&#x27; checked&#x27;:&#x27;&#x27;)+&#x27;&gt; Voice the station’s capture call&lt;/label&gt;&#x27;:&#x27;&#x27;),
+    [[&#x27;Restart guided first rescue&#x27;,()=&gt;{closeDialog(false);newFlight(0,&#x27;Easy&#x27;,&#x27;none&#x27;,&#x27;aim&#x27;);}],[&#x27;Back to flight&#x27;,()=&gt;closeDialog(),true]]);
+  if($(&#x27;crewAudio&#x27;))$(&#x27;crewAudio&#x27;).onchange=e=&gt;{crewVoiceEnabled=e.target.checked;};
 }
 function finish(title,description) {
-  endDrag(true);state.phase=&#x27;ended&#x27;;state.result={title,description};stopCharge();flash=null;
-  renderGear(); summary();
+  const captured=title===&#x27;Capture confirmed&#x27;, arrival=captured &amp;&amp; state.finalRate&gt;0;
+  endDrag(true);if(state.lesson)rememberLesson();
+  state.finalRate=0;state.phase=&#x27;ended&#x27;;state.result={title,description};stopCharge();flash=null;
+  if(captured){
+    state.tip=description;
+    const voice=crewVoiceEnabled &amp;&amp; localCrewVoice();
+    if(voice){
+      const call=new SpeechSynthesisUtterance(&#x27;We’ve got you. Welcome back.&#x27;);
+      call.voice=voice;window.speechSynthesis.speak(call);
+    }
+  }
+  renderGear();
+  if(arrival){
+    render();
+    debriefTimer=setTimeout(()=&gt;{debriefTimer=null;if(!$(&#x27;modal&#x27;).open)summary();},1300);
+  } else summary();
 }
 function summary() {
+  clearTimeout(debriefTimer);debriefTimer=null;
   const s=state;
   openDialog(&#x27;summary&#x27;,&#x27;Mission debrief&#x27;,s.result.title,&#x27;&lt;p&gt;&#x27;+s.result.description+&#x27;&lt;/p&gt;&lt;dl class=&quot;dialogstats&quot;&gt;&#x27;+
     [[&#x27;Scenario&#x27;,s.name],[&#x27;Difficulty&#x27;,s.level],[&#x27;Flight time&#x27;,clock(s.elapsed)],[&#x27;Oxygen remaining&#x27;,clock(Math.ceil(s.oxygen))],
-    [&#x27;Tools thrown&#x27;,s.level===&#x27;Story&#x27;?s.throws:s.throws+&#x27; / 6&#x27;],[&#x27;Δv applied&#x27;,s.spent.toFixed(3)+&#x27; m/s&#x27;],[&#x27;Closest approach&#x27;,s.closest.toFixed(2)+&#x27; m&#x27;]].map(([k,v])=&gt;&#x27;&lt;dt&gt;&#x27;+k+&#x27;&lt;/dt&gt;&lt;dd&gt;&#x27;+v+&#x27;&lt;/dd&gt;&#x27;).join(&#x27;&#x27;)+&#x27;&lt;/dl&gt;&#x27;,
-    [[&#x27;Review plot&#x27;,()=&gt;closeDialog()],[&#x27;Fly again&#x27;,()=&gt;setup(),true]]);
+    [&#x27;Tools thrown&#x27;,s.level===&#x27;Story&#x27;?s.throws:s.throws+&#x27; / 6&#x27;],[&#x27;Δv applied&#x27;,s.spent.toFixed(3)+&#x27; m/s&#x27;],[&#x27;Closest approach&#x27;,s.closest.toFixed(2)+&#x27; m&#x27;],
+      ...(s.objective===&#x27;none&#x27;?[]:[[&#x27;Bonus objective&#x27;,replayGoals[s.objective]+&#x27; · &#x27;+(s.result.title===&#x27;Capture confirmed&#x27; &amp;&amp; objectiveIntact()?&#x27;Earned&#x27;:&#x27;Missed&#x27;)]])].map(([k,v])=&gt;&#x27;&lt;dt&gt;&#x27;+k+&#x27;&lt;/dt&gt;&lt;dd&gt;&#x27;+v+&#x27;&lt;/dd&gt;&#x27;).join(&#x27;&#x27;)+&#x27;&lt;/dl&gt;&#x27;,
+    [[&#x27;Review plot&#x27;,()=&gt;closeDialog()],[&#x27;Retry this flight&#x27;,()=&gt;{closeDialog(false);newFlight(s.index,s.level,s.objective,s.lesson?&#x27;aim&#x27;:&#x27;&#x27;);}],
+      [&#x27;Next challenge&#x27;,()=&gt;{closeDialog(false);newFlight((s.index+1)%scenarios.length,s.level,s.objective===&#x27;drill&#x27;?&#x27;two&#x27;:&#x27;drill&#x27;);},true]]);
 }
 function windup(time) {
   if(!charge)return;
@@ -668,7 +891,7 @@ function releaseCharge(source) {
   windup(performance.now());stopCharge(false);throwTool();
 }
 function frame(now) {
-  if(lastFrame!==null &amp;&amp; state.phase===&#x27;flying&#x27; &amp;&amp; !$(&#x27;modal&#x27;).open) advance(Math.max(0,now-lastFrame)*.001*state.rate);
+  if(lastFrame!==null &amp;&amp; state.phase===&#x27;flying&#x27; &amp;&amp; !$(&#x27;modal&#x27;).open) advance(Math.max(0,now-lastFrame)*.001*(state.finalRate || state.rate));
   lastFrame=now;
   windup(now);
   if(state.phase===&#x27;flying&#x27;||charge)render();
@@ -680,7 +903,13 @@ function backgroundPause() {
   if($(&#x27;modal&#x27;).open &amp;&amp; previousPhase===&#x27;flying&#x27;)previousPhase=&#x27;paused&#x27;;
   renderGear();render();
 }
+function measurePlot() {
+  const b=$(&#x27;plot&#x27;).getBoundingClientRect();
+  plotW=Math.max(1,b.width);plotH=Math.max(1,b.height);
+  $(&#x27;plot&#x27;).setAttribute(&#x27;viewBox&#x27;,&#x27;0 0 &#x27;+plotW+&#x27; &#x27;+plotH);
+}
 function init() {
+  window.speechSynthesis?.getVoices();
   const ns=&#x27;http://www.w3.org/2000/svg&#x27;;
   let seed=73;
   const random=()=&gt;{seed=(Math.imul(1664525,seed)+1013904223)&gt;&gt;&gt;0;return seed/4294967296;};
@@ -700,7 +929,7 @@ function init() {
   });
   for(const v of [1,2,5,10]) {
     const b=document.createElement(&#x27;button&#x27;);b.value=v;b.textContent=v+&#x27;×&#x27;;b.setAttribute(&#x27;aria-label&#x27;,v+&#x27; times simulation speed&#x27;);
-    b.onclick=()=&gt;{state.rate=v;lastFrame=null;render();};$(&#x27;speeds&#x27;).append(b);
+    b.onclick=()=&gt;{state.rate=v;state.finalRate=0;lastFrame=null;render();};$(&#x27;speeds&#x27;).append(b);
   }
   const plot=$(&#x27;plot&#x27;);
   plot.addEventListener(&#x27;pointerdown&#x27;,startDrag);
@@ -719,13 +948,24 @@ function init() {
     moveDrag(e);
     render(); // A release can arrive at a new position without an intervening move.
     const commit=drag.inside &amp;&amp; drag.moved;
+    const tap=drag.inside &amp;&amp; !drag.moved;
+    const bounds=plot.getBoundingClientRect();
+    const onTarget=tap &amp;&amp; trainingAim() &amp;&amp; Math.hypot(
+      e.clientX-bounds.left-camera.px-trainingRange(),e.clientY-bounds.top-camera.py)&lt;=21;
     endDrag(!drag.inside);
+    if(onTarget)useTrainingAim();
+    else if(tap)markAim();
     if(commit)throwTool();
     else render();
   });
   for(const event of [&#x27;pointercancel&#x27;,&#x27;lostpointercapture&#x27;])window.addEventListener(event,e=&gt;{
     if(drag?.id===e.pointerId){endDrag(true);render();}
   });
+  $(&#x27;lessonAction&#x27;).onclick=lessonAction;
+  $(&#x27;retryThrow&#x27;).onclick=()=&gt;newFlight(0,&#x27;Easy&#x27;,&#x27;none&#x27;,&#x27;aim&#x27;);
+  $(&#x27;skipLesson&#x27;).onclick=()=&gt;{rememberLesson();state.lesson=&#x27;&#x27;;renderGear();render();$(&#x27;plot&#x27;).focus({preventScroll:true});};
+  $(&#x27;throwButton&#x27;).onclick=throwTool;
+  $(&#x27;coastButton&#x27;).onclick=coastToHatch;
   $(&#x27;setup&#x27;).onclick=()=&gt;setup();$(&#x27;difficulty&#x27;).onchange=e=&gt;setup(e.target.value);
   $(&#x27;guide&#x27;).onclick=guide;$(&#x27;pause&#x27;).onclick=()=&gt;state.phase===&#x27;ended&#x27;?summary():toggleClock();
   $(&#x27;modal&#x27;).addEventListener(&#x27;cancel&#x27;,e=&gt;{e.preventDefault();closeDialog();});
@@ -741,10 +981,10 @@ function init() {
     if(/^[1-6]$/.test(e.key))selectTool(Number(e.key)-1);
     const step=e.shiftKey?10:1;
     if([&#x27;ArrowLeft&#x27;,&#x27;ArrowRight&#x27;].includes(e.key)){
-      e.preventDefault();state.bearing=norm(state.bearing+(e.key===&#x27;ArrowLeft&#x27;?step:-step));render();
+      e.preventDefault();markAim();state.bearing=norm(state.bearing+(e.key===&#x27;ArrowLeft&#x27;?step:-step));render();
     }
     if([&#x27;ArrowUp&#x27;,&#x27;ArrowDown&#x27;].includes(e.key)){
-      e.preventDefault();state.power=Math.min(100,Math.max(10,state.power+(e.key===&#x27;ArrowUp&#x27;?step:-step)));render();
+      e.preventDefault();markAim();state.power=Math.min(100,Math.max(10,state.power+(e.key===&#x27;ArrowUp&#x27;?step:-step)));render();
     }
     if(e.key===&#x27;Enter&#x27; &amp;&amp; e.target===plot){
       e.preventDefault();if(!e.repeat)throwTool();
@@ -753,16 +993,16 @@ function init() {
   document.addEventListener(&#x27;keyup&#x27;,e=&gt;{if(e.code===&#x27;Space&#x27; &amp;&amp; charge?.source===&#x27;key&#x27;){e.preventDefault();releaseCharge(&#x27;key&#x27;);}});
   document.addEventListener(&#x27;visibilitychange&#x27;,()=&gt;{if(document.hidden)backgroundPause();});
   window.addEventListener(&#x27;blur&#x27;,backgroundPause);
-  function resize() {
-    const b=$(&#x27;plot&#x27;).getBoundingClientRect(); plotW=Math.max(1,b.width);plotH=Math.max(1,b.height);
-    $(&#x27;plot&#x27;).setAttribute(&#x27;viewBox&#x27;,&#x27;0 0 &#x27;+plotW+&#x27; &#x27;+plotH); if(state)render();
-  }
-  resize();newFlight();new ResizeObserver(resize).observe($(&#x27;plot&#x27;));requestAnimationFrame(frame);
+  newFlight(0,&#x27;Easy&#x27;,&#x27;none&#x27;,firstRescueWanted()?&#x27;aim&#x27;:&#x27;&#x27;);
+  new ResizeObserver(()=&gt;{measurePlot();render();}).observe(plot);
+  requestAnimationFrame(frame);
 }
 init();
 &lt;/script&gt;&lt;script&gt;
 (() =&gt; {
   const passed=[];
+  let savedLesson;
+  try {savedLesson=localStorage.getItem(&#x27;untethered.firstRescueSeen&#x27;);} catch { /* Opaque test document. */ }
   const yes=(v,m)=&gt;{if(!v)throw Error(m)};
   const near=(a,b,m,tol=1e-9)=&gt;yes(Math.abs(a-b)&lt;tol,m+&#x27; &#x27;+a+&#x27; &#x27;+b);
   function test(name,fn) { if($(&#x27;modal&#x27;).open)closeDialog(false);newFlight();fn();passed.push(name);}
@@ -804,7 +1044,7 @@ init();
         const guided=l===&#x27;Easy&#x27; || l===&#x27;Story&#x27;;
         yes($(&#x27;coast&#x27;).getAttribute(&#x27;visibility&#x27;)===(guided?&#x27;visible&#x27;:&#x27;hidden&#x27;),&#x27;coast visibility&#x27;);
         yes($(&#x27;coastKey&#x27;).hidden===!guided,&#x27;coast legend&#x27;);
-        yes(/intercept|miss/i.test($(&#x27;prediction&#x27;).textContent)===guided,&#x27;prediction text&#x27;);
+        yes(/on course|miss by|oxygen runs out first/i.test($(&#x27;prediction&#x27;).textContent)===guided,&#x27;prediction text&#x27;);
       }
     });
     test(&#x27;Story is optional, starts from the difficulty menu and reloads the selected tool&#x27;,()=&gt;{
@@ -881,19 +1121,24 @@ init();
       }
       $(&#x27;guide&#x27;).click();yes($(&#x27;modal&#x27;).open,&#x27;guide&#x27;);$(&#x27;dialogActions&#x27;).lastElementChild.click();yes(state.phase===&#x27;paused&#x27;,&#x27;guide keeps paused state&#x27;);
     });
-    test(&#x27;All three scenarios are rescuable on Hard with rack and bearing controls&#x27;,()=&gt;{
-      for(let index=0;index&lt;3;index++){
-        if($(&#x27;modal&#x27;).open)closeDialog(false);newFlight(index,&#x27;Hard&#x27;);const dist=Math.hypot(state.x,state.y),ux=-state.x/dist,uy=-state.y/dist;
-        const side=state.vx*(-uy)+state.vy*ux,along=state.vx*ux+state.vy*uy;
-        const dv=gear[3].mass*gear[3].speed/massOf(state.mask)+gear[1].mass*gear[1].speed/(massOf(state.mask)-gear[3].mass);
-        const speed=along+Math.sqrt(dv*dv-side*side);
-        const angle=Math.atan2(state.vy-speed*uy,state.vx-speed*ux);
-        const dx=Math.cos(angle)*camera.reach,dy=Math.sin(angle)*camera.reach;
-        for(const i of [3,1]){
-          $(&#x27;tools&#x27;).children[i].click();pointer(&#x27;pointerdown&#x27;,0,0);pointer(&#x27;pointermove&#x27;,dx,dy);pointer(&#x27;pointerup&#x27;,dx,dy);
+    test(&#x27;All three scenarios allow a legal soft capture with the rack and integer controls&#x27;,()=&gt;{
+      const plans=[[[3,99,-6]],[[3,93,-21]],[[3,100,-17],[2,74,-16]]];
+      const random=Math.random;
+      try {
+        Math.random=()=&gt;.5;
+        for(const level of [&#x27;Medium&#x27;,&#x27;Hard&#x27;])for(const [index,throws] of plans.entries()){
+          if($(&#x27;modal&#x27;).open)closeDialog(false);
+          newFlight(index,level);
+          for(const [tool,power,bearing] of throws){
+            $(&#x27;tools&#x27;).children[tool].click();
+            const dx=camera.inner+(camera.reach-camera.inner)*(power-10)/90;
+            pointer(&#x27;pointerdown&#x27;,dx*Math.cos(radians(bearing)),dx*Math.sin(radians(bearing)));
+            pointer(&#x27;pointerup&#x27;,dx*Math.cos(radians(bearing)),dx*Math.sin(radians(bearing)));
+            $(&#x27;throwButton&#x27;).click();advance(4);
+          }
+          advance(600);yes(state.result?.title===&#x27;Capture confirmed&#x27;,level+&#x27; scenario &#x27;+index);
         }
-        advance(450);yes(state.result?.title===&#x27;Capture confirmed&#x27;,&#x27;scenario &#x27;+index);
-      }
+      } finally {Math.random=random;}
     });
     test(&#x27;Grazing, stationary, receding and already captured trajectories&#x27;,()=&gt;{
       near(course(5,1.2,-1,0).eta,5,&#x27;tangent&#x27;);yes(course(5,1.21,-1,0).eta===null,&#x27;near miss&#x27;);yes(course(5,0,0,0).eta===null,&#x27;stationary&#x27;);
@@ -998,6 +1243,80 @@ init();
       }
       yes(getComputedStyle(advisory).pointerEvents===&#x27;none&#x27;,&#x27;notice intercepts drags&#x27;);
     });
+    test(&#x27;Training aim, throw, retry, skip and replay all use the flight controls&#x27;,()=&gt;{
+      newFlight(0,&#x27;Easy&#x27;,&#x27;none&#x27;,&#x27;aim&#x27;);
+      $(&#x27;pause&#x27;).click();yes(state.phase===&#x27;ready&#x27; &amp;&amp; state.elapsed===0,&#x27;training clock held&#x27;);
+      yes(!$(&#x27;lesson&#x27;).hidden &amp;&amp; $(&#x27;lessonMarks&#x27;).getAttribute(&#x27;visibility&#x27;)===&#x27;visible&#x27;,&#x27;visible instruction&#x27;);
+      const target=trainingRange();pointer(&#x27;pointerdown&#x27;,target,3);pointer(&#x27;pointerup&#x27;,target,3);
+      yes(state.lesson===&#x27;throw&#x27; &amp;&amp; state.bearing===0 &amp;&amp; state.power===65 &amp;&amp; !state.throws,&#x27;forgiving target&#x27;);
+      $(&#x27;lessonAction&#x27;).click();yes(state.lesson===&#x27;coast&#x27; &amp;&amp; state.throws===1 &amp;&amp; !$(&#x27;coastButton&#x27;).hidden,&#x27;first release&#x27;);
+      yes($(&#x27;assistMode&#x27;).textContent===&#x27;Current coast&#x27; &amp;&amp; /On course/.test($(&#x27;prediction&#x27;).querySelector(&#x27;strong&#x27;).textContent),&#x27;primary coast&#x27;);
+      const eta=course(state.x,state.y,state.vx,state.vy).eta;
+      $(&#x27;lessonAction&#x27;).click();yes(state.phase===&#x27;flying&#x27; &amp;&amp; state.finalRate &amp;&amp; state.elapsed&gt;700 &amp;&amp; state.elapsed&lt;eta,&#x27;last metre remains&#x27;);
+      advance(1000);near(state.elapsed,eta,&#x27;coast charges full time&#x27;);yes(state.result.title===&#x27;Capture confirmed&#x27; &amp;&amp; $(&#x27;railCatch&#x27;).getAttribute(&#x27;visibility&#x27;)===&#x27;visible&#x27;,&#x27;handrail&#x27;);
+      closeDialog(false);newFlight(0,&#x27;Easy&#x27;,&#x27;none&#x27;,&#x27;aim&#x27;);$(&#x27;lessonAction&#x27;).click();key(&#x27;ArrowLeft&#x27;,true);$(&#x27;throwButton&#x27;).click();
+      yes($(&#x27;coastButton&#x27;).hidden &amp;&amp; /again/i.test($(&#x27;lessonAction&#x27;).textContent),&#x27;miss can retry&#x27;);
+      $(&#x27;lessonAction&#x27;).click();yes(state.throws===0 &amp;&amp; state.lesson===&#x27;aim&#x27; &amp;&amp; state.mask===fullMask,&#x27;fresh guided try&#x27;);
+      $(&#x27;skipLesson&#x27;).click();yes($(&#x27;lesson&#x27;).hidden &amp;&amp; !$(&#x27;pause&#x27;).disabled,&#x27;skip releases controls&#x27;);
+      $(&#x27;guide&#x27;).click();$(&#x27;dialogActions&#x27;).firstElementChild.click();yes(state.lesson===&#x27;aim&#x27; &amp;&amp; !$(&#x27;lesson&#x27;).hidden,&#x27;guide replay&#x27;);
+    });
+    test(&#x27;Approach gauge and first-crossing outcomes use total speed at the exact deadline&#x27;,()=&gt;{
+      for(const level of Object.keys(limits))for(const factor of [.99,1,1.001]){
+        if($(&#x27;modal&#x27;).open)closeDialog(false);
+        newFlight(0,level);
+        const speed=captureSpeedLimit*factor;
+        state.x=3;state.y=4;state.vx=-.6*speed;state.vy=-.8*speed;
+        state.oxygen=course(state.x,state.y,state.vx,state.vy).eta;
+        toggleClock();render();
+        const over=softCapture(level) &amp;&amp; factor&gt;1;
+        yes($(&#x27;speedometer&#x27;).hidden===!softCapture(level),&#x27;meter mode&#x27;);
+        if(softCapture(level)){
+          yes($(&#x27;speedometer&#x27;).dataset.over===String(over),&#x27;redline&#x27;);
+          yes(parseFloat($(&#x27;speedFill&#x27;).style.width)&gt;70,&#x27;gauge fill&#x27;);
+          yes($(&#x27;speedLimit&#x27;).textContent.startsWith(over?&#x27;Over limit&#x27;:&#x27;Limit&#x27;),&#x27;text warning&#x27;);
+          const [red,green]=getComputedStyle($(&#x27;speedNumber&#x27;)).color.match(/\d+/g).map(Number);
+          yes(over?red&gt;green:green&gt;red,&#x27;speed readout warning color&#x27;);
+          if(innerWidth&lt;=720)yes($(&#x27;speedGauge&#x27;).getBoundingClientRect().bottom&lt;=$(&#x27;plot&#x27;).getBoundingClientRect().top,&#x27;gauge clear of aiming area&#x27;);
+        }
+        yes($(&#x27;coastButton&#x27;).hidden===over,&#x27;safe shortcut&#x27;);
+        advance(1000);near(Math.hypot(state.x,state.y),captureRadius,&#x27;edge&#x27;);
+        yes(state.result.title===(over?&#x27;Approach too fast&#x27;:&#x27;Capture confirmed&#x27;),&#x27;deadline &#x27;+level+&#x27; &#x27;+factor);
+      }
+      closeDialog(false);newFlight(0,&#x27;Medium&#x27;);state.x=2;state.y=0;state.vx=-.04;state.vy=.08;render();
+      yes($(&#x27;speedometer&#x27;).dataset.over===&#x27;true&#x27;,&#x27;fast sideways motion&#x27;);
+    });
+    test(&#x27;Hard samples one bounded release error and preserves opposite recoil&#x27;,()=&gt;{
+      const random=Math.random;
+      try {
+        for(const level of Object.keys(limits))for(const sample of [0,.5,.999999]){
+          newFlight(0,level);
+          let calls=0;Math.random=()=&gt;{calls++;return sample;};
+          state.bearing=359;state.power=85;
+          render();render();yes(calls===0,&#x27;preview sampled random&#x27;);
+          const angle=359+(level===&#x27;Hard&#x27;?(sample*2-1)*hardBearingError:0);
+          const k=impulse(0,85,angle),vx=state.vx,vy=state.vy;
+          $(&#x27;throwButton&#x27;).click();
+          yes(calls===(level===&#x27;Hard&#x27;?1:0),&#x27;one draw at release&#x27;);
+          near(state.lastBearing,norm(angle),&#x27;actual bearing&#x27;);near(state.vx,vx+k.dx,&#x27;recoil x&#x27;);near(state.vy,vy+k.dy,&#x27;recoil y&#x27;);
+          near(anim.vx-state.vx,k.ux,&#x27;tool x&#x27;);near(anim.vy-state.vy,k.uy,&#x27;tool y&#x27;);
+        }
+      } finally {Math.random=random;}
+    });
+    test(&#x27;Forecast switches with aim and unsafe or expired coasts cannot skip time&#x27;,()=&gt;{
+      $(&#x27;throwButton&#x27;).click();yes($(&#x27;assistMode&#x27;).textContent===&#x27;Current coast&#x27;,&#x27;coast leads after release&#x27;);
+      key(&#x27;ArrowUp&#x27;);yes($(&#x27;assistMode&#x27;).textContent===&#x27;If you throw now&#x27;,&#x27;planned keyboard throw&#x27;);
+      state.oxygen=5;render();coastToHatch();yes($(&#x27;coastButton&#x27;).hidden &amp;&amp; state.elapsed===0,&#x27;oxygen gate&#x27;);
+      newFlight(0,&#x27;Medium&#x27;);state.x=5;state.y=0;state.vx=-.12;state.vy=0;toggleClock();coastToHatch();
+      yes(state.elapsed===0 &amp;&amp; $(&#x27;coastButton&#x27;).hidden,&#x27;no overspeed skip&#x27;);
+      state.mask=0;state.selected=-1;advance(600);yes(state.result.title===&#x27;Approach too fast&#x27;,&#x27;final coast still fails fast&#x27;);
+    });
+    test(&#x27;Bonus goals track released tools including Story reloads and retry resets the challenge&#x27;,()=&gt;{
+      newFlight(1,&#x27;Story&#x27;,&#x27;drill&#x27;);selectTool(1);throwTool();yes(!objectiveIntact() &amp;&amp; isAvailable(1),&#x27;reloaded drill counts&#x27;);
+      state.x=1;state.y=0;advance(1);yes($(&#x27;dialogBody&#x27;).textContent.includes(&#x27;Missed&#x27;),&#x27;optional goal can miss on a rescue&#x27;);
+      $(&#x27;dialogActions&#x27;).children[1].click();yes(state.index===1 &amp;&amp; state.level===&#x27;Story&#x27; &amp;&amp; state.objective===&#x27;drill&#x27; &amp;&amp; objectiveIntact(),&#x27;same flight retry&#x27;);
+      newFlight(0,&#x27;Easy&#x27;,&#x27;two&#x27;);throwTool();advance(900);yes($(&#x27;dialogBody&#x27;).textContent.includes(&#x27;Earned&#x27;),&#x27;two throws objective&#x27;);
+      $(&#x27;dialogActions&#x27;).lastElementChild.click();yes(state.index===1 &amp;&amp; state.level===&#x27;Easy&#x27; &amp;&amp; state.objective===&#x27;drill&#x27;,&#x27;different next challenge&#x27;);
+    });
     test(&#x27;Menu configuration, full-power reach and narrow layout&#x27;,()=&gt;{
       $(&#x27;setup&#x27;).click();$(&#x27;scenarioChoice&#x27;).value=&#x27;2&#x27;;$(&#x27;levelChoice&#x27;).value=&#x27;Medium&#x27;;$(&#x27;dialogActions&#x27;).lastElementChild.click();
       yes(state.index===2 &amp;&amp; state.oxygen===600 &amp;&amp; state.throws===0 &amp;&amp; state.mask===63,&#x27;reset&#x27;);
@@ -1009,6 +1328,10 @@ init();
     });
     output.textContent=&#x27;PASS &#x27;+passed.length+&#x27; groups at &#x27;+innerWidth+&#x27;px: &#x27;+passed.join(&#x27; | &#x27;);
   }catch(e){output.textContent=&#x27;FAIL after &#x27;+passed.length+&#x27;: &#x27;+e.message+&#x27; / &#x27;+e.stack;}
+  if(savedLesson!==undefined){
+    if(savedLesson===null)localStorage.removeItem(&#x27;untethered.firstRescueSeen&#x27;);
+    else localStorage.setItem(&#x27;untethered.firstRescueSeen&#x27;,savedLesson);
+  }
   document.body.append(output);
 })();
 &lt;/script&gt;&lt;/body&gt;&lt;/html&gt;
@@ -1135,6 +1458,47 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
   .lower-hud { padding-bottom:8px }
   .earth-view { x:-25%; width:150% }
 }
+:root { --danger:#ffaaa0 }
+.flight-controls,.lesson-actions,.dialogactions { display:flex; align-items:center; flex-wrap:wrap; gap:8px }
+.flight-controls { padding:7px 14px; border-top:1px solid var(--edge) }
+.flight-controls button,.lesson-actions button { padding:7px 12px; min-height:34px }
+#objectiveStatus { margin-left:auto; color:var(--mint) }
+.lesson { padding:12px clamp(12px,2vw,28px); background:#192b2a; border-bottom:1px solid #456059 }
+.lesson h3 { font-size:17px; font-weight:600; color:var(--oxygen-fill) }
+.lesson p { margin:4px 0 8px; line-height:1.45; max-width:76ch }
+.lesson-actions .skip { background:transparent; color:var(--muted) }
+.lesson-mark { pointer-events:none }
+.lesson-mark text { font:600 12px var(--sans); paint-order:stroke; stroke:#10181d; stroke-width:3px }
+.speedometer { width:clamp(120px,12vw,162px); top:calc(var(--inset) + 64px); padding-inline:10px }
+.speedometer .speed-number { display:block; font:600 15px var(--mono); color:var(--oxygen-fill) }
+.speedometer[data-over=&quot;true&quot;] .speed-number,.speedometer[data-over=&quot;true&quot;] .speed-limit { color:var(--danger) }
+.speed-track { position:relative; height:8px; margin:4px 0; background:linear-gradient(to right,#253833 75%,#593b39 75%); border:1px solid #80918b }
+.speed-track i { display:block; height:100%; background:var(--oxygen-fill) }
+.speedometer[data-over=&quot;true&quot;] .speed-track i { background:var(--danger) }
+.speed-track::after { position:absolute; content:&quot;&quot;; left:75%; top:-3px; bottom:-3px; width:3px; background:#f77569; box-shadow:0 0 0 1px #161d20 }
+.speed-limit { color:var(--muted); font-size:12px }
+.assist strong { font:600 14px/1.4 var(--sans); color:var(--oxygen-fill) }
+.assist .secondary { font:12px/1.4 var(--sans); color:var(--muted) }
+.flight-scene { position:relative }
+#plot[data-forecast=&quot;coast&quot;] #coast { stroke:var(--oxygen-fill); stroke-width:2 }
+#plot[data-forecast=&quot;coast&quot;] #trial { opacity:.32 }
+@media(min-width:1000px) {
+  .lesson { position:absolute; top:14px; left:50%; transform:translateX(-50%); width:min(52%,590px); z-index:1; border:1px solid #456059; border-radius:6px; background:#18282bf2; padding:11px 16px }
+}
+@media(max-width:940px) { .scene:has(.speedometer:not([hidden])) .side-hud.right { top:155px } }
+@media(max-width:720px) { .flight-controls { padding:7px 9px } .lesson { padding:9px 10px } }
+@media(max-width:720px) {
+  .scene:has(.speedometer:not([hidden])) { display:flex; flex-direction:column }
+  .scene:has(.speedometer:not([hidden])) [aria-label=&quot;Suit telemetry&quot;] { order:-1; display:grid; grid-template-columns:1fr 1fr; gap:7px 12px; padding:9px 12px; background:#141e23; border-bottom:1px solid var(--edge) }
+  .scene:has(.speedometer:not([hidden])) [aria-label=&quot;Suit telemetry&quot;]&gt;.hud { position:static; padding:0; border:0; background:none }
+  .scene:has(.speedometer:not([hidden])) .side-hud { gap:3px }
+  .scene:has(.speedometer:not([hidden])) .side-hud.right { justify-self:end }
+  .scene:has(.speedometer:not([hidden])) .primary-hud .big { font-size:23px }
+  .scene:has(.speedometer:not([hidden]))&gt;svg { height:clamp(300px,45svh,400px) }
+  .speedometer { order:1; width:100%; display:grid; grid-template-columns:auto 1fr auto; text-align:left!important; grid-column:1/-1; gap:3px 8px; align-items:baseline }
+  .speedometer .speed-number { text-align:right }
+  .speedometer .speed-track { grid-column:1/-1; grid-row:2 }
+}
 &lt;/style&gt;&lt;/head&gt;&lt;body&gt;
 &lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;0&quot; height=&quot;0&quot; aria-hidden=&quot;true&quot; style=&quot;position:absolute&quot;&gt;&lt;defs&gt;
 &lt;linearGradient id=&quot;silver&quot; x2=&quot;.25&quot; y2=&quot;1&quot; gradientUnits=&quot;objectBoundingBox&quot;&gt;&lt;stop stop-color=&quot;#f0f2df&quot;/&gt;&lt;stop offset=&quot;.23&quot; stop-color=&quot;#bdc7c6&quot;/&gt;&lt;stop offset=&quot;.48&quot; stop-color=&quot;#87999f&quot;/&gt;&lt;stop offset=&quot;.75&quot; stop-color=&quot;#667a85&quot;/&gt;&lt;stop offset=&quot;1&quot; stop-color=&quot;#293c49&quot;/&gt;&lt;/linearGradient&gt;
@@ -1229,6 +1593,10 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
 &lt;/defs&gt;&lt;/svg&gt;&lt;header&gt;&lt;div class=&quot;bar&quot;&gt;&lt;div class=&quot;brand&quot;&gt;&lt;svg viewBox=&quot;0 0 40 40&quot; aria-hidden=&quot;true&quot;&gt;&lt;rect x=&quot;1&quot; y=&quot;1&quot; width=&quot;38&quot; height=&quot;38&quot; rx=&quot;9&quot; fill=&quot;#b1c2b7&quot;/&gt;&lt;g stroke=&quot;#25332d&quot; fill=&quot;none&quot; stroke-width=&quot;2&quot;&gt;&lt;ellipse cx=&quot;20&quot; cy=&quot;20&quot; rx=&quot;15&quot; ry=&quot;6&quot; transform=&quot;rotate(-40 20 20)&quot;/&gt;&lt;path d=&quot;m15 24 3-13 10 6-13 7z&quot; fill=&quot;#25332d&quot;/&gt;&lt;/g&gt;&lt;/svg&gt;&lt;div&gt;&lt;div class=&quot;wordmark&quot;&gt;UNTETHERED&lt;/div&gt;&lt;div class=&quot;subbrand&quot;&gt;EVA return simulator&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;toptools&quot;&gt;&lt;span class=&quot;tag&quot;&gt;Alpha v0.1&lt;/span&gt;&lt;button class=&quot;quiet guide&quot; id=&quot;guide&quot;&gt;&lt;svg aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#book&quot;/&gt;&lt;/svg&gt; Flight guide&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;/header&gt;
 &lt;main&gt;&lt;div class=&quot;mission&quot;&gt;&lt;div&gt;&lt;div class=&quot;eyebrow&quot; id=&quot;missionId&quot;&gt;Scenario 01 / 03&lt;/div&gt;&lt;h1 id=&quot;missionTitle&quot;&gt;Tether separation&lt;/h1&gt;&lt;/div&gt;&lt;div class=&quot;settings&quot;&gt;&lt;select id=&quot;difficulty&quot; aria-label=&quot;Mission difficulty&quot;&gt;&lt;option&gt;Story&lt;/option&gt;&lt;option selected&gt;Easy&lt;/option&gt;&lt;option&gt;Medium&lt;/option&gt;&lt;option&gt;Hard&lt;/option&gt;&lt;/select&gt;&lt;button class=&quot;quiet&quot; id=&quot;setup&quot;&gt;&lt;svg aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#restart&quot;/&gt;&lt;/svg&gt; New mission&lt;/button&gt;&lt;button class=&quot;quiet&quot; id=&quot;pause&quot;&gt;Start clock&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;section class=&quot;panel&quot; aria-label=&quot;Navigation&quot;&gt;&lt;div class=&quot;panelhead&quot;&gt;&lt;h2 class=&quot;sectionlabel&quot;&gt;&lt;svg aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#cross&quot;/&gt;&lt;/svg&gt; Navigation plot&lt;/h2&gt;&lt;span class=&quot;status&quot;&gt;&lt;i class=&quot;dot&quot;&gt;&lt;/i&gt;&lt;span id=&quot;status&quot;&gt;Standby&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;
+&lt;div class=&quot;flight-scene&quot;&gt;&lt;aside class=&quot;lesson&quot; id=&quot;lesson&quot; aria-label=&quot;Guided first rescue&quot; hidden&gt;
+  &lt;h3 id=&quot;lessonTitle&quot;&gt;&lt;/h3&gt;&lt;p id=&quot;lessonText&quot; aria-live=&quot;polite&quot;&gt;&lt;/p&gt;
+  &lt;div class=&quot;lesson-actions&quot;&gt;&lt;button class=&quot;primary&quot; id=&quot;lessonAction&quot;&gt;&lt;/button&gt;&lt;button id=&quot;retryThrow&quot; hidden&gt;Try first throw again&lt;/button&gt;&lt;button class=&quot;skip&quot; id=&quot;skipLesson&quot;&gt;Skip guidance&lt;/button&gt;&lt;/div&gt;
+&lt;/aside&gt;
 &lt;div class=&quot;scene&quot;&gt;&lt;svg id=&quot;plot&quot; tabindex=&quot;0&quot; role=&quot;application&quot; aria-label=&quot;Navigation plot&quot; aria-describedby=&quot;aimHint plotKeys&quot; viewBox=&quot;0 0 860 345&quot;&gt;&lt;defs&gt;&lt;radialGradient id=&quot;space&quot; cx=&quot;38%&quot; cy=&quot;47%&quot; r=&quot;82%&quot;&gt;&lt;stop stop-color=&quot;#18232c&quot;/&gt;&lt;stop offset=&quot;.6&quot; stop-color=&quot;#0d151c&quot;/&gt;&lt;stop offset=&quot;1&quot; stop-color=&quot;#070b11&quot;/&gt;&lt;/radialGradient&gt;&lt;pattern id=&quot;grid&quot; width=&quot;64&quot; height=&quot;64&quot; patternUnits=&quot;userSpaceOnUse&quot;&gt;&lt;path d=&quot;M64 0H0V64&quot; fill=&quot;none&quot; stroke=&quot;#688392&quot; opacity=&quot;.10&quot;/&gt;&lt;/pattern&gt;&lt;marker id=&quot;vTip&quot; viewBox=&quot;0 0 10 10&quot; refX=&quot;8&quot; refY=&quot;5&quot; markerWidth=&quot;5&quot; markerHeight=&quot;5&quot; orient=&quot;auto&quot;&gt;&lt;path d=&quot;m0 0 10 5-10 5z&quot; fill=&quot;#a9b8c5&quot;/&gt;&lt;/marker&gt;&lt;marker id=&quot;pTip&quot; viewBox=&quot;0 0 10 10&quot; refX=&quot;8&quot; refY=&quot;5&quot; markerWidth=&quot;5&quot; markerHeight=&quot;5&quot; orient=&quot;auto&quot;&gt;&lt;path d=&quot;m0 0 10 5-10 5z&quot; fill=&quot;var(--gold)&quot;/&gt;&lt;/marker&gt;&lt;/defs&gt;
 &lt;rect width=&quot;100%&quot; height=&quot;100%&quot; fill=&quot;url(#space)&quot;/&gt;&lt;rect width=&quot;100%&quot; height=&quot;100%&quot; fill=&quot;url(#grid)&quot;/&gt;&lt;svg width=&quot;100%&quot; height=&quot;100%&quot; viewBox=&quot;0 0 1600 800&quot; preserveAspectRatio=&quot;xMidYMid slice&quot;&gt;&lt;g id=&quot;stars&quot;&gt;&lt;/g&gt;&lt;/svg&gt;
 &lt;svg class=&quot;earth-view&quot; y=&quot;52%&quot; width=&quot;100%&quot; height=&quot;48%&quot; viewBox=&quot;0 0 2172 724&quot; preserveAspectRatio=&quot;none&quot; aria-hidden=&quot;true&quot;&gt;
@@ -1247,10 +1615,19 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
   &lt;g id=&quot;reticle&quot;&gt;&lt;circle r=&quot;7&quot; fill=&quot;#111719&quot; fill-opacity=&quot;.75&quot;/&gt;&lt;path d=&quot;M-12 0h7m10 0h7M0-12v7m0 10v7&quot;/&gt;&lt;circle r=&quot;1.3&quot; fill=&quot;var(--gold)&quot; stroke=&quot;none&quot;/&gt;&lt;/g&gt;
   &lt;text id=&quot;reticleLabel&quot; class=&quot;reticle-text&quot;&gt;&lt;/text&gt;
 &lt;/g&gt;
+&lt;g id=&quot;railCatch&quot; visibility=&quot;hidden&quot; aria-hidden=&quot;true&quot;&gt;&lt;circle r=&quot;11&quot; fill=&quot;none&quot; stroke=&quot;var(--oxygen-fill)&quot; stroke-width=&quot;2.5&quot;/&gt;&lt;path d=&quot;m-5 0 3 3 7-7&quot; fill=&quot;none&quot; stroke=&quot;var(--oxygen-fill)&quot; stroke-width=&quot;2&quot;/&gt;&lt;/g&gt;
+&lt;g id=&quot;lessonMarks&quot; class=&quot;lesson-mark&quot; visibility=&quot;hidden&quot; aria-hidden=&quot;true&quot;&gt;
+  &lt;g id=&quot;lessonTarget&quot;&gt;&lt;circle r=&quot;18&quot; fill=&quot;#d4b48b&quot; fill-opacity=&quot;.13&quot; stroke=&quot;var(--gold)&quot; stroke-width=&quot;2&quot; stroke-dasharray=&quot;4 3&quot;/&gt;&lt;/g&gt;
+  &lt;text id=&quot;wrenchCaption&quot; fill=&quot;var(--gold)&quot;&gt;Wrench goes here&lt;/text&gt;
+  &lt;text id=&quot;driftCaption&quot; fill=&quot;var(--oxygen-fill)&quot;&gt;Your path&lt;/text&gt;
+&lt;/g&gt;
 &lt;/svg&gt;
   &lt;div role=&quot;group&quot; aria-label=&quot;Suit telemetry&quot;&gt;
     &lt;div class=&quot;hud left primary-hud&quot;&gt;&lt;div class=&quot;micro&quot;&gt;Oxygen remaining&lt;/div&gt;&lt;div class=&quot;big&quot; id=&quot;oxygen&quot;&gt;15:00&lt;/div&gt;&lt;div class=&quot;meter&quot;&gt;&lt;i id=&quot;oxygenBar&quot;&gt;&lt;/i&gt;&lt;/div&gt;&lt;/div&gt;
     &lt;div class=&quot;hud right primary-hud&quot;&gt;&lt;div class=&quot;micro&quot;&gt;Δv budget&lt;/div&gt;&lt;div class=&quot;big&quot;&gt;&lt;span id=&quot;budget&quot;&gt;&lt;/span&gt; &lt;small&gt;m/s&lt;/small&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;div id=&quot;speedometer&quot; class=&quot;hud right speedometer&quot; hidden&gt;&lt;span class=&quot;micro&quot;&gt;Approach speed&lt;/span&gt;&lt;output class=&quot;speed-number&quot; id=&quot;speedNumber&quot;&gt;&lt;/output&gt;
+        &lt;div id=&quot;speedGauge&quot; class=&quot;speed-track&quot; role=&quot;meter&quot; aria-label=&quot;Approach speed&quot; aria-valuemin=&quot;0&quot;&gt;&lt;i id=&quot;speedFill&quot;&gt;&lt;/i&gt;&lt;/div&gt;&lt;span class=&quot;speed-limit&quot; id=&quot;speedLimit&quot;&gt;&lt;/span&gt;
+      &lt;/div&gt;
     &lt;div class=&quot;hud left side-hud&quot;&gt;&lt;div&gt;&lt;div class=&quot;micro&quot;&gt;Hatch distance&lt;/div&gt;&lt;b id=&quot;range&quot;&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;div class=&quot;micro&quot;&gt;Hatch bearing&lt;/div&gt;&lt;b id=&quot;bearing&quot;&gt;&lt;/b&gt;&lt;/div&gt;&lt;/div&gt;
     &lt;div class=&quot;hud right side-hud&quot;&gt;&lt;div class=&quot;micro&quot;&gt;Velocity · m/s&lt;/div&gt;&lt;div class=&quot;raw&quot;&gt;&lt;span&gt;Vx&lt;/span&gt;&lt;b id=&quot;vx&quot;&gt;&lt;/b&gt;&lt;span&gt;Vy&lt;/span&gt;&lt;b id=&quot;vy&quot;&gt;&lt;/b&gt;&lt;span&gt;Radial&lt;/span&gt;&lt;b id=&quot;radial&quot;&gt;&lt;/b&gt;&lt;span&gt;Mass&lt;/span&gt;&lt;b id=&quot;mass&quot;&gt;&lt;/b&gt;&lt;/div&gt;&lt;/div&gt;
   &lt;/div&gt;
@@ -1266,8 +1643,9 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
       &lt;p id=&quot;tip&quot; role=&quot;status&quot;&gt;&lt;/p&gt;
     &lt;/aside&gt;
   &lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;plotbar&quot;&gt;&lt;div class=&quot;legend&quot;&gt;&lt;span&gt;&lt;i class=&quot;keyline vector&quot;&gt;&lt;/i&gt;Velocity&lt;/span&gt;&lt;span id=&quot;coastKey&quot;&gt;&lt;i class=&quot;keyline&quot; style=&quot;border-top-style:dotted&quot;&gt;&lt;/i&gt;Coast&lt;/span&gt;&lt;span id=&quot;trialKey&quot;&gt;&lt;i class=&quot;keyline recoil&quot;&gt;&lt;/i&gt;After throw&lt;/span&gt;&lt;/div&gt;&lt;span class=&quot;flight-time&quot;&gt;Flight time &lt;b id=&quot;elapsed&quot;&gt;00:00&lt;/b&gt;&lt;/span&gt;&lt;div class=&quot;speed&quot; id=&quot;speeds&quot; aria-label=&quot;Simulation speed&quot;&gt;&lt;svg viewBox=&quot;0 0 20 20&quot; aria-hidden=&quot;true&quot;&gt;&lt;circle cx=&quot;10&quot; cy=&quot;10&quot; r=&quot;7&quot;/&gt;&lt;path d=&quot;M10 5v6l4 2&quot;/&gt;&lt;/svg&gt;&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
+&lt;/div&gt;&lt;/div&gt;
+&lt;div class=&quot;plotbar&quot;&gt;&lt;div class=&quot;legend&quot;&gt;&lt;span&gt;&lt;i class=&quot;keyline vector&quot;&gt;&lt;/i&gt;Velocity&lt;/span&gt;&lt;span id=&quot;coastKey&quot;&gt;&lt;i class=&quot;keyline&quot; style=&quot;border-top-style:dotted&quot;&gt;&lt;/i&gt;Coast&lt;/span&gt;&lt;span id=&quot;trialKey&quot;&gt;&lt;i class=&quot;keyline recoil&quot;&gt;&lt;/i&gt;After throw&lt;/span&gt;&lt;/div&gt;&lt;span class=&quot;flight-time&quot;&gt;Flight time &lt;b id=&quot;elapsed&quot;&gt;00:00&lt;/b&gt;&lt;/span&gt;&lt;div class=&quot;speed&quot; id=&quot;speeds&quot; aria-label=&quot;Simulation speed&quot;&gt;&lt;svg viewBox=&quot;0 0 20 20&quot; aria-hidden=&quot;true&quot;&gt;&lt;circle cx=&quot;10&quot; cy=&quot;10&quot; r=&quot;7&quot;/&gt;&lt;path d=&quot;M10 5v6l4 2&quot;/&gt;&lt;/svg&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;div class=&quot;flight-controls&quot;&gt;&lt;button id=&quot;throwButton&quot;&gt;Throw wrench&lt;/button&gt;&lt;button id=&quot;coastButton&quot; class=&quot;primary&quot; hidden&gt;Coast to hatch&lt;/button&gt;&lt;span id=&quot;objectiveStatus&quot; hidden&gt;&lt;/span&gt;&lt;/div&gt;&lt;/section&gt;
 &lt;section class=&quot;panel rack&quot;&gt;&lt;div class=&quot;panelhead&quot;&gt;&lt;h2 class=&quot;sectionlabel&quot;&gt;&lt;svg aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#rackicon&quot;/&gt;&lt;/svg&gt; Equipment rack&lt;/h2&gt;&lt;span class=&quot;spec&quot; id=&quot;count&quot;&gt;&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;tools&quot; id=&quot;tools&quot;&gt;&lt;/div&gt;&lt;div class=&quot;throwstrip&quot;&gt;&lt;p id=&quot;aimHint&quot;&gt;Click to aim. Drag to set direction and power, then release to throw.&lt;/p&gt;&lt;span class=&quot;throw-vector&quot;&gt;&lt;span class=&quot;micro&quot;&gt;Throw vector&lt;/span&gt;&lt;span id=&quot;angle&quot;&gt;&lt;/span&gt; / &lt;span id=&quot;powerLabel&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/section&gt;
 &lt;span class=&quot;sr&quot; id=&quot;plotKeys&quot;&gt;1 to 6 select a tool. Left and right adjust bearing. Up and down adjust power. Enter throws. Escape cancels a drag.&lt;/span&gt;&lt;div class=&quot;sr&quot; aria-live=&quot;polite&quot; id=&quot;announce&quot;&gt;&lt;/div&gt;&lt;/main&gt;
 &lt;dialog id=&quot;modal&quot; aria-labelledby=&quot;dialogTitle&quot;&gt;&lt;div class=&quot;eyebrow&quot; id=&quot;dialogKicker&quot;&gt;&lt;/div&gt;&lt;h2 id=&quot;dialogTitle&quot;&gt;&lt;/h2&gt;&lt;div id=&quot;dialogBody&quot;&gt;&lt;/div&gt;&lt;div class=&quot;dialogactions&quot; id=&quot;dialogActions&quot;&gt;&lt;/div&gt;&lt;/dialog&gt;
@@ -1288,6 +1666,14 @@ const scenarios = [
   {name:&#x27;Wide separation&#x27;, x:29, y:-8, vx:0.044, vy:-0.016, brief:&#x27;The airlock is falling behind. Combine heavy throws to reverse your drift and close the gap.&#x27;}
 ];
 const limits = {Story:Infinity, Easy:900, Medium:600, Hard:450};
+const captureSpeedLimit = 0.080, hardBearingError = 2;
+const softCapture = level =&gt; level===&#x27;Medium&#x27; || level===&#x27;Hard&#x27;;
+const overRedline = (level,vx,vy) =&gt; softCapture(level) &amp;&amp; Math.hypot(vx,vy)&gt;captureSpeedLimit+1e-12;
+const replayGoals = {
+  none:&#x27;Return to the hatch&#x27;,
+  drill:&#x27;Keep the power drill holstered&#x27;,
+  two:&#x27;Return in two throws or fewer&#x27;
+};
 const fullGuidance = level =&gt; level===&#x27;Story&#x27; || level===&#x27;Easy&#x27;;
 const dryMass = 186, captureRadius = 1.2, fullMask = (1 &lt;&lt; gear.length)-1;
 const massOf = mask =&gt; gear.reduce((sum,t,i)=&gt;sum + ((mask &amp; (1&lt;&lt;i)) ? t.mass : 0),dryMass);
@@ -1338,18 +1724,36 @@ const isAvailable = i =&gt; i&gt;=0 &amp;&amp; Boolean(state.mask &amp; (1&lt;&l
 const live = () =&gt; state.phase===&#x27;ready&#x27; || state.phase===&#x27;flying&#x27;;
 const suitBounds = DOMRect.fromRect($(&#x27;suitMan&#x27;).getBBox());
 let state, camera, charge=null, flash=null, anim=null, lastFrame=null, dialogKind=&#x27;&#x27;, previousPhase=&#x27;&#x27;, returnFocus=null;
-let plotW=860, plotH=345, drag=null;
-function newFlight(index=0,level=&#x27;Easy&#x27;) {
+let plotW=860, plotH=345, drag=null, debriefTimer=null;
+let crewVoiceEnabled=false;
+function newFlight(index=0,level=&#x27;Easy&#x27;,objective=&#x27;none&#x27;,lesson=&#x27;&#x27;) {
+  clearTimeout(debriefTimer);debriefTimer=null;
   endDrag(true);
   const s=scenarios[index];
   state={...s, index,level, phase:&#x27;ready&#x27;, elapsed:0, oxygen:limits[level], mask:fullMask,
-    selected:0, bearing:0, power:65, rate:1, throws:0, spent:0, closest:Math.hypot(s.x,s.y)-captureRadius,
-    lastImpulse:0,tip:level===&#x27;Story&#x27;?&#x27;Tools reload after every throw. Stay in view and aim for the hatch.&#x27;:&#x27;Throw equipment away from the hatch to push your suit toward it.&#x27;};
+    selected:0, bearing:0, power:65, rate:1, throws:0, spent:0, usedMask:0, objective, lesson,
+    previewing:false, finalRate:0, closest:Math.hypot(s.x,s.y)-captureRadius,
+    lastImpulse:0,tip:lesson?&#x27;Line up your predicted path with the hatch before you release the wrench.&#x27;:softCapture(level)?captureBrief(level):level===&#x27;Story&#x27;?&#x27;Tools reload after every throw. Stay in view and aim for the hatch.&#x27;:&#x27;Throw equipment away from the hatch to push your suit toward it.&#x27;};
   charge=null; flash=null; anim=null; lastFrame=null;
   $(&#x27;missionId&#x27;).textContent=&#x27;Scenario &#x27;+String(index+1).padStart(2,&#x27;0&#x27;)+&#x27; / 03&#x27;;
   $(&#x27;missionTitle&#x27;).textContent=s.name;
   $(&#x27;difficulty&#x27;).value=level;
-  renderGear(); render();
+  $(&#x27;speedometer&#x27;).hidden=!softCapture(level);
+  $(&#x27;lesson&#x27;).hidden=!lesson;
+  measurePlot();renderGear();render();
+}
+function captureBrief(level) {
+  const limit=captureSpeedLimit.toFixed(3)+&#x27; m/s&#x27;;
+  return &#x27;Enter the hatch at &#x27;+limit+&#x27; or slower. Throw along your motion to brake.&#x27;+
+    (level===&#x27;Hard&#x27;?&#x27; Each release can stray by up to ±&#x27;+hardBearingError+&#x27;°.&#x27;:&#x27;&#x27;);
+}
+function safeCoast(path) {
+  return path.eta!==null &amp;&amp; path.eta&lt;=state.oxygen &amp;&amp; !overRedline(state.level,state.vx,state.vy);
+}
+function objectiveIntact() {
+  if(state.objective===&#x27;drill&#x27;)return !(state.usedMask &amp; (1&lt;&lt;1));
+  if(state.objective===&#x27;two&#x27;)return state.throws&lt;=2;
+  return true;
 }
 function impulse(i,power,bearing) {
   if (!isAvailable(i)) return {dx:0,dy:0,ux:0,uy:0};
@@ -1359,7 +1763,12 @@ function impulse(i,power,bearing) {
 }
 function throwTool() {
   if (!live() || !isAvailable(state.selected) || $(&#x27;modal&#x27;).open) return;
-  const i=state.selected, t=gear[i], kick=impulse(i,state.power,state.bearing);
+  const i=state.selected, t=gear[i];
+  const offset=state.level===&#x27;Hard&#x27;?(Math.random()*2-1)*hardBearingError:0;
+  const released=norm(state.bearing+offset), kick=impulse(i,state.power,released);
+  state.lastBearing=released; state.usedMask|=1&lt;&lt;i;
+  state.previewing=false; state.finalRate=0;
+  if(state.lesson)state.lesson=&#x27;coast&#x27;;
   state.vx+=kick.dx; state.vy+=kick.dy;
   anim={x:state.x,y:state.y,vx:state.vx+kick.ux,vy:state.vy+kick.uy,age:0,i};
   if (state.level!==&#x27;Story&#x27;) {
@@ -1368,14 +1777,15 @@ function throwTool() {
   }
   state.lastImpulse=Math.hypot(kick.dx,kick.dy); state.spent+=state.lastImpulse; state.throws++;
   state.phase=&#x27;flying&#x27;; lastFrame=null;
-  const report=t.name+&#x27; released · Δv &#x27;+state.lastImpulse.toFixed(3)+&#x27; m/s&#x27;;
+  const report=t.name+&#x27; released · Δv &#x27;+state.lastImpulse.toFixed(3)+&#x27; m/s&#x27;+(state.level===&#x27;Hard&#x27;?&#x27; · Released at &#x27;+released.toFixed(1)+&#x27;°&#x27;:&#x27;&#x27;);
   flash={text:report,until:performance.now()+2400}; $(&#x27;announce&#x27;).textContent=report;
   state.tip=contextTip(); renderGear();
   checkEmpty(); render();
 }
 function contextTip() {
   const path=course(state.x,state.y,state.vx,state.vy);
-  if (fullGuidance(state.level) &amp;&amp; path.eta!==null &amp;&amp; path.eta&lt;=state.oxygen) return &#x27;Your coast path enters the capture zone. Fast-forward to reach the hatch.&#x27;;
+  if(overRedline(state.level,state.vx,state.vy))return &#x27;Above capture speed. Throw along the velocity arrow to brake before reaching the hatch.&#x27;;
+  if (safeCoast(path)) return &#x27;You are on course. Hold this coast to reach the hatch.&#x27;;
   if (state.closest&lt;5) return &#x27;Near the hatch, a light tool gives you a smaller course correction.&#x27;;
   if (state.level===&#x27;Story&#x27;) return &#x27;To slow down, throw in the direction of your velocity arrow. Repeat as needed.&#x27;;
   const tips=[&#x27;Correct your lateral velocity as well as your outward drift.&#x27;,
@@ -1402,7 +1812,11 @@ function advance(dt) {
   state.x+=vx*step; state.y+=vy*step;
   state.oxygen=Math.max(0,state.oxygen-step); state.elapsed+=step;
   if (anim) {anim.x+=anim.vx*step;anim.y+=anim.vy*step;anim.age+=step;if(anim.age&gt;2.5) anim=null;}
-  if (eta!==null &amp;&amp; eta&lt;=step) finish(&#x27;Capture confirmed&#x27;,&#x27;Your suit entered the airlock capture zone. You made it back.&#x27;);
+  if (eta!==null &amp;&amp; eta&lt;=step) {
+    if(overRedline(state.level,vx,vy))
+      finish(&#x27;Approach too fast&#x27;,&#x27;You reached the hatch at &#x27;+formatSpeed(vx,vy)+&#x27; m/s. The handrail slipped past. Brake to &#x27;+captureSpeedLimit.toFixed(3)+&#x27; m/s or below before crossing the capture ring.&#x27;);
+    else finish(&#x27;Capture confirmed&#x27;,&#x27;Your glove closes around the handrail. “We’ve got you. Welcome back.”&#x27;);
+  }
   else if (exitTime&lt;=step) finish(&#x27;Drifted out of view&#x27;,&#x27;Your suit drifted completely beyond the navigation plot.&#x27;);
   else if (state.oxygen&lt;=0) finish(&#x27;Oxygen depleted&#x27;,&#x27;Your oxygen supply ran out before you reached the capture zone.&#x27;);
 }
@@ -1410,15 +1824,117 @@ function renderGear() {
   const count=gear.filter((_,i)=&gt;isAvailable(i)).length;
   $(&#x27;count&#x27;).textContent=state.level===&#x27;Story&#x27;?&#x27;Tools reload on release&#x27;:count+&#x27; / 6 tools remaining&#x27;;
   [...$(&#x27;tools&#x27;).children].forEach((b,i)=&gt;{
-    b.disabled=!isAvailable(i) || !live();
+    b.disabled=!isAvailable(i) || !live() || (trainingAim() &amp;&amp; i!==0);
     b.classList.toggle(&#x27;selected&#x27;,state.selected===i);
     b.setAttribute(&#x27;aria-pressed&#x27;,String(state.selected===i));
     b.querySelector(&#x27;small&#x27;).textContent=isAvailable(i)?gear[i].mass.toFixed(1)+&#x27; kg&#x27;:&#x27;Released&#x27;;
   });
 }
 function selectTool(i) {
-  if (!live() || !isAvailable(i) || charge || drag) return;
-  state.selected=i; renderGear();render();
+  if (!live() || !isAvailable(i) || charge || drag || (trainingAim() &amp;&amp; i!==0)) return;
+  state.previewing=true; state.selected=i; renderGear();render();
+}
+function formatSpeed(vx,vy) {
+  const speed=Math.hypot(vx,vy);
+  // Keep a marginally unsafe reading visibly above the printed limit.
+  return (speed&gt;captureSpeedLimit+1e-12 ? Math.max(captureSpeedLimit+.001,speed) : speed).toFixed(3);
+}
+function renderSpeedometer() {
+  const s=state, meter=$(&#x27;speedometer&#x27;);
+  if(meter.hidden)return;
+  const speed=Math.hypot(s.vx,s.vy), over=overRedline(s.level,s.vx,s.vy);
+  const label=formatSpeed(s.vx,s.vy)+&#x27; m/s&#x27;, max=captureSpeedLimit/0.75;
+  meter.dataset.over=String(over);
+  $(&#x27;speedNumber&#x27;).textContent=label;
+  $(&#x27;speedLimit&#x27;).textContent=(over?&#x27;Over limit&#x27;:&#x27;Limit&#x27;)+&#x27; · &#x27;+captureSpeedLimit.toFixed(3);
+  $(&#x27;speedFill&#x27;).style.width=Math.min(100,100*speed/max)+&#x27;%&#x27;;
+  $(&#x27;speedGauge&#x27;).setAttribute(&#x27;aria-valuemax&#x27;,max.toFixed(4));
+  $(&#x27;speedGauge&#x27;).setAttribute(&#x27;aria-valuenow&#x27;,Math.min(speed,max).toFixed(4));
+  $(&#x27;speedGauge&#x27;).setAttribute(&#x27;aria-valuetext&#x27;,label+&#x27;, &#x27;+$(&#x27;speedLimit&#x27;).textContent+&#x27; m/s&#x27;);
+}
+function coastToHatch() {
+  if(state.phase!==&#x27;flying&#x27; || drag || charge || $(&#x27;modal&#x27;).open)return;
+  const path=course(state.x,state.y,state.vx,state.vy);
+  if(!safeCoast(path))return;
+  const lastMetre=Math.min(path.eta,1/Math.hypot(state.vx,state.vy));
+  advance(path.eta-lastMetre);
+  state.finalRate=Math.max(1,lastMetre/2);
+  state.previewing=false; lastFrame=null; render();
+}
+function trainingAim() {
+  return state.lesson===&#x27;aim&#x27; || state.lesson===&#x27;throw&#x27;;
+}
+function firstRescueWanted() {
+  try {return !localStorage.getItem(&#x27;untethered.firstRescueSeen&#x27;);} catch {return true;}
+}
+function rememberLesson() {
+  try {localStorage.setItem(&#x27;untethered.firstRescueSeen&#x27;,&#x27;1&#x27;);} catch { /* Storage is optional offline. */ }
+}
+function markAim() {
+  state.previewing=true;
+  if(trainingAim())state.lesson=&#x27;throw&#x27;;
+}
+function trainingRange() {
+  return camera.inner+(camera.reach-camera.inner)*55/90;
+}
+function useTrainingAim() {
+  state.bearing=0; state.power=65; markAim(); render();
+}
+function lessonAction() {
+  if(state.lesson===&#x27;aim&#x27;)useTrainingAim();
+  else if(state.lesson===&#x27;throw&#x27;)throwTool();
+  else if(state.lesson===&#x27;coast&#x27;){
+    if(safeCoast(course(state.x,state.y,state.vx,state.vy)))coastToHatch();
+    else newFlight(0,&#x27;Easy&#x27;,&#x27;none&#x27;,&#x27;aim&#x27;);
+  }
+}
+function renderLesson(coast) {
+  const step=state.lesson;
+  $(&#x27;lesson&#x27;).hidden=!step || state.phase===&#x27;ended&#x27;;
+  if($(&#x27;lesson&#x27;).hidden)return;
+  const good=safeCoast(coast);
+  let heading, copy, action;
+  if(step===&#x27;aim&#x27;){
+    heading=&#x27;First rescue · Aim&#x27;;
+    copy=&#x27;Your tether snapped. Your thrusters are silent. Eighteen metres to the hatch. “First time anyone on this station has had to throw their way home.” Tap the gold ring to aim the wrench.&#x27;;
+    action=&#x27;Aim at the ring&#x27;;
+  } else if(step===&#x27;throw&#x27;){
+    heading=&#x27;First rescue · Throw&#x27;;
+    copy=&#x27;The wrench flies toward the crosshair. The dashed line shows where you will drift. Tap to change aim, then use Throw wrench. You can also drag and release.&#x27;;
+    action=&#x27;Throw wrench&#x27;;
+  } else {
+    heading=&#x27;First rescue · Coast&#x27;;
+    copy=good?&#x27;The wrench is gone and you’re moving home. Keep the next tool. Coast through the quiet stretch to the handrail.&#x27;:&#x27;Your path misses the return window. Try the first throw again, or skip guidance and correct with another tool.&#x27;;
+    action=good?&#x27;Coast to hatch&#x27;:&#x27;Try first throw again&#x27;;
+  }
+  $(&#x27;lessonTitle&#x27;).textContent=heading;
+  if($(&#x27;lessonText&#x27;).textContent!==copy)$(&#x27;lessonText&#x27;).textContent=copy;
+  $(&#x27;lessonAction&#x27;).textContent=state.finalRate?&#x27;Final approach…&#x27;:action;
+  $(&#x27;lessonAction&#x27;).disabled=!!state.finalRate || !live();
+  $(&#x27;retryThrow&#x27;).hidden=step!==&#x27;coast&#x27; || !good;
+}
+function forecastText(path) {
+  if(path.eta===null)return &#x27;Miss by &#x27;+path.clearance.toFixed(2)+&#x27; m&#x27;;
+  const eta=clock(Math.ceil(path.eta));
+  return path.eta&lt;=state.oxygen?&#x27;On course · hatch in &#x27;+eta:&#x27;Hatch in &#x27;+eta+&#x27; · oxygen runs out first&#x27;;
+}
+function renderForecast(pvx,pvy,coast) {
+  const s=state, aiming=s.phase!==&#x27;ended&#x27; &amp;&amp; s.mask &amp;&amp; (s.phase===&#x27;ready&#x27; || s.previewing || drag || charge);
+  $(&#x27;plot&#x27;).dataset.forecast=fullGuidance(s.level) &amp;&amp; !aiming?&#x27;coast&#x27;:&#x27;aim&#x27;;
+  if(fullGuidance(s.level)){
+    const trial=course(s.x,s.y,pvx,pvy);
+    $(&#x27;assistMode&#x27;).textContent=aiming?&#x27;If you throw now&#x27;:&#x27;Current coast&#x27;;
+    const vector=aiming?&#x27;&lt;div class=&quot;secondary&quot;&gt;&#x27;+signed(pvx)+&#x27;, &#x27;+signed(pvy)+&#x27; m/s&lt;/div&gt;&#x27;:&#x27;&#x27;;
+    const note=s.phase!==&#x27;ended&#x27; &amp;&amp; s.throws &amp;&amp; s.mask ? (aiming?&#x27;Current coast · &#x27;+forecastText(coast):&#x27;Next throw · &#x27;+forecastText(trial)) : &#x27;&#x27;;
+    $(&#x27;prediction&#x27;).innerHTML=&#x27;&lt;strong&gt;&#x27;+forecastText(aiming?trial:coast)+&#x27;&lt;/strong&gt;&#x27;+vector+(note?&#x27;&lt;div class=&quot;secondary&quot;&gt;&#x27;+note+&#x27;&lt;/div&gt;&#x27;:&#x27;&#x27;);
+  } else if(s.level===&#x27;Medium&#x27;){
+    $(&#x27;assistMode&#x27;).textContent=aiming?&#x27;If you throw now&#x27;:&#x27;Current velocity&#x27;;
+    const x=aiming?pvx:s.vx,y=aiming?pvy:s.vy;
+    $(&#x27;prediction&#x27;).textContent=signed(x)+&#x27;, &#x27;+signed(y)+&#x27; m/s · &#x27;+(overRedline(s.level,x,y)?&#x27;Above redline&#x27;:&#x27;Within speed limit&#x27;);
+  } else {
+    $(&#x27;assistMode&#x27;).textContent=&#x27;Manual navigation&#x27;;
+    $(&#x27;prediction&#x27;).textContent=&#x27;Release bearing varies by ±&#x27;+hardBearingError+&#x27;°&#x27;;
+  }
 }
 function render() {
   const s=state, dist=Math.hypot(s.x,s.y), radial=(s.x*s.vx+s.y*s.vy)/(dist||1);
@@ -1439,7 +1955,7 @@ function render() {
   $(&#x27;powerLabel&#x27;).textContent=s.mask?s.power+&#x27;%&#x27;:&#x27;—&#x27;;
   $(&#x27;elapsed&#x27;).textContent=clock(s.elapsed);
   if ($(&#x27;tip&#x27;).textContent!==s.tip) $(&#x27;tip&#x27;).textContent=s.tip;
-  $(&#x27;pause&#x27;).disabled=false;
+  $(&#x27;pause&#x27;).disabled=trainingAim();
   $(&#x27;pause&#x27;).textContent=({ready:&#x27;Start clock&#x27;,flying:&#x27;Ⅱ  Pause&#x27;,paused:&#x27;▷  Resume&#x27;,ended:&#x27;Debrief&#x27;})[s.phase];
   $(&#x27;status&#x27;).textContent=drag?.moved ? (drag.inside?&#x27;Release &#x27;+gear[s.selected].name.toLowerCase():&#x27;Release to cancel&#x27;) :
     flash &amp;&amp; performance.now()&lt;flash.until &amp;&amp; s.phase===&#x27;flying&#x27; ? flash.text :
@@ -1449,22 +1965,15 @@ function render() {
     el.classList.toggle(&#x27;active&#x27;,active);el.setAttribute(&#x27;aria-pressed&#x27;,String(active));
   });
   const k=impulse(s.selected,s.power,s.bearing), pvx=s.vx+k.dx,pvy=s.vy+k.dy;
-  const path=course(s.x,s.y,pvx,pvy);
-  const preview=s.mask?&#x27;After throw&#x27;:&#x27;Current coast&#x27;;
-  if(fullGuidance(s.level)) {
-    $(&#x27;assistMode&#x27;).textContent=preview+&#x27; / full prediction&#x27;;
-    $(&#x27;prediction&#x27;).innerHTML=&#x27;&lt;strong&gt;&#x27;+signed(pvx)+&#x27;, &#x27;+signed(pvy)+&#x27;&lt;/strong&gt; m/s&lt;br&gt;&#x27;+
-      (path.eta===null?&#x27;Miss distance &#x27;+path.clearance.toFixed(2)+&#x27; m&#x27;:&#x27;Intercept &#x27;+clock(Math.ceil(path.eta))+&#x27; · Miss 0.00 m&#x27;+(path.eta&gt;s.oxygen?&#x27; · Low O₂&#x27;:&#x27;&#x27;));
-    if (s.mask &amp;&amp; s.throws) {
-      const drift=course(s.x,s.y,s.vx,s.vy);
-      $(&#x27;prediction&#x27;).append(document.createElement(&#x27;br&#x27;), drift.eta===null?&#x27;Coast misses by &#x27;+drift.clearance.toFixed(2)+&#x27; m&#x27;:&#x27;Coast intercept &#x27;+clock(Math.ceil(drift.eta))+(drift.eta&gt;s.oxygen?&#x27; · Low O₂&#x27;:&#x27;&#x27;));
-    }
-  } else if (s.level===&#x27;Medium&#x27;) {
-    $(&#x27;assistMode&#x27;).textContent=preview+&#x27; / vector assist&#x27;;
-    $(&#x27;prediction&#x27;).textContent=signed(pvx)+&#x27;, &#x27;+signed(pvy)+&#x27; m/s&#x27;;
-  } else {
-    $(&#x27;assistMode&#x27;).textContent=&#x27;Manual navigation&#x27;; $(&#x27;prediction&#x27;).textContent=&#x27;Read suit velocity and target bearing.&#x27;;
-  }
+  const coast=course(s.x,s.y,s.vx,s.vy);
+  renderForecast(pvx,pvy,coast);
+  renderSpeedometer();
+  renderLesson(coast);
+  $(&#x27;throwButton&#x27;).textContent=s.mask?&#x27;Throw &#x27;+gear[s.selected].name.toLowerCase():&#x27;Rack empty&#x27;;
+  $(&#x27;throwButton&#x27;).disabled=!live() || !s.mask || !!drag || !!charge;
+  $(&#x27;coastButton&#x27;).hidden=s.phase!==&#x27;flying&#x27; || !safeCoast(coast) || !!s.finalRate || !!drag || !!charge;
+  $(&#x27;objectiveStatus&#x27;).hidden=s.objective===&#x27;none&#x27;;
+  $(&#x27;objectiveStatus&#x27;).textContent=replayGoals[s.objective]+(objectiveIntact()?&#x27;&#x27;:&#x27; · missed&#x27;);
   $(&#x27;coastKey&#x27;).hidden=!fullGuidance(s.level); $(&#x27;trialKey&#x27;).hidden=s.level===&#x27;Hard&#x27;||!s.mask;
   renderPlot(pvx,pvy);
 }
@@ -1519,6 +2028,18 @@ function renderPlot(pvx,pvy) {
   at(&#x27;reticleLabel&#x27;,tx+(alignRight?-12:12),ty-12);
   $(&#x27;reticleLabel&#x27;).setAttribute(&#x27;text-anchor&#x27;,alignRight?&#x27;end&#x27;:&#x27;start&#x27;);
   $(&#x27;reticleLabel&#x27;).textContent=fmtAngle(s.bearing)+&#x27; / &#x27;+s.power+&#x27;%&#x27;;
+  visible(&#x27;lessonMarks&#x27;,trainingAim());
+  visible(&#x27;railCatch&#x27;,s.result?.title===&#x27;Capture confirmed&#x27;);
+  at(&#x27;railCatch&#x27;,ox,oy);
+  if(trainingAim()) {
+    at(&#x27;lessonTarget&#x27;,px+trainingRange(),py);
+    const clampX=x=&gt;Math.min(w-62,Math.max(62,x));
+    at(&#x27;wrenchCaption&#x27;,clampX(tx),ty-29);
+    $(&#x27;wrenchCaption&#x27;).setAttribute(&#x27;text-anchor&#x27;,&#x27;middle&#x27;);
+    const speed=Math.hypot(pvx,pvy)||1;
+    at(&#x27;driftCaption&#x27;,clampX(px+pvx/speed*Math.min(reach,72)),py-pvy/speed*Math.min(reach,72)+21);
+    $(&#x27;driftCaption&#x27;).setAttribute(&#x27;text-anchor&#x27;,&#x27;middle&#x27;);
+  }
   at(&#x27;rings&#x27;,ox,oy);
   [...$(&#x27;rings&#x27;).children].forEach((el,i)=&gt;el.setAttribute(&#x27;r&#x27;,(i+1)*5*scale));
   const vectorScale=430*Math.min(1.6,scale/12);
@@ -1595,8 +2116,8 @@ function stopCharge(restore=true) {
   charge=null;
 }
 function toggleClock() {
-  if($(&#x27;modal&#x27;).open || state.phase===&#x27;ended&#x27;) return;
-  endDrag(true);stopCharge(); flash=null;
+  if($(&#x27;modal&#x27;).open || state.phase===&#x27;ended&#x27; || trainingAim()) return;
+  endDrag(true);stopCharge(); flash=null; state.finalRate=0;
   state.phase=state.phase===&#x27;flying&#x27;?&#x27;paused&#x27;:&#x27;flying&#x27;; lastFrame=null;
   renderGear();render();
 }
@@ -1624,46 +2145,71 @@ function closeDialog(resume=true) {
   lastFrame=null;renderGear();render();
   if(returnFocus?.isConnected &amp;&amp; !returnFocus.disabled) returnFocus.focus({preventScroll:true});
 }
-function setup(proposed=state.level) {
+function setup(proposed=state.level,goal=state.objective) {
   $(&#x27;difficulty&#x27;).value=state.level;
   const sceneOptions=scenarios.map((v,i)=&gt;&#x27;&lt;option value=&quot;&#x27;+i+&#x27;&quot;&#x27;+(i===state.index?&#x27; selected&#x27;:&#x27;&#x27;)+&#x27;&gt;&#x27;+v.name+&#x27;&lt;/option&gt;&#x27;).join(&#x27;&#x27;);
   const levels=Object.keys(limits).map(k=&gt;&#x27;&lt;option&#x27;+(k===proposed?&#x27; selected&#x27;:&#x27;&#x27;)+&#x27;&gt;&#x27;+k+&#x27;&lt;/option&gt;&#x27;).join(&#x27;&#x27;);
   openDialog(&#x27;setup&#x27;,&#x27;Mission setup&#x27;,&#x27;New mission&#x27;,
     &#x27;&lt;label class=&quot;dialogrow&quot;&gt;Drift scenario &lt;select id=&quot;scenarioChoice&quot;&gt;&#x27;+sceneOptions+&#x27;&lt;/select&gt;&lt;/label&gt;&lt;p id=&quot;scenarioBrief&quot;&gt;&lt;/p&gt;&#x27;+
-    &#x27;&lt;label class=&quot;dialogrow&quot;&gt;Difficulty &lt;select id=&quot;levelChoice&quot;&gt;&#x27;+levels+&#x27;&lt;/select&gt;&lt;/label&gt;&lt;p id=&quot;levelBrief&quot;&gt;&lt;/p&gt;&#x27;,
-    [[&#x27;Cancel&#x27;,()=&gt;closeDialog()],[&#x27;Begin mission&#x27;,()=&gt;{const index=Number($(&#x27;scenarioChoice&#x27;).value),level=$(&#x27;levelChoice&#x27;).value;closeDialog(false);newFlight(index,level);},true]]);
+    &#x27;&lt;label class=&quot;dialogrow&quot;&gt;Difficulty &lt;select id=&quot;levelChoice&quot;&gt;&#x27;+levels+&#x27;&lt;/select&gt;&lt;/label&gt;&lt;p id=&quot;levelBrief&quot;&gt;&lt;/p&gt;&#x27;+
+    &#x27;&lt;label class=&quot;dialogrow&quot;&gt;Bonus objective &lt;select id=&quot;goalChoice&quot;&gt;&#x27;+Object.entries(replayGoals).map(([key,label])=&gt;&#x27;&lt;option value=&quot;&#x27;+key+&#x27;&quot;&#x27;+(key===goal?&#x27; selected&#x27;:&#x27;&#x27;)+&#x27;&gt;&#x27;+label+&#x27;&lt;/option&gt;&#x27;).join(&#x27;&#x27;)+&#x27;&lt;/select&gt;&lt;/label&gt;&#x27;,
+    [[&#x27;Cancel&#x27;,()=&gt;closeDialog()],[&#x27;Begin mission&#x27;,()=&gt;{const index=Number($(&#x27;scenarioChoice&#x27;).value),level=$(&#x27;levelChoice&#x27;).value,objective=$(&#x27;goalChoice&#x27;).value;closeDialog(false);newFlight(index,level,objective);},true]]);
   const describe=()=&gt;{
     $(&#x27;scenarioBrief&#x27;).textContent=scenarios[Number($(&#x27;scenarioChoice&#x27;).value)].brief;
     const level=$(&#x27;levelChoice&#x27;).value;
     $(&#x27;levelBrief&#x27;).textContent=level===&#x27;Story&#x27;
       ? &#x27;Unlimited oxygen and reloading tools. Full trajectory guidance. Reach the hatch before your suit drifts off the plot.&#x27;
-      : clock(limits[level])+&#x27; oxygen · &#x27;+({Easy:&#x27;Full trajectory, intercept time and miss distance.&#x27;,Medium:&#x27;Predicted velocity vector.&#x27;,Hard:&#x27;Raw navigation telemetry.&#x27;})[level];
+      : clock(limits[level])+&#x27; oxygen · &#x27;+({Easy:&#x27;Full trajectory, intercept time and miss distance.&#x27;,Medium:&#x27;Predicted velocity vector.&#x27;,Hard:&#x27;Raw navigation telemetry.&#x27;})[level]+(softCapture(level)?&#x27; &#x27;+captureBrief(level):&#x27;&#x27;);
   };
   $(&#x27;scenarioChoice&#x27;).onchange=describe;$(&#x27;levelChoice&#x27;).onchange=describe;describe();
 }
+function localCrewVoice() {
+  return window.speechSynthesis?.getVoices().find(voice=&gt;voice.localService &amp;&amp; /^en(?:-|$)/i.test(voice.lang));
+}
 function guide() {
+  const voice=localCrewVoice();
   openDialog(&#x27;guide&#x27;,&#x27;Flight manual&#x27;,&#x27;Get back to the hatch&#x27;,
     &#x27;&lt;p&gt;Your tether has parted and your thrusters are offline. Throw equipment to reach the airlock capture circle.&lt;/p&gt;&#x27;+
     (state.level===&#x27;Story&#x27;?&#x27;&lt;p&gt;&lt;b&gt;Story mode.&lt;/b&gt; Oxygen is unlimited and the selected tool reloads immediately. Your flight ends when you reach the hatch or your whole suit leaves the plot. Throw along your velocity arrow to brake.&lt;/p&gt;&#x27;:&#x27;&lt;p&gt;Reach the hatch before your oxygen runs out.&lt;/p&gt;&#x27;)+
+    (softCapture(state.level)?&#x27;&lt;p&gt;&#x27;+captureBrief(state.level)+&#x27;&lt;/p&gt;&#x27;:&#x27;&#x27;)+
     &#x27;&lt;ul&gt;&lt;li&gt;&lt;b&gt;Select&lt;/b&gt; a tool from the rack or press 1–6. A heavier or faster tool changes your velocity more.&lt;/li&gt;&#x27;+
     &#x27;&lt;li&gt;&lt;b&gt;Drag on the plot&lt;/b&gt; or grab the reticle. Point where the tool should travel. Your suit recoils in the opposite direction. Distance from your suit sets power, from 10% up to 100% at the dotted ring.&lt;/li&gt;&#x27;+
-    &#x27;&lt;li&gt;&lt;b&gt;Release to throw.&lt;/b&gt; A click or tap without dragging previews the aim. Escape or release outside the plot to cancel a drag.&lt;/li&gt;&#x27;+
+    &#x27;&lt;li&gt;&lt;b&gt;Release to throw.&lt;/b&gt; A click or tap previews your aim. The Throw button commits it. Escape or release outside the plot to cancel a drag.&lt;/li&gt;&#x27;+
     &#x27;&lt;li&gt;&lt;b&gt;Keyboard controls.&lt;/b&gt; Left and right change bearing by 1° (Shift for 10°). Up and down change power by 1% (Shift for 10%). Press Enter on the plot to throw, or hold Space to wind up and release to throw. Escape cancels the windup.&lt;/li&gt;&#x27;+
     &#x27;&lt;li&gt;&lt;b&gt;Coast&lt;/b&gt; once you have a return path. P pauses flight. Use the speed controls to fast-forward a long coast.&lt;/li&gt;&lt;/ul&gt;&#x27;+
     &#x27;&lt;p&gt;Bearings run counterclockwise from right (000°) to up (090°). Vx, Vy and radial speed use m/s. Green hatch distance and negative radial speed mean you are closing in. Red distance and positive radial speed mean you are moving away. Hatch distance measures the gap to the capture circle.&lt;/p&gt;&#x27;+
-    (state.level===&#x27;Story&#x27;?&#x27;&#x27;:&#x27;&lt;p&gt;The Δv budget is the largest total velocity change available from full-power throws in the best order.&lt;/p&gt;&#x27;),
-    [[&#x27;Back to flight&#x27;,()=&gt;closeDialog(),true]]);
+    (state.level===&#x27;Story&#x27;?&#x27;&#x27;:&#x27;&lt;p&gt;The Δv budget is the largest total velocity change available from full-power throws in the best order.&lt;/p&gt;&#x27;)+
+    (voice?&#x27;&lt;label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;crewAudio&quot;&#x27;+(crewVoiceEnabled?&#x27; checked&#x27;:&#x27;&#x27;)+&#x27;&gt; Voice the station’s capture call&lt;/label&gt;&#x27;:&#x27;&#x27;),
+    [[&#x27;Restart guided first rescue&#x27;,()=&gt;{closeDialog(false);newFlight(0,&#x27;Easy&#x27;,&#x27;none&#x27;,&#x27;aim&#x27;);}],[&#x27;Back to flight&#x27;,()=&gt;closeDialog(),true]]);
+  if($(&#x27;crewAudio&#x27;))$(&#x27;crewAudio&#x27;).onchange=e=&gt;{crewVoiceEnabled=e.target.checked;};
 }
 function finish(title,description) {
-  endDrag(true);state.phase=&#x27;ended&#x27;;state.result={title,description};stopCharge();flash=null;
-  renderGear(); summary();
+  const captured=title===&#x27;Capture confirmed&#x27;, arrival=captured &amp;&amp; state.finalRate&gt;0;
+  endDrag(true);if(state.lesson)rememberLesson();
+  state.finalRate=0;state.phase=&#x27;ended&#x27;;state.result={title,description};stopCharge();flash=null;
+  if(captured){
+    state.tip=description;
+    const voice=crewVoiceEnabled &amp;&amp; localCrewVoice();
+    if(voice){
+      const call=new SpeechSynthesisUtterance(&#x27;We’ve got you. Welcome back.&#x27;);
+      call.voice=voice;window.speechSynthesis.speak(call);
+    }
+  }
+  renderGear();
+  if(arrival){
+    render();
+    debriefTimer=setTimeout(()=&gt;{debriefTimer=null;if(!$(&#x27;modal&#x27;).open)summary();},1300);
+  } else summary();
 }
 function summary() {
+  clearTimeout(debriefTimer);debriefTimer=null;
   const s=state;
   openDialog(&#x27;summary&#x27;,&#x27;Mission debrief&#x27;,s.result.title,&#x27;&lt;p&gt;&#x27;+s.result.description+&#x27;&lt;/p&gt;&lt;dl class=&quot;dialogstats&quot;&gt;&#x27;+
     [[&#x27;Scenario&#x27;,s.name],[&#x27;Difficulty&#x27;,s.level],[&#x27;Flight time&#x27;,clock(s.elapsed)],[&#x27;Oxygen remaining&#x27;,clock(Math.ceil(s.oxygen))],
-    [&#x27;Tools thrown&#x27;,s.level===&#x27;Story&#x27;?s.throws:s.throws+&#x27; / 6&#x27;],[&#x27;Δv applied&#x27;,s.spent.toFixed(3)+&#x27; m/s&#x27;],[&#x27;Closest approach&#x27;,s.closest.toFixed(2)+&#x27; m&#x27;]].map(([k,v])=&gt;&#x27;&lt;dt&gt;&#x27;+k+&#x27;&lt;/dt&gt;&lt;dd&gt;&#x27;+v+&#x27;&lt;/dd&gt;&#x27;).join(&#x27;&#x27;)+&#x27;&lt;/dl&gt;&#x27;,
-    [[&#x27;Review plot&#x27;,()=&gt;closeDialog()],[&#x27;Fly again&#x27;,()=&gt;setup(),true]]);
+    [&#x27;Tools thrown&#x27;,s.level===&#x27;Story&#x27;?s.throws:s.throws+&#x27; / 6&#x27;],[&#x27;Δv applied&#x27;,s.spent.toFixed(3)+&#x27; m/s&#x27;],[&#x27;Closest approach&#x27;,s.closest.toFixed(2)+&#x27; m&#x27;],
+      ...(s.objective===&#x27;none&#x27;?[]:[[&#x27;Bonus objective&#x27;,replayGoals[s.objective]+&#x27; · &#x27;+(s.result.title===&#x27;Capture confirmed&#x27; &amp;&amp; objectiveIntact()?&#x27;Earned&#x27;:&#x27;Missed&#x27;)]])].map(([k,v])=&gt;&#x27;&lt;dt&gt;&#x27;+k+&#x27;&lt;/dt&gt;&lt;dd&gt;&#x27;+v+&#x27;&lt;/dd&gt;&#x27;).join(&#x27;&#x27;)+&#x27;&lt;/dl&gt;&#x27;,
+    [[&#x27;Review plot&#x27;,()=&gt;closeDialog()],[&#x27;Retry this flight&#x27;,()=&gt;{closeDialog(false);newFlight(s.index,s.level,s.objective,s.lesson?&#x27;aim&#x27;:&#x27;&#x27;);}],
+      [&#x27;Next challenge&#x27;,()=&gt;{closeDialog(false);newFlight((s.index+1)%scenarios.length,s.level,s.objective===&#x27;drill&#x27;?&#x27;two&#x27;:&#x27;drill&#x27;);},true]]);
 }
 function windup(time) {
   if(!charge)return;
@@ -1682,7 +2228,7 @@ function releaseCharge(source) {
   windup(performance.now());stopCharge(false);throwTool();
 }
 function frame(now) {
-  if(lastFrame!==null &amp;&amp; state.phase===&#x27;flying&#x27; &amp;&amp; !$(&#x27;modal&#x27;).open) advance(Math.max(0,now-lastFrame)*.001*state.rate);
+  if(lastFrame!==null &amp;&amp; state.phase===&#x27;flying&#x27; &amp;&amp; !$(&#x27;modal&#x27;).open) advance(Math.max(0,now-lastFrame)*.001*(state.finalRate || state.rate));
   lastFrame=now;
   windup(now);
   if(state.phase===&#x27;flying&#x27;||charge)render();
@@ -1694,7 +2240,13 @@ function backgroundPause() {
   if($(&#x27;modal&#x27;).open &amp;&amp; previousPhase===&#x27;flying&#x27;)previousPhase=&#x27;paused&#x27;;
   renderGear();render();
 }
+function measurePlot() {
+  const b=$(&#x27;plot&#x27;).getBoundingClientRect();
+  plotW=Math.max(1,b.width);plotH=Math.max(1,b.height);
+  $(&#x27;plot&#x27;).setAttribute(&#x27;viewBox&#x27;,&#x27;0 0 &#x27;+plotW+&#x27; &#x27;+plotH);
+}
 function init() {
+  window.speechSynthesis?.getVoices();
   const ns=&#x27;http://www.w3.org/2000/svg&#x27;;
   let seed=73;
   const random=()=&gt;{seed=(Math.imul(1664525,seed)+1013904223)&gt;&gt;&gt;0;return seed/4294967296;};
@@ -1714,7 +2266,7 @@ function init() {
   });
   for(const v of [1,2,5,10]) {
     const b=document.createElement(&#x27;button&#x27;);b.value=v;b.textContent=v+&#x27;×&#x27;;b.setAttribute(&#x27;aria-label&#x27;,v+&#x27; times simulation speed&#x27;);
-    b.onclick=()=&gt;{state.rate=v;lastFrame=null;render();};$(&#x27;speeds&#x27;).append(b);
+    b.onclick=()=&gt;{state.rate=v;state.finalRate=0;lastFrame=null;render();};$(&#x27;speeds&#x27;).append(b);
   }
   const plot=$(&#x27;plot&#x27;);
   plot.addEventListener(&#x27;pointerdown&#x27;,startDrag);
@@ -1733,13 +2285,24 @@ function init() {
     moveDrag(e);
     render(); // A release can arrive at a new position without an intervening move.
     const commit=drag.inside &amp;&amp; drag.moved;
+    const tap=drag.inside &amp;&amp; !drag.moved;
+    const bounds=plot.getBoundingClientRect();
+    const onTarget=tap &amp;&amp; trainingAim() &amp;&amp; Math.hypot(
+      e.clientX-bounds.left-camera.px-trainingRange(),e.clientY-bounds.top-camera.py)&lt;=21;
     endDrag(!drag.inside);
+    if(onTarget)useTrainingAim();
+    else if(tap)markAim();
     if(commit)throwTool();
     else render();
   });
   for(const event of [&#x27;pointercancel&#x27;,&#x27;lostpointercapture&#x27;])window.addEventListener(event,e=&gt;{
     if(drag?.id===e.pointerId){endDrag(true);render();}
   });
+  $(&#x27;lessonAction&#x27;).onclick=lessonAction;
+  $(&#x27;retryThrow&#x27;).onclick=()=&gt;newFlight(0,&#x27;Easy&#x27;,&#x27;none&#x27;,&#x27;aim&#x27;);
+  $(&#x27;skipLesson&#x27;).onclick=()=&gt;{rememberLesson();state.lesson=&#x27;&#x27;;renderGear();render();$(&#x27;plot&#x27;).focus({preventScroll:true});};
+  $(&#x27;throwButton&#x27;).onclick=throwTool;
+  $(&#x27;coastButton&#x27;).onclick=coastToHatch;
   $(&#x27;setup&#x27;).onclick=()=&gt;setup();$(&#x27;difficulty&#x27;).onchange=e=&gt;setup(e.target.value);
   $(&#x27;guide&#x27;).onclick=guide;$(&#x27;pause&#x27;).onclick=()=&gt;state.phase===&#x27;ended&#x27;?summary():toggleClock();
   $(&#x27;modal&#x27;).addEventListener(&#x27;cancel&#x27;,e=&gt;{e.preventDefault();closeDialog();});
@@ -1755,10 +2318,10 @@ function init() {
     if(/^[1-6]$/.test(e.key))selectTool(Number(e.key)-1);
     const step=e.shiftKey?10:1;
     if([&#x27;ArrowLeft&#x27;,&#x27;ArrowRight&#x27;].includes(e.key)){
-      e.preventDefault();state.bearing=norm(state.bearing+(e.key===&#x27;ArrowLeft&#x27;?step:-step));render();
+      e.preventDefault();markAim();state.bearing=norm(state.bearing+(e.key===&#x27;ArrowLeft&#x27;?step:-step));render();
     }
     if([&#x27;ArrowUp&#x27;,&#x27;ArrowDown&#x27;].includes(e.key)){
-      e.preventDefault();state.power=Math.min(100,Math.max(10,state.power+(e.key===&#x27;ArrowUp&#x27;?step:-step)));render();
+      e.preventDefault();markAim();state.power=Math.min(100,Math.max(10,state.power+(e.key===&#x27;ArrowUp&#x27;?step:-step)));render();
     }
     if(e.key===&#x27;Enter&#x27; &amp;&amp; e.target===plot){
       e.preventDefault();if(!e.repeat)throwTool();
@@ -1767,16 +2330,16 @@ function init() {
   document.addEventListener(&#x27;keyup&#x27;,e=&gt;{if(e.code===&#x27;Space&#x27; &amp;&amp; charge?.source===&#x27;key&#x27;){e.preventDefault();releaseCharge(&#x27;key&#x27;);}});
   document.addEventListener(&#x27;visibilitychange&#x27;,()=&gt;{if(document.hidden)backgroundPause();});
   window.addEventListener(&#x27;blur&#x27;,backgroundPause);
-  function resize() {
-    const b=$(&#x27;plot&#x27;).getBoundingClientRect(); plotW=Math.max(1,b.width);plotH=Math.max(1,b.height);
-    $(&#x27;plot&#x27;).setAttribute(&#x27;viewBox&#x27;,&#x27;0 0 &#x27;+plotW+&#x27; &#x27;+plotH); if(state)render();
-  }
-  resize();newFlight();new ResizeObserver(resize).observe($(&#x27;plot&#x27;));requestAnimationFrame(frame);
+  newFlight(0,&#x27;Easy&#x27;,&#x27;none&#x27;,firstRescueWanted()?&#x27;aim&#x27;:&#x27;&#x27;);
+  new ResizeObserver(()=&gt;{measurePlot();render();}).observe(plot);
+  requestAnimationFrame(frame);
 }
 init();
 &lt;/script&gt;&lt;script&gt;
 (() =&gt; {
   const passed=[];
+  let savedLesson;
+  try {savedLesson=localStorage.getItem(&#x27;untethered.firstRescueSeen&#x27;);} catch { /* Opaque test document. */ }
   const yes=(v,m)=&gt;{if(!v)throw Error(m)};
   const near=(a,b,m,tol=1e-9)=&gt;yes(Math.abs(a-b)&lt;tol,m+&#x27; &#x27;+a+&#x27; &#x27;+b);
   function test(name,fn) { if($(&#x27;modal&#x27;).open)closeDialog(false);newFlight();fn();passed.push(name);}
@@ -1818,7 +2381,7 @@ init();
         const guided=l===&#x27;Easy&#x27; || l===&#x27;Story&#x27;;
         yes($(&#x27;coast&#x27;).getAttribute(&#x27;visibility&#x27;)===(guided?&#x27;visible&#x27;:&#x27;hidden&#x27;),&#x27;coast visibility&#x27;);
         yes($(&#x27;coastKey&#x27;).hidden===!guided,&#x27;coast legend&#x27;);
-        yes(/intercept|miss/i.test($(&#x27;prediction&#x27;).textContent)===guided,&#x27;prediction text&#x27;);
+        yes(/on course|miss by|oxygen runs out first/i.test($(&#x27;prediction&#x27;).textContent)===guided,&#x27;prediction text&#x27;);
       }
     });
     test(&#x27;Story is optional, starts from the difficulty menu and reloads the selected tool&#x27;,()=&gt;{
@@ -1895,19 +2458,24 @@ init();
       }
       $(&#x27;guide&#x27;).click();yes($(&#x27;modal&#x27;).open,&#x27;guide&#x27;);$(&#x27;dialogActions&#x27;).lastElementChild.click();yes(state.phase===&#x27;paused&#x27;,&#x27;guide keeps paused state&#x27;);
     });
-    test(&#x27;All three scenarios are rescuable on Hard with rack and bearing controls&#x27;,()=&gt;{
-      for(let index=0;index&lt;3;index++){
-        if($(&#x27;modal&#x27;).open)closeDialog(false);newFlight(index,&#x27;Hard&#x27;);const dist=Math.hypot(state.x,state.y),ux=-state.x/dist,uy=-state.y/dist;
-        const side=state.vx*(-uy)+state.vy*ux,along=state.vx*ux+state.vy*uy;
-        const dv=gear[3].mass*gear[3].speed/massOf(state.mask)+gear[1].mass*gear[1].speed/(massOf(state.mask)-gear[3].mass);
-        const speed=along+Math.sqrt(dv*dv-side*side);
-        const angle=Math.atan2(state.vy-speed*uy,state.vx-speed*ux);
-        const dx=Math.cos(angle)*camera.reach,dy=Math.sin(angle)*camera.reach;
-        for(const i of [3,1]){
-          $(&#x27;tools&#x27;).children[i].click();pointer(&#x27;pointerdown&#x27;,0,0);pointer(&#x27;pointermove&#x27;,dx,dy);pointer(&#x27;pointerup&#x27;,dx,dy);
+    test(&#x27;All three scenarios allow a legal soft capture with the rack and integer controls&#x27;,()=&gt;{
+      const plans=[[[3,99,-6]],[[3,93,-21]],[[3,100,-17],[2,74,-16]]];
+      const random=Math.random;
+      try {
+        Math.random=()=&gt;.5;
+        for(const level of [&#x27;Medium&#x27;,&#x27;Hard&#x27;])for(const [index,throws] of plans.entries()){
+          if($(&#x27;modal&#x27;).open)closeDialog(false);
+          newFlight(index,level);
+          for(const [tool,power,bearing] of throws){
+            $(&#x27;tools&#x27;).children[tool].click();
+            const dx=camera.inner+(camera.reach-camera.inner)*(power-10)/90;
+            pointer(&#x27;pointerdown&#x27;,dx*Math.cos(radians(bearing)),dx*Math.sin(radians(bearing)));
+            pointer(&#x27;pointerup&#x27;,dx*Math.cos(radians(bearing)),dx*Math.sin(radians(bearing)));
+            $(&#x27;throwButton&#x27;).click();advance(4);
+          }
+          advance(600);yes(state.result?.title===&#x27;Capture confirmed&#x27;,level+&#x27; scenario &#x27;+index);
         }
-        advance(450);yes(state.result?.title===&#x27;Capture confirmed&#x27;,&#x27;scenario &#x27;+index);
-      }
+      } finally {Math.random=random;}
     });
     test(&#x27;Grazing, stationary, receding and already captured trajectories&#x27;,()=&gt;{
       near(course(5,1.2,-1,0).eta,5,&#x27;tangent&#x27;);yes(course(5,1.21,-1,0).eta===null,&#x27;near miss&#x27;);yes(course(5,0,0,0).eta===null,&#x27;stationary&#x27;);
@@ -2012,6 +2580,80 @@ init();
       }
       yes(getComputedStyle(advisory).pointerEvents===&#x27;none&#x27;,&#x27;notice intercepts drags&#x27;);
     });
+    test(&#x27;Training aim, throw, retry, skip and replay all use the flight controls&#x27;,()=&gt;{
+      newFlight(0,&#x27;Easy&#x27;,&#x27;none&#x27;,&#x27;aim&#x27;);
+      $(&#x27;pause&#x27;).click();yes(state.phase===&#x27;ready&#x27; &amp;&amp; state.elapsed===0,&#x27;training clock held&#x27;);
+      yes(!$(&#x27;lesson&#x27;).hidden &amp;&amp; $(&#x27;lessonMarks&#x27;).getAttribute(&#x27;visibility&#x27;)===&#x27;visible&#x27;,&#x27;visible instruction&#x27;);
+      const target=trainingRange();pointer(&#x27;pointerdown&#x27;,target,3);pointer(&#x27;pointerup&#x27;,target,3);
+      yes(state.lesson===&#x27;throw&#x27; &amp;&amp; state.bearing===0 &amp;&amp; state.power===65 &amp;&amp; !state.throws,&#x27;forgiving target&#x27;);
+      $(&#x27;lessonAction&#x27;).click();yes(state.lesson===&#x27;coast&#x27; &amp;&amp; state.throws===1 &amp;&amp; !$(&#x27;coastButton&#x27;).hidden,&#x27;first release&#x27;);
+      yes($(&#x27;assistMode&#x27;).textContent===&#x27;Current coast&#x27; &amp;&amp; /On course/.test($(&#x27;prediction&#x27;).querySelector(&#x27;strong&#x27;).textContent),&#x27;primary coast&#x27;);
+      const eta=course(state.x,state.y,state.vx,state.vy).eta;
+      $(&#x27;lessonAction&#x27;).click();yes(state.phase===&#x27;flying&#x27; &amp;&amp; state.finalRate &amp;&amp; state.elapsed&gt;700 &amp;&amp; state.elapsed&lt;eta,&#x27;last metre remains&#x27;);
+      advance(1000);near(state.elapsed,eta,&#x27;coast charges full time&#x27;);yes(state.result.title===&#x27;Capture confirmed&#x27; &amp;&amp; $(&#x27;railCatch&#x27;).getAttribute(&#x27;visibility&#x27;)===&#x27;visible&#x27;,&#x27;handrail&#x27;);
+      closeDialog(false);newFlight(0,&#x27;Easy&#x27;,&#x27;none&#x27;,&#x27;aim&#x27;);$(&#x27;lessonAction&#x27;).click();key(&#x27;ArrowLeft&#x27;,true);$(&#x27;throwButton&#x27;).click();
+      yes($(&#x27;coastButton&#x27;).hidden &amp;&amp; /again/i.test($(&#x27;lessonAction&#x27;).textContent),&#x27;miss can retry&#x27;);
+      $(&#x27;lessonAction&#x27;).click();yes(state.throws===0 &amp;&amp; state.lesson===&#x27;aim&#x27; &amp;&amp; state.mask===fullMask,&#x27;fresh guided try&#x27;);
+      $(&#x27;skipLesson&#x27;).click();yes($(&#x27;lesson&#x27;).hidden &amp;&amp; !$(&#x27;pause&#x27;).disabled,&#x27;skip releases controls&#x27;);
+      $(&#x27;guide&#x27;).click();$(&#x27;dialogActions&#x27;).firstElementChild.click();yes(state.lesson===&#x27;aim&#x27; &amp;&amp; !$(&#x27;lesson&#x27;).hidden,&#x27;guide replay&#x27;);
+    });
+    test(&#x27;Approach gauge and first-crossing outcomes use total speed at the exact deadline&#x27;,()=&gt;{
+      for(const level of Object.keys(limits))for(const factor of [.99,1,1.001]){
+        if($(&#x27;modal&#x27;).open)closeDialog(false);
+        newFlight(0,level);
+        const speed=captureSpeedLimit*factor;
+        state.x=3;state.y=4;state.vx=-.6*speed;state.vy=-.8*speed;
+        state.oxygen=course(state.x,state.y,state.vx,state.vy).eta;
+        toggleClock();render();
+        const over=softCapture(level) &amp;&amp; factor&gt;1;
+        yes($(&#x27;speedometer&#x27;).hidden===!softCapture(level),&#x27;meter mode&#x27;);
+        if(softCapture(level)){
+          yes($(&#x27;speedometer&#x27;).dataset.over===String(over),&#x27;redline&#x27;);
+          yes(parseFloat($(&#x27;speedFill&#x27;).style.width)&gt;70,&#x27;gauge fill&#x27;);
+          yes($(&#x27;speedLimit&#x27;).textContent.startsWith(over?&#x27;Over limit&#x27;:&#x27;Limit&#x27;),&#x27;text warning&#x27;);
+          const [red,green]=getComputedStyle($(&#x27;speedNumber&#x27;)).color.match(/\d+/g).map(Number);
+          yes(over?red&gt;green:green&gt;red,&#x27;speed readout warning color&#x27;);
+          if(innerWidth&lt;=720)yes($(&#x27;speedGauge&#x27;).getBoundingClientRect().bottom&lt;=$(&#x27;plot&#x27;).getBoundingClientRect().top,&#x27;gauge clear of aiming area&#x27;);
+        }
+        yes($(&#x27;coastButton&#x27;).hidden===over,&#x27;safe shortcut&#x27;);
+        advance(1000);near(Math.hypot(state.x,state.y),captureRadius,&#x27;edge&#x27;);
+        yes(state.result.title===(over?&#x27;Approach too fast&#x27;:&#x27;Capture confirmed&#x27;),&#x27;deadline &#x27;+level+&#x27; &#x27;+factor);
+      }
+      closeDialog(false);newFlight(0,&#x27;Medium&#x27;);state.x=2;state.y=0;state.vx=-.04;state.vy=.08;render();
+      yes($(&#x27;speedometer&#x27;).dataset.over===&#x27;true&#x27;,&#x27;fast sideways motion&#x27;);
+    });
+    test(&#x27;Hard samples one bounded release error and preserves opposite recoil&#x27;,()=&gt;{
+      const random=Math.random;
+      try {
+        for(const level of Object.keys(limits))for(const sample of [0,.5,.999999]){
+          newFlight(0,level);
+          let calls=0;Math.random=()=&gt;{calls++;return sample;};
+          state.bearing=359;state.power=85;
+          render();render();yes(calls===0,&#x27;preview sampled random&#x27;);
+          const angle=359+(level===&#x27;Hard&#x27;?(sample*2-1)*hardBearingError:0);
+          const k=impulse(0,85,angle),vx=state.vx,vy=state.vy;
+          $(&#x27;throwButton&#x27;).click();
+          yes(calls===(level===&#x27;Hard&#x27;?1:0),&#x27;one draw at release&#x27;);
+          near(state.lastBearing,norm(angle),&#x27;actual bearing&#x27;);near(state.vx,vx+k.dx,&#x27;recoil x&#x27;);near(state.vy,vy+k.dy,&#x27;recoil y&#x27;);
+          near(anim.vx-state.vx,k.ux,&#x27;tool x&#x27;);near(anim.vy-state.vy,k.uy,&#x27;tool y&#x27;);
+        }
+      } finally {Math.random=random;}
+    });
+    test(&#x27;Forecast switches with aim and unsafe or expired coasts cannot skip time&#x27;,()=&gt;{
+      $(&#x27;throwButton&#x27;).click();yes($(&#x27;assistMode&#x27;).textContent===&#x27;Current coast&#x27;,&#x27;coast leads after release&#x27;);
+      key(&#x27;ArrowUp&#x27;);yes($(&#x27;assistMode&#x27;).textContent===&#x27;If you throw now&#x27;,&#x27;planned keyboard throw&#x27;);
+      state.oxygen=5;render();coastToHatch();yes($(&#x27;coastButton&#x27;).hidden &amp;&amp; state.elapsed===0,&#x27;oxygen gate&#x27;);
+      newFlight(0,&#x27;Medium&#x27;);state.x=5;state.y=0;state.vx=-.12;state.vy=0;toggleClock();coastToHatch();
+      yes(state.elapsed===0 &amp;&amp; $(&#x27;coastButton&#x27;).hidden,&#x27;no overspeed skip&#x27;);
+      state.mask=0;state.selected=-1;advance(600);yes(state.result.title===&#x27;Approach too fast&#x27;,&#x27;final coast still fails fast&#x27;);
+    });
+    test(&#x27;Bonus goals track released tools including Story reloads and retry resets the challenge&#x27;,()=&gt;{
+      newFlight(1,&#x27;Story&#x27;,&#x27;drill&#x27;);selectTool(1);throwTool();yes(!objectiveIntact() &amp;&amp; isAvailable(1),&#x27;reloaded drill counts&#x27;);
+      state.x=1;state.y=0;advance(1);yes($(&#x27;dialogBody&#x27;).textContent.includes(&#x27;Missed&#x27;),&#x27;optional goal can miss on a rescue&#x27;);
+      $(&#x27;dialogActions&#x27;).children[1].click();yes(state.index===1 &amp;&amp; state.level===&#x27;Story&#x27; &amp;&amp; state.objective===&#x27;drill&#x27; &amp;&amp; objectiveIntact(),&#x27;same flight retry&#x27;);
+      newFlight(0,&#x27;Easy&#x27;,&#x27;two&#x27;);throwTool();advance(900);yes($(&#x27;dialogBody&#x27;).textContent.includes(&#x27;Earned&#x27;),&#x27;two throws objective&#x27;);
+      $(&#x27;dialogActions&#x27;).lastElementChild.click();yes(state.index===1 &amp;&amp; state.level===&#x27;Easy&#x27; &amp;&amp; state.objective===&#x27;drill&#x27;,&#x27;different next challenge&#x27;);
+    });
     test(&#x27;Menu configuration, full-power reach and narrow layout&#x27;,()=&gt;{
       $(&#x27;setup&#x27;).click();$(&#x27;scenarioChoice&#x27;).value=&#x27;2&#x27;;$(&#x27;levelChoice&#x27;).value=&#x27;Medium&#x27;;$(&#x27;dialogActions&#x27;).lastElementChild.click();
       yes(state.index===2 &amp;&amp; state.oxygen===600 &amp;&amp; state.throws===0 &amp;&amp; state.mask===63,&#x27;reset&#x27;);
@@ -2023,6 +2665,10 @@ init();
     });
     output.textContent=&#x27;PASS &#x27;+passed.length+&#x27; groups at &#x27;+innerWidth+&#x27;px: &#x27;+passed.join(&#x27; | &#x27;);
   }catch(e){output.textContent=&#x27;FAIL after &#x27;+passed.length+&#x27;: &#x27;+e.message+&#x27; / &#x27;+e.stack;}
+  if(savedLesson!==undefined){
+    if(savedLesson===null)localStorage.removeItem(&#x27;untethered.firstRescueSeen&#x27;);
+    else localStorage.setItem(&#x27;untethered.firstRescueSeen&#x27;,savedLesson);
+  }
   document.body.append(output);
 })();
 &lt;/script&gt;&lt;/body&gt;&lt;/html&gt;
@@ -2149,6 +2795,47 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
   .lower-hud { padding-bottom:8px }
   .earth-view { x:-25%; width:150% }
 }
+:root { --danger:#ffaaa0 }
+.flight-controls,.lesson-actions,.dialogactions { display:flex; align-items:center; flex-wrap:wrap; gap:8px }
+.flight-controls { padding:7px 14px; border-top:1px solid var(--edge) }
+.flight-controls button,.lesson-actions button { padding:7px 12px; min-height:34px }
+#objectiveStatus { margin-left:auto; color:var(--mint) }
+.lesson { padding:12px clamp(12px,2vw,28px); background:#192b2a; border-bottom:1px solid #456059 }
+.lesson h3 { font-size:17px; font-weight:600; color:var(--oxygen-fill) }
+.lesson p { margin:4px 0 8px; line-height:1.45; max-width:76ch }
+.lesson-actions .skip { background:transparent; color:var(--muted) }
+.lesson-mark { pointer-events:none }
+.lesson-mark text { font:600 12px var(--sans); paint-order:stroke; stroke:#10181d; stroke-width:3px }
+.speedometer { width:clamp(120px,12vw,162px); top:calc(var(--inset) + 64px); padding-inline:10px }
+.speedometer .speed-number { display:block; font:600 15px var(--mono); color:var(--oxygen-fill) }
+.speedometer[data-over=&quot;true&quot;] .speed-number,.speedometer[data-over=&quot;true&quot;] .speed-limit { color:var(--danger) }
+.speed-track { position:relative; height:8px; margin:4px 0; background:linear-gradient(to right,#253833 75%,#593b39 75%); border:1px solid #80918b }
+.speed-track i { display:block; height:100%; background:var(--oxygen-fill) }
+.speedometer[data-over=&quot;true&quot;] .speed-track i { background:var(--danger) }
+.speed-track::after { position:absolute; content:&quot;&quot;; left:75%; top:-3px; bottom:-3px; width:3px; background:#f77569; box-shadow:0 0 0 1px #161d20 }
+.speed-limit { color:var(--muted); font-size:12px }
+.assist strong { font:600 14px/1.4 var(--sans); color:var(--oxygen-fill) }
+.assist .secondary { font:12px/1.4 var(--sans); color:var(--muted) }
+.flight-scene { position:relative }
+#plot[data-forecast=&quot;coast&quot;] #coast { stroke:var(--oxygen-fill); stroke-width:2 }
+#plot[data-forecast=&quot;coast&quot;] #trial { opacity:.32 }
+@media(min-width:1000px) {
+  .lesson { position:absolute; top:14px; left:50%; transform:translateX(-50%); width:min(52%,590px); z-index:1; border:1px solid #456059; border-radius:6px; background:#18282bf2; padding:11px 16px }
+}
+@media(max-width:940px) { .scene:has(.speedometer:not([hidden])) .side-hud.right { top:155px } }
+@media(max-width:720px) { .flight-controls { padding:7px 9px } .lesson { padding:9px 10px } }
+@media(max-width:720px) {
+  .scene:has(.speedometer:not([hidden])) { display:flex; flex-direction:column }
+  .scene:has(.speedometer:not([hidden])) [aria-label=&quot;Suit telemetry&quot;] { order:-1; display:grid; grid-template-columns:1fr 1fr; gap:7px 12px; padding:9px 12px; background:#141e23; border-bottom:1px solid var(--edge) }
+  .scene:has(.speedometer:not([hidden])) [aria-label=&quot;Suit telemetry&quot;]&gt;.hud { position:static; padding:0; border:0; background:none }
+  .scene:has(.speedometer:not([hidden])) .side-hud { gap:3px }
+  .scene:has(.speedometer:not([hidden])) .side-hud.right { justify-self:end }
+  .scene:has(.speedometer:not([hidden])) .primary-hud .big { font-size:23px }
+  .scene:has(.speedometer:not([hidden]))&gt;svg { height:clamp(300px,45svh,400px) }
+  .speedometer { order:1; width:100%; display:grid; grid-template-columns:auto 1fr auto; text-align:left!important; grid-column:1/-1; gap:3px 8px; align-items:baseline }
+  .speedometer .speed-number { text-align:right }
+  .speedometer .speed-track { grid-column:1/-1; grid-row:2 }
+}
 &lt;/style&gt;&lt;/head&gt;&lt;body&gt;
 &lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;0&quot; height=&quot;0&quot; aria-hidden=&quot;true&quot; style=&quot;position:absolute&quot;&gt;&lt;defs&gt;
 &lt;linearGradient id=&quot;silver&quot; x2=&quot;.25&quot; y2=&quot;1&quot; gradientUnits=&quot;objectBoundingBox&quot;&gt;&lt;stop stop-color=&quot;#f0f2df&quot;/&gt;&lt;stop offset=&quot;.23&quot; stop-color=&quot;#bdc7c6&quot;/&gt;&lt;stop offset=&quot;.48&quot; stop-color=&quot;#87999f&quot;/&gt;&lt;stop offset=&quot;.75&quot; stop-color=&quot;#667a85&quot;/&gt;&lt;stop offset=&quot;1&quot; stop-color=&quot;#293c49&quot;/&gt;&lt;/linearGradient&gt;
@@ -2243,6 +2930,10 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
 &lt;/defs&gt;&lt;/svg&gt;&lt;header&gt;&lt;div class=&quot;bar&quot;&gt;&lt;div class=&quot;brand&quot;&gt;&lt;svg viewBox=&quot;0 0 40 40&quot; aria-hidden=&quot;true&quot;&gt;&lt;rect x=&quot;1&quot; y=&quot;1&quot; width=&quot;38&quot; height=&quot;38&quot; rx=&quot;9&quot; fill=&quot;#b1c2b7&quot;/&gt;&lt;g stroke=&quot;#25332d&quot; fill=&quot;none&quot; stroke-width=&quot;2&quot;&gt;&lt;ellipse cx=&quot;20&quot; cy=&quot;20&quot; rx=&quot;15&quot; ry=&quot;6&quot; transform=&quot;rotate(-40 20 20)&quot;/&gt;&lt;path d=&quot;m15 24 3-13 10 6-13 7z&quot; fill=&quot;#25332d&quot;/&gt;&lt;/g&gt;&lt;/svg&gt;&lt;div&gt;&lt;div class=&quot;wordmark&quot;&gt;UNTETHERED&lt;/div&gt;&lt;div class=&quot;subbrand&quot;&gt;EVA return simulator&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;toptools&quot;&gt;&lt;span class=&quot;tag&quot;&gt;Alpha v0.1&lt;/span&gt;&lt;button class=&quot;quiet guide&quot; id=&quot;guide&quot;&gt;&lt;svg aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#book&quot;/&gt;&lt;/svg&gt; Flight guide&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;/header&gt;
 &lt;main&gt;&lt;div class=&quot;mission&quot;&gt;&lt;div&gt;&lt;div class=&quot;eyebrow&quot; id=&quot;missionId&quot;&gt;Scenario 01 / 03&lt;/div&gt;&lt;h1 id=&quot;missionTitle&quot;&gt;Tether separation&lt;/h1&gt;&lt;/div&gt;&lt;div class=&quot;settings&quot;&gt;&lt;select id=&quot;difficulty&quot; aria-label=&quot;Mission difficulty&quot;&gt;&lt;option&gt;Story&lt;/option&gt;&lt;option selected&gt;Easy&lt;/option&gt;&lt;option&gt;Medium&lt;/option&gt;&lt;option&gt;Hard&lt;/option&gt;&lt;/select&gt;&lt;button class=&quot;quiet&quot; id=&quot;setup&quot;&gt;&lt;svg aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#restart&quot;/&gt;&lt;/svg&gt; New mission&lt;/button&gt;&lt;button class=&quot;quiet&quot; id=&quot;pause&quot;&gt;Start clock&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;section class=&quot;panel&quot; aria-label=&quot;Navigation&quot;&gt;&lt;div class=&quot;panelhead&quot;&gt;&lt;h2 class=&quot;sectionlabel&quot;&gt;&lt;svg aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#cross&quot;/&gt;&lt;/svg&gt; Navigation plot&lt;/h2&gt;&lt;span class=&quot;status&quot;&gt;&lt;i class=&quot;dot&quot;&gt;&lt;/i&gt;&lt;span id=&quot;status&quot;&gt;Standby&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;
+&lt;div class=&quot;flight-scene&quot;&gt;&lt;aside class=&quot;lesson&quot; id=&quot;lesson&quot; aria-label=&quot;Guided first rescue&quot; hidden&gt;
+  &lt;h3 id=&quot;lessonTitle&quot;&gt;&lt;/h3&gt;&lt;p id=&quot;lessonText&quot; aria-live=&quot;polite&quot;&gt;&lt;/p&gt;
+  &lt;div class=&quot;lesson-actions&quot;&gt;&lt;button class=&quot;primary&quot; id=&quot;lessonAction&quot;&gt;&lt;/button&gt;&lt;button id=&quot;retryThrow&quot; hidden&gt;Try first throw again&lt;/button&gt;&lt;button class=&quot;skip&quot; id=&quot;skipLesson&quot;&gt;Skip guidance&lt;/button&gt;&lt;/div&gt;
+&lt;/aside&gt;
 &lt;div class=&quot;scene&quot;&gt;&lt;svg id=&quot;plot&quot; tabindex=&quot;0&quot; role=&quot;application&quot; aria-label=&quot;Navigation plot&quot; aria-describedby=&quot;aimHint plotKeys&quot; viewBox=&quot;0 0 860 345&quot;&gt;&lt;defs&gt;&lt;radialGradient id=&quot;space&quot; cx=&quot;38%&quot; cy=&quot;47%&quot; r=&quot;82%&quot;&gt;&lt;stop stop-color=&quot;#18232c&quot;/&gt;&lt;stop offset=&quot;.6&quot; stop-color=&quot;#0d151c&quot;/&gt;&lt;stop offset=&quot;1&quot; stop-color=&quot;#070b11&quot;/&gt;&lt;/radialGradient&gt;&lt;pattern id=&quot;grid&quot; width=&quot;64&quot; height=&quot;64&quot; patternUnits=&quot;userSpaceOnUse&quot;&gt;&lt;path d=&quot;M64 0H0V64&quot; fill=&quot;none&quot; stroke=&quot;#688392&quot; opacity=&quot;.10&quot;/&gt;&lt;/pattern&gt;&lt;marker id=&quot;vTip&quot; viewBox=&quot;0 0 10 10&quot; refX=&quot;8&quot; refY=&quot;5&quot; markerWidth=&quot;5&quot; markerHeight=&quot;5&quot; orient=&quot;auto&quot;&gt;&lt;path d=&quot;m0 0 10 5-10 5z&quot; fill=&quot;#a9b8c5&quot;/&gt;&lt;/marker&gt;&lt;marker id=&quot;pTip&quot; viewBox=&quot;0 0 10 10&quot; refX=&quot;8&quot; refY=&quot;5&quot; markerWidth=&quot;5&quot; markerHeight=&quot;5&quot; orient=&quot;auto&quot;&gt;&lt;path d=&quot;m0 0 10 5-10 5z&quot; fill=&quot;var(--gold)&quot;/&gt;&lt;/marker&gt;&lt;/defs&gt;
 &lt;rect width=&quot;100%&quot; height=&quot;100%&quot; fill=&quot;url(#space)&quot;/&gt;&lt;rect width=&quot;100%&quot; height=&quot;100%&quot; fill=&quot;url(#grid)&quot;/&gt;&lt;svg width=&quot;100%&quot; height=&quot;100%&quot; viewBox=&quot;0 0 1600 800&quot; preserveAspectRatio=&quot;xMidYMid slice&quot;&gt;&lt;g id=&quot;stars&quot;&gt;&lt;/g&gt;&lt;/svg&gt;
 &lt;svg class=&quot;earth-view&quot; y=&quot;52%&quot; width=&quot;100%&quot; height=&quot;48%&quot; viewBox=&quot;0 0 2172 724&quot; preserveAspectRatio=&quot;none&quot; aria-hidden=&quot;true&quot;&gt;
@@ -2261,10 +2952,19 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
   &lt;g id=&quot;reticle&quot;&gt;&lt;circle r=&quot;7&quot; fill=&quot;#111719&quot; fill-opacity=&quot;.75&quot;/&gt;&lt;path d=&quot;M-12 0h7m10 0h7M0-12v7m0 10v7&quot;/&gt;&lt;circle r=&quot;1.3&quot; fill=&quot;var(--gold)&quot; stroke=&quot;none&quot;/&gt;&lt;/g&gt;
   &lt;text id=&quot;reticleLabel&quot; class=&quot;reticle-text&quot;&gt;&lt;/text&gt;
 &lt;/g&gt;
+&lt;g id=&quot;railCatch&quot; visibility=&quot;hidden&quot; aria-hidden=&quot;true&quot;&gt;&lt;circle r=&quot;11&quot; fill=&quot;none&quot; stroke=&quot;var(--oxygen-fill)&quot; stroke-width=&quot;2.5&quot;/&gt;&lt;path d=&quot;m-5 0 3 3 7-7&quot; fill=&quot;none&quot; stroke=&quot;var(--oxygen-fill)&quot; stroke-width=&quot;2&quot;/&gt;&lt;/g&gt;
+&lt;g id=&quot;lessonMarks&quot; class=&quot;lesson-mark&quot; visibility=&quot;hidden&quot; aria-hidden=&quot;true&quot;&gt;
+  &lt;g id=&quot;lessonTarget&quot;&gt;&lt;circle r=&quot;18&quot; fill=&quot;#d4b48b&quot; fill-opacity=&quot;.13&quot; stroke=&quot;var(--gold)&quot; stroke-width=&quot;2&quot; stroke-dasharray=&quot;4 3&quot;/&gt;&lt;/g&gt;
+  &lt;text id=&quot;wrenchCaption&quot; fill=&quot;var(--gold)&quot;&gt;Wrench goes here&lt;/text&gt;
+  &lt;text id=&quot;driftCaption&quot; fill=&quot;var(--oxygen-fill)&quot;&gt;Your path&lt;/text&gt;
+&lt;/g&gt;
 &lt;/svg&gt;
   &lt;div role=&quot;group&quot; aria-label=&quot;Suit telemetry&quot;&gt;
     &lt;div class=&quot;hud left primary-hud&quot;&gt;&lt;div class=&quot;micro&quot;&gt;Oxygen remaining&lt;/div&gt;&lt;div class=&quot;big&quot; id=&quot;oxygen&quot;&gt;15:00&lt;/div&gt;&lt;div class=&quot;meter&quot;&gt;&lt;i id=&quot;oxygenBar&quot;&gt;&lt;/i&gt;&lt;/div&gt;&lt;/div&gt;
     &lt;div class=&quot;hud right primary-hud&quot;&gt;&lt;div class=&quot;micro&quot;&gt;Δv budget&lt;/div&gt;&lt;div class=&quot;big&quot;&gt;&lt;span id=&quot;budget&quot;&gt;&lt;/span&gt; &lt;small&gt;m/s&lt;/small&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;div id=&quot;speedometer&quot; class=&quot;hud right speedometer&quot; hidden&gt;&lt;span class=&quot;micro&quot;&gt;Approach speed&lt;/span&gt;&lt;output class=&quot;speed-number&quot; id=&quot;speedNumber&quot;&gt;&lt;/output&gt;
+        &lt;div id=&quot;speedGauge&quot; class=&quot;speed-track&quot; role=&quot;meter&quot; aria-label=&quot;Approach speed&quot; aria-valuemin=&quot;0&quot;&gt;&lt;i id=&quot;speedFill&quot;&gt;&lt;/i&gt;&lt;/div&gt;&lt;span class=&quot;speed-limit&quot; id=&quot;speedLimit&quot;&gt;&lt;/span&gt;
+      &lt;/div&gt;
     &lt;div class=&quot;hud left side-hud&quot;&gt;&lt;div&gt;&lt;div class=&quot;micro&quot;&gt;Hatch distance&lt;/div&gt;&lt;b id=&quot;range&quot;&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;div class=&quot;micro&quot;&gt;Hatch bearing&lt;/div&gt;&lt;b id=&quot;bearing&quot;&gt;&lt;/b&gt;&lt;/div&gt;&lt;/div&gt;
     &lt;div class=&quot;hud right side-hud&quot;&gt;&lt;div class=&quot;micro&quot;&gt;Velocity · m/s&lt;/div&gt;&lt;div class=&quot;raw&quot;&gt;&lt;span&gt;Vx&lt;/span&gt;&lt;b id=&quot;vx&quot;&gt;&lt;/b&gt;&lt;span&gt;Vy&lt;/span&gt;&lt;b id=&quot;vy&quot;&gt;&lt;/b&gt;&lt;span&gt;Radial&lt;/span&gt;&lt;b id=&quot;radial&quot;&gt;&lt;/b&gt;&lt;span&gt;Mass&lt;/span&gt;&lt;b id=&quot;mass&quot;&gt;&lt;/b&gt;&lt;/div&gt;&lt;/div&gt;
   &lt;/div&gt;
@@ -2280,8 +2980,9 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
       &lt;p id=&quot;tip&quot; role=&quot;status&quot;&gt;&lt;/p&gt;
     &lt;/aside&gt;
   &lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;plotbar&quot;&gt;&lt;div class=&quot;legend&quot;&gt;&lt;span&gt;&lt;i class=&quot;keyline vector&quot;&gt;&lt;/i&gt;Velocity&lt;/span&gt;&lt;span id=&quot;coastKey&quot;&gt;&lt;i class=&quot;keyline&quot; style=&quot;border-top-style:dotted&quot;&gt;&lt;/i&gt;Coast&lt;/span&gt;&lt;span id=&quot;trialKey&quot;&gt;&lt;i class=&quot;keyline recoil&quot;&gt;&lt;/i&gt;After throw&lt;/span&gt;&lt;/div&gt;&lt;span class=&quot;flight-time&quot;&gt;Flight time &lt;b id=&quot;elapsed&quot;&gt;00:00&lt;/b&gt;&lt;/span&gt;&lt;div class=&quot;speed&quot; id=&quot;speeds&quot; aria-label=&quot;Simulation speed&quot;&gt;&lt;svg viewBox=&quot;0 0 20 20&quot; aria-hidden=&quot;true&quot;&gt;&lt;circle cx=&quot;10&quot; cy=&quot;10&quot; r=&quot;7&quot;/&gt;&lt;path d=&quot;M10 5v6l4 2&quot;/&gt;&lt;/svg&gt;&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
+&lt;/div&gt;&lt;/div&gt;
+&lt;div class=&quot;plotbar&quot;&gt;&lt;div class=&quot;legend&quot;&gt;&lt;span&gt;&lt;i class=&quot;keyline vector&quot;&gt;&lt;/i&gt;Velocity&lt;/span&gt;&lt;span id=&quot;coastKey&quot;&gt;&lt;i class=&quot;keyline&quot; style=&quot;border-top-style:dotted&quot;&gt;&lt;/i&gt;Coast&lt;/span&gt;&lt;span id=&quot;trialKey&quot;&gt;&lt;i class=&quot;keyline recoil&quot;&gt;&lt;/i&gt;After throw&lt;/span&gt;&lt;/div&gt;&lt;span class=&quot;flight-time&quot;&gt;Flight time &lt;b id=&quot;elapsed&quot;&gt;00:00&lt;/b&gt;&lt;/span&gt;&lt;div class=&quot;speed&quot; id=&quot;speeds&quot; aria-label=&quot;Simulation speed&quot;&gt;&lt;svg viewBox=&quot;0 0 20 20&quot; aria-hidden=&quot;true&quot;&gt;&lt;circle cx=&quot;10&quot; cy=&quot;10&quot; r=&quot;7&quot;/&gt;&lt;path d=&quot;M10 5v6l4 2&quot;/&gt;&lt;/svg&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;div class=&quot;flight-controls&quot;&gt;&lt;button id=&quot;throwButton&quot;&gt;Throw wrench&lt;/button&gt;&lt;button id=&quot;coastButton&quot; class=&quot;primary&quot; hidden&gt;Coast to hatch&lt;/button&gt;&lt;span id=&quot;objectiveStatus&quot; hidden&gt;&lt;/span&gt;&lt;/div&gt;&lt;/section&gt;
 &lt;section class=&quot;panel rack&quot;&gt;&lt;div class=&quot;panelhead&quot;&gt;&lt;h2 class=&quot;sectionlabel&quot;&gt;&lt;svg aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#rackicon&quot;/&gt;&lt;/svg&gt; Equipment rack&lt;/h2&gt;&lt;span class=&quot;spec&quot; id=&quot;count&quot;&gt;&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;tools&quot; id=&quot;tools&quot;&gt;&lt;/div&gt;&lt;div class=&quot;throwstrip&quot;&gt;&lt;p id=&quot;aimHint&quot;&gt;Click to aim. Drag to set direction and power, then release to throw.&lt;/p&gt;&lt;span class=&quot;throw-vector&quot;&gt;&lt;span class=&quot;micro&quot;&gt;Throw vector&lt;/span&gt;&lt;span id=&quot;angle&quot;&gt;&lt;/span&gt; / &lt;span id=&quot;powerLabel&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/section&gt;
 &lt;span class=&quot;sr&quot; id=&quot;plotKeys&quot;&gt;1 to 6 select a tool. Left and right adjust bearing. Up and down adjust power. Enter throws. Escape cancels a drag.&lt;/span&gt;&lt;div class=&quot;sr&quot; aria-live=&quot;polite&quot; id=&quot;announce&quot;&gt;&lt;/div&gt;&lt;/main&gt;
 &lt;dialog id=&quot;modal&quot; aria-labelledby=&quot;dialogTitle&quot;&gt;&lt;div class=&quot;eyebrow&quot; id=&quot;dialogKicker&quot;&gt;&lt;/div&gt;&lt;h2 id=&quot;dialogTitle&quot;&gt;&lt;/h2&gt;&lt;div id=&quot;dialogBody&quot;&gt;&lt;/div&gt;&lt;div class=&quot;dialogactions&quot; id=&quot;dialogActions&quot;&gt;&lt;/div&gt;&lt;/dialog&gt;
@@ -2302,6 +3003,14 @@ const scenarios = [
   {name:&#x27;Wide separation&#x27;, x:29, y:-8, vx:0.044, vy:-0.016, brief:&#x27;The airlock is falling behind. Combine heavy throws to reverse your drift and close the gap.&#x27;}
 ];
 const limits = {Story:Infinity, Easy:900, Medium:600, Hard:450};
+const captureSpeedLimit = 0.080, hardBearingError = 2;
+const softCapture = level =&gt; level===&#x27;Medium&#x27; || level===&#x27;Hard&#x27;;
+const overRedline = (level,vx,vy) =&gt; softCapture(level) &amp;&amp; Math.hypot(vx,vy)&gt;captureSpeedLimit+1e-12;
+const replayGoals = {
+  none:&#x27;Return to the hatch&#x27;,
+  drill:&#x27;Keep the power drill holstered&#x27;,
+  two:&#x27;Return in two throws or fewer&#x27;
+};
 const fullGuidance = level =&gt; level===&#x27;Story&#x27; || level===&#x27;Easy&#x27;;
 const dryMass = 186, captureRadius = 1.2, fullMask = (1 &lt;&lt; gear.length)-1;
 const massOf = mask =&gt; gear.reduce((sum,t,i)=&gt;sum + ((mask &amp; (1&lt;&lt;i)) ? t.mass : 0),dryMass);
@@ -2352,18 +3061,36 @@ const isAvailable = i =&gt; i&gt;=0 &amp;&amp; Boolean(state.mask &amp; (1&lt;&l
 const live = () =&gt; state.phase===&#x27;ready&#x27; || state.phase===&#x27;flying&#x27;;
 const suitBounds = DOMRect.fromRect($(&#x27;suitMan&#x27;).getBBox());
 let state, camera, charge=null, flash=null, anim=null, lastFrame=null, dialogKind=&#x27;&#x27;, previousPhase=&#x27;&#x27;, returnFocus=null;
-let plotW=860, plotH=345, drag=null;
-function newFlight(index=0,level=&#x27;Easy&#x27;) {
+let plotW=860, plotH=345, drag=null, debriefTimer=null;
+let crewVoiceEnabled=false;
+function newFlight(index=0,level=&#x27;Easy&#x27;,objective=&#x27;none&#x27;,lesson=&#x27;&#x27;) {
+  clearTimeout(debriefTimer);debriefTimer=null;
   endDrag(true);
   const s=scenarios[index];
   state={...s, index,level, phase:&#x27;ready&#x27;, elapsed:0, oxygen:limits[level], mask:fullMask,
-    selected:0, bearing:0, power:65, rate:1, throws:0, spent:0, closest:Math.hypot(s.x,s.y)-captureRadius,
-    lastImpulse:0,tip:level===&#x27;Story&#x27;?&#x27;Tools reload after every throw. Stay in view and aim for the hatch.&#x27;:&#x27;Throw equipment away from the hatch to push your suit toward it.&#x27;};
+    selected:0, bearing:0, power:65, rate:1, throws:0, spent:0, usedMask:0, objective, lesson,
+    previewing:false, finalRate:0, closest:Math.hypot(s.x,s.y)-captureRadius,
+    lastImpulse:0,tip:lesson?&#x27;Line up your predicted path with the hatch before you release the wrench.&#x27;:softCapture(level)?captureBrief(level):level===&#x27;Story&#x27;?&#x27;Tools reload after every throw. Stay in view and aim for the hatch.&#x27;:&#x27;Throw equipment away from the hatch to push your suit toward it.&#x27;};
   charge=null; flash=null; anim=null; lastFrame=null;
   $(&#x27;missionId&#x27;).textContent=&#x27;Scenario &#x27;+String(index+1).padStart(2,&#x27;0&#x27;)+&#x27; / 03&#x27;;
   $(&#x27;missionTitle&#x27;).textContent=s.name;
   $(&#x27;difficulty&#x27;).value=level;
-  renderGear(); render();
+  $(&#x27;speedometer&#x27;).hidden=!softCapture(level);
+  $(&#x27;lesson&#x27;).hidden=!lesson;
+  measurePlot();renderGear();render();
+}
+function captureBrief(level) {
+  const limit=captureSpeedLimit.toFixed(3)+&#x27; m/s&#x27;;
+  return &#x27;Enter the hatch at &#x27;+limit+&#x27; or slower. Throw along your motion to brake.&#x27;+
+    (level===&#x27;Hard&#x27;?&#x27; Each release can stray by up to ±&#x27;+hardBearingError+&#x27;°.&#x27;:&#x27;&#x27;);
+}
+function safeCoast(path) {
+  return path.eta!==null &amp;&amp; path.eta&lt;=state.oxygen &amp;&amp; !overRedline(state.level,state.vx,state.vy);
+}
+function objectiveIntact() {
+  if(state.objective===&#x27;drill&#x27;)return !(state.usedMask &amp; (1&lt;&lt;1));
+  if(state.objective===&#x27;two&#x27;)return state.throws&lt;=2;
+  return true;
 }
 function impulse(i,power,bearing) {
   if (!isAvailable(i)) return {dx:0,dy:0,ux:0,uy:0};
@@ -2373,7 +3100,12 @@ function impulse(i,power,bearing) {
 }
 function throwTool() {
   if (!live() || !isAvailable(state.selected) || $(&#x27;modal&#x27;).open) return;
-  const i=state.selected, t=gear[i], kick=impulse(i,state.power,state.bearing);
+  const i=state.selected, t=gear[i];
+  const offset=state.level===&#x27;Hard&#x27;?(Math.random()*2-1)*hardBearingError:0;
+  const released=norm(state.bearing+offset), kick=impulse(i,state.power,released);
+  state.lastBearing=released; state.usedMask|=1&lt;&lt;i;
+  state.previewing=false; state.finalRate=0;
+  if(state.lesson)state.lesson=&#x27;coast&#x27;;
   state.vx+=kick.dx; state.vy+=kick.dy;
   anim={x:state.x,y:state.y,vx:state.vx+kick.ux,vy:state.vy+kick.uy,age:0,i};
   if (state.level!==&#x27;Story&#x27;) {
@@ -2382,14 +3114,15 @@ function throwTool() {
   }
   state.lastImpulse=Math.hypot(kick.dx,kick.dy); state.spent+=state.lastImpulse; state.throws++;
   state.phase=&#x27;flying&#x27;; lastFrame=null;
-  const report=t.name+&#x27; released · Δv &#x27;+state.lastImpulse.toFixed(3)+&#x27; m/s&#x27;;
+  const report=t.name+&#x27; released · Δv &#x27;+state.lastImpulse.toFixed(3)+&#x27; m/s&#x27;+(state.level===&#x27;Hard&#x27;?&#x27; · Released at &#x27;+released.toFixed(1)+&#x27;°&#x27;:&#x27;&#x27;);
   flash={text:report,until:performance.now()+2400}; $(&#x27;announce&#x27;).textContent=report;
   state.tip=contextTip(); renderGear();
   checkEmpty(); render();
 }
 function contextTip() {
   const path=course(state.x,state.y,state.vx,state.vy);
-  if (fullGuidance(state.level) &amp;&amp; path.eta!==null &amp;&amp; path.eta&lt;=state.oxygen) return &#x27;Your coast path enters the capture zone. Fast-forward to reach the hatch.&#x27;;
+  if(overRedline(state.level,state.vx,state.vy))return &#x27;Above capture speed. Throw along the velocity arrow to brake before reaching the hatch.&#x27;;
+  if (safeCoast(path)) return &#x27;You are on course. Hold this coast to reach the hatch.&#x27;;
   if (state.closest&lt;5) return &#x27;Near the hatch, a light tool gives you a smaller course correction.&#x27;;
   if (state.level===&#x27;Story&#x27;) return &#x27;To slow down, throw in the direction of your velocity arrow. Repeat as needed.&#x27;;
   const tips=[&#x27;Correct your lateral velocity as well as your outward drift.&#x27;,
@@ -2416,7 +3149,11 @@ function advance(dt) {
   state.x+=vx*step; state.y+=vy*step;
   state.oxygen=Math.max(0,state.oxygen-step); state.elapsed+=step;
   if (anim) {anim.x+=anim.vx*step;anim.y+=anim.vy*step;anim.age+=step;if(anim.age&gt;2.5) anim=null;}
-  if (eta!==null &amp;&amp; eta&lt;=step) finish(&#x27;Capture confirmed&#x27;,&#x27;Your suit entered the airlock capture zone. You made it back.&#x27;);
+  if (eta!==null &amp;&amp; eta&lt;=step) {
+    if(overRedline(state.level,vx,vy))
+      finish(&#x27;Approach too fast&#x27;,&#x27;You reached the hatch at &#x27;+formatSpeed(vx,vy)+&#x27; m/s. The handrail slipped past. Brake to &#x27;+captureSpeedLimit.toFixed(3)+&#x27; m/s or below before crossing the capture ring.&#x27;);
+    else finish(&#x27;Capture confirmed&#x27;,&#x27;Your glove closes around the handrail. “We’ve got you. Welcome back.”&#x27;);
+  }
   else if (exitTime&lt;=step) finish(&#x27;Drifted out of view&#x27;,&#x27;Your suit drifted completely beyond the navigation plot.&#x27;);
   else if (state.oxygen&lt;=0) finish(&#x27;Oxygen depleted&#x27;,&#x27;Your oxygen supply ran out before you reached the capture zone.&#x27;);
 }
@@ -2424,15 +3161,117 @@ function renderGear() {
   const count=gear.filter((_,i)=&gt;isAvailable(i)).length;
   $(&#x27;count&#x27;).textContent=state.level===&#x27;Story&#x27;?&#x27;Tools reload on release&#x27;:count+&#x27; / 6 tools remaining&#x27;;
   [...$(&#x27;tools&#x27;).children].forEach((b,i)=&gt;{
-    b.disabled=!isAvailable(i) || !live();
+    b.disabled=!isAvailable(i) || !live() || (trainingAim() &amp;&amp; i!==0);
     b.classList.toggle(&#x27;selected&#x27;,state.selected===i);
     b.setAttribute(&#x27;aria-pressed&#x27;,String(state.selected===i));
     b.querySelector(&#x27;small&#x27;).textContent=isAvailable(i)?gear[i].mass.toFixed(1)+&#x27; kg&#x27;:&#x27;Released&#x27;;
   });
 }
 function selectTool(i) {
-  if (!live() || !isAvailable(i) || charge || drag) return;
-  state.selected=i; renderGear();render();
+  if (!live() || !isAvailable(i) || charge || drag || (trainingAim() &amp;&amp; i!==0)) return;
+  state.previewing=true; state.selected=i; renderGear();render();
+}
+function formatSpeed(vx,vy) {
+  const speed=Math.hypot(vx,vy);
+  // Keep a marginally unsafe reading visibly above the printed limit.
+  return (speed&gt;captureSpeedLimit+1e-12 ? Math.max(captureSpeedLimit+.001,speed) : speed).toFixed(3);
+}
+function renderSpeedometer() {
+  const s=state, meter=$(&#x27;speedometer&#x27;);
+  if(meter.hidden)return;
+  const speed=Math.hypot(s.vx,s.vy), over=overRedline(s.level,s.vx,s.vy);
+  const label=formatSpeed(s.vx,s.vy)+&#x27; m/s&#x27;, max=captureSpeedLimit/0.75;
+  meter.dataset.over=String(over);
+  $(&#x27;speedNumber&#x27;).textContent=label;
+  $(&#x27;speedLimit&#x27;).textContent=(over?&#x27;Over limit&#x27;:&#x27;Limit&#x27;)+&#x27; · &#x27;+captureSpeedLimit.toFixed(3);
+  $(&#x27;speedFill&#x27;).style.width=Math.min(100,100*speed/max)+&#x27;%&#x27;;
+  $(&#x27;speedGauge&#x27;).setAttribute(&#x27;aria-valuemax&#x27;,max.toFixed(4));
+  $(&#x27;speedGauge&#x27;).setAttribute(&#x27;aria-valuenow&#x27;,Math.min(speed,max).toFixed(4));
+  $(&#x27;speedGauge&#x27;).setAttribute(&#x27;aria-valuetext&#x27;,label+&#x27;, &#x27;+$(&#x27;speedLimit&#x27;).textContent+&#x27; m/s&#x27;);
+}
+function coastToHatch() {
+  if(state.phase!==&#x27;flying&#x27; || drag || charge || $(&#x27;modal&#x27;).open)return;
+  const path=course(state.x,state.y,state.vx,state.vy);
+  if(!safeCoast(path))return;
+  const lastMetre=Math.min(path.eta,1/Math.hypot(state.vx,state.vy));
+  advance(path.eta-lastMetre);
+  state.finalRate=Math.max(1,lastMetre/2);
+  state.previewing=false; lastFrame=null; render();
+}
+function trainingAim() {
+  return state.lesson===&#x27;aim&#x27; || state.lesson===&#x27;throw&#x27;;
+}
+function firstRescueWanted() {
+  try {return !localStorage.getItem(&#x27;untethered.firstRescueSeen&#x27;);} catch {return true;}
+}
+function rememberLesson() {
+  try {localStorage.setItem(&#x27;untethered.firstRescueSeen&#x27;,&#x27;1&#x27;);} catch { /* Storage is optional offline. */ }
+}
+function markAim() {
+  state.previewing=true;
+  if(trainingAim())state.lesson=&#x27;throw&#x27;;
+}
+function trainingRange() {
+  return camera.inner+(camera.reach-camera.inner)*55/90;
+}
+function useTrainingAim() {
+  state.bearing=0; state.power=65; markAim(); render();
+}
+function lessonAction() {
+  if(state.lesson===&#x27;aim&#x27;)useTrainingAim();
+  else if(state.lesson===&#x27;throw&#x27;)throwTool();
+  else if(state.lesson===&#x27;coast&#x27;){
+    if(safeCoast(course(state.x,state.y,state.vx,state.vy)))coastToHatch();
+    else newFlight(0,&#x27;Easy&#x27;,&#x27;none&#x27;,&#x27;aim&#x27;);
+  }
+}
+function renderLesson(coast) {
+  const step=state.lesson;
+  $(&#x27;lesson&#x27;).hidden=!step || state.phase===&#x27;ended&#x27;;
+  if($(&#x27;lesson&#x27;).hidden)return;
+  const good=safeCoast(coast);
+  let heading, copy, action;
+  if(step===&#x27;aim&#x27;){
+    heading=&#x27;First rescue · Aim&#x27;;
+    copy=&#x27;Your tether snapped. Your thrusters are silent. Eighteen metres to the hatch. “First time anyone on this station has had to throw their way home.” Tap the gold ring to aim the wrench.&#x27;;
+    action=&#x27;Aim at the ring&#x27;;
+  } else if(step===&#x27;throw&#x27;){
+    heading=&#x27;First rescue · Throw&#x27;;
+    copy=&#x27;The wrench flies toward the crosshair. The dashed line shows where you will drift. Tap to change aim, then use Throw wrench. You can also drag and release.&#x27;;
+    action=&#x27;Throw wrench&#x27;;
+  } else {
+    heading=&#x27;First rescue · Coast&#x27;;
+    copy=good?&#x27;The wrench is gone and you’re moving home. Keep the next tool. Coast through the quiet stretch to the handrail.&#x27;:&#x27;Your path misses the return window. Try the first throw again, or skip guidance and correct with another tool.&#x27;;
+    action=good?&#x27;Coast to hatch&#x27;:&#x27;Try first throw again&#x27;;
+  }
+  $(&#x27;lessonTitle&#x27;).textContent=heading;
+  if($(&#x27;lessonText&#x27;).textContent!==copy)$(&#x27;lessonText&#x27;).textContent=copy;
+  $(&#x27;lessonAction&#x27;).textContent=state.finalRate?&#x27;Final approach…&#x27;:action;
+  $(&#x27;lessonAction&#x27;).disabled=!!state.finalRate || !live();
+  $(&#x27;retryThrow&#x27;).hidden=step!==&#x27;coast&#x27; || !good;
+}
+function forecastText(path) {
+  if(path.eta===null)return &#x27;Miss by &#x27;+path.clearance.toFixed(2)+&#x27; m&#x27;;
+  const eta=clock(Math.ceil(path.eta));
+  return path.eta&lt;=state.oxygen?&#x27;On course · hatch in &#x27;+eta:&#x27;Hatch in &#x27;+eta+&#x27; · oxygen runs out first&#x27;;
+}
+function renderForecast(pvx,pvy,coast) {
+  const s=state, aiming=s.phase!==&#x27;ended&#x27; &amp;&amp; s.mask &amp;&amp; (s.phase===&#x27;ready&#x27; || s.previewing || drag || charge);
+  $(&#x27;plot&#x27;).dataset.forecast=fullGuidance(s.level) &amp;&amp; !aiming?&#x27;coast&#x27;:&#x27;aim&#x27;;
+  if(fullGuidance(s.level)){
+    const trial=course(s.x,s.y,pvx,pvy);
+    $(&#x27;assistMode&#x27;).textContent=aiming?&#x27;If you throw now&#x27;:&#x27;Current coast&#x27;;
+    const vector=aiming?&#x27;&lt;div class=&quot;secondary&quot;&gt;&#x27;+signed(pvx)+&#x27;, &#x27;+signed(pvy)+&#x27; m/s&lt;/div&gt;&#x27;:&#x27;&#x27;;
+    const note=s.phase!==&#x27;ended&#x27; &amp;&amp; s.throws &amp;&amp; s.mask ? (aiming?&#x27;Current coast · &#x27;+forecastText(coast):&#x27;Next throw · &#x27;+forecastText(trial)) : &#x27;&#x27;;
+    $(&#x27;prediction&#x27;).innerHTML=&#x27;&lt;strong&gt;&#x27;+forecastText(aiming?trial:coast)+&#x27;&lt;/strong&gt;&#x27;+vector+(note?&#x27;&lt;div class=&quot;secondary&quot;&gt;&#x27;+note+&#x27;&lt;/div&gt;&#x27;:&#x27;&#x27;);
+  } else if(s.level===&#x27;Medium&#x27;){
+    $(&#x27;assistMode&#x27;).textContent=aiming?&#x27;If you throw now&#x27;:&#x27;Current velocity&#x27;;
+    const x=aiming?pvx:s.vx,y=aiming?pvy:s.vy;
+    $(&#x27;prediction&#x27;).textContent=signed(x)+&#x27;, &#x27;+signed(y)+&#x27; m/s · &#x27;+(overRedline(s.level,x,y)?&#x27;Above redline&#x27;:&#x27;Within speed limit&#x27;);
+  } else {
+    $(&#x27;assistMode&#x27;).textContent=&#x27;Manual navigation&#x27;;
+    $(&#x27;prediction&#x27;).textContent=&#x27;Release bearing varies by ±&#x27;+hardBearingError+&#x27;°&#x27;;
+  }
 }
 function render() {
   const s=state, dist=Math.hypot(s.x,s.y), radial=(s.x*s.vx+s.y*s.vy)/(dist||1);
@@ -2453,7 +3292,7 @@ function render() {
   $(&#x27;powerLabel&#x27;).textContent=s.mask?s.power+&#x27;%&#x27;:&#x27;—&#x27;;
   $(&#x27;elapsed&#x27;).textContent=clock(s.elapsed);
   if ($(&#x27;tip&#x27;).textContent!==s.tip) $(&#x27;tip&#x27;).textContent=s.tip;
-  $(&#x27;pause&#x27;).disabled=false;
+  $(&#x27;pause&#x27;).disabled=trainingAim();
   $(&#x27;pause&#x27;).textContent=({ready:&#x27;Start clock&#x27;,flying:&#x27;Ⅱ  Pause&#x27;,paused:&#x27;▷  Resume&#x27;,ended:&#x27;Debrief&#x27;})[s.phase];
   $(&#x27;status&#x27;).textContent=drag?.moved ? (drag.inside?&#x27;Release &#x27;+gear[s.selected].name.toLowerCase():&#x27;Release to cancel&#x27;) :
     flash &amp;&amp; performance.now()&lt;flash.until &amp;&amp; s.phase===&#x27;flying&#x27; ? flash.text :
@@ -2463,22 +3302,15 @@ function render() {
     el.classList.toggle(&#x27;active&#x27;,active);el.setAttribute(&#x27;aria-pressed&#x27;,String(active));
   });
   const k=impulse(s.selected,s.power,s.bearing), pvx=s.vx+k.dx,pvy=s.vy+k.dy;
-  const path=course(s.x,s.y,pvx,pvy);
-  const preview=s.mask?&#x27;After throw&#x27;:&#x27;Current coast&#x27;;
-  if(fullGuidance(s.level)) {
-    $(&#x27;assistMode&#x27;).textContent=preview+&#x27; / full prediction&#x27;;
-    $(&#x27;prediction&#x27;).innerHTML=&#x27;&lt;strong&gt;&#x27;+signed(pvx)+&#x27;, &#x27;+signed(pvy)+&#x27;&lt;/strong&gt; m/s&lt;br&gt;&#x27;+
-      (path.eta===null?&#x27;Miss distance &#x27;+path.clearance.toFixed(2)+&#x27; m&#x27;:&#x27;Intercept &#x27;+clock(Math.ceil(path.eta))+&#x27; · Miss 0.00 m&#x27;+(path.eta&gt;s.oxygen?&#x27; · Low O₂&#x27;:&#x27;&#x27;));
-    if (s.mask &amp;&amp; s.throws) {
-      const drift=course(s.x,s.y,s.vx,s.vy);
-      $(&#x27;prediction&#x27;).append(document.createElement(&#x27;br&#x27;), drift.eta===null?&#x27;Coast misses by &#x27;+drift.clearance.toFixed(2)+&#x27; m&#x27;:&#x27;Coast intercept &#x27;+clock(Math.ceil(drift.eta))+(drift.eta&gt;s.oxygen?&#x27; · Low O₂&#x27;:&#x27;&#x27;));
-    }
-  } else if (s.level===&#x27;Medium&#x27;) {
-    $(&#x27;assistMode&#x27;).textContent=preview+&#x27; / vector assist&#x27;;
-    $(&#x27;prediction&#x27;).textContent=signed(pvx)+&#x27;, &#x27;+signed(pvy)+&#x27; m/s&#x27;;
-  } else {
-    $(&#x27;assistMode&#x27;).textContent=&#x27;Manual navigation&#x27;; $(&#x27;prediction&#x27;).textContent=&#x27;Read suit velocity and target bearing.&#x27;;
-  }
+  const coast=course(s.x,s.y,s.vx,s.vy);
+  renderForecast(pvx,pvy,coast);
+  renderSpeedometer();
+  renderLesson(coast);
+  $(&#x27;throwButton&#x27;).textContent=s.mask?&#x27;Throw &#x27;+gear[s.selected].name.toLowerCase():&#x27;Rack empty&#x27;;
+  $(&#x27;throwButton&#x27;).disabled=!live() || !s.mask || !!drag || !!charge;
+  $(&#x27;coastButton&#x27;).hidden=s.phase!==&#x27;flying&#x27; || !safeCoast(coast) || !!s.finalRate || !!drag || !!charge;
+  $(&#x27;objectiveStatus&#x27;).hidden=s.objective===&#x27;none&#x27;;
+  $(&#x27;objectiveStatus&#x27;).textContent=replayGoals[s.objective]+(objectiveIntact()?&#x27;&#x27;:&#x27; · missed&#x27;);
   $(&#x27;coastKey&#x27;).hidden=!fullGuidance(s.level); $(&#x27;trialKey&#x27;).hidden=s.level===&#x27;Hard&#x27;||!s.mask;
   renderPlot(pvx,pvy);
 }
@@ -2533,6 +3365,18 @@ function renderPlot(pvx,pvy) {
   at(&#x27;reticleLabel&#x27;,tx+(alignRight?-12:12),ty-12);
   $(&#x27;reticleLabel&#x27;).setAttribute(&#x27;text-anchor&#x27;,alignRight?&#x27;end&#x27;:&#x27;start&#x27;);
   $(&#x27;reticleLabel&#x27;).textContent=fmtAngle(s.bearing)+&#x27; / &#x27;+s.power+&#x27;%&#x27;;
+  visible(&#x27;lessonMarks&#x27;,trainingAim());
+  visible(&#x27;railCatch&#x27;,s.result?.title===&#x27;Capture confirmed&#x27;);
+  at(&#x27;railCatch&#x27;,ox,oy);
+  if(trainingAim()) {
+    at(&#x27;lessonTarget&#x27;,px+trainingRange(),py);
+    const clampX=x=&gt;Math.min(w-62,Math.max(62,x));
+    at(&#x27;wrenchCaption&#x27;,clampX(tx),ty-29);
+    $(&#x27;wrenchCaption&#x27;).setAttribute(&#x27;text-anchor&#x27;,&#x27;middle&#x27;);
+    const speed=Math.hypot(pvx,pvy)||1;
+    at(&#x27;driftCaption&#x27;,clampX(px+pvx/speed*Math.min(reach,72)),py-pvy/speed*Math.min(reach,72)+21);
+    $(&#x27;driftCaption&#x27;).setAttribute(&#x27;text-anchor&#x27;,&#x27;middle&#x27;);
+  }
   at(&#x27;rings&#x27;,ox,oy);
   [...$(&#x27;rings&#x27;).children].forEach((el,i)=&gt;el.setAttribute(&#x27;r&#x27;,(i+1)*5*scale));
   const vectorScale=430*Math.min(1.6,scale/12);
@@ -2609,8 +3453,8 @@ function stopCharge(restore=true) {
   charge=null;
 }
 function toggleClock() {
-  if($(&#x27;modal&#x27;).open || state.phase===&#x27;ended&#x27;) return;
-  endDrag(true);stopCharge(); flash=null;
+  if($(&#x27;modal&#x27;).open || state.phase===&#x27;ended&#x27; || trainingAim()) return;
+  endDrag(true);stopCharge(); flash=null; state.finalRate=0;
   state.phase=state.phase===&#x27;flying&#x27;?&#x27;paused&#x27;:&#x27;flying&#x27;; lastFrame=null;
   renderGear();render();
 }
@@ -2638,46 +3482,71 @@ function closeDialog(resume=true) {
   lastFrame=null;renderGear();render();
   if(returnFocus?.isConnected &amp;&amp; !returnFocus.disabled) returnFocus.focus({preventScroll:true});
 }
-function setup(proposed=state.level) {
+function setup(proposed=state.level,goal=state.objective) {
   $(&#x27;difficulty&#x27;).value=state.level;
   const sceneOptions=scenarios.map((v,i)=&gt;&#x27;&lt;option value=&quot;&#x27;+i+&#x27;&quot;&#x27;+(i===state.index?&#x27; selected&#x27;:&#x27;&#x27;)+&#x27;&gt;&#x27;+v.name+&#x27;&lt;/option&gt;&#x27;).join(&#x27;&#x27;);
   const levels=Object.keys(limits).map(k=&gt;&#x27;&lt;option&#x27;+(k===proposed?&#x27; selected&#x27;:&#x27;&#x27;)+&#x27;&gt;&#x27;+k+&#x27;&lt;/option&gt;&#x27;).join(&#x27;&#x27;);
   openDialog(&#x27;setup&#x27;,&#x27;Mission setup&#x27;,&#x27;New mission&#x27;,
     &#x27;&lt;label class=&quot;dialogrow&quot;&gt;Drift scenario &lt;select id=&quot;scenarioChoice&quot;&gt;&#x27;+sceneOptions+&#x27;&lt;/select&gt;&lt;/label&gt;&lt;p id=&quot;scenarioBrief&quot;&gt;&lt;/p&gt;&#x27;+
-    &#x27;&lt;label class=&quot;dialogrow&quot;&gt;Difficulty &lt;select id=&quot;levelChoice&quot;&gt;&#x27;+levels+&#x27;&lt;/select&gt;&lt;/label&gt;&lt;p id=&quot;levelBrief&quot;&gt;&lt;/p&gt;&#x27;,
-    [[&#x27;Cancel&#x27;,()=&gt;closeDialog()],[&#x27;Begin mission&#x27;,()=&gt;{const index=Number($(&#x27;scenarioChoice&#x27;).value),level=$(&#x27;levelChoice&#x27;).value;closeDialog(false);newFlight(index,level);},true]]);
+    &#x27;&lt;label class=&quot;dialogrow&quot;&gt;Difficulty &lt;select id=&quot;levelChoice&quot;&gt;&#x27;+levels+&#x27;&lt;/select&gt;&lt;/label&gt;&lt;p id=&quot;levelBrief&quot;&gt;&lt;/p&gt;&#x27;+
+    &#x27;&lt;label class=&quot;dialogrow&quot;&gt;Bonus objective &lt;select id=&quot;goalChoice&quot;&gt;&#x27;+Object.entries(replayGoals).map(([key,label])=&gt;&#x27;&lt;option value=&quot;&#x27;+key+&#x27;&quot;&#x27;+(key===goal?&#x27; selected&#x27;:&#x27;&#x27;)+&#x27;&gt;&#x27;+label+&#x27;&lt;/option&gt;&#x27;).join(&#x27;&#x27;)+&#x27;&lt;/select&gt;&lt;/label&gt;&#x27;,
+    [[&#x27;Cancel&#x27;,()=&gt;closeDialog()],[&#x27;Begin mission&#x27;,()=&gt;{const index=Number($(&#x27;scenarioChoice&#x27;).value),level=$(&#x27;levelChoice&#x27;).value,objective=$(&#x27;goalChoice&#x27;).value;closeDialog(false);newFlight(index,level,objective);},true]]);
   const describe=()=&gt;{
     $(&#x27;scenarioBrief&#x27;).textContent=scenarios[Number($(&#x27;scenarioChoice&#x27;).value)].brief;
     const level=$(&#x27;levelChoice&#x27;).value;
     $(&#x27;levelBrief&#x27;).textContent=level===&#x27;Story&#x27;
       ? &#x27;Unlimited oxygen and reloading tools. Full trajectory guidance. Reach the hatch before your suit drifts off the plot.&#x27;
-      : clock(limits[level])+&#x27; oxygen · &#x27;+({Easy:&#x27;Full trajectory, intercept time and miss distance.&#x27;,Medium:&#x27;Predicted velocity vector.&#x27;,Hard:&#x27;Raw navigation telemetry.&#x27;})[level];
+      : clock(limits[level])+&#x27; oxygen · &#x27;+({Easy:&#x27;Full trajectory, intercept time and miss distance.&#x27;,Medium:&#x27;Predicted velocity vector.&#x27;,Hard:&#x27;Raw navigation telemetry.&#x27;})[level]+(softCapture(level)?&#x27; &#x27;+captureBrief(level):&#x27;&#x27;);
   };
   $(&#x27;scenarioChoice&#x27;).onchange=describe;$(&#x27;levelChoice&#x27;).onchange=describe;describe();
 }
+function localCrewVoice() {
+  return window.speechSynthesis?.getVoices().find(voice=&gt;voice.localService &amp;&amp; /^en(?:-|$)/i.test(voice.lang));
+}
 function guide() {
+  const voice=localCrewVoice();
   openDialog(&#x27;guide&#x27;,&#x27;Flight manual&#x27;,&#x27;Get back to the hatch&#x27;,
     &#x27;&lt;p&gt;Your tether has parted and your thrusters are offline. Throw equipment to reach the airlock capture circle.&lt;/p&gt;&#x27;+
     (state.level===&#x27;Story&#x27;?&#x27;&lt;p&gt;&lt;b&gt;Story mode.&lt;/b&gt; Oxygen is unlimited and the selected tool reloads immediately. Your flight ends when you reach the hatch or your whole suit leaves the plot. Throw along your velocity arrow to brake.&lt;/p&gt;&#x27;:&#x27;&lt;p&gt;Reach the hatch before your oxygen runs out.&lt;/p&gt;&#x27;)+
+    (softCapture(state.level)?&#x27;&lt;p&gt;&#x27;+captureBrief(state.level)+&#x27;&lt;/p&gt;&#x27;:&#x27;&#x27;)+
     &#x27;&lt;ul&gt;&lt;li&gt;&lt;b&gt;Select&lt;/b&gt; a tool from the rack or press 1–6. A heavier or faster tool changes your velocity more.&lt;/li&gt;&#x27;+
     &#x27;&lt;li&gt;&lt;b&gt;Drag on the plot&lt;/b&gt; or grab the reticle. Point where the tool should travel. Your suit recoils in the opposite direction. Distance from your suit sets power, from 10% up to 100% at the dotted ring.&lt;/li&gt;&#x27;+
-    &#x27;&lt;li&gt;&lt;b&gt;Release to throw.&lt;/b&gt; A click or tap without dragging previews the aim. Escape or release outside the plot to cancel a drag.&lt;/li&gt;&#x27;+
+    &#x27;&lt;li&gt;&lt;b&gt;Release to throw.&lt;/b&gt; A click or tap previews your aim. The Throw button commits it. Escape or release outside the plot to cancel a drag.&lt;/li&gt;&#x27;+
     &#x27;&lt;li&gt;&lt;b&gt;Keyboard controls.&lt;/b&gt; Left and right change bearing by 1° (Shift for 10°). Up and down change power by 1% (Shift for 10%). Press Enter on the plot to throw, or hold Space to wind up and release to throw. Escape cancels the windup.&lt;/li&gt;&#x27;+
     &#x27;&lt;li&gt;&lt;b&gt;Coast&lt;/b&gt; once you have a return path. P pauses flight. Use the speed controls to fast-forward a long coast.&lt;/li&gt;&lt;/ul&gt;&#x27;+
     &#x27;&lt;p&gt;Bearings run counterclockwise from right (000°) to up (090°). Vx, Vy and radial speed use m/s. Green hatch distance and negative radial speed mean you are closing in. Red distance and positive radial speed mean you are moving away. Hatch distance measures the gap to the capture circle.&lt;/p&gt;&#x27;+
-    (state.level===&#x27;Story&#x27;?&#x27;&#x27;:&#x27;&lt;p&gt;The Δv budget is the largest total velocity change available from full-power throws in the best order.&lt;/p&gt;&#x27;),
-    [[&#x27;Back to flight&#x27;,()=&gt;closeDialog(),true]]);
+    (state.level===&#x27;Story&#x27;?&#x27;&#x27;:&#x27;&lt;p&gt;The Δv budget is the largest total velocity change available from full-power throws in the best order.&lt;/p&gt;&#x27;)+
+    (voice?&#x27;&lt;label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;crewAudio&quot;&#x27;+(crewVoiceEnabled?&#x27; checked&#x27;:&#x27;&#x27;)+&#x27;&gt; Voice the station’s capture call&lt;/label&gt;&#x27;:&#x27;&#x27;),
+    [[&#x27;Restart guided first rescue&#x27;,()=&gt;{closeDialog(false);newFlight(0,&#x27;Easy&#x27;,&#x27;none&#x27;,&#x27;aim&#x27;);}],[&#x27;Back to flight&#x27;,()=&gt;closeDialog(),true]]);
+  if($(&#x27;crewAudio&#x27;))$(&#x27;crewAudio&#x27;).onchange=e=&gt;{crewVoiceEnabled=e.target.checked;};
 }
 function finish(title,description) {
-  endDrag(true);state.phase=&#x27;ended&#x27;;state.result={title,description};stopCharge();flash=null;
-  renderGear(); summary();
+  const captured=title===&#x27;Capture confirmed&#x27;, arrival=captured &amp;&amp; state.finalRate&gt;0;
+  endDrag(true);if(state.lesson)rememberLesson();
+  state.finalRate=0;state.phase=&#x27;ended&#x27;;state.result={title,description};stopCharge();flash=null;
+  if(captured){
+    state.tip=description;
+    const voice=crewVoiceEnabled &amp;&amp; localCrewVoice();
+    if(voice){
+      const call=new SpeechSynthesisUtterance(&#x27;We’ve got you. Welcome back.&#x27;);
+      call.voice=voice;window.speechSynthesis.speak(call);
+    }
+  }
+  renderGear();
+  if(arrival){
+    render();
+    debriefTimer=setTimeout(()=&gt;{debriefTimer=null;if(!$(&#x27;modal&#x27;).open)summary();},1300);
+  } else summary();
 }
 function summary() {
+  clearTimeout(debriefTimer);debriefTimer=null;
   const s=state;
   openDialog(&#x27;summary&#x27;,&#x27;Mission debrief&#x27;,s.result.title,&#x27;&lt;p&gt;&#x27;+s.result.description+&#x27;&lt;/p&gt;&lt;dl class=&quot;dialogstats&quot;&gt;&#x27;+
     [[&#x27;Scenario&#x27;,s.name],[&#x27;Difficulty&#x27;,s.level],[&#x27;Flight time&#x27;,clock(s.elapsed)],[&#x27;Oxygen remaining&#x27;,clock(Math.ceil(s.oxygen))],
-    [&#x27;Tools thrown&#x27;,s.level===&#x27;Story&#x27;?s.throws:s.throws+&#x27; / 6&#x27;],[&#x27;Δv applied&#x27;,s.spent.toFixed(3)+&#x27; m/s&#x27;],[&#x27;Closest approach&#x27;,s.closest.toFixed(2)+&#x27; m&#x27;]].map(([k,v])=&gt;&#x27;&lt;dt&gt;&#x27;+k+&#x27;&lt;/dt&gt;&lt;dd&gt;&#x27;+v+&#x27;&lt;/dd&gt;&#x27;).join(&#x27;&#x27;)+&#x27;&lt;/dl&gt;&#x27;,
-    [[&#x27;Review plot&#x27;,()=&gt;closeDialog()],[&#x27;Fly again&#x27;,()=&gt;setup(),true]]);
+    [&#x27;Tools thrown&#x27;,s.level===&#x27;Story&#x27;?s.throws:s.throws+&#x27; / 6&#x27;],[&#x27;Δv applied&#x27;,s.spent.toFixed(3)+&#x27; m/s&#x27;],[&#x27;Closest approach&#x27;,s.closest.toFixed(2)+&#x27; m&#x27;],
+      ...(s.objective===&#x27;none&#x27;?[]:[[&#x27;Bonus objective&#x27;,replayGoals[s.objective]+&#x27; · &#x27;+(s.result.title===&#x27;Capture confirmed&#x27; &amp;&amp; objectiveIntact()?&#x27;Earned&#x27;:&#x27;Missed&#x27;)]])].map(([k,v])=&gt;&#x27;&lt;dt&gt;&#x27;+k+&#x27;&lt;/dt&gt;&lt;dd&gt;&#x27;+v+&#x27;&lt;/dd&gt;&#x27;).join(&#x27;&#x27;)+&#x27;&lt;/dl&gt;&#x27;,
+    [[&#x27;Review plot&#x27;,()=&gt;closeDialog()],[&#x27;Retry this flight&#x27;,()=&gt;{closeDialog(false);newFlight(s.index,s.level,s.objective,s.lesson?&#x27;aim&#x27;:&#x27;&#x27;);}],
+      [&#x27;Next challenge&#x27;,()=&gt;{closeDialog(false);newFlight((s.index+1)%scenarios.length,s.level,s.objective===&#x27;drill&#x27;?&#x27;two&#x27;:&#x27;drill&#x27;);},true]]);
 }
 function windup(time) {
   if(!charge)return;
@@ -2696,7 +3565,7 @@ function releaseCharge(source) {
   windup(performance.now());stopCharge(false);throwTool();
 }
 function frame(now) {
-  if(lastFrame!==null &amp;&amp; state.phase===&#x27;flying&#x27; &amp;&amp; !$(&#x27;modal&#x27;).open) advance(Math.max(0,now-lastFrame)*.001*state.rate);
+  if(lastFrame!==null &amp;&amp; state.phase===&#x27;flying&#x27; &amp;&amp; !$(&#x27;modal&#x27;).open) advance(Math.max(0,now-lastFrame)*.001*(state.finalRate || state.rate));
   lastFrame=now;
   windup(now);
   if(state.phase===&#x27;flying&#x27;||charge)render();
@@ -2708,7 +3577,13 @@ function backgroundPause() {
   if($(&#x27;modal&#x27;).open &amp;&amp; previousPhase===&#x27;flying&#x27;)previousPhase=&#x27;paused&#x27;;
   renderGear();render();
 }
+function measurePlot() {
+  const b=$(&#x27;plot&#x27;).getBoundingClientRect();
+  plotW=Math.max(1,b.width);plotH=Math.max(1,b.height);
+  $(&#x27;plot&#x27;).setAttribute(&#x27;viewBox&#x27;,&#x27;0 0 &#x27;+plotW+&#x27; &#x27;+plotH);
+}
 function init() {
+  window.speechSynthesis?.getVoices();
   const ns=&#x27;http://www.w3.org/2000/svg&#x27;;
   let seed=73;
   const random=()=&gt;{seed=(Math.imul(1664525,seed)+1013904223)&gt;&gt;&gt;0;return seed/4294967296;};
@@ -2728,7 +3603,7 @@ function init() {
   });
   for(const v of [1,2,5,10]) {
     const b=document.createElement(&#x27;button&#x27;);b.value=v;b.textContent=v+&#x27;×&#x27;;b.setAttribute(&#x27;aria-label&#x27;,v+&#x27; times simulation speed&#x27;);
-    b.onclick=()=&gt;{state.rate=v;lastFrame=null;render();};$(&#x27;speeds&#x27;).append(b);
+    b.onclick=()=&gt;{state.rate=v;state.finalRate=0;lastFrame=null;render();};$(&#x27;speeds&#x27;).append(b);
   }
   const plot=$(&#x27;plot&#x27;);
   plot.addEventListener(&#x27;pointerdown&#x27;,startDrag);
@@ -2747,13 +3622,24 @@ function init() {
     moveDrag(e);
     render(); // A release can arrive at a new position without an intervening move.
     const commit=drag.inside &amp;&amp; drag.moved;
+    const tap=drag.inside &amp;&amp; !drag.moved;
+    const bounds=plot.getBoundingClientRect();
+    const onTarget=tap &amp;&amp; trainingAim() &amp;&amp; Math.hypot(
+      e.clientX-bounds.left-camera.px-trainingRange(),e.clientY-bounds.top-camera.py)&lt;=21;
     endDrag(!drag.inside);
+    if(onTarget)useTrainingAim();
+    else if(tap)markAim();
     if(commit)throwTool();
     else render();
   });
   for(const event of [&#x27;pointercancel&#x27;,&#x27;lostpointercapture&#x27;])window.addEventListener(event,e=&gt;{
     if(drag?.id===e.pointerId){endDrag(true);render();}
   });
+  $(&#x27;lessonAction&#x27;).onclick=lessonAction;
+  $(&#x27;retryThrow&#x27;).onclick=()=&gt;newFlight(0,&#x27;Easy&#x27;,&#x27;none&#x27;,&#x27;aim&#x27;);
+  $(&#x27;skipLesson&#x27;).onclick=()=&gt;{rememberLesson();state.lesson=&#x27;&#x27;;renderGear();render();$(&#x27;plot&#x27;).focus({preventScroll:true});};
+  $(&#x27;throwButton&#x27;).onclick=throwTool;
+  $(&#x27;coastButton&#x27;).onclick=coastToHatch;
   $(&#x27;setup&#x27;).onclick=()=&gt;setup();$(&#x27;difficulty&#x27;).onchange=e=&gt;setup(e.target.value);
   $(&#x27;guide&#x27;).onclick=guide;$(&#x27;pause&#x27;).onclick=()=&gt;state.phase===&#x27;ended&#x27;?summary():toggleClock();
   $(&#x27;modal&#x27;).addEventListener(&#x27;cancel&#x27;,e=&gt;{e.preventDefault();closeDialog();});
@@ -2769,10 +3655,10 @@ function init() {
     if(/^[1-6]$/.test(e.key))selectTool(Number(e.key)-1);
     const step=e.shiftKey?10:1;
     if([&#x27;ArrowLeft&#x27;,&#x27;ArrowRight&#x27;].includes(e.key)){
-      e.preventDefault();state.bearing=norm(state.bearing+(e.key===&#x27;ArrowLeft&#x27;?step:-step));render();
+      e.preventDefault();markAim();state.bearing=norm(state.bearing+(e.key===&#x27;ArrowLeft&#x27;?step:-step));render();
     }
     if([&#x27;ArrowUp&#x27;,&#x27;ArrowDown&#x27;].includes(e.key)){
-      e.preventDefault();state.power=Math.min(100,Math.max(10,state.power+(e.key===&#x27;ArrowUp&#x27;?step:-step)));render();
+      e.preventDefault();markAim();state.power=Math.min(100,Math.max(10,state.power+(e.key===&#x27;ArrowUp&#x27;?step:-step)));render();
     }
     if(e.key===&#x27;Enter&#x27; &amp;&amp; e.target===plot){
       e.preventDefault();if(!e.repeat)throwTool();
@@ -2781,16 +3667,16 @@ function init() {
   document.addEventListener(&#x27;keyup&#x27;,e=&gt;{if(e.code===&#x27;Space&#x27; &amp;&amp; charge?.source===&#x27;key&#x27;){e.preventDefault();releaseCharge(&#x27;key&#x27;);}});
   document.addEventListener(&#x27;visibilitychange&#x27;,()=&gt;{if(document.hidden)backgroundPause();});
   window.addEventListener(&#x27;blur&#x27;,backgroundPause);
-  function resize() {
-    const b=$(&#x27;plot&#x27;).getBoundingClientRect(); plotW=Math.max(1,b.width);plotH=Math.max(1,b.height);
-    $(&#x27;plot&#x27;).setAttribute(&#x27;viewBox&#x27;,&#x27;0 0 &#x27;+plotW+&#x27; &#x27;+plotH); if(state)render();
-  }
-  resize();newFlight();new ResizeObserver(resize).observe($(&#x27;plot&#x27;));requestAnimationFrame(frame);
+  newFlight(0,&#x27;Easy&#x27;,&#x27;none&#x27;,firstRescueWanted()?&#x27;aim&#x27;:&#x27;&#x27;);
+  new ResizeObserver(()=&gt;{measurePlot();render();}).observe(plot);
+  requestAnimationFrame(frame);
 }
 init();
 &lt;/script&gt;&lt;script&gt;
 (() =&gt; {
   const passed=[];
+  let savedLesson;
+  try {savedLesson=localStorage.getItem(&#x27;untethered.firstRescueSeen&#x27;);} catch { /* Opaque test document. */ }
   const yes=(v,m)=&gt;{if(!v)throw Error(m)};
   const near=(a,b,m,tol=1e-9)=&gt;yes(Math.abs(a-b)&lt;tol,m+&#x27; &#x27;+a+&#x27; &#x27;+b);
   function test(name,fn) { if($(&#x27;modal&#x27;).open)closeDialog(false);newFlight();fn();passed.push(name);}
@@ -2832,7 +3718,7 @@ init();
         const guided=l===&#x27;Easy&#x27; || l===&#x27;Story&#x27;;
         yes($(&#x27;coast&#x27;).getAttribute(&#x27;visibility&#x27;)===(guided?&#x27;visible&#x27;:&#x27;hidden&#x27;),&#x27;coast visibility&#x27;);
         yes($(&#x27;coastKey&#x27;).hidden===!guided,&#x27;coast legend&#x27;);
-        yes(/intercept|miss/i.test($(&#x27;prediction&#x27;).textContent)===guided,&#x27;prediction text&#x27;);
+        yes(/on course|miss by|oxygen runs out first/i.test($(&#x27;prediction&#x27;).textContent)===guided,&#x27;prediction text&#x27;);
       }
     });
     test(&#x27;Story is optional, starts from the difficulty menu and reloads the selected tool&#x27;,()=&gt;{
@@ -2909,19 +3795,24 @@ init();
       }
       $(&#x27;guide&#x27;).click();yes($(&#x27;modal&#x27;).open,&#x27;guide&#x27;);$(&#x27;dialogActions&#x27;).lastElementChild.click();yes(state.phase===&#x27;paused&#x27;,&#x27;guide keeps paused state&#x27;);
     });
-    test(&#x27;All three scenarios are rescuable on Hard with rack and bearing controls&#x27;,()=&gt;{
-      for(let index=0;index&lt;3;index++){
-        if($(&#x27;modal&#x27;).open)closeDialog(false);newFlight(index,&#x27;Hard&#x27;);const dist=Math.hypot(state.x,state.y),ux=-state.x/dist,uy=-state.y/dist;
-        const side=state.vx*(-uy)+state.vy*ux,along=state.vx*ux+state.vy*uy;
-        const dv=gear[3].mass*gear[3].speed/massOf(state.mask)+gear[1].mass*gear[1].speed/(massOf(state.mask)-gear[3].mass);
-        const speed=along+Math.sqrt(dv*dv-side*side);
-        const angle=Math.atan2(state.vy-speed*uy,state.vx-speed*ux);
-        const dx=Math.cos(angle)*camera.reach,dy=Math.sin(angle)*camera.reach;
-        for(const i of [3,1]){
-          $(&#x27;tools&#x27;).children[i].click();pointer(&#x27;pointerdown&#x27;,0,0);pointer(&#x27;pointermove&#x27;,dx,dy);pointer(&#x27;pointerup&#x27;,dx,dy);
+    test(&#x27;All three scenarios allow a legal soft capture with the rack and integer controls&#x27;,()=&gt;{
+      const plans=[[[3,99,-6]],[[3,93,-21]],[[3,100,-17],[2,74,-16]]];
+      const random=Math.random;
+      try {
+        Math.random=()=&gt;.5;
+        for(const level of [&#x27;Medium&#x27;,&#x27;Hard&#x27;])for(const [index,throws] of plans.entries()){
+          if($(&#x27;modal&#x27;).open)closeDialog(false);
+          newFlight(index,level);
+          for(const [tool,power,bearing] of throws){
+            $(&#x27;tools&#x27;).children[tool].click();
+            const dx=camera.inner+(camera.reach-camera.inner)*(power-10)/90;
+            pointer(&#x27;pointerdown&#x27;,dx*Math.cos(radians(bearing)),dx*Math.sin(radians(bearing)));
+            pointer(&#x27;pointerup&#x27;,dx*Math.cos(radians(bearing)),dx*Math.sin(radians(bearing)));
+            $(&#x27;throwButton&#x27;).click();advance(4);
+          }
+          advance(600);yes(state.result?.title===&#x27;Capture confirmed&#x27;,level+&#x27; scenario &#x27;+index);
         }
-        advance(450);yes(state.result?.title===&#x27;Capture confirmed&#x27;,&#x27;scenario &#x27;+index);
-      }
+      } finally {Math.random=random;}
     });
     test(&#x27;Grazing, stationary, receding and already captured trajectories&#x27;,()=&gt;{
       near(course(5,1.2,-1,0).eta,5,&#x27;tangent&#x27;);yes(course(5,1.21,-1,0).eta===null,&#x27;near miss&#x27;);yes(course(5,0,0,0).eta===null,&#x27;stationary&#x27;);
@@ -3026,6 +3917,80 @@ init();
       }
       yes(getComputedStyle(advisory).pointerEvents===&#x27;none&#x27;,&#x27;notice intercepts drags&#x27;);
     });
+    test(&#x27;Training aim, throw, retry, skip and replay all use the flight controls&#x27;,()=&gt;{
+      newFlight(0,&#x27;Easy&#x27;,&#x27;none&#x27;,&#x27;aim&#x27;);
+      $(&#x27;pause&#x27;).click();yes(state.phase===&#x27;ready&#x27; &amp;&amp; state.elapsed===0,&#x27;training clock held&#x27;);
+      yes(!$(&#x27;lesson&#x27;).hidden &amp;&amp; $(&#x27;lessonMarks&#x27;).getAttribute(&#x27;visibility&#x27;)===&#x27;visible&#x27;,&#x27;visible instruction&#x27;);
+      const target=trainingRange();pointer(&#x27;pointerdown&#x27;,target,3);pointer(&#x27;pointerup&#x27;,target,3);
+      yes(state.lesson===&#x27;throw&#x27; &amp;&amp; state.bearing===0 &amp;&amp; state.power===65 &amp;&amp; !state.throws,&#x27;forgiving target&#x27;);
+      $(&#x27;lessonAction&#x27;).click();yes(state.lesson===&#x27;coast&#x27; &amp;&amp; state.throws===1 &amp;&amp; !$(&#x27;coastButton&#x27;).hidden,&#x27;first release&#x27;);
+      yes($(&#x27;assistMode&#x27;).textContent===&#x27;Current coast&#x27; &amp;&amp; /On course/.test($(&#x27;prediction&#x27;).querySelector(&#x27;strong&#x27;).textContent),&#x27;primary coast&#x27;);
+      const eta=course(state.x,state.y,state.vx,state.vy).eta;
+      $(&#x27;lessonAction&#x27;).click();yes(state.phase===&#x27;flying&#x27; &amp;&amp; state.finalRate &amp;&amp; state.elapsed&gt;700 &amp;&amp; state.elapsed&lt;eta,&#x27;last metre remains&#x27;);
+      advance(1000);near(state.elapsed,eta,&#x27;coast charges full time&#x27;);yes(state.result.title===&#x27;Capture confirmed&#x27; &amp;&amp; $(&#x27;railCatch&#x27;).getAttribute(&#x27;visibility&#x27;)===&#x27;visible&#x27;,&#x27;handrail&#x27;);
+      closeDialog(false);newFlight(0,&#x27;Easy&#x27;,&#x27;none&#x27;,&#x27;aim&#x27;);$(&#x27;lessonAction&#x27;).click();key(&#x27;ArrowLeft&#x27;,true);$(&#x27;throwButton&#x27;).click();
+      yes($(&#x27;coastButton&#x27;).hidden &amp;&amp; /again/i.test($(&#x27;lessonAction&#x27;).textContent),&#x27;miss can retry&#x27;);
+      $(&#x27;lessonAction&#x27;).click();yes(state.throws===0 &amp;&amp; state.lesson===&#x27;aim&#x27; &amp;&amp; state.mask===fullMask,&#x27;fresh guided try&#x27;);
+      $(&#x27;skipLesson&#x27;).click();yes($(&#x27;lesson&#x27;).hidden &amp;&amp; !$(&#x27;pause&#x27;).disabled,&#x27;skip releases controls&#x27;);
+      $(&#x27;guide&#x27;).click();$(&#x27;dialogActions&#x27;).firstElementChild.click();yes(state.lesson===&#x27;aim&#x27; &amp;&amp; !$(&#x27;lesson&#x27;).hidden,&#x27;guide replay&#x27;);
+    });
+    test(&#x27;Approach gauge and first-crossing outcomes use total speed at the exact deadline&#x27;,()=&gt;{
+      for(const level of Object.keys(limits))for(const factor of [.99,1,1.001]){
+        if($(&#x27;modal&#x27;).open)closeDialog(false);
+        newFlight(0,level);
+        const speed=captureSpeedLimit*factor;
+        state.x=3;state.y=4;state.vx=-.6*speed;state.vy=-.8*speed;
+        state.oxygen=course(state.x,state.y,state.vx,state.vy).eta;
+        toggleClock();render();
+        const over=softCapture(level) &amp;&amp; factor&gt;1;
+        yes($(&#x27;speedometer&#x27;).hidden===!softCapture(level),&#x27;meter mode&#x27;);
+        if(softCapture(level)){
+          yes($(&#x27;speedometer&#x27;).dataset.over===String(over),&#x27;redline&#x27;);
+          yes(parseFloat($(&#x27;speedFill&#x27;).style.width)&gt;70,&#x27;gauge fill&#x27;);
+          yes($(&#x27;speedLimit&#x27;).textContent.startsWith(over?&#x27;Over limit&#x27;:&#x27;Limit&#x27;),&#x27;text warning&#x27;);
+          const [red,green]=getComputedStyle($(&#x27;speedNumber&#x27;)).color.match(/\d+/g).map(Number);
+          yes(over?red&gt;green:green&gt;red,&#x27;speed readout warning color&#x27;);
+          if(innerWidth&lt;=720)yes($(&#x27;speedGauge&#x27;).getBoundingClientRect().bottom&lt;=$(&#x27;plot&#x27;).getBoundingClientRect().top,&#x27;gauge clear of aiming area&#x27;);
+        }
+        yes($(&#x27;coastButton&#x27;).hidden===over,&#x27;safe shortcut&#x27;);
+        advance(1000);near(Math.hypot(state.x,state.y),captureRadius,&#x27;edge&#x27;);
+        yes(state.result.title===(over?&#x27;Approach too fast&#x27;:&#x27;Capture confirmed&#x27;),&#x27;deadline &#x27;+level+&#x27; &#x27;+factor);
+      }
+      closeDialog(false);newFlight(0,&#x27;Medium&#x27;);state.x=2;state.y=0;state.vx=-.04;state.vy=.08;render();
+      yes($(&#x27;speedometer&#x27;).dataset.over===&#x27;true&#x27;,&#x27;fast sideways motion&#x27;);
+    });
+    test(&#x27;Hard samples one bounded release error and preserves opposite recoil&#x27;,()=&gt;{
+      const random=Math.random;
+      try {
+        for(const level of Object.keys(limits))for(const sample of [0,.5,.999999]){
+          newFlight(0,level);
+          let calls=0;Math.random=()=&gt;{calls++;return sample;};
+          state.bearing=359;state.power=85;
+          render();render();yes(calls===0,&#x27;preview sampled random&#x27;);
+          const angle=359+(level===&#x27;Hard&#x27;?(sample*2-1)*hardBearingError:0);
+          const k=impulse(0,85,angle),vx=state.vx,vy=state.vy;
+          $(&#x27;throwButton&#x27;).click();
+          yes(calls===(level===&#x27;Hard&#x27;?1:0),&#x27;one draw at release&#x27;);
+          near(state.lastBearing,norm(angle),&#x27;actual bearing&#x27;);near(state.vx,vx+k.dx,&#x27;recoil x&#x27;);near(state.vy,vy+k.dy,&#x27;recoil y&#x27;);
+          near(anim.vx-state.vx,k.ux,&#x27;tool x&#x27;);near(anim.vy-state.vy,k.uy,&#x27;tool y&#x27;);
+        }
+      } finally {Math.random=random;}
+    });
+    test(&#x27;Forecast switches with aim and unsafe or expired coasts cannot skip time&#x27;,()=&gt;{
+      $(&#x27;throwButton&#x27;).click();yes($(&#x27;assistMode&#x27;).textContent===&#x27;Current coast&#x27;,&#x27;coast leads after release&#x27;);
+      key(&#x27;ArrowUp&#x27;);yes($(&#x27;assistMode&#x27;).textContent===&#x27;If you throw now&#x27;,&#x27;planned keyboard throw&#x27;);
+      state.oxygen=5;render();coastToHatch();yes($(&#x27;coastButton&#x27;).hidden &amp;&amp; state.elapsed===0,&#x27;oxygen gate&#x27;);
+      newFlight(0,&#x27;Medium&#x27;);state.x=5;state.y=0;state.vx=-.12;state.vy=0;toggleClock();coastToHatch();
+      yes(state.elapsed===0 &amp;&amp; $(&#x27;coastButton&#x27;).hidden,&#x27;no overspeed skip&#x27;);
+      state.mask=0;state.selected=-1;advance(600);yes(state.result.title===&#x27;Approach too fast&#x27;,&#x27;final coast still fails fast&#x27;);
+    });
+    test(&#x27;Bonus goals track released tools including Story reloads and retry resets the challenge&#x27;,()=&gt;{
+      newFlight(1,&#x27;Story&#x27;,&#x27;drill&#x27;);selectTool(1);throwTool();yes(!objectiveIntact() &amp;&amp; isAvailable(1),&#x27;reloaded drill counts&#x27;);
+      state.x=1;state.y=0;advance(1);yes($(&#x27;dialogBody&#x27;).textContent.includes(&#x27;Missed&#x27;),&#x27;optional goal can miss on a rescue&#x27;);
+      $(&#x27;dialogActions&#x27;).children[1].click();yes(state.index===1 &amp;&amp; state.level===&#x27;Story&#x27; &amp;&amp; state.objective===&#x27;drill&#x27; &amp;&amp; objectiveIntact(),&#x27;same flight retry&#x27;);
+      newFlight(0,&#x27;Easy&#x27;,&#x27;two&#x27;);throwTool();advance(900);yes($(&#x27;dialogBody&#x27;).textContent.includes(&#x27;Earned&#x27;),&#x27;two throws objective&#x27;);
+      $(&#x27;dialogActions&#x27;).lastElementChild.click();yes(state.index===1 &amp;&amp; state.level===&#x27;Easy&#x27; &amp;&amp; state.objective===&#x27;drill&#x27;,&#x27;different next challenge&#x27;);
+    });
     test(&#x27;Menu configuration, full-power reach and narrow layout&#x27;,()=&gt;{
       $(&#x27;setup&#x27;).click();$(&#x27;scenarioChoice&#x27;).value=&#x27;2&#x27;;$(&#x27;levelChoice&#x27;).value=&#x27;Medium&#x27;;$(&#x27;dialogActions&#x27;).lastElementChild.click();
       yes(state.index===2 &amp;&amp; state.oxygen===600 &amp;&amp; state.throws===0 &amp;&amp; state.mask===63,&#x27;reset&#x27;);
@@ -3037,6 +4002,10 @@ init();
     });
     output.textContent=&#x27;PASS &#x27;+passed.length+&#x27; groups at &#x27;+innerWidth+&#x27;px: &#x27;+passed.join(&#x27; | &#x27;);
   }catch(e){output.textContent=&#x27;FAIL after &#x27;+passed.length+&#x27;: &#x27;+e.message+&#x27; / &#x27;+e.stack;}
+  if(savedLesson!==undefined){
+    if(savedLesson===null)localStorage.removeItem(&#x27;untethered.firstRescueSeen&#x27;);
+    else localStorage.setItem(&#x27;untethered.firstRescueSeen&#x27;,savedLesson);
+  }
   document.body.append(output);
 })();
 &lt;/script&gt;&lt;/body&gt;&lt;/html&gt;
