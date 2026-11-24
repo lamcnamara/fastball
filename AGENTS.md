@@ -2,7 +2,7 @@
 
 ## Project structure
 
-UNTETHERED is a browser-based EVA return simulator. Edit `index.html` for the interface, inline SVG artwork, CSS, and simulation logic. The script starts with equipment and scenario definitions. Use `impulse()` for throw calculations, `advance()` for elapsed flight time, and `renderPlot()` for the trajectory display. Keep the throw preview and the actual throw on the same physics calculation.
+Fastball is a browser-based EVA return simulator. Edit `index.html` for the interface, inline SVG artwork, CSS, and simulation logic. The script starts with equipment and scenario definitions. Use `impulse()` for throw calculations, `advance()` for elapsed flight time, and `renderPlot()` for the trajectory display. Keep the throw preview and the actual throw on the same physics calculation.
 
 The root also contains two browser test pages and `preview-qa.png`, a visual reference.
 
