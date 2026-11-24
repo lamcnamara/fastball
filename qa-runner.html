@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101517"><meta name="description" content="You were the star pitcher in high school. Now your tether has snapped. Pitch your repair tools to get back to the airlock in Fastball, a browser game about momentum."><title>Fastball · Alpha v0.2 · EVA return simulator</title><style>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101517"><meta name="description" content="Mission specialist Capt. Tommi Dylan has a broken tether, a wrench pouch, and a pitching arm. Bring her home in Fastball, a browser game about momentum."><title>Fastball · Alpha v0.2 · EVA return simulator</title><style>
 :root{color-scheme:dark;--bg:#0e1113;--panel:#181c1e;--edge:#343b3e;--muted:#c1cecf;--oxygen-fill:#a4ead0;--mint:#a9c4b7;--ink:#e5e8e5;--gold:#d4b48b;--mono:Consolas,"SFMono-Regular","Liberation Mono",monospace;--sans:"Segoe UI",Arial,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px var(--sans)}button,select,input{font:inherit}button,select{color:var(--ink);cursor:pointer}button{background:#20282b;border:1px solid var(--edge);border-radius:5px}button:hover:enabled,select:hover{background:#2a3437;border-color:#6b7d81}button:focus-visible,select:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--mint);outline-offset:3px}button:disabled{cursor:default;color:var(--muted)}.tool:disabled svg{opacity:.52}button svg{width:15px;height:15px;vertical-align:-3px}header{border-bottom:1px solid var(--edge);background:#14191b}.bar,main{width:min(1512px,100%);margin:auto}.bar{display:flex;align-items:center;justify-content:space-between;padding:17px clamp(16px,3.6vw,58px);gap:12px}.brand{display:flex;align-items:center;gap:13px}.brand>svg{width:38px;height:38px}.wordmark{font-weight:750;letter-spacing:.18em;font-size:20px;line-height:1.1}.subbrand,.micro,.sectionlabel,.spec,.tag,.plotlabel,.foot,.eyebrow{font:500 13px/1.35 var(--sans);letter-spacing:.012em}.subbrand{color:var(--muted);letter-spacing:.02em;font-size:12px;margin-top:2px}.toptools,.actions,.caption,.settings,.row,.chips,.legend,.cardhead,.inc,.fr{display:flex;align-items:center;gap:10px}.toptools{gap:17px}.tag{border:1px solid #435050;color:#bccac7;border-radius:4px;padding:4px 7px;letter-spacing:.025em}.quiet{padding:8px 11px;display:inline-flex;align-items:center;gap:7px}.quiet svg{fill:none;stroke:currentColor;stroke-width:1.6}.guide{background:transparent}main{padding:24px clamp(16px,3.6vw,58px) 22px}.mission{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:17px}.eyebrow,.plotlabel{color:var(--mint)}h1,h2,h3,p{margin:0}h1{font-size:clamp(26px,2.4vw,39px);line-height:1.15;letter-spacing:-.04em;margin-top:4px;font-weight:630}.settings{gap:9px}.settings select,.dialogrow select{background:#20282b;border:1px solid var(--edge);border-radius:5px;padding:7px 9px}.panel{background:var(--panel);border:1px solid var(--edge);border-radius:8px;overflow:hidden;min-width:0}.panelhead{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--edge);min-height:44px}.sectionlabel{font-weight:650;font-size:14px;color:#dce5e2;display:flex;align-items:center;gap:9px}.sectionlabel svg{width:15px;height:15px;stroke:var(--mint);fill:none;stroke-width:1.6}.status{font:12px/1.3 var(--sans);color:var(--mint);display:flex;align-items:center;gap:7px}.dot{width:6px;height:6px;display:inline-block;background:var(--mint);border-radius:50%}.micro,.spec,.foot{color:var(--muted)}.big{font:clamp(25px,2.2vw,36px)/1.05 var(--mono);letter-spacing:-.06em;margin-top:4px}.big small{font:13px var(--mono);color:var(--muted);letter-spacing:0}.oxygen,.dv{color:var(--mint)}.rack{margin-top:14px}.rack .panelhead{border-bottom:0;padding-bottom:4px}.spec{font-variant-numeric:tabular-nums}.tools{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;padding:9px 14px 14px}.tool{position:relative;text-align:left;background:#1b2225;padding:7px 10px 10px;min-width:0}.tool.selected{background:#20312e;border-color:#81c8ad;box-shadow:inset 0 -2px #a9c4b7}.tool b,.tool small{display:block}.tool b{font-size:13px;font-weight:600}.tool small{font:12px/1.3 var(--sans);color:var(--muted);margin-top:4px}.tool svg{width:100%;height:43px;display:block}.slot{position:absolute;top:7px;left:8px;color:var(--muted);font:11px var(--mono)}.tool.selected .slot{color:var(--mint)}.foot{display:flex;justify-content:space-between;gap:8px;margin-top:15px}.plottext{font:500 12px var(--sans);paint-order:stroke;stroke:#10181d;stroke-width:2.5px;stroke-linejoin:round}.plotvalue{font:11px var(--mono)}dialog{color:var(--ink);background:#192023;border:1px solid #536260;border-radius:10px;width:min(450px,calc(100% - 28px));padding:23px;box-shadow:0 18px 95px #0009}dialog::backdrop{background:#070c10b5}dialog h2{font-size:26px;letter-spacing:-.035em;margin:5px 0 12px}dialog p,dialog li,dialog dd{color:#c2cfcc;font-size:14px;line-height:1.55}dialog ul{padding-left:19px}dialog li{margin:7px 0}.dialogrow{display:flex;justify-content:space-between;align-items:center;margin:16px 0;gap:10px}.dialogactions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}.dialogactions button{padding:9px 14px}.primary{color:#10201a;background:var(--mint);border-color:var(--mint)}.primary:hover:enabled{background:#c0f8df}.dialogstats{display:grid;grid-template-columns:1fr auto;gap:8px 16px}.dialogstats dd{margin:0;text-align:right;font-family:var(--mono)}.dialogstats dt{color:var(--muted)}.sr{position:absolute;width:1px;height:1px;clip-path:inset(50%);overflow:hidden}[hidden]{display:none!important}
 
 .bar,main { width:min(1920px,100%); padding-inline:clamp(12px,3vw,58px) }
 .bar { padding-block:11px }
-.brand>svg { width:33px; height:33px }
+.brand>svg { width:49px; height:49px; flex:none }
 .wordmark { font-size:18px }
 main { padding-block:16px }
 .mission { margin-bottom:14px }
@@ -101,7 +101,7 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
   .bar,main { padding-inline:8px }
   .brand { gap:7px }
   .wordmark { font-size:15px }
-  .brand>svg { width:27px; height:27px }
+  .brand>svg { width:39px; height:39px }
   .toptools { flex-direction:column-reverse; align-items:flex-end; gap:2px }
   .tag { border:0; padding:0; font-size:11px }
   .settings { gap:5px }
@@ -144,7 +144,18 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
 .speed-track i { display:block; height:100%; background:var(--oxygen-fill) }
 .speedometer[data-over="true"] .speed-track i { background:var(--danger) }
 .speed-track::after { position:absolute; content:""; left:75%; top:-3px; bottom:-3px; width:3px; background:#f77569; box-shadow:0 0 0 1px #161d20 }
+.speedometer[data-reference="true"] .speed-track { background:#253833 }
+.speedometer[data-reference="true"] .speed-track::after { background:var(--muted); opacity:.55; width:2px }
 .speed-limit { color:var(--muted); font-size:12px }
+dialog[data-kind="guide"] { width:min(560px,calc(100% - 28px)) }
+dialog[data-kind="guide"] #dialogBody>p+p { margin-top:9px }
+#dialogTitle:focus { outline:none }
+.station-call { margin:0 0 16px; border-left:2px solid var(--mint); padding-left:12px }
+.station-call b { color:var(--mint); font:600 12px var(--mono) }
+.station-call p { color:var(--ink); margin:4px 0 0; font-size:16px }
+.upmass { margin:14px 0 18px; border-block:1px solid var(--edge); padding:10px 0 }
+.upmass h3 { margin:0; color:var(--gold); font-size:16px }
+.upmass p { margin:4px 0 }
 .assist strong { font:600 14px/1.4 var(--sans); color:var(--oxygen-fill) }
 .assist .secondary { font:12px/1.4 var(--sans); color:var(--muted) }
 .flight-scene { position:relative }
@@ -153,19 +164,18 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
 @media(min-width:1000px) {
   .lesson { position:absolute; top:14px; left:50%; transform:translateX(-50%); width:min(52%,590px); z-index:1; border:1px solid #456059; border-radius:6px; background:#18282bf2; padding:11px 16px }
 }
-@media(max-width:940px) { .scene:has(.speedometer:not([hidden])) .side-hud.right { top:155px } }
+@media(max-width:940px) { .scene .side-hud.right { top:155px } }
 @media(max-width:720px) { .flight-controls { padding:7px 9px } .lesson { padding:9px 10px } }
 @media(max-width:720px) {
-  .scene:has(.speedometer:not([hidden])) { display:flex; flex-direction:column }
-  .scene:has(.speedometer:not([hidden])) [aria-label="Suit telemetry"] { order:-1; display:grid; grid-template-columns:1fr 1fr; gap:7px 12px; padding:9px 12px; background:#141e23; border-bottom:1px solid var(--edge) }
-  .scene:has(.speedometer:not([hidden])) .left-instruments { display:contents }
-  .scene:has(.speedometer:not([hidden])) [aria-label="Suit telemetry"] .hud { position:static; padding:0; border:0; background:none }
-  .scene:has(.speedometer:not([hidden])) .primary-hud { grid-row:1 }
-  .scene:has(.speedometer:not([hidden])) .side-hud { grid-row:2 }
-  .scene:has(.speedometer:not([hidden])) .side-hud { gap:3px }
-  .scene:has(.speedometer:not([hidden])) .side-hud.right { justify-self:end }
-  .scene:has(.speedometer:not([hidden])) .primary-hud .big { font-size:23px }
-  .scene:has(.speedometer:not([hidden]))>svg { height:clamp(300px,45svh,400px) }
+  .scene { display:flex; flex-direction:column }
+  .scene [aria-label="Suit telemetry"] { order:-1; display:grid; grid-template-columns:1fr 1fr; gap:7px 12px; padding:9px 12px; background:#141e23; border-bottom:1px solid var(--edge) }
+  .scene .left-instruments { display:contents }
+  .scene [aria-label="Suit telemetry"] .hud { position:static; padding:0; border:0; background:none }
+  .scene .primary-hud { grid-row:1 }
+  .scene .side-hud { grid-row:2; gap:3px }
+  .scene .side-hud.right { justify-self:end }
+  .scene .primary-hud .big { font-size:23px }
+  .scene>svg { height:clamp(300px,45svh,400px) }
   .speedometer { order:1; width:100%; display:grid; grid-template-columns:auto 1fr auto; text-align:left!important; grid-column:1/-1; gap:3px 8px; align-items:baseline }
   .speedometer .speed-number { text-align:right }
   .speedometer .speed-track { grid-column:1/-1; grid-row:2 }
@@ -267,8 +277,26 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
 <g id="t4" transform="rotate(-29)" stroke="#50626a" stroke-width="1.6"><path d="M-25 -4H7v-9h10v9h7v8h-7v9H7V4h-32z" fill="url(#suit)"/><path d="M-24 -4h11v8h-11z" fill="#6f848b"/><path d="M9 -8h6m-6 16h6" stroke="#bf985e"/></g>
 <g id="t5" transform="rotate(-28)" stroke="#52636b" stroke-width="1.6"><path d="M-23 -4h31v8h-31q-5-4 0-8z" fill="url(#silver)"/><path d="M7 -9h16l4 5v9l-4 4H7z" fill="url(#suit)"/><path d="M12 -8V8m5-16V8m5-14V6" stroke="#768a92"/><circle cx="-21" cy="0" r="1.5" fill="#2e3a3f"/></g>
 <symbol id="cross" viewBox="0 0 20 20"><circle cx="10" cy="10" r="5.8"/><path d="M10 0v6m0 8v6M0 10h6m8 0h6"/></symbol><symbol id="signal" viewBox="0 0 20 20"><path d="M1 12h4l3-8 4 13 3-8h4"/></symbol><symbol id="rackicon" viewBox="0 0 20 20"><rect x="2" y="6" width="16" height="11" rx="2"/><path d="M6 6V3h8v3M2 10h16m-10 0v2h4v-2"/></symbol><symbol id="book" viewBox="0 0 20 20"><path d="M2 4q5-2 8 1 3-3 8-1v12q-4-2-8 1-4-3-8-1zM10 5v11"/></symbol><symbol id="restart" viewBox="0 0 20 20"><path d="M3 9a7 7 0 1 1 1 6M3 3v6h6"/></symbol><symbol id="launch" viewBox="0 0 20 20"><path d="m3 16 12-12M6 4h10v10M2 11l4-4"/></symbol>
-</defs></svg><header><div class="bar"><div class="brand"><svg viewBox="0 0 40 40" aria-hidden="true"><rect x="1" y="1" width="38" height="38" rx="9" fill="#b1c2b7"/><g stroke="#25332d" fill="none" stroke-width="2"><ellipse cx="20" cy="20" rx="15" ry="6" transform="rotate(-40 20 20)"/><path d="m15 24 3-13 10 6-13 7z" fill="#25332d"/></g></svg><div><div class="wordmark">FASTBALL</div><div class="subbrand">EVA return simulator</div></div></div><div class="toptools"><span class="tag">Alpha v0.2</span><button class="quiet guide" id="guide"><svg aria-hidden="true"><use href="#book"/></svg> Flight guide</button></div></div></header>
-<main><div class="mission"><div><div class="eyebrow" id="missionId">Scenario 01 / 03</div><h1 id="missionTitle">Tether separation</h1></div><div class="settings"><select id="difficulty" aria-label="Mission difficulty"><option>Story</option><option selected>Easy</option><option>Medium</option><option>Hard</option></select><button class="quiet" id="setup"><svg aria-hidden="true"><use href="#restart"/></svg> New mission</button><button class="quiet" id="pause">Start clock</button></div></div>
+</defs></svg><header><div class="bar"><div class="brand">
+<svg viewBox="0 0 64 64" role="img" aria-label="Mission patch: a gloved hand grips a wrench above Earth">
+  <defs><clipPath id="patchRim"><circle cx="32" cy="32" r="30"/></clipPath></defs>
+  <g clip-path="url(#patchRim)">
+    <circle cx="32" cy="32" r="30" fill="#15242c"/>
+    <path d="M-4 65Q23 29 68 45V68H-4Z" fill="#45717b" stroke="var(--oxygen-fill)" stroke-width="2"/>
+    <path d="M21 60q9-7 18-6l4-4 13 2" fill="none" stroke="#82a6a3" stroke-width="2"/>
+    <g fill="var(--gold)" stroke="#172329" stroke-width="1.5" stroke-linejoin="round">
+      <path d="M48 9a9 9 0 0 0-12 11L16 43a3.6 3.6 0 0 0 5.5 4.6L42 25a9 9 0 0 0 11-12l-6 6-5-4z"/>
+    </g>
+    <g stroke="#25343a" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round">
+      <path d="m7 43 9-9 13 9-11 13z" fill="#a8bcb9"/>
+      <path d="m12 40 8 8" fill="none" stroke="#d8e4dd" stroke-width="3"/>
+      <path d="m15 34 3-9q1-3 4-4l7-3q4-1 5 2 1 2-2 4l-5 3 7-1 6 7-2 5-9 6-7-1z" fill="#e7e9dc"/>
+      <path d="m28 27 4-4q2-2 4 0l6 5q2 2 0 4l-2 1m-8-5 7 6q2 2-1 4l-2 1m-7-7 6 5q2 2-1 4l-3 1m-5-6 5 4" fill="#e7e9dc"/>
+    </g>
+  </g>
+  <circle cx="32" cy="32" r="30" fill="none" stroke="var(--mint)" stroke-width="2"/>
+</svg><div><div class="wordmark">FASTBALL</div><div class="subbrand">EVA return simulator</div></div></div><div class="toptools"><span class="tag">Alpha v0.2</span><button class="quiet guide" id="guide"><svg aria-hidden="true"><use href="#book"/></svg> Flight guide</button></div></div></header>
+<main><div class="mission"><div><div class="eyebrow"><span id="missionId">Scenario 01 / 03</span> · Capt. Tommi Dylan</div><h1 id="missionTitle">Tether separation</h1></div><div class="settings"><select id="difficulty" aria-label="Mission difficulty"><option>Story</option><option selected>Easy</option><option>Medium</option><option>Hard</option></select><button class="quiet" id="setup"><svg aria-hidden="true"><use href="#restart"/></svg> New mission</button><button class="quiet" id="pause">Start clock</button></div></div>
 <section class="panel" aria-label="Navigation"><div class="panelhead"><h2 class="sectionlabel"><svg aria-hidden="true"><use href="#cross"/></svg> Navigation plot</h2><span class="status"><i class="dot"></i><span id="status">Standby</span></span></div>
 <div class="flight-scene"><aside class="lesson" id="lesson" aria-label="Guided first rescue" hidden>
   <h3 id="lessonTitle"></h3><p id="lessonText" aria-live="polite"></p>
@@ -305,7 +333,7 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
       <div class="hud left side-hud"><div><div class="micro">Hatch distance</div><b id="range"></b></div><div><div class="micro">Hatch bearing</div><b id="bearing"></b></div></div>
     </div>
     <div class="hud right primary-hud"><div class="micro">Δv budget</div><div class="big"><span id="budget"></span> <small>m/s</small></div></div>
-      <div id="speedometer" class="hud right speedometer" hidden><span class="micro">Approach speed</span><output class="speed-number" id="speedNumber"></output>
+      <div id="speedometer" class="hud right speedometer"><span class="micro">Approach speed</span><output class="speed-number" id="speedNumber"></output>
         <div id="speedGauge" class="speed-track" role="meter" aria-label="Approach speed" aria-valuemin="0"><i id="speedFill"></i></div><span class="speed-limit" id="speedLimit"></span>
       </div>
     <div class="hud right side-hud"><div class="micro">Velocity · m/s</div><div class="raw"><span>Vx</span><b id="vx"></b><span>Vy</span><b id="vy"></b><span>Radial</span><b id="radial"></b><span>Mass</span><b id="mass"></b></div></div>
@@ -327,7 +355,7 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
 <div class="flight-controls"><button id="throwButton">Throw pouch</button><button id="coastButton" class="primary" hidden>Coast to halfway</button><span id="objectiveStatus" hidden></span></div></section>
 <section class="panel rack"><div class="panelhead"><h2 class="sectionlabel"><svg aria-hidden="true"><use href="#rackicon"/></svg> Equipment rack</h2><span class="spec" id="count"></span></div><div class="tools" id="tools"></div><div class="throwstrip"><p id="aimHint">Click to aim. Drag to set direction and power, then release to throw.</p><span class="throw-vector"><span class="micro">Throw vector</span><span id="angle"></span> / <span id="powerLabel"></span></span></div></section>
 <span class="sr" id="plotKeys">1 to 6 select a tool. Left and right adjust bearing. Up and down adjust power. Enter throws. Escape cancels a drag.</span><div class="sr" aria-live="polite" id="announce"></div></main>
-<dialog id="modal" aria-labelledby="dialogTitle"><div class="eyebrow" id="dialogKicker"></div><h2 id="dialogTitle"></h2><div id="dialogBody"></div><div class="dialogactions" id="dialogActions"></div></dialog>
+<dialog id="modal" aria-labelledby="dialogTitle"><div class="eyebrow" id="dialogKicker"></div><h2 id="dialogTitle" tabindex="-1"></h2><div id="dialogBody"></div><div class="dialogactions" id="dialogActions"></div></dialog>
 <script>
 'use strict';
 const $ = id => document.getElementById(id);
@@ -348,6 +376,12 @@ const limits = {Story:Infinity, Easy:900, Medium:600, Hard:450};
 const captureSpeedLimit = 0.080, hardBearingError = 2;
 const softCapture = level => level==='Medium' || level==='Hard';
 const overRedline = (level,vx,vy) => softCapture(level) && Math.hypot(vx,vy)>captureSpeedLimit+1e-12;
+const captureCalls = {
+  Story:'Safe at home! The official scorer has given the wrench an assist. The wrench has declined to comment.',
+  Easy:'There’s that arm, Tommi. Remind me to stand behind you at batting practice on Saturday. Welcome home.',
+  Medium:'Steady, Captain. I see your glove on the rail. Hold there while I clip you in. Good flying.',
+  Hard:'Tommi, I’ve got your wrist. Can you feel my hand? That’s the tether clicking shut. You can let go now. I’ve got you.'
+};
 const replayGoals = {
   none:'Return to the hatch',
   drill:'Keep the power drill holstered',
@@ -400,6 +434,7 @@ const line = (id,x,y,xx,yy) => {
 const at = (id,x,y,extra='') => $(id).setAttribute('transform','translate('+x+' '+y+') '+extra);
 const visible = (id,show) => $(id).setAttribute('visibility',show?'visible':'hidden');
 const isAvailable = i => i>=0 && Boolean(state.mask & (1<<i));
+const keptDrill = () => !(state.usedMask & (1<<1));
 const live = () => state.phase==='ready' || state.phase==='flying';
 const suitBounds = DOMRect.fromRect($('suitMan').getBBox());
 let state, camera, charge=null, flash=null, anim=null, lastFrame=null, dialogKind='', previousPhase='', returnFocus=null;
@@ -418,7 +453,6 @@ function newFlight(index=0,level='Easy',objective='none',lesson='') {
   $('missionId').textContent='Scenario '+String(index+1).padStart(2,'0')+' / 03';
   $('missionTitle').textContent=s.name;
   $('difficulty').value=level;
-  $('speedometer').hidden=!softCapture(level);
   $('lesson').hidden=!lesson;
   measurePlot();renderGear();render();
 }
@@ -431,7 +465,7 @@ function safeCoast(path) {
   return path.eta!==null && path.eta<=state.oxygen && !overRedline(state.level,state.vx,state.vy);
 }
 function objectiveIntact() {
-  if(state.objective==='drill')return !(state.usedMask & (1<<1));
+  if(state.objective==='drill')return keptDrill();
   if(state.objective==='two')return state.throws<=2;
   return true;
 }
@@ -510,7 +544,7 @@ function advance(dt) {
   if (eta!==null && eta<=step) {
     if(overRedline(state.level,vx,vy))
       finish('Approach too fast','You reached the hatch at '+formatSpeed(vx,vy)+' m/s. The handrail slipped past. Brake to '+captureSpeedLimit.toFixed(3)+' m/s or below before entering the handrail reach zone.');
-    else finish('Capture confirmed','Your glove closes around the handrail. “We’ve got you. Welcome back.”');
+    else finish('Capture confirmed',captureCalls[state.level]);
   }
   else if (exitTime<=step) finish('Drifted out of view','Your suit drifted completely beyond the navigation plot.');
   else if (state.oxygen<=0) finish('Reserve expired','Your time to reach the rail on emergency reserve has run out.');
@@ -532,20 +566,23 @@ function selectTool(i) {
 function formatSpeed(vx,vy) {
   const speed=Math.hypot(vx,vy);
   // Keep a marginally unsafe reading visibly above the printed limit.
-  return (speed>captureSpeedLimit+1e-12 ? Math.max(captureSpeedLimit+.001,speed) : speed).toFixed(3);
+  return (overRedline(state.level,vx,vy) ? Math.max(captureSpeedLimit+.001,speed) : speed).toFixed(3);
 }
 function renderSpeedometer() {
   const s=state, meter=$('speedometer');
-  if(meter.hidden)return;
   const speed=Math.hypot(s.vx,s.vy), over=overRedline(s.level,s.vx,s.vy);
   const label=formatSpeed(s.vx,s.vy)+' m/s', max=captureSpeedLimit/0.75;
+  meter.dataset.reference=String(!softCapture(s.level));
   meter.dataset.over=String(over);
   $('speedNumber').textContent=label;
-  $('speedLimit').textContent=(over?'Over limit':'Limit')+' · '+captureSpeedLimit.toFixed(3);
+  const limit=captureSpeedLimit.toFixed(3);
+  const limitLabel=softCapture(s.level)?(over?'Over limit':'Limit'):'Reference';
+  $('speedLimit').textContent=limitLabel+' · '+limit;
   $('speedFill').style.width=Math.min(100,100*speed/max)+'%';
   $('speedGauge').setAttribute('aria-valuemax',max.toFixed(4));
   $('speedGauge').setAttribute('aria-valuenow',Math.min(speed,max).toFixed(4));
-  $('speedGauge').setAttribute('aria-valuetext',label+', '+$('speedLimit').textContent+' m/s');
+  const limitText=softCapture(s.level)?limitLabel:'Reference only, Medium and Hard capture limit';
+  $('speedGauge').setAttribute('aria-valuetext',label+', '+limitText+' '+limit+' m/s');
 }
 function coastToHatch() {
   if(state.phase!=='flying' || drag || charge || $('modal').open)return;
@@ -599,7 +636,7 @@ function renderLesson(coast) {
   let heading, copy, action;
   if(step==='aim'){
     heading='First rescue · Aim';
-    copy='Your tether snapped. Your prototype suit’s thrusters are stuck closed. Eighteen metres to the rail. You were the star pitcher in high school. Tap the gold ring to aim the pouch.';
+    copy='Tommi was the star pitcher in high school. Now the tether’s gone, the thrusters are stuck closed, and the rail is eighteen metres away. She palms the wrench pouch. Tap the gold ring to aim.';
     action='Aim at the ring';
   } else if(step==='throw'){
     heading='First rescue · Throw';
@@ -839,6 +876,8 @@ function openDialog(kind,kicker,title,body,actions) {
     if(state.phase==='flying') state.phase='paused';
   }
   endDrag(true);stopCharge(); lastFrame=null; dialogKind=kind;
+  m.dataset.kind=kind;
+  $('dialogTitle').toggleAttribute('autofocus',kind!=='setup');
   $('dialogKicker').textContent=kicker; $('dialogTitle').textContent=title;
   $('dialogBody').innerHTML=body; $('dialogActions').replaceChildren();
   actions.forEach(([label,fn,primary])=>{
@@ -846,6 +885,10 @@ function openDialog(kind,kicker,title,body,actions) {
     b.addEventListener('click',fn);$('dialogActions').append(b);
   });
   if(!m.open) m.showModal();
+  if(kind!=='setup'){
+    $('dialogTitle').focus({preventScroll:true});
+    m.scrollTop=0;
+  }
   render();
 }
 function closeDialog(resume=true) {
@@ -879,9 +922,11 @@ function localCrewVoice() {
 function guide() {
   const voice=localCrewVoice();
   openDialog('guide','Flight manual','Get back to the hatch',
-    '<p>You were the star pitcher in high school. Now your tether has parted and your prototype suit’s integrated thruster valves are stuck closed. This new suit carries less mass than the older EVA suits. The same pitch gives you more recoil. That might be just enough to get you home.</p>'+
+    '<p>Mission specialist <b>Capt. Tommi Dylan (she/they)</b> was the first test pilot to break Mach 10 in the SR-73, a reconnaissance craft she still can’t talk about. On weekends they pitch for their friends. When a team from the next town comes over, somebody has to bring the good bases.</p>'+
+    '<p>Now the tether has parted. The prototype suit’s integrated thruster valves are stuck closed. The flight manual lists an astronaut adrift without a means of return as <i>irretrievably lost.</i> Tommi was the star pitcher in high school. She palms the wrench through its pouch, winds up, and aims down the throat of death.</p>'+
+    '<p>The prototype carries less mass than the older EVA suits. Every pitch gives you a little more recoil.</p>'+
     (state.level==='Story'?'<p><b>Story mode.</b> Oxygen is unlimited and the selected tool reloads immediately. Your flight ends when you reach the hatch or your whole suit leaves the plot. Throw along your velocity arrow to brake.</p>':'<p>Reach the handrail before your emergency return window closes. The clock allows time for the crew to get you inside.</p>')+
-    (softCapture(state.level)?'<p>'+captureBrief(state.level)+'</p>':'')+
+    '<p>'+(softCapture(state.level)?captureBrief(state.level):'The approach gauge shows your speed relative to the station. Its faint mark at '+captureSpeedLimit.toFixed(3)+' m/s is the capture limit on Medium and Hard. In '+state.level+' you can grab the rail at any speed.')+'</p>'+
     '<p>Your socket-and-wrench pouch, spare battery and gas cartridge were packed for the repair job. Choose one to unclip and throw.</p>'+
     '<ul><li><b>Select</b> a tool from the rack or press 1–6. A heavier or faster tool changes your velocity more.</li>'+
     '<li><b>Drag on the plot</b> or grab the reticle. Point where the tool should travel. Your suit recoils in the opposite direction. Distance from your suit sets power, from 10% up to 100% at the dotted ring.</li>'+
@@ -899,10 +944,10 @@ function finish(title,description) {
   endDrag(true);if(state.lesson)rememberLesson();
   state.finalRate=0;state.phase='ended';state.result={title,description};stopCharge();flash=null;
   if(captured){
-    state.tip=description;
+    state.tip='Station radio · “'+description+'”';
     const voice=crewVoiceEnabled && localCrewVoice();
     if(voice){
-      const call=new SpeechSynthesisUtterance('We’ve got you. Welcome back.');
+      const call=new SpeechSynthesisUtterance(description);
       call.voice=voice;window.speechSynthesis.speak(call);
     }
   }
@@ -915,10 +960,15 @@ function finish(title,description) {
 function summary() {
   clearTimeout(debriefTimer);debriefTimer=null;
   const s=state;
-  openDialog('summary','Mission debrief',s.result.title,'<p>'+s.result.description+'</p><dl class="dialogstats">'+
+  const captured=s.result.title==='Capture confirmed';
+  const report=captured?'<blockquote class="station-call"><b>Station radio</b><p>“'+s.result.description+'”</p></blockquote>':'<p>'+s.result.description+'</p>';
+  const award=captured && keptDrill()
+    ? '<section class="upmass"><h3>Upmass Hero</h3><p>“Supply, cross that replacement drill off the manifest. Think you could send us some board games instead?”</p><p><i>Back on Earth, the drill gets a ticker-tape parade. Tommi has a game that Saturday.</i></p></section>'
+    : '';
+  openDialog('summary','Mission debrief',s.result.title,report+award+'<dl class="dialogstats">'+
     [['Scenario',s.name],['Difficulty',s.level],['Flight time',clock(s.elapsed)],['Emergency reserve remaining',clock(Math.ceil(s.oxygen))],
     ['Tools thrown',s.level==='Story'?s.throws:s.throws+' / 6'],['Δv applied',s.spent.toFixed(3)+' m/s'],['Closest approach',s.closest.toFixed(2)+' m'],
-      ...(s.objective==='none'?[]:[['Bonus objective',replayGoals[s.objective]+' · '+(s.result.title==='Capture confirmed' && objectiveIntact()?'Earned':'Missed')]])].map(([k,v])=>'<dt>'+k+'</dt><dd>'+v+'</dd>').join('')+'</dl>',
+      ...(s.objective==='none'?[]:[['Bonus objective',replayGoals[s.objective]+' · '+(captured && objectiveIntact()?'Earned':'Missed')]])].map(([k,v])=>'<dt>'+k+'</dt><dd>'+v+'</dd>').join('')+'</dl>',
     [['Review plot',()=>closeDialog()],['Retry this flight',()=>{closeDialog(false);newFlight(s.index,s.level,s.objective,s.lesson?'aim':'');}],
       ['Next challenge',()=>{closeDialog(false);newFlight((s.index+1)%scenarios.length,s.level,s.objective==='drill'?'two':'drill');},true]]);
 }
@@ -1069,7 +1119,10 @@ init();
       newFlight(0,'Easy','none','aim');
       yes(!$('lesson').hidden && /star pitcher/i.test($('lessonText').textContent),'opening rescue');
       $('guide').click();
-      yes($('modal').open && /star pitcher/i.test($('dialogBody').textContent),'flight guide');
+      const briefing=$('dialogBody').textContent;
+      yes($('modal').open && /star pitcher/i.test(briefing),'flight guide');
+      yes(['Capt. Tommi Dylan (she/they)','Mach 10','SR-73','irretrievably lost'].every(detail=>briefing.includes(detail)),'pilot and stakes');
+      yes($('modal').scrollTop===0 && document.activeElement===$('dialogTitle'),'guide opens at the briefing');
       closeDialog();
     });
     test('Offline initialization and six selectable tools',()=>{yes($('tools').children.length===6,'rack');yes($('oxygen').textContent==='15:00','clock');yes(state.phase==='ready','standby');yes(!performance.getEntriesByType('resource').some(r=>/^https?:/.test(r.name)),'external request')});
@@ -1371,15 +1424,18 @@ init();
         state.oxygen=course(state.x,state.y,state.vx,state.vy).eta;
         toggleClock();render();
         const over=softCapture(level) && factor>1;
-        yes($('speedometer').hidden===!softCapture(level),'meter mode');
-        if(softCapture(level)){
-          yes($('speedometer').dataset.over===String(over),'redline');
-          yes(parseFloat($('speedFill').style.width)>70,'gauge fill');
-          yes($('speedLimit').textContent.startsWith(over?'Over limit':'Limit'),'text warning');
-          const [red,green]=getComputedStyle($('speedNumber')).color.match(/\d+/g).map(Number);
-          yes(over?red>green:green>red,'speed readout warning color');
-          if(innerWidth<=720)yes($('speedGauge').getBoundingClientRect().bottom<=$('plot').getBoundingClientRect().top,'gauge clear of aiming area');
-        }
+        const meter=$('speedometer'), gauge=$('speedGauge'), reference=!softCapture(level);
+        yes(meter.getBoundingClientRect().width>0 && meter.dataset.reference===String(reference),'meter mode');
+        yes(meter.dataset.over===String(over),'redline');
+        const markerOpacity=Number(getComputedStyle(gauge,'::after').opacity);
+        yes(reference?markerOpacity>0 && markerOpacity<1:markerOpacity===1,'threshold visibility');
+        near(parseFloat($('speedFill').style.width),75*factor,'gauge fill',.001);
+        const reading=over?'0.081':speed.toFixed(3);
+        yes($('speedNumber').textContent===reading+' m/s' && gauge.getAttribute('aria-valuetext').startsWith(reading),'current total speed');
+        yes($('speedLimit').textContent===(reference?'Reference':over?'Over limit':'Limit')+' · 0.080','limit label');
+        const [red,green]=getComputedStyle($('speedNumber')).color.match(/\d+/g).map(Number);
+        yes(over?red>green:green>red,'speed readout warning color');
+        if(innerWidth<=720)yes(gauge.getBoundingClientRect().bottom<=$('plot').getBoundingClientRect().top,'gauge clear of aiming area');
         yes($('coastButton').hidden===over,'safe shortcut');
         advance(1000);near(Math.hypot(state.x,state.y),captureRadius,'edge');
         yes(state.result.title===(over?'Approach too fast':'Capture confirmed'),'deadline '+level+' '+factor);
@@ -1418,6 +1474,27 @@ init();
       $('dialogActions').children[1].click();yes(state.index===1 && state.level==='Story' && state.objective==='drill' && objectiveIntact(),'same flight retry');
       newFlight(0,'Easy','two');throwTool();advance(900);yes($('dialogBody').textContent.includes('Earned'),'two throws objective');
       $('dialogActions').lastElementChild.click();yes(state.index===1 && state.level==='Easy' && state.objective==='drill','different next challenge');
+    });
+    test('Station calls vary by difficulty and Upmass Hero requires returning the original drill',()=>{
+      const calls=new Set();
+      for(const level of Object.keys(limits)){
+        for(const keep of [true,false]){
+          newFlight(0,level);
+          selectTool(keep?0:1);throwTool();
+          state.x=2;state.y=0;state.vx=-.06;state.vy=0;advance(20);
+          yes(state.result?.title==='Capture confirmed','safe capture');
+          const call=$('dialogBody').querySelector('.station-call p').textContent;
+          yes($('tip').textContent.includes(call),'radio matches the debrief');
+          calls.add(call);
+          const award=$('dialogBody').querySelector('.upmass');
+          yes(Boolean(award)===keep,'drill award '+level);
+          if(keep)yes(['Upmass Hero','board games','ticker-tape parade'].every(s=>award.textContent.includes(s)),'drill citation');
+          closeDialog(false);
+        }
+      }
+      yes(calls.size===4,'one distinct station transmission per difficulty');
+      newFlight(0,'Hard');state.x=2;state.y=0;state.vx=-.1;state.vy=0;toggleClock();advance(20);
+      yes(state.result.title==='Approach too fast' && !$('dialogBody').querySelector('.upmass, .station-call'),'awards and calls require capture');
     });
     test('Menu configuration, full-power reach and narrow layout',()=>{
       $('setup').click();$('scenarioChoice').value='2';$('levelChoice').value='Medium';$('dialogActions').lastElementChild.click();
