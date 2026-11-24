@@ -46,19 +46,23 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
 .assist { text-align:right; padding-right:10px; border-right:2px solid #827764; color:#c8cecd; font:11px/1.5 var(--mono); background:linear-gradient(270deg,#0c1013bb,transparent) }
 .assist .micro { color:var(--gold); margin-bottom:2px }
 .assist strong { font-weight:normal; color:var(--ink) }
-.plotbar { position:relative; display:flex; align-items:center; justify-content:space-between; gap:12px; border-top:1px solid var(--edge); padding:5px 14px; min-height:33px }
-.legend,.speed,.flight-time { color:var(--muted); font:12px/1.35 var(--sans) }
+.plotbar { display:flex; align-items:center; justify-content:space-between; gap:12px; border-top:1px solid var(--edge); padding:4px 14px; background:#11191c }
+.legend { color:var(--muted); font:12px/1.35 var(--sans) }
 .legend { gap:15px }
 .legend span { display:flex; align-items:center; gap:5px }
 .keyline { width:15px; border-top:2px dotted var(--mint) }
 .keyline.vector { border-top:2px solid #a9b8c5 }
 .keyline.recoil { border-top:2px dashed var(--gold) }
-.speed { display:flex; align-items:center; gap:2px }
-.speed&gt;svg { width:14px; height:14px; stroke:var(--muted); fill:none; margin-right:3px }
-.speed button { padding:4px 7px; background:transparent; font:12px var(--mono); border-color:transparent }
-.speed .active { color:var(--mint); background:#29332f; border-color:#4c5c54 }
-.flight-time { margin-left:auto; font-variant-numeric:tabular-nums }
-.flight-time b { color:var(--ink); font-weight:400 }
+.flight-clock { --clock-accent:var(--mint); display:grid; grid-template-columns:auto 144px; align-items:center; gap:16px; margin-left:auto; padding:5px 10px; border:1px solid var(--edge); border-radius:5px; background:var(--panel); color:var(--muted); font:12px/1.25 var(--sans) }
+.flight-clock[data-fast=&quot;true&quot;] { --clock-accent:var(--gold); border-color:var(--gold); background:#30291f }
+.clock-readout { display:grid; gap:2px; min-width:7ch }
+.clock-readout b { color:var(--clock-accent); font:600 17px var(--mono); font-variant-numeric:tabular-nums }
+.rate-control { display:grid; min-width:0 }
+.rate-status { color:var(--clock-accent); font-weight:600 }
+.rate-slider { margin:0; width:100%; height:24px; accent-color:var(--clock-accent); cursor:pointer }
+.rate-slider:focus-visible { outline:2px solid var(--clock-accent); outline-offset:-2px; border-radius:5px }
+.rate-stops { display:flex; justify-content:space-between; margin:0 8px; font:11px/1 var(--mono); pointer-events:none }
+.rate-stops span { width:0; display:flex; justify-content:center }
 .rack { margin-top:12px }
 .tools { padding:6px 12px 11px; gap:7px }
 .tool { display:grid; grid-template-columns:minmax(40px,.9fr) minmax(0,1.5fr); align-items:center; gap:5px; min-height:64px; padding:6px 7px; background:#1c2123 }
@@ -94,7 +98,6 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
   .tool { display:grid; min-height:55px }
   .throwstrip { align-items:flex-start; flex-wrap:wrap; gap:4px 12px }
   .assist { min-width:0 }
-  .plotbar { flex-wrap:wrap }
   .lower-readouts { gap:6px }
 }
 @media(max-width:450px) {
@@ -112,12 +115,10 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
   section[aria-label=&quot;Navigation&quot;]&gt;.panelhead { flex-direction:column; align-items:flex-start; gap:3px }
   .reserve-label { max-width:17ch }
   .side-hud.right { top:66px }
-  .plotbar { padding:5px 6px; gap:4px }
-  .legend { gap:8px }
+  .plotbar { padding:4px 8px; gap:4px }
+  .legend { flex-direction:column; align-items:flex-start; gap:1px }
   .keyline { width:9px }
-  .speed { gap:0 }
-  .speed&gt;svg { display:none }
-  .speed button { padding:5px 4px }
+  .flight-clock { grid-template-columns:auto 112px; gap:10px; padding-inline:8px }
   .tools { padding:4px 6px 7px; gap:4px }
   .tool { display:block; min-height:67px; padding:4px 5px 6px }
   .tool svg { height:30px }
@@ -350,8 +351,18 @@ dialog[data-kind=&quot;guide&quot;] #dialogBody&gt;p+p { margin-top:9px }
       &lt;p id=&quot;tip&quot; role=&quot;status&quot;&gt;&lt;/p&gt;
     &lt;/aside&gt;
   &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;plotbar&quot;&gt;
+  &lt;div class=&quot;legend&quot;&gt;&lt;span&gt;&lt;i class=&quot;keyline vector&quot;&gt;&lt;/i&gt;Velocity&lt;/span&gt;&lt;span id=&quot;coastKey&quot;&gt;&lt;i class=&quot;keyline&quot; style=&quot;border-top-style:dotted&quot;&gt;&lt;/i&gt;Coast&lt;/span&gt;&lt;span id=&quot;trialKey&quot;&gt;&lt;i class=&quot;keyline recoil&quot;&gt;&lt;/i&gt;After throw&lt;/span&gt;&lt;/div&gt;
+  &lt;div class=&quot;flight-clock&quot; id=&quot;flightClock&quot; role=&quot;group&quot; aria-label=&quot;Flight clock&quot;&gt;
+    &lt;div class=&quot;clock-readout&quot;&gt;Flight time&lt;b id=&quot;elapsed&quot; role=&quot;timer&quot;&gt;00:00&lt;/b&gt;&lt;/div&gt;
+    &lt;div class=&quot;rate-control&quot;&gt;
+      &lt;span class=&quot;rate-status&quot; id=&quot;rateStatus&quot;&gt;Real time · 1×&lt;/span&gt;
+      &lt;input class=&quot;rate-slider&quot; id=&quot;timeRate&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;3&quot; step=&quot;1&quot; value=&quot;0&quot; aria-label=&quot;Simulation speed&quot; aria-valuetext=&quot;1×&quot; aria-describedby=&quot;rateStatus&quot;&gt;
+      &lt;div class=&quot;rate-stops&quot; aria-hidden=&quot;true&quot;&gt;&lt;span&gt;1×&lt;/span&gt;&lt;span&gt;2×&lt;/span&gt;&lt;span&gt;5×&lt;/span&gt;&lt;span&gt;10×&lt;/span&gt;&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
 &lt;/div&gt;&lt;/div&gt;
-&lt;div class=&quot;plotbar&quot;&gt;&lt;div class=&quot;legend&quot;&gt;&lt;span&gt;&lt;i class=&quot;keyline vector&quot;&gt;&lt;/i&gt;Velocity&lt;/span&gt;&lt;span id=&quot;coastKey&quot;&gt;&lt;i class=&quot;keyline&quot; style=&quot;border-top-style:dotted&quot;&gt;&lt;/i&gt;Coast&lt;/span&gt;&lt;span id=&quot;trialKey&quot;&gt;&lt;i class=&quot;keyline recoil&quot;&gt;&lt;/i&gt;After throw&lt;/span&gt;&lt;/div&gt;&lt;span class=&quot;flight-time&quot;&gt;Flight time &lt;b id=&quot;elapsed&quot;&gt;00:00&lt;/b&gt;&lt;/span&gt;&lt;div class=&quot;speed&quot; id=&quot;speeds&quot; aria-label=&quot;Simulation speed&quot;&gt;&lt;svg viewBox=&quot;0 0 20 20&quot; aria-hidden=&quot;true&quot;&gt;&lt;circle cx=&quot;10&quot; cy=&quot;10&quot; r=&quot;7&quot;/&gt;&lt;path d=&quot;M10 5v6l4 2&quot;/&gt;&lt;/svg&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;div class=&quot;flight-controls&quot;&gt;&lt;button id=&quot;throwButton&quot;&gt;Throw pouch&lt;/button&gt;&lt;button id=&quot;coastButton&quot; class=&quot;primary&quot; hidden&gt;Coast to halfway&lt;/button&gt;&lt;span id=&quot;objectiveStatus&quot; hidden&gt;&lt;/span&gt;&lt;/div&gt;&lt;/section&gt;
 &lt;section class=&quot;panel rack&quot;&gt;&lt;div class=&quot;panelhead&quot;&gt;&lt;h2 class=&quot;sectionlabel&quot;&gt;&lt;svg aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#rackicon&quot;/&gt;&lt;/svg&gt; Equipment rack&lt;/h2&gt;&lt;span class=&quot;spec&quot; id=&quot;count&quot;&gt;&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;tools&quot; id=&quot;tools&quot;&gt;&lt;/div&gt;&lt;div class=&quot;throwstrip&quot;&gt;&lt;p id=&quot;aimHint&quot;&gt;Click to aim. Drag to set direction and power, then release to throw.&lt;/p&gt;&lt;span class=&quot;throw-vector&quot;&gt;&lt;span class=&quot;micro&quot;&gt;Throw vector&lt;/span&gt;&lt;span id=&quot;angle&quot;&gt;&lt;/span&gt; / &lt;span id=&quot;powerLabel&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/section&gt;
 &lt;span class=&quot;sr&quot; id=&quot;plotKeys&quot;&gt;1 to 6 select a tool. Left and right adjust bearing. Up and down adjust power. Enter throws. Escape cancels a drag.&lt;/span&gt;&lt;div class=&quot;sr&quot; aria-live=&quot;polite&quot; id=&quot;announce&quot;&gt;&lt;/div&gt;&lt;/main&gt;
@@ -373,6 +384,7 @@ const scenarios = [
   {name:&#x27;Wide separation&#x27;, x:29, y:-8, vx:0.044, vy:-0.016, brief:&#x27;The airlock is falling behind. Combine heavy throws to reverse your drift and close the gap.&#x27;}
 ];
 const limits = {Story:Infinity, Easy:900, Medium:600, Hard:450};
+const timeRates = [1,2,5,10];
 const captureSpeedLimit = 0.080, hardBearingError = 2;
 const softCapture = level =&gt; level===&#x27;Medium&#x27; || level===&#x27;Hard&#x27;;
 const overRedline = (level,vx,vy) =&gt; softCapture(level) &amp;&amp; Math.hypot(vx,vy)&gt;captureSpeedLimit+1e-12;
@@ -584,6 +596,24 @@ function renderSpeedometer() {
   const limitText=softCapture(s.level)?limitLabel:&#x27;Reference only, Medium and Hard capture limit&#x27;;
   $(&#x27;speedGauge&#x27;).setAttribute(&#x27;aria-valuetext&#x27;,label+&#x27;, &#x27;+limitText+&#x27; &#x27;+limit+&#x27; m/s&#x27;);
 }
+function renderFlightClock() {
+  const slider=$(&#x27;timeRate&#x27;), rate=state.finalRate || state.rate;
+  const mode=state.finalRate?&#x27;Auto coast&#x27;:rate&gt;1?&#x27;Fast-forward&#x27;:&#x27;Real time&#x27;;
+  const rateText=Number(rate.toFixed(1))+&#x27;×&#x27;;
+  $(&#x27;elapsed&#x27;).textContent=clock(state.elapsed);
+  $(&#x27;flightClock&#x27;).dataset.fast=String(rate&gt;1);
+  $(&#x27;rateStatus&#x27;).textContent=mode+&#x27; · &#x27;+rateText;
+  slider.value=timeRates.indexOf(state.rate);
+  slider.setAttribute(&#x27;aria-valuetext&#x27;,state.rate+&#x27;×&#x27;);
+}
+function selectTimeRate() {
+  const rate=timeRates[$(&#x27;timeRate&#x27;).valueAsNumber];
+  if(rate===state.rate &amp;&amp; !state.finalRate)return;
+  state.rate=rate;
+  state.finalRate=0;
+  lastFrame=null;
+  render();
+}
 function coastToHatch() {
   if(state.phase!==&#x27;flying&#x27; || drag || charge || $(&#x27;modal&#x27;).open)return;
   const path=course(state.x,state.y,state.vx,state.vy);
@@ -697,16 +727,12 @@ function render() {
   $(&#x27;radial&#x27;).dataset.trend=trend;
   $(&#x27;angle&#x27;).textContent=s.mask?fmtAngle(s.bearing):&#x27;—&#x27;;
   $(&#x27;powerLabel&#x27;).textContent=s.mask?s.power+&#x27;%&#x27;:&#x27;—&#x27;;
-  $(&#x27;elapsed&#x27;).textContent=clock(s.elapsed);
+  renderFlightClock();
   $(&#x27;pause&#x27;).disabled=trainingAim();
   $(&#x27;pause&#x27;).textContent=({ready:&#x27;Start clock&#x27;,flying:&#x27;Ⅱ  Pause&#x27;,paused:&#x27;▷  Resume&#x27;,ended:&#x27;Debrief&#x27;})[s.phase];
   $(&#x27;status&#x27;).textContent=drag?.moved ? (drag.inside?&#x27;Release &#x27;+gear[s.selected].name.toLowerCase():&#x27;Release to cancel&#x27;) :
     flash &amp;&amp; performance.now()&lt;flash.until &amp;&amp; s.phase===&#x27;flying&#x27; ? flash.text :
     ({ready:(gear[s.selected]?.name??&#x27;Ready&#x27;)+&#x27; · Drag to throw&#x27;,flying:&#x27;Live tracking&#x27;,paused:&#x27;Paused&#x27;,ended:&#x27;Mission ended&#x27;})[s.phase];
-  [...$(&#x27;speeds&#x27;).children].filter(el=&gt;el.tagName===&#x27;BUTTON&#x27;).forEach(el=&gt;{
-    const active=Number(el.value)===s.rate;
-    el.classList.toggle(&#x27;active&#x27;,active);el.setAttribute(&#x27;aria-pressed&#x27;,String(active));
-  });
   const k=impulse(s.selected,s.power,s.bearing), pvx=s.vx+k.dx,pvy=s.vy+k.dy;
   const coast=course(s.x,s.y,s.vx,s.vy);
   const checkingCourse=s.midpointThrow===s.throws &amp;&amp; s.phase!==&#x27;ended&#x27;;
@@ -932,7 +958,8 @@ function guide() {
     &#x27;&lt;li&gt;&lt;b&gt;Drag on the plot&lt;/b&gt; or grab the reticle. Point where the tool should travel. Your suit recoils in the opposite direction. Distance from your suit sets power, from 10% up to 100% at the dotted ring.&lt;/li&gt;&#x27;+
     &#x27;&lt;li&gt;&lt;b&gt;Release to throw.&lt;/b&gt; A click or tap previews your aim. The Throw button commits it. Escape or release outside the plot to cancel a drag.&lt;/li&gt;&#x27;+
     &#x27;&lt;li&gt;&lt;b&gt;Keyboard controls.&lt;/b&gt; Left and right change bearing by 1° (Shift for 10°). Up and down change power by 1% (Shift for 10%). Press Enter on the plot to throw, or hold Space to wind up and release to throw. Escape cancels the windup.&lt;/li&gt;&#x27;+
-    &#x27;&lt;li&gt;&lt;b&gt;Check your course halfway home.&lt;/b&gt; When the original gap to the handrail reach zone has halved, the station calls once. Check your path and approach speed before spending another tool. The coast shortcut stops there first. P pauses flight.&lt;/li&gt;&lt;/ul&gt;&#x27;+
+    &#x27;&lt;li&gt;&lt;b&gt;Set the flight clock&lt;/b&gt; to 1×, 2×, 5× or 10× with the slider at the lower right of the HUD. Amber means fast-forward. P pauses flight.&lt;/li&gt;&#x27;+
+    &#x27;&lt;li&gt;&lt;b&gt;Check your course halfway home.&lt;/b&gt; When the original gap to the handrail reach zone has halved, the station calls once. Check your path and approach speed before spending another tool. The coast shortcut stops there first.&lt;/li&gt;&lt;/ul&gt;&#x27;+
     &#x27;&lt;p&gt;Bearings run counterclockwise from right (000°) to up (090°). Vx, Vy and radial speed use m/s. Green hatch distance and negative radial speed mean you are closing in. Red distance and positive radial speed mean you are moving away. Hatch distance measures the gap to the edge of the handrail reach zone. Between throws you coast in a straight line.&lt;/p&gt;&#x27;+
     (state.level===&#x27;Story&#x27;?&#x27;&#x27;:&#x27;&lt;p&gt;The Δv budget is the largest total velocity change available from full-power throws in the best order.&lt;/p&gt;&#x27;)+
     (voice?&#x27;&lt;label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;crewAudio&quot;&#x27;+(crewVoiceEnabled?&#x27; checked&#x27;:&#x27;&#x27;)+&#x27;&gt; Voice the station’s capture call&lt;/label&gt;&#x27;:&#x27;&#x27;),
@@ -1025,10 +1052,9 @@ function init() {
     b.innerHTML=&#x27;&lt;span class=&quot;slot&quot;&gt;0&#x27;+(i+1)+&#x27;&lt;/span&gt;&lt;svg viewBox=&quot;-42 -27 84 54&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#t&#x27;+i+&#x27;&quot;/&gt;&lt;/svg&gt;&lt;span&gt;&lt;b&gt;&#x27;+t.name+&#x27;&lt;/b&gt;&lt;small&gt;&lt;/small&gt;&lt;/span&gt;&#x27;;
     b.onclick=()=&gt;selectTool(i);$(&#x27;tools&#x27;).append(b);
   });
-  for(const v of [1,2,5,10]) {
-    const b=document.createElement(&#x27;button&#x27;);b.value=v;b.textContent=v+&#x27;×&#x27;;b.setAttribute(&#x27;aria-label&#x27;,v+&#x27; times simulation speed&#x27;);
-    b.onclick=()=&gt;{state.rate=v;state.finalRate=0;lastFrame=null;render();};$(&#x27;speeds&#x27;).append(b);
-  }
+  $(&#x27;timeRate&#x27;).oninput=selectTimeRate;
+  // Clicking the selected stop also takes manual control back from an automatic coast.
+  $(&#x27;timeRate&#x27;).onclick=selectTimeRate;
   const plot=$(&#x27;plot&#x27;);
   plot.addEventListener(&#x27;pointerdown&#x27;,startDrag);
   // Window listeners also catch releases over the HUD or rack when capture is unavailable.
@@ -1068,7 +1094,8 @@ function init() {
   $(&#x27;guide&#x27;).onclick=guide;$(&#x27;pause&#x27;).onclick=()=&gt;state.phase===&#x27;ended&#x27;?summary():toggleClock();
   $(&#x27;modal&#x27;).addEventListener(&#x27;cancel&#x27;,e=&gt;{e.preventDefault();closeDialog();});
   document.addEventListener(&#x27;keydown&#x27;,e=&gt;{
-    if($(&#x27;modal&#x27;).open || e.altKey || e.ctrlKey || e.metaKey || [&#x27;SELECT&#x27;,&#x27;INPUT&#x27;].includes(e.target.tagName))return;
+    if($(&#x27;modal&#x27;).open || e.altKey || e.ctrlKey || e.metaKey)return;
+    if([&#x27;SELECT&#x27;,&#x27;INPUT&#x27;].includes(e.target.tagName) &amp;&amp; !(e.target===$(&#x27;timeRate&#x27;) &amp;&amp; e.code===&#x27;KeyP&#x27;))return;
     if(e.key===&#x27;Escape&#x27; &amp;&amp; (charge || drag)){endDrag(true);stopCharge();render();return;}
     if(e.code===&#x27;Space&#x27;){
       if(e.target.closest(&#x27;button&#x27;) &amp;&amp; !e.target.closest(&#x27;.tool&#x27;))return;
@@ -1224,11 +1251,26 @@ init();
       }
     });
     test(&#x27;Coasting, time rates and pause consume matching simulation time&#x27;,()=&gt;{
-      for(const b of $(&#x27;speeds&#x27;).querySelectorAll(&#x27;button&#x27;)){
-        newFlight();b.click();$(&#x27;pause&#x27;).click();lastFrame=1000;frame(2000);near(state.elapsed,Number(b.value),&#x27;rate&#x27;);near(state.x,19+.018*Number(b.value),&#x27;distance&#x27;);
+      const slider=$(&#x27;timeRate&#x27;), panel=$(&#x27;flightClock&#x27;), normalColor=getComputedStyle(slider).accentColor;
+      yes(slider.type===&#x27;range&#x27; &amp;&amp; slider.min===&#x27;0&#x27; &amp;&amp; slider.max===&#x27;3&#x27; &amp;&amp; slider.step===&#x27;1&#x27;,&#x27;four discrete speed stops&#x27;);
+      for(const [stop,rate] of [1,2,5,10].entries()){
+        newFlight();
+        yes(slider.value===&#x27;0&#x27; &amp;&amp; panel.dataset.fast===&#x27;false&#x27;,&#x27;reset to real time&#x27;);
+        slider.value=stop;slider.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));
+        yes(state.rate===rate &amp;&amp; slider.getAttribute(&#x27;aria-valuetext&#x27;)===rate+&#x27;×&#x27;,&#x27;selected multiplier&#x27;);
+        yes(panel.dataset.fast===String(rate&gt;1) &amp;&amp; (getComputedStyle(slider).accentColor!==normalColor)===(rate&gt;1),&#x27;fast-forward color&#x27;);
+        yes($(&#x27;rateStatus&#x27;).textContent===(rate&gt;1?&#x27;Fast-forward&#x27;:&#x27;Real time&#x27;)+&#x27; · &#x27;+rate+&#x27;×&#x27;,&#x27;visible speed&#x27;);
+        $(&#x27;pause&#x27;).click();lastFrame=1000;frame(2000);
+        near(state.elapsed,rate,&#x27;rate&#x27;);near(state.x,19+.018*rate,&#x27;distance&#x27;);
+        yes($(&#x27;elapsed&#x27;).textContent===clock(rate),&#x27;displayed flight time&#x27;);
         $(&#x27;pause&#x27;).click();const air=state.oxygen;advance(8);near(state.oxygen,air,&#x27;paused&#x27;);
       }
       $(&#x27;guide&#x27;).click();yes($(&#x27;modal&#x27;).open,&#x27;guide&#x27;);$(&#x27;dialogActions&#x27;).lastElementChild.click();yes(state.phase===&#x27;paused&#x27;,&#x27;guide keeps paused state&#x27;);
+      const box=panel.getBoundingClientRect(), view=$(&#x27;plot&#x27;).getBoundingClientRect();
+      yes(box.left&gt;view.left &amp;&amp; box.right&lt;=view.right &amp;&amp; view.right-box.right&lt;24 &amp;&amp; Math.abs(box.top-view.bottom)&lt;10,&#x27;clock at lower right edge of HUD&#x27;);
+      newFlight();throwTool();coastToHatch();coastToHatch();
+      yes(state.finalRate&gt;1 &amp;&amp; panel.dataset.fast===&#x27;true&#x27; &amp;&amp; $(&#x27;rateStatus&#x27;).textContent.includes(&#x27;Auto coast&#x27;),&#x27;automatic approach is visible&#x27;);
+      slider.click();yes(!state.finalRate &amp;&amp; state.rate===1 &amp;&amp; panel.dataset.fast===&#x27;false&#x27;,&#x27;take back manual control at same stop&#x27;);
     });
     test(&#x27;All three scenarios allow a legal soft capture with the rack and integer controls&#x27;,()=&gt;{
       const plans=[[[3,99,-6]],[[3,93,-21]],[[3,100,-17],[2,74,-16]]];
@@ -1562,19 +1604,23 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
 .assist { text-align:right; padding-right:10px; border-right:2px solid #827764; color:#c8cecd; font:11px/1.5 var(--mono); background:linear-gradient(270deg,#0c1013bb,transparent) }
 .assist .micro { color:var(--gold); margin-bottom:2px }
 .assist strong { font-weight:normal; color:var(--ink) }
-.plotbar { position:relative; display:flex; align-items:center; justify-content:space-between; gap:12px; border-top:1px solid var(--edge); padding:5px 14px; min-height:33px }
-.legend,.speed,.flight-time { color:var(--muted); font:12px/1.35 var(--sans) }
+.plotbar { display:flex; align-items:center; justify-content:space-between; gap:12px; border-top:1px solid var(--edge); padding:4px 14px; background:#11191c }
+.legend { color:var(--muted); font:12px/1.35 var(--sans) }
 .legend { gap:15px }
 .legend span { display:flex; align-items:center; gap:5px }
 .keyline { width:15px; border-top:2px dotted var(--mint) }
 .keyline.vector { border-top:2px solid #a9b8c5 }
 .keyline.recoil { border-top:2px dashed var(--gold) }
-.speed { display:flex; align-items:center; gap:2px }
-.speed&gt;svg { width:14px; height:14px; stroke:var(--muted); fill:none; margin-right:3px }
-.speed button { padding:4px 7px; background:transparent; font:12px var(--mono); border-color:transparent }
-.speed .active { color:var(--mint); background:#29332f; border-color:#4c5c54 }
-.flight-time { margin-left:auto; font-variant-numeric:tabular-nums }
-.flight-time b { color:var(--ink); font-weight:400 }
+.flight-clock { --clock-accent:var(--mint); display:grid; grid-template-columns:auto 144px; align-items:center; gap:16px; margin-left:auto; padding:5px 10px; border:1px solid var(--edge); border-radius:5px; background:var(--panel); color:var(--muted); font:12px/1.25 var(--sans) }
+.flight-clock[data-fast=&quot;true&quot;] { --clock-accent:var(--gold); border-color:var(--gold); background:#30291f }
+.clock-readout { display:grid; gap:2px; min-width:7ch }
+.clock-readout b { color:var(--clock-accent); font:600 17px var(--mono); font-variant-numeric:tabular-nums }
+.rate-control { display:grid; min-width:0 }
+.rate-status { color:var(--clock-accent); font-weight:600 }
+.rate-slider { margin:0; width:100%; height:24px; accent-color:var(--clock-accent); cursor:pointer }
+.rate-slider:focus-visible { outline:2px solid var(--clock-accent); outline-offset:-2px; border-radius:5px }
+.rate-stops { display:flex; justify-content:space-between; margin:0 8px; font:11px/1 var(--mono); pointer-events:none }
+.rate-stops span { width:0; display:flex; justify-content:center }
 .rack { margin-top:12px }
 .tools { padding:6px 12px 11px; gap:7px }
 .tool { display:grid; grid-template-columns:minmax(40px,.9fr) minmax(0,1.5fr); align-items:center; gap:5px; min-height:64px; padding:6px 7px; background:#1c2123 }
@@ -1610,7 +1656,6 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
   .tool { display:grid; min-height:55px }
   .throwstrip { align-items:flex-start; flex-wrap:wrap; gap:4px 12px }
   .assist { min-width:0 }
-  .plotbar { flex-wrap:wrap }
   .lower-readouts { gap:6px }
 }
 @media(max-width:450px) {
@@ -1628,12 +1673,10 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
   section[aria-label=&quot;Navigation&quot;]&gt;.panelhead { flex-direction:column; align-items:flex-start; gap:3px }
   .reserve-label { max-width:17ch }
   .side-hud.right { top:66px }
-  .plotbar { padding:5px 6px; gap:4px }
-  .legend { gap:8px }
+  .plotbar { padding:4px 8px; gap:4px }
+  .legend { flex-direction:column; align-items:flex-start; gap:1px }
   .keyline { width:9px }
-  .speed { gap:0 }
-  .speed&gt;svg { display:none }
-  .speed button { padding:5px 4px }
+  .flight-clock { grid-template-columns:auto 112px; gap:10px; padding-inline:8px }
   .tools { padding:4px 6px 7px; gap:4px }
   .tool { display:block; min-height:67px; padding:4px 5px 6px }
   .tool svg { height:30px }
@@ -1866,8 +1909,18 @@ dialog[data-kind=&quot;guide&quot;] #dialogBody&gt;p+p { margin-top:9px }
       &lt;p id=&quot;tip&quot; role=&quot;status&quot;&gt;&lt;/p&gt;
     &lt;/aside&gt;
   &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;plotbar&quot;&gt;
+  &lt;div class=&quot;legend&quot;&gt;&lt;span&gt;&lt;i class=&quot;keyline vector&quot;&gt;&lt;/i&gt;Velocity&lt;/span&gt;&lt;span id=&quot;coastKey&quot;&gt;&lt;i class=&quot;keyline&quot; style=&quot;border-top-style:dotted&quot;&gt;&lt;/i&gt;Coast&lt;/span&gt;&lt;span id=&quot;trialKey&quot;&gt;&lt;i class=&quot;keyline recoil&quot;&gt;&lt;/i&gt;After throw&lt;/span&gt;&lt;/div&gt;
+  &lt;div class=&quot;flight-clock&quot; id=&quot;flightClock&quot; role=&quot;group&quot; aria-label=&quot;Flight clock&quot;&gt;
+    &lt;div class=&quot;clock-readout&quot;&gt;Flight time&lt;b id=&quot;elapsed&quot; role=&quot;timer&quot;&gt;00:00&lt;/b&gt;&lt;/div&gt;
+    &lt;div class=&quot;rate-control&quot;&gt;
+      &lt;span class=&quot;rate-status&quot; id=&quot;rateStatus&quot;&gt;Real time · 1×&lt;/span&gt;
+      &lt;input class=&quot;rate-slider&quot; id=&quot;timeRate&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;3&quot; step=&quot;1&quot; value=&quot;0&quot; aria-label=&quot;Simulation speed&quot; aria-valuetext=&quot;1×&quot; aria-describedby=&quot;rateStatus&quot;&gt;
+      &lt;div class=&quot;rate-stops&quot; aria-hidden=&quot;true&quot;&gt;&lt;span&gt;1×&lt;/span&gt;&lt;span&gt;2×&lt;/span&gt;&lt;span&gt;5×&lt;/span&gt;&lt;span&gt;10×&lt;/span&gt;&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
 &lt;/div&gt;&lt;/div&gt;
-&lt;div class=&quot;plotbar&quot;&gt;&lt;div class=&quot;legend&quot;&gt;&lt;span&gt;&lt;i class=&quot;keyline vector&quot;&gt;&lt;/i&gt;Velocity&lt;/span&gt;&lt;span id=&quot;coastKey&quot;&gt;&lt;i class=&quot;keyline&quot; style=&quot;border-top-style:dotted&quot;&gt;&lt;/i&gt;Coast&lt;/span&gt;&lt;span id=&quot;trialKey&quot;&gt;&lt;i class=&quot;keyline recoil&quot;&gt;&lt;/i&gt;After throw&lt;/span&gt;&lt;/div&gt;&lt;span class=&quot;flight-time&quot;&gt;Flight time &lt;b id=&quot;elapsed&quot;&gt;00:00&lt;/b&gt;&lt;/span&gt;&lt;div class=&quot;speed&quot; id=&quot;speeds&quot; aria-label=&quot;Simulation speed&quot;&gt;&lt;svg viewBox=&quot;0 0 20 20&quot; aria-hidden=&quot;true&quot;&gt;&lt;circle cx=&quot;10&quot; cy=&quot;10&quot; r=&quot;7&quot;/&gt;&lt;path d=&quot;M10 5v6l4 2&quot;/&gt;&lt;/svg&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;div class=&quot;flight-controls&quot;&gt;&lt;button id=&quot;throwButton&quot;&gt;Throw pouch&lt;/button&gt;&lt;button id=&quot;coastButton&quot; class=&quot;primary&quot; hidden&gt;Coast to halfway&lt;/button&gt;&lt;span id=&quot;objectiveStatus&quot; hidden&gt;&lt;/span&gt;&lt;/div&gt;&lt;/section&gt;
 &lt;section class=&quot;panel rack&quot;&gt;&lt;div class=&quot;panelhead&quot;&gt;&lt;h2 class=&quot;sectionlabel&quot;&gt;&lt;svg aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#rackicon&quot;/&gt;&lt;/svg&gt; Equipment rack&lt;/h2&gt;&lt;span class=&quot;spec&quot; id=&quot;count&quot;&gt;&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;tools&quot; id=&quot;tools&quot;&gt;&lt;/div&gt;&lt;div class=&quot;throwstrip&quot;&gt;&lt;p id=&quot;aimHint&quot;&gt;Click to aim. Drag to set direction and power, then release to throw.&lt;/p&gt;&lt;span class=&quot;throw-vector&quot;&gt;&lt;span class=&quot;micro&quot;&gt;Throw vector&lt;/span&gt;&lt;span id=&quot;angle&quot;&gt;&lt;/span&gt; / &lt;span id=&quot;powerLabel&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/section&gt;
 &lt;span class=&quot;sr&quot; id=&quot;plotKeys&quot;&gt;1 to 6 select a tool. Left and right adjust bearing. Up and down adjust power. Enter throws. Escape cancels a drag.&lt;/span&gt;&lt;div class=&quot;sr&quot; aria-live=&quot;polite&quot; id=&quot;announce&quot;&gt;&lt;/div&gt;&lt;/main&gt;
@@ -1889,6 +1942,7 @@ const scenarios = [
   {name:&#x27;Wide separation&#x27;, x:29, y:-8, vx:0.044, vy:-0.016, brief:&#x27;The airlock is falling behind. Combine heavy throws to reverse your drift and close the gap.&#x27;}
 ];
 const limits = {Story:Infinity, Easy:900, Medium:600, Hard:450};
+const timeRates = [1,2,5,10];
 const captureSpeedLimit = 0.080, hardBearingError = 2;
 const softCapture = level =&gt; level===&#x27;Medium&#x27; || level===&#x27;Hard&#x27;;
 const overRedline = (level,vx,vy) =&gt; softCapture(level) &amp;&amp; Math.hypot(vx,vy)&gt;captureSpeedLimit+1e-12;
@@ -2100,6 +2154,24 @@ function renderSpeedometer() {
   const limitText=softCapture(s.level)?limitLabel:&#x27;Reference only, Medium and Hard capture limit&#x27;;
   $(&#x27;speedGauge&#x27;).setAttribute(&#x27;aria-valuetext&#x27;,label+&#x27;, &#x27;+limitText+&#x27; &#x27;+limit+&#x27; m/s&#x27;);
 }
+function renderFlightClock() {
+  const slider=$(&#x27;timeRate&#x27;), rate=state.finalRate || state.rate;
+  const mode=state.finalRate?&#x27;Auto coast&#x27;:rate&gt;1?&#x27;Fast-forward&#x27;:&#x27;Real time&#x27;;
+  const rateText=Number(rate.toFixed(1))+&#x27;×&#x27;;
+  $(&#x27;elapsed&#x27;).textContent=clock(state.elapsed);
+  $(&#x27;flightClock&#x27;).dataset.fast=String(rate&gt;1);
+  $(&#x27;rateStatus&#x27;).textContent=mode+&#x27; · &#x27;+rateText;
+  slider.value=timeRates.indexOf(state.rate);
+  slider.setAttribute(&#x27;aria-valuetext&#x27;,state.rate+&#x27;×&#x27;);
+}
+function selectTimeRate() {
+  const rate=timeRates[$(&#x27;timeRate&#x27;).valueAsNumber];
+  if(rate===state.rate &amp;&amp; !state.finalRate)return;
+  state.rate=rate;
+  state.finalRate=0;
+  lastFrame=null;
+  render();
+}
 function coastToHatch() {
   if(state.phase!==&#x27;flying&#x27; || drag || charge || $(&#x27;modal&#x27;).open)return;
   const path=course(state.x,state.y,state.vx,state.vy);
@@ -2213,16 +2285,12 @@ function render() {
   $(&#x27;radial&#x27;).dataset.trend=trend;
   $(&#x27;angle&#x27;).textContent=s.mask?fmtAngle(s.bearing):&#x27;—&#x27;;
   $(&#x27;powerLabel&#x27;).textContent=s.mask?s.power+&#x27;%&#x27;:&#x27;—&#x27;;
-  $(&#x27;elapsed&#x27;).textContent=clock(s.elapsed);
+  renderFlightClock();
   $(&#x27;pause&#x27;).disabled=trainingAim();
   $(&#x27;pause&#x27;).textContent=({ready:&#x27;Start clock&#x27;,flying:&#x27;Ⅱ  Pause&#x27;,paused:&#x27;▷  Resume&#x27;,ended:&#x27;Debrief&#x27;})[s.phase];
   $(&#x27;status&#x27;).textContent=drag?.moved ? (drag.inside?&#x27;Release &#x27;+gear[s.selected].name.toLowerCase():&#x27;Release to cancel&#x27;) :
     flash &amp;&amp; performance.now()&lt;flash.until &amp;&amp; s.phase===&#x27;flying&#x27; ? flash.text :
     ({ready:(gear[s.selected]?.name??&#x27;Ready&#x27;)+&#x27; · Drag to throw&#x27;,flying:&#x27;Live tracking&#x27;,paused:&#x27;Paused&#x27;,ended:&#x27;Mission ended&#x27;})[s.phase];
-  [...$(&#x27;speeds&#x27;).children].filter(el=&gt;el.tagName===&#x27;BUTTON&#x27;).forEach(el=&gt;{
-    const active=Number(el.value)===s.rate;
-    el.classList.toggle(&#x27;active&#x27;,active);el.setAttribute(&#x27;aria-pressed&#x27;,String(active));
-  });
   const k=impulse(s.selected,s.power,s.bearing), pvx=s.vx+k.dx,pvy=s.vy+k.dy;
   const coast=course(s.x,s.y,s.vx,s.vy);
   const checkingCourse=s.midpointThrow===s.throws &amp;&amp; s.phase!==&#x27;ended&#x27;;
@@ -2448,7 +2516,8 @@ function guide() {
     &#x27;&lt;li&gt;&lt;b&gt;Drag on the plot&lt;/b&gt; or grab the reticle. Point where the tool should travel. Your suit recoils in the opposite direction. Distance from your suit sets power, from 10% up to 100% at the dotted ring.&lt;/li&gt;&#x27;+
     &#x27;&lt;li&gt;&lt;b&gt;Release to throw.&lt;/b&gt; A click or tap previews your aim. The Throw button commits it. Escape or release outside the plot to cancel a drag.&lt;/li&gt;&#x27;+
     &#x27;&lt;li&gt;&lt;b&gt;Keyboard controls.&lt;/b&gt; Left and right change bearing by 1° (Shift for 10°). Up and down change power by 1% (Shift for 10%). Press Enter on the plot to throw, or hold Space to wind up and release to throw. Escape cancels the windup.&lt;/li&gt;&#x27;+
-    &#x27;&lt;li&gt;&lt;b&gt;Check your course halfway home.&lt;/b&gt; When the original gap to the handrail reach zone has halved, the station calls once. Check your path and approach speed before spending another tool. The coast shortcut stops there first. P pauses flight.&lt;/li&gt;&lt;/ul&gt;&#x27;+
+    &#x27;&lt;li&gt;&lt;b&gt;Set the flight clock&lt;/b&gt; to 1×, 2×, 5× or 10× with the slider at the lower right of the HUD. Amber means fast-forward. P pauses flight.&lt;/li&gt;&#x27;+
+    &#x27;&lt;li&gt;&lt;b&gt;Check your course halfway home.&lt;/b&gt; When the original gap to the handrail reach zone has halved, the station calls once. Check your path and approach speed before spending another tool. The coast shortcut stops there first.&lt;/li&gt;&lt;/ul&gt;&#x27;+
     &#x27;&lt;p&gt;Bearings run counterclockwise from right (000°) to up (090°). Vx, Vy and radial speed use m/s. Green hatch distance and negative radial speed mean you are closing in. Red distance and positive radial speed mean you are moving away. Hatch distance measures the gap to the edge of the handrail reach zone. Between throws you coast in a straight line.&lt;/p&gt;&#x27;+
     (state.level===&#x27;Story&#x27;?&#x27;&#x27;:&#x27;&lt;p&gt;The Δv budget is the largest total velocity change available from full-power throws in the best order.&lt;/p&gt;&#x27;)+
     (voice?&#x27;&lt;label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;crewAudio&quot;&#x27;+(crewVoiceEnabled?&#x27; checked&#x27;:&#x27;&#x27;)+&#x27;&gt; Voice the station’s capture call&lt;/label&gt;&#x27;:&#x27;&#x27;),
@@ -2541,10 +2610,9 @@ function init() {
     b.innerHTML=&#x27;&lt;span class=&quot;slot&quot;&gt;0&#x27;+(i+1)+&#x27;&lt;/span&gt;&lt;svg viewBox=&quot;-42 -27 84 54&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#t&#x27;+i+&#x27;&quot;/&gt;&lt;/svg&gt;&lt;span&gt;&lt;b&gt;&#x27;+t.name+&#x27;&lt;/b&gt;&lt;small&gt;&lt;/small&gt;&lt;/span&gt;&#x27;;
     b.onclick=()=&gt;selectTool(i);$(&#x27;tools&#x27;).append(b);
   });
-  for(const v of [1,2,5,10]) {
-    const b=document.createElement(&#x27;button&#x27;);b.value=v;b.textContent=v+&#x27;×&#x27;;b.setAttribute(&#x27;aria-label&#x27;,v+&#x27; times simulation speed&#x27;);
-    b.onclick=()=&gt;{state.rate=v;state.finalRate=0;lastFrame=null;render();};$(&#x27;speeds&#x27;).append(b);
-  }
+  $(&#x27;timeRate&#x27;).oninput=selectTimeRate;
+  // Clicking the selected stop also takes manual control back from an automatic coast.
+  $(&#x27;timeRate&#x27;).onclick=selectTimeRate;
   const plot=$(&#x27;plot&#x27;);
   plot.addEventListener(&#x27;pointerdown&#x27;,startDrag);
   // Window listeners also catch releases over the HUD or rack when capture is unavailable.
@@ -2584,7 +2652,8 @@ function init() {
   $(&#x27;guide&#x27;).onclick=guide;$(&#x27;pause&#x27;).onclick=()=&gt;state.phase===&#x27;ended&#x27;?summary():toggleClock();
   $(&#x27;modal&#x27;).addEventListener(&#x27;cancel&#x27;,e=&gt;{e.preventDefault();closeDialog();});
   document.addEventListener(&#x27;keydown&#x27;,e=&gt;{
-    if($(&#x27;modal&#x27;).open || e.altKey || e.ctrlKey || e.metaKey || [&#x27;SELECT&#x27;,&#x27;INPUT&#x27;].includes(e.target.tagName))return;
+    if($(&#x27;modal&#x27;).open || e.altKey || e.ctrlKey || e.metaKey)return;
+    if([&#x27;SELECT&#x27;,&#x27;INPUT&#x27;].includes(e.target.tagName) &amp;&amp; !(e.target===$(&#x27;timeRate&#x27;) &amp;&amp; e.code===&#x27;KeyP&#x27;))return;
     if(e.key===&#x27;Escape&#x27; &amp;&amp; (charge || drag)){endDrag(true);stopCharge();render();return;}
     if(e.code===&#x27;Space&#x27;){
       if(e.target.closest(&#x27;button&#x27;) &amp;&amp; !e.target.closest(&#x27;.tool&#x27;))return;
@@ -2740,11 +2809,26 @@ init();
       }
     });
     test(&#x27;Coasting, time rates and pause consume matching simulation time&#x27;,()=&gt;{
-      for(const b of $(&#x27;speeds&#x27;).querySelectorAll(&#x27;button&#x27;)){
-        newFlight();b.click();$(&#x27;pause&#x27;).click();lastFrame=1000;frame(2000);near(state.elapsed,Number(b.value),&#x27;rate&#x27;);near(state.x,19+.018*Number(b.value),&#x27;distance&#x27;);
+      const slider=$(&#x27;timeRate&#x27;), panel=$(&#x27;flightClock&#x27;), normalColor=getComputedStyle(slider).accentColor;
+      yes(slider.type===&#x27;range&#x27; &amp;&amp; slider.min===&#x27;0&#x27; &amp;&amp; slider.max===&#x27;3&#x27; &amp;&amp; slider.step===&#x27;1&#x27;,&#x27;four discrete speed stops&#x27;);
+      for(const [stop,rate] of [1,2,5,10].entries()){
+        newFlight();
+        yes(slider.value===&#x27;0&#x27; &amp;&amp; panel.dataset.fast===&#x27;false&#x27;,&#x27;reset to real time&#x27;);
+        slider.value=stop;slider.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));
+        yes(state.rate===rate &amp;&amp; slider.getAttribute(&#x27;aria-valuetext&#x27;)===rate+&#x27;×&#x27;,&#x27;selected multiplier&#x27;);
+        yes(panel.dataset.fast===String(rate&gt;1) &amp;&amp; (getComputedStyle(slider).accentColor!==normalColor)===(rate&gt;1),&#x27;fast-forward color&#x27;);
+        yes($(&#x27;rateStatus&#x27;).textContent===(rate&gt;1?&#x27;Fast-forward&#x27;:&#x27;Real time&#x27;)+&#x27; · &#x27;+rate+&#x27;×&#x27;,&#x27;visible speed&#x27;);
+        $(&#x27;pause&#x27;).click();lastFrame=1000;frame(2000);
+        near(state.elapsed,rate,&#x27;rate&#x27;);near(state.x,19+.018*rate,&#x27;distance&#x27;);
+        yes($(&#x27;elapsed&#x27;).textContent===clock(rate),&#x27;displayed flight time&#x27;);
         $(&#x27;pause&#x27;).click();const air=state.oxygen;advance(8);near(state.oxygen,air,&#x27;paused&#x27;);
       }
       $(&#x27;guide&#x27;).click();yes($(&#x27;modal&#x27;).open,&#x27;guide&#x27;);$(&#x27;dialogActions&#x27;).lastElementChild.click();yes(state.phase===&#x27;paused&#x27;,&#x27;guide keeps paused state&#x27;);
+      const box=panel.getBoundingClientRect(), view=$(&#x27;plot&#x27;).getBoundingClientRect();
+      yes(box.left&gt;view.left &amp;&amp; box.right&lt;=view.right &amp;&amp; view.right-box.right&lt;24 &amp;&amp; Math.abs(box.top-view.bottom)&lt;10,&#x27;clock at lower right edge of HUD&#x27;);
+      newFlight();throwTool();coastToHatch();coastToHatch();
+      yes(state.finalRate&gt;1 &amp;&amp; panel.dataset.fast===&#x27;true&#x27; &amp;&amp; $(&#x27;rateStatus&#x27;).textContent.includes(&#x27;Auto coast&#x27;),&#x27;automatic approach is visible&#x27;);
+      slider.click();yes(!state.finalRate &amp;&amp; state.rate===1 &amp;&amp; panel.dataset.fast===&#x27;false&#x27;,&#x27;take back manual control at same stop&#x27;);
     });
     test(&#x27;All three scenarios allow a legal soft capture with the rack and integer controls&#x27;,()=&gt;{
       const plans=[[[3,99,-6]],[[3,93,-21]],[[3,100,-17],[2,74,-16]]];
@@ -3078,19 +3162,23 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
 .assist { text-align:right; padding-right:10px; border-right:2px solid #827764; color:#c8cecd; font:11px/1.5 var(--mono); background:linear-gradient(270deg,#0c1013bb,transparent) }
 .assist .micro { color:var(--gold); margin-bottom:2px }
 .assist strong { font-weight:normal; color:var(--ink) }
-.plotbar { position:relative; display:flex; align-items:center; justify-content:space-between; gap:12px; border-top:1px solid var(--edge); padding:5px 14px; min-height:33px }
-.legend,.speed,.flight-time { color:var(--muted); font:12px/1.35 var(--sans) }
+.plotbar { display:flex; align-items:center; justify-content:space-between; gap:12px; border-top:1px solid var(--edge); padding:4px 14px; background:#11191c }
+.legend { color:var(--muted); font:12px/1.35 var(--sans) }
 .legend { gap:15px }
 .legend span { display:flex; align-items:center; gap:5px }
 .keyline { width:15px; border-top:2px dotted var(--mint) }
 .keyline.vector { border-top:2px solid #a9b8c5 }
 .keyline.recoil { border-top:2px dashed var(--gold) }
-.speed { display:flex; align-items:center; gap:2px }
-.speed&gt;svg { width:14px; height:14px; stroke:var(--muted); fill:none; margin-right:3px }
-.speed button { padding:4px 7px; background:transparent; font:12px var(--mono); border-color:transparent }
-.speed .active { color:var(--mint); background:#29332f; border-color:#4c5c54 }
-.flight-time { margin-left:auto; font-variant-numeric:tabular-nums }
-.flight-time b { color:var(--ink); font-weight:400 }
+.flight-clock { --clock-accent:var(--mint); display:grid; grid-template-columns:auto 144px; align-items:center; gap:16px; margin-left:auto; padding:5px 10px; border:1px solid var(--edge); border-radius:5px; background:var(--panel); color:var(--muted); font:12px/1.25 var(--sans) }
+.flight-clock[data-fast=&quot;true&quot;] { --clock-accent:var(--gold); border-color:var(--gold); background:#30291f }
+.clock-readout { display:grid; gap:2px; min-width:7ch }
+.clock-readout b { color:var(--clock-accent); font:600 17px var(--mono); font-variant-numeric:tabular-nums }
+.rate-control { display:grid; min-width:0 }
+.rate-status { color:var(--clock-accent); font-weight:600 }
+.rate-slider { margin:0; width:100%; height:24px; accent-color:var(--clock-accent); cursor:pointer }
+.rate-slider:focus-visible { outline:2px solid var(--clock-accent); outline-offset:-2px; border-radius:5px }
+.rate-stops { display:flex; justify-content:space-between; margin:0 8px; font:11px/1 var(--mono); pointer-events:none }
+.rate-stops span { width:0; display:flex; justify-content:center }
 .rack { margin-top:12px }
 .tools { padding:6px 12px 11px; gap:7px }
 .tool { display:grid; grid-template-columns:minmax(40px,.9fr) minmax(0,1.5fr); align-items:center; gap:5px; min-height:64px; padding:6px 7px; background:#1c2123 }
@@ -3126,7 +3214,6 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
   .tool { display:grid; min-height:55px }
   .throwstrip { align-items:flex-start; flex-wrap:wrap; gap:4px 12px }
   .assist { min-width:0 }
-  .plotbar { flex-wrap:wrap }
   .lower-readouts { gap:6px }
 }
 @media(max-width:450px) {
@@ -3144,12 +3231,10 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
   section[aria-label=&quot;Navigation&quot;]&gt;.panelhead { flex-direction:column; align-items:flex-start; gap:3px }
   .reserve-label { max-width:17ch }
   .side-hud.right { top:66px }
-  .plotbar { padding:5px 6px; gap:4px }
-  .legend { gap:8px }
+  .plotbar { padding:4px 8px; gap:4px }
+  .legend { flex-direction:column; align-items:flex-start; gap:1px }
   .keyline { width:9px }
-  .speed { gap:0 }
-  .speed&gt;svg { display:none }
-  .speed button { padding:5px 4px }
+  .flight-clock { grid-template-columns:auto 112px; gap:10px; padding-inline:8px }
   .tools { padding:4px 6px 7px; gap:4px }
   .tool { display:block; min-height:67px; padding:4px 5px 6px }
   .tool svg { height:30px }
@@ -3382,8 +3467,18 @@ dialog[data-kind=&quot;guide&quot;] #dialogBody&gt;p+p { margin-top:9px }
       &lt;p id=&quot;tip&quot; role=&quot;status&quot;&gt;&lt;/p&gt;
     &lt;/aside&gt;
   &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;plotbar&quot;&gt;
+  &lt;div class=&quot;legend&quot;&gt;&lt;span&gt;&lt;i class=&quot;keyline vector&quot;&gt;&lt;/i&gt;Velocity&lt;/span&gt;&lt;span id=&quot;coastKey&quot;&gt;&lt;i class=&quot;keyline&quot; style=&quot;border-top-style:dotted&quot;&gt;&lt;/i&gt;Coast&lt;/span&gt;&lt;span id=&quot;trialKey&quot;&gt;&lt;i class=&quot;keyline recoil&quot;&gt;&lt;/i&gt;After throw&lt;/span&gt;&lt;/div&gt;
+  &lt;div class=&quot;flight-clock&quot; id=&quot;flightClock&quot; role=&quot;group&quot; aria-label=&quot;Flight clock&quot;&gt;
+    &lt;div class=&quot;clock-readout&quot;&gt;Flight time&lt;b id=&quot;elapsed&quot; role=&quot;timer&quot;&gt;00:00&lt;/b&gt;&lt;/div&gt;
+    &lt;div class=&quot;rate-control&quot;&gt;
+      &lt;span class=&quot;rate-status&quot; id=&quot;rateStatus&quot;&gt;Real time · 1×&lt;/span&gt;
+      &lt;input class=&quot;rate-slider&quot; id=&quot;timeRate&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;3&quot; step=&quot;1&quot; value=&quot;0&quot; aria-label=&quot;Simulation speed&quot; aria-valuetext=&quot;1×&quot; aria-describedby=&quot;rateStatus&quot;&gt;
+      &lt;div class=&quot;rate-stops&quot; aria-hidden=&quot;true&quot;&gt;&lt;span&gt;1×&lt;/span&gt;&lt;span&gt;2×&lt;/span&gt;&lt;span&gt;5×&lt;/span&gt;&lt;span&gt;10×&lt;/span&gt;&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
 &lt;/div&gt;&lt;/div&gt;
-&lt;div class=&quot;plotbar&quot;&gt;&lt;div class=&quot;legend&quot;&gt;&lt;span&gt;&lt;i class=&quot;keyline vector&quot;&gt;&lt;/i&gt;Velocity&lt;/span&gt;&lt;span id=&quot;coastKey&quot;&gt;&lt;i class=&quot;keyline&quot; style=&quot;border-top-style:dotted&quot;&gt;&lt;/i&gt;Coast&lt;/span&gt;&lt;span id=&quot;trialKey&quot;&gt;&lt;i class=&quot;keyline recoil&quot;&gt;&lt;/i&gt;After throw&lt;/span&gt;&lt;/div&gt;&lt;span class=&quot;flight-time&quot;&gt;Flight time &lt;b id=&quot;elapsed&quot;&gt;00:00&lt;/b&gt;&lt;/span&gt;&lt;div class=&quot;speed&quot; id=&quot;speeds&quot; aria-label=&quot;Simulation speed&quot;&gt;&lt;svg viewBox=&quot;0 0 20 20&quot; aria-hidden=&quot;true&quot;&gt;&lt;circle cx=&quot;10&quot; cy=&quot;10&quot; r=&quot;7&quot;/&gt;&lt;path d=&quot;M10 5v6l4 2&quot;/&gt;&lt;/svg&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;div class=&quot;flight-controls&quot;&gt;&lt;button id=&quot;throwButton&quot;&gt;Throw pouch&lt;/button&gt;&lt;button id=&quot;coastButton&quot; class=&quot;primary&quot; hidden&gt;Coast to halfway&lt;/button&gt;&lt;span id=&quot;objectiveStatus&quot; hidden&gt;&lt;/span&gt;&lt;/div&gt;&lt;/section&gt;
 &lt;section class=&quot;panel rack&quot;&gt;&lt;div class=&quot;panelhead&quot;&gt;&lt;h2 class=&quot;sectionlabel&quot;&gt;&lt;svg aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#rackicon&quot;/&gt;&lt;/svg&gt; Equipment rack&lt;/h2&gt;&lt;span class=&quot;spec&quot; id=&quot;count&quot;&gt;&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;tools&quot; id=&quot;tools&quot;&gt;&lt;/div&gt;&lt;div class=&quot;throwstrip&quot;&gt;&lt;p id=&quot;aimHint&quot;&gt;Click to aim. Drag to set direction and power, then release to throw.&lt;/p&gt;&lt;span class=&quot;throw-vector&quot;&gt;&lt;span class=&quot;micro&quot;&gt;Throw vector&lt;/span&gt;&lt;span id=&quot;angle&quot;&gt;&lt;/span&gt; / &lt;span id=&quot;powerLabel&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/section&gt;
 &lt;span class=&quot;sr&quot; id=&quot;plotKeys&quot;&gt;1 to 6 select a tool. Left and right adjust bearing. Up and down adjust power. Enter throws. Escape cancels a drag.&lt;/span&gt;&lt;div class=&quot;sr&quot; aria-live=&quot;polite&quot; id=&quot;announce&quot;&gt;&lt;/div&gt;&lt;/main&gt;
@@ -3405,6 +3500,7 @@ const scenarios = [
   {name:&#x27;Wide separation&#x27;, x:29, y:-8, vx:0.044, vy:-0.016, brief:&#x27;The airlock is falling behind. Combine heavy throws to reverse your drift and close the gap.&#x27;}
 ];
 const limits = {Story:Infinity, Easy:900, Medium:600, Hard:450};
+const timeRates = [1,2,5,10];
 const captureSpeedLimit = 0.080, hardBearingError = 2;
 const softCapture = level =&gt; level===&#x27;Medium&#x27; || level===&#x27;Hard&#x27;;
 const overRedline = (level,vx,vy) =&gt; softCapture(level) &amp;&amp; Math.hypot(vx,vy)&gt;captureSpeedLimit+1e-12;
@@ -3616,6 +3712,24 @@ function renderSpeedometer() {
   const limitText=softCapture(s.level)?limitLabel:&#x27;Reference only, Medium and Hard capture limit&#x27;;
   $(&#x27;speedGauge&#x27;).setAttribute(&#x27;aria-valuetext&#x27;,label+&#x27;, &#x27;+limitText+&#x27; &#x27;+limit+&#x27; m/s&#x27;);
 }
+function renderFlightClock() {
+  const slider=$(&#x27;timeRate&#x27;), rate=state.finalRate || state.rate;
+  const mode=state.finalRate?&#x27;Auto coast&#x27;:rate&gt;1?&#x27;Fast-forward&#x27;:&#x27;Real time&#x27;;
+  const rateText=Number(rate.toFixed(1))+&#x27;×&#x27;;
+  $(&#x27;elapsed&#x27;).textContent=clock(state.elapsed);
+  $(&#x27;flightClock&#x27;).dataset.fast=String(rate&gt;1);
+  $(&#x27;rateStatus&#x27;).textContent=mode+&#x27; · &#x27;+rateText;
+  slider.value=timeRates.indexOf(state.rate);
+  slider.setAttribute(&#x27;aria-valuetext&#x27;,state.rate+&#x27;×&#x27;);
+}
+function selectTimeRate() {
+  const rate=timeRates[$(&#x27;timeRate&#x27;).valueAsNumber];
+  if(rate===state.rate &amp;&amp; !state.finalRate)return;
+  state.rate=rate;
+  state.finalRate=0;
+  lastFrame=null;
+  render();
+}
 function coastToHatch() {
   if(state.phase!==&#x27;flying&#x27; || drag || charge || $(&#x27;modal&#x27;).open)return;
   const path=course(state.x,state.y,state.vx,state.vy);
@@ -3729,16 +3843,12 @@ function render() {
   $(&#x27;radial&#x27;).dataset.trend=trend;
   $(&#x27;angle&#x27;).textContent=s.mask?fmtAngle(s.bearing):&#x27;—&#x27;;
   $(&#x27;powerLabel&#x27;).textContent=s.mask?s.power+&#x27;%&#x27;:&#x27;—&#x27;;
-  $(&#x27;elapsed&#x27;).textContent=clock(s.elapsed);
+  renderFlightClock();
   $(&#x27;pause&#x27;).disabled=trainingAim();
   $(&#x27;pause&#x27;).textContent=({ready:&#x27;Start clock&#x27;,flying:&#x27;Ⅱ  Pause&#x27;,paused:&#x27;▷  Resume&#x27;,ended:&#x27;Debrief&#x27;})[s.phase];
   $(&#x27;status&#x27;).textContent=drag?.moved ? (drag.inside?&#x27;Release &#x27;+gear[s.selected].name.toLowerCase():&#x27;Release to cancel&#x27;) :
     flash &amp;&amp; performance.now()&lt;flash.until &amp;&amp; s.phase===&#x27;flying&#x27; ? flash.text :
     ({ready:(gear[s.selected]?.name??&#x27;Ready&#x27;)+&#x27; · Drag to throw&#x27;,flying:&#x27;Live tracking&#x27;,paused:&#x27;Paused&#x27;,ended:&#x27;Mission ended&#x27;})[s.phase];
-  [...$(&#x27;speeds&#x27;).children].filter(el=&gt;el.tagName===&#x27;BUTTON&#x27;).forEach(el=&gt;{
-    const active=Number(el.value)===s.rate;
-    el.classList.toggle(&#x27;active&#x27;,active);el.setAttribute(&#x27;aria-pressed&#x27;,String(active));
-  });
   const k=impulse(s.selected,s.power,s.bearing), pvx=s.vx+k.dx,pvy=s.vy+k.dy;
   const coast=course(s.x,s.y,s.vx,s.vy);
   const checkingCourse=s.midpointThrow===s.throws &amp;&amp; s.phase!==&#x27;ended&#x27;;
@@ -3964,7 +4074,8 @@ function guide() {
     &#x27;&lt;li&gt;&lt;b&gt;Drag on the plot&lt;/b&gt; or grab the reticle. Point where the tool should travel. Your suit recoils in the opposite direction. Distance from your suit sets power, from 10% up to 100% at the dotted ring.&lt;/li&gt;&#x27;+
     &#x27;&lt;li&gt;&lt;b&gt;Release to throw.&lt;/b&gt; A click or tap previews your aim. The Throw button commits it. Escape or release outside the plot to cancel a drag.&lt;/li&gt;&#x27;+
     &#x27;&lt;li&gt;&lt;b&gt;Keyboard controls.&lt;/b&gt; Left and right change bearing by 1° (Shift for 10°). Up and down change power by 1% (Shift for 10%). Press Enter on the plot to throw, or hold Space to wind up and release to throw. Escape cancels the windup.&lt;/li&gt;&#x27;+
-    &#x27;&lt;li&gt;&lt;b&gt;Check your course halfway home.&lt;/b&gt; When the original gap to the handrail reach zone has halved, the station calls once. Check your path and approach speed before spending another tool. The coast shortcut stops there first. P pauses flight.&lt;/li&gt;&lt;/ul&gt;&#x27;+
+    &#x27;&lt;li&gt;&lt;b&gt;Set the flight clock&lt;/b&gt; to 1×, 2×, 5× or 10× with the slider at the lower right of the HUD. Amber means fast-forward. P pauses flight.&lt;/li&gt;&#x27;+
+    &#x27;&lt;li&gt;&lt;b&gt;Check your course halfway home.&lt;/b&gt; When the original gap to the handrail reach zone has halved, the station calls once. Check your path and approach speed before spending another tool. The coast shortcut stops there first.&lt;/li&gt;&lt;/ul&gt;&#x27;+
     &#x27;&lt;p&gt;Bearings run counterclockwise from right (000°) to up (090°). Vx, Vy and radial speed use m/s. Green hatch distance and negative radial speed mean you are closing in. Red distance and positive radial speed mean you are moving away. Hatch distance measures the gap to the edge of the handrail reach zone. Between throws you coast in a straight line.&lt;/p&gt;&#x27;+
     (state.level===&#x27;Story&#x27;?&#x27;&#x27;:&#x27;&lt;p&gt;The Δv budget is the largest total velocity change available from full-power throws in the best order.&lt;/p&gt;&#x27;)+
     (voice?&#x27;&lt;label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;crewAudio&quot;&#x27;+(crewVoiceEnabled?&#x27; checked&#x27;:&#x27;&#x27;)+&#x27;&gt; Voice the station’s capture call&lt;/label&gt;&#x27;:&#x27;&#x27;),
@@ -4057,10 +4168,9 @@ function init() {
     b.innerHTML=&#x27;&lt;span class=&quot;slot&quot;&gt;0&#x27;+(i+1)+&#x27;&lt;/span&gt;&lt;svg viewBox=&quot;-42 -27 84 54&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#t&#x27;+i+&#x27;&quot;/&gt;&lt;/svg&gt;&lt;span&gt;&lt;b&gt;&#x27;+t.name+&#x27;&lt;/b&gt;&lt;small&gt;&lt;/small&gt;&lt;/span&gt;&#x27;;
     b.onclick=()=&gt;selectTool(i);$(&#x27;tools&#x27;).append(b);
   });
-  for(const v of [1,2,5,10]) {
-    const b=document.createElement(&#x27;button&#x27;);b.value=v;b.textContent=v+&#x27;×&#x27;;b.setAttribute(&#x27;aria-label&#x27;,v+&#x27; times simulation speed&#x27;);
-    b.onclick=()=&gt;{state.rate=v;state.finalRate=0;lastFrame=null;render();};$(&#x27;speeds&#x27;).append(b);
-  }
+  $(&#x27;timeRate&#x27;).oninput=selectTimeRate;
+  // Clicking the selected stop also takes manual control back from an automatic coast.
+  $(&#x27;timeRate&#x27;).onclick=selectTimeRate;
   const plot=$(&#x27;plot&#x27;);
   plot.addEventListener(&#x27;pointerdown&#x27;,startDrag);
   // Window listeners also catch releases over the HUD or rack when capture is unavailable.
@@ -4100,7 +4210,8 @@ function init() {
   $(&#x27;guide&#x27;).onclick=guide;$(&#x27;pause&#x27;).onclick=()=&gt;state.phase===&#x27;ended&#x27;?summary():toggleClock();
   $(&#x27;modal&#x27;).addEventListener(&#x27;cancel&#x27;,e=&gt;{e.preventDefault();closeDialog();});
   document.addEventListener(&#x27;keydown&#x27;,e=&gt;{
-    if($(&#x27;modal&#x27;).open || e.altKey || e.ctrlKey || e.metaKey || [&#x27;SELECT&#x27;,&#x27;INPUT&#x27;].includes(e.target.tagName))return;
+    if($(&#x27;modal&#x27;).open || e.altKey || e.ctrlKey || e.metaKey)return;
+    if([&#x27;SELECT&#x27;,&#x27;INPUT&#x27;].includes(e.target.tagName) &amp;&amp; !(e.target===$(&#x27;timeRate&#x27;) &amp;&amp; e.code===&#x27;KeyP&#x27;))return;
     if(e.key===&#x27;Escape&#x27; &amp;&amp; (charge || drag)){endDrag(true);stopCharge();render();return;}
     if(e.code===&#x27;Space&#x27;){
       if(e.target.closest(&#x27;button&#x27;) &amp;&amp; !e.target.closest(&#x27;.tool&#x27;))return;
@@ -4256,11 +4367,26 @@ init();
       }
     });
     test(&#x27;Coasting, time rates and pause consume matching simulation time&#x27;,()=&gt;{
-      for(const b of $(&#x27;speeds&#x27;).querySelectorAll(&#x27;button&#x27;)){
-        newFlight();b.click();$(&#x27;pause&#x27;).click();lastFrame=1000;frame(2000);near(state.elapsed,Number(b.value),&#x27;rate&#x27;);near(state.x,19+.018*Number(b.value),&#x27;distance&#x27;);
+      const slider=$(&#x27;timeRate&#x27;), panel=$(&#x27;flightClock&#x27;), normalColor=getComputedStyle(slider).accentColor;
+      yes(slider.type===&#x27;range&#x27; &amp;&amp; slider.min===&#x27;0&#x27; &amp;&amp; slider.max===&#x27;3&#x27; &amp;&amp; slider.step===&#x27;1&#x27;,&#x27;four discrete speed stops&#x27;);
+      for(const [stop,rate] of [1,2,5,10].entries()){
+        newFlight();
+        yes(slider.value===&#x27;0&#x27; &amp;&amp; panel.dataset.fast===&#x27;false&#x27;,&#x27;reset to real time&#x27;);
+        slider.value=stop;slider.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));
+        yes(state.rate===rate &amp;&amp; slider.getAttribute(&#x27;aria-valuetext&#x27;)===rate+&#x27;×&#x27;,&#x27;selected multiplier&#x27;);
+        yes(panel.dataset.fast===String(rate&gt;1) &amp;&amp; (getComputedStyle(slider).accentColor!==normalColor)===(rate&gt;1),&#x27;fast-forward color&#x27;);
+        yes($(&#x27;rateStatus&#x27;).textContent===(rate&gt;1?&#x27;Fast-forward&#x27;:&#x27;Real time&#x27;)+&#x27; · &#x27;+rate+&#x27;×&#x27;,&#x27;visible speed&#x27;);
+        $(&#x27;pause&#x27;).click();lastFrame=1000;frame(2000);
+        near(state.elapsed,rate,&#x27;rate&#x27;);near(state.x,19+.018*rate,&#x27;distance&#x27;);
+        yes($(&#x27;elapsed&#x27;).textContent===clock(rate),&#x27;displayed flight time&#x27;);
         $(&#x27;pause&#x27;).click();const air=state.oxygen;advance(8);near(state.oxygen,air,&#x27;paused&#x27;);
       }
       $(&#x27;guide&#x27;).click();yes($(&#x27;modal&#x27;).open,&#x27;guide&#x27;);$(&#x27;dialogActions&#x27;).lastElementChild.click();yes(state.phase===&#x27;paused&#x27;,&#x27;guide keeps paused state&#x27;);
+      const box=panel.getBoundingClientRect(), view=$(&#x27;plot&#x27;).getBoundingClientRect();
+      yes(box.left&gt;view.left &amp;&amp; box.right&lt;=view.right &amp;&amp; view.right-box.right&lt;24 &amp;&amp; Math.abs(box.top-view.bottom)&lt;10,&#x27;clock at lower right edge of HUD&#x27;);
+      newFlight();throwTool();coastToHatch();coastToHatch();
+      yes(state.finalRate&gt;1 &amp;&amp; panel.dataset.fast===&#x27;true&#x27; &amp;&amp; $(&#x27;rateStatus&#x27;).textContent.includes(&#x27;Auto coast&#x27;),&#x27;automatic approach is visible&#x27;);
+      slider.click();yes(!state.finalRate &amp;&amp; state.rate===1 &amp;&amp; panel.dataset.fast===&#x27;false&#x27;,&#x27;take back manual control at same stop&#x27;);
     });
     test(&#x27;All three scenarios allow a legal soft capture with the rack and integer controls&#x27;,()=&gt;{
       const plans=[[[3,99,-6]],[[3,93,-21]],[[3,100,-17],[2,74,-16]]];
