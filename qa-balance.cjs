@@ -14,17 +14,18 @@ function randomStream(seed) {
 const html = fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
 const script = html.split('<script>')[1].split('</script>')[0];
 assert.match(script,/\ninit\(\);\s*$/);
-const element = {getBBox: () => ({})};
+const element = {getBBox: () => ({left:-22,right:22,top:-32,bottom:32})};
 const gameMath = Object.create(Math);
 const environment = {
   Math:gameMath, performance, clearTimeout, document:{getElementById:() => element},
   DOMRect:{fromRect:r => r}
 };
 const flight = vm.runInNewContext(script.replace(/\ninit\(\);\s*$/,'')+`
-  measurePlot=renderGear=render=summary=()=>{};
+  measurePlot=renderGear=summary=()=>{};
+  render=()=>{camera=plotCamera(state,plotW,plotH,plotH);};
   ({
-    scenarios,gear,captureRadius,captureSpeedLimit,massOf,course,
-    start:(i,level,day)=>newFlight(i,level,'none','',day), state:()=>state,
+    scenarios,gear,captureRadius,captureSpeedLimit,massOf,course,generateDrift,decodeSeed,recoveryPlan,
+    start:(i,level,drift)=>newFlight(i,level,'none','',drift), state:()=>state,
     release:(i,power,bearing)=>{selectTool(i);state.power=power;state.bearing=bearing;throwTool();},
     advance
   });
@@ -58,11 +59,11 @@ function planThrow(reading,targetSpeed) {
   return best;
 }
 
-function fly(index,level,seed,recheck,fastLaunch,day) {
+function fly(index,level,seed,recheck,fastLaunch,drift) {
   // Use paired, independent streams for release scatter and pilot inputs.
   const pilot = randomStream(seed);
   gameMath.random=randomStream(seed ^ 0x56e94517);
-  flight.start(index,level,day);
+  flight.start(index,level,drift);
   const s=flight.state(), landingSpeed=flight.captureSpeedLimit*.92;
   const targetSpeed=fastLaunch?flight.captureSpeedLimit*1.5:landingSpeed;
   let estimate=readInstruments(s);
@@ -125,16 +126,43 @@ for(const level of ['Medium','Hard']) {
   }
 }
 
-// A dated start should admit a legal capture with the same imperfect pilot and course check.
-for(const level of ['Medium','Hard']) {
-  for(let dayIndex=0;dayIndex<365;dayIndex++) {
-    const day=new Date(Date.UTC(2027,0,dayIndex+1)).toISOString().slice(0,10);
-    let captured=false;
-    for(let attempt=0;attempt<8 && !captured;attempt++) {
-      const seed=(Math.imul(dayIndex+1,2654435761)+attempt)>>>0;
-      captured=fly(flight.scenarios.length,level,seed,true,false,day).result==='Capture confirmed';
+const randomIndex=flight.scenarios.length, draw=randomStream(0xFA57BA11);
+const sampleCount=10000, seeds=new Set(), positionQuadrants=new Set(), driftQuadrants=new Set();
+const lengths={}, hardResults={};
+let firstAttemptWins=0, recoveries=0;
+for(let n=0;n<sampleCount;n++){
+  const start=flight.generateDrift(draw);
+  seeds.add(start.seed);
+  positionQuadrants.add([Math.sign(start.x),Math.sign(start.y)].join(','));
+  driftQuadrants.add([Math.sign(start.vx),Math.sign(start.vy)].join(','));
+  assert.deepEqual(flight.decodeSeed(start.seed),start);
+  assert.equal(flight.course(start.x,start.y,start.vx,start.vy).eta,null,'free coast to hatch');
+  for(const level of ['Story','Easy','Medium','Hard']){
+    const plan=flight.recoveryPlan(start,level==='Story');
+    assert(plan && plan.length,'missing recovery '+start.seed);
+    if(level==='Hard')lengths[plan.length]=(lengths[plan.length]||0)+1;
+    gameMath.random=()=>.5; // Nominal release, then exercise real scatter below.
+    flight.start(randomIndex,level,start);
+    for(const [i,step] of plan.entries()){
+      if(i)flight.advance(4);
+      flight.release(step.i,step.power,step.bearing);
     }
-    assert(captured,'No daily capture for '+day+' on '+level);
+    flight.advance(900);
+    const s=flight.state();
+    assert.equal(s.result?.title,'Capture confirmed',level+' '+start.seed);
+    assert(s.elapsed<=430 && Math.hypot(s.vx,s.vy)<=flight.captureSpeedLimit-.003);
   }
-  console.log(level,'daily drift: verified a safe capture for all 365 sampled dates');
+  for(let attempt=0;attempt<8;attempt++){
+    const seed=(Math.imul(n+1,2654435761)+attempt)>>>0;
+    const result=fly(randomIndex,'Hard',seed,true,false,start).result;
+    if(attempt===0)hardResults[result]=(hardResults[result]||0)+1;
+    if(result==='Capture confirmed'){recoveries++;if(!attempt)firstAttemptWins++;break;}
+  }
 }
+for(const x of [-1,1])for(const y of [-1,1]){
+  assert(positionQuadrants.has([x,y].join(',')) && driftQuadrants.has([x,y].join(',')));
+}
+assert(seeds.size>sampleCount*.99 && lengths[2]>sampleCount*.15,'insufficient variety');
+assert.equal(recoveries,sampleCount,'failed to recover a sampled seed with Hard scatter');
+console.log('Random starts:',sampleCount,'verified recoverable on all four difficulties; finite-rack plan lengths:',lengths);
+console.log('Hard with scatter and imperfect controls:',firstAttemptWins,'first-attempt captures;',recoveries,'within eight attempts;',hardResults);

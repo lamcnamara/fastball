@@ -45,7 +45,19 @@ Both mass and release speed affect recoil. The **Δv budget** estimates how much
 
 ## Missions and difficulty
 
-Under **New mission**, choose **Tether separation**, **Lateral drift**, **Wide separation**, or **Daily drift**. The daily mission gives everyone the same starting position and velocity for a UTC date, across all four difficulties. A new drift becomes available at 00:00 UTC. **Retry this flight** keeps the original date’s drift and bonus objective, even after midnight.
+Under **New mission**, choose **Tether separation**, **Lateral drift**, **Wide separation**, or **Random**. **Retry this flight** restores the same opening, difficulty and bonus objective.
+
+### Share a random rescue
+
+1. Choose **Random** to draw a starting position, drift speed and direction. **Generate seed** deals another start. The preview gives the initial distance from the hatch, speed and heading.
+2. Use **Copy link** in setup or beside the seed during flight. Opening the link starts the same drift with the sender’s difficulty and bonus objective. Hard rolls a fresh release error each time a tool is thrown.
+3. To enter a flight manually, paste its Scenario Seed or full link under **New mission → Random** and choose **Load seed**, then **Begin mission**. A bare seed keeps your chosen difficulty and objective. Offline players can exchange just the code. For a two-throw Hard playtest, try `F1N73CGPHF`.
+
+**Seed format.** Each ten-character code starts with `F1`. The next seven base-36 characters pack the initial X and Y coordinates in decimetres and the X and Y velocity components in millimetres per second. Each position component uses 10 bits with an offset of 512, and each velocity component uses 8 bits with an offset of 128, in X, Y, Vx, Vy order from most to least significant. The last base-36 character checks the payload. Starting at zero, multiply the running check by 17, add each digit’s value and reduce modulo 36. For example, `F1N73CGPHF` decodes to (24.0, −7.0) m and (+0.046, +0.021) m/s. Case is ignored.
+
+Random starts lie 14–28 m from the hatch and drift at 0.022–0.085 m/s. Each generated or loaded seed must admit a soft capture using whole-degree bearings and whole-percent power, with time to spare on Hard. The same check covers Story’s reloading inventory. Every start needs at least one throw. Run `node qa-balance.cjs` for the seeded 10,000-start recovery and Hard-scatter tests.
+
+[View random mission setup](preview-random.png)
 
 | Mode | Return reserve | Navigation and capture |
 | --- | --- | --- |
@@ -57,3 +69,9 @@ Under **New mission**, choose **Tether separation**, **Lateral drift**, **Wide s
 The approach gauge shows the 0.080 m/s reference in every mode. On Medium and Hard it turns red above the capture limit. An empty rack can still get you home if your final coast reaches the rail in time at a permitted speed.
 
 For a replay, try keeping the original drill holstered or returning in two throws or fewer. The station gives Tommi a different welcome on each difficulty. Bring the original drill home to earn **Upmass Hero**, whichever bonus objective you picked. The mission debrief lets you review the plot, retry the same flight, or take the next challenge.
+
+### Share a flight log
+
+Choose **View flight log** in any mission debrief, then **Copy flight log**. Each throw lists its flight timestamp, tool and mass, power, actual release bearing, signed changes to X and Y velocity, and the suit’s heading before and after release. On Hard, the log also records the aimed bearing. The final entry includes velocity, speed, heading, elapsed time, remaining oxygen and earned awards. Random flights also include their seed and replay link.
+
+[View a two-throw capture log](preview-flight-log.png)
