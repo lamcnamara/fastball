@@ -1,8 +1,11 @@
 // Reproduce the Orbital playtest with node qa-orbital.cjs.
 const assert=require('node:assert/strict');
-const {flight:f,randomStream}=require('./qa-flight.cjs');
+const {flight:f,gameMath,randomStream}=require('./qa-flight.cjs');
 const count=2000, trials=3, randomIndex=f.scenarios.length;
 const draw=randomStream(0x0B17A1);
+f.start(0,'Orbital');
+const reserve=f.state().oxygen;
+assert.equal(reserve,450);
 
 // Cross-check the closed-form propagator against independent RK4 integration of
 // the differential equations. Test both directions along both orbital axes.
@@ -20,17 +23,18 @@ for(const start of [...f.scenarios,{x:-20,y:8,vx:-.09,vy:.06}]){
 }
 
 const profiles=[
-  {name:'Exact controls'},
+  {name:'Nominal route, zero release error',nominal:true},
+  {name:'Exact aim and power, flight scatter'},
   {name:'Aim ±1°, power ±1 point',aim:1,power:1},
   {name:'Aim ±2°, power ±2 points',aim:2,power:2},
-  {name:'Same + Hard scatter ±2°',aim:2,power:2,scatter:2},
   {name:'Launch 15 seconds late',delay:15},
   {name:'Aim ±5°, power ±5 points',aim:5,power:5},
   {name:'Aim ±5°, power ±5 points + midpoint trim',aim:5,power:5,trim:true}
 ];
 
 function fly(start,index,plan,profile,seed){
-  const pilot=randomStream(seed), scatter=randomStream(seed ^ 0xAF35BB17);
+  const pilot=randomStream(seed);
+  gameMath.random=profile.nominal?()=>.5:randomStream(seed ^ 0xAF35BB17);
   const slip=(stream,amplitude)=>(stream()*2-1)*amplitude;
   f.start(index,'Orbital',start);
   const s=f.state();
@@ -39,7 +43,7 @@ function fly(start,index,plan,profile,seed){
     for(const [j,step] of steps.entries()){
       if(j)f.advance(4);
       if(s.phase==='ended')break;
-      const bearing=step.bearing+Math.round(slip(pilot,profile.aim || 0))+slip(scatter,profile.scatter || 0);
+      const bearing=step.bearing+Math.round(slip(pilot,profile.aim || 0));
       const power=Math.min(100,Math.max(10,step.power+Math.round(slip(pilot,profile.power || 0))));
       f.release(step.i,power,bearing);
     }
@@ -72,6 +76,7 @@ for(const [i,s] of f.scenarios.entries()){
 // previews. It never calls the transfer solver or reads a seed's recovery plan.
 function flyByForecast(start,index,seed) {
   const pilot=randomStream(seed);
+  gameMath.random=randomStream(seed ^ 0xAF35BB17);
   f.start(index,'Orbital',start);
   const s=f.state();
   for(let attempt=0;attempt<3;attempt++){
@@ -133,6 +138,7 @@ for(const arrivalSpeed of [.079,.080,.081]){
   f.advance(1000);assert.equal(s.result.title,arrivalSpeed<=.080?'Capture confirmed':'Approach too fast');
 }
 for(const [index,start] of f.scenarios.entries()){
+  gameMath.random=()=>.5;
   f.start(index,'Orbital');const s=f.state();
   for(const [j,k] of f.orbitalRecovery(s).entries()){
     if(j)f.advance(4);f.release(k.i,k.power,k.bearing);
@@ -140,7 +146,7 @@ for(const [index,start] of f.scenarios.entries()){
   const expected=s.elapsed+f.flightCourse().eta;
   f.coastToHatch();assert.equal(s.midpointThrow,s.throws);
   assert(Math.abs(Math.hypot(s.x,s.y)-f.captureRadius-s.halfwayGap)<1e-8);
-  f.coastToHatch();f.advance(900);
+  f.coastToHatch();f.advance(reserve);
   assert.equal(s.result.title,'Capture confirmed');assert(Math.abs(s.elapsed-expected)<1e-7);
 }
 
@@ -152,16 +158,16 @@ let leastBudget=Infinity,longest=0,maxSpeed=0;
 for(let i=0;i<count;i++){
   const start=f.generateDrift(draw,'Orbital');
   assert(start.orbital && f.decodeSeed(start.seed)?.seed===start.seed);
-  assert.equal(f.orbitalCourse(start,900).eta,null,'free capture');
+  assert.equal(f.orbitalCourse(start,reserve).eta,null,'free capture');
   seen.add(start.seed);positions.add(Math.sign(start.x)+','+Math.sign(start.y));
   directions.add(Math.sign(start.vx)+','+Math.sign(start.vy));
-  const plan=f.orbitalRecovery(start), delayed=f.orbitalRecovery(f.orbitalMotion(start,30),f.fullMask,870);
+  const plan=f.orbitalRecovery(start), delayed=f.orbitalRecovery(f.orbitalMotion(start,30),f.fullMask,reserve-30);
   assert(plan && delayed,start.seed);
-  assert(fly(start,randomIndex,delayed,{delay:30},i).won,'no recovery after 30s '+start.seed);
+  assert(fly(start,randomIndex,delayed,{delay:30,nominal:true},i).won,'no recovery after 30s '+start.seed);
   if(i<forecastCount && flyByForecast(start,randomIndex,(i+1)*73))forecastWins++;
   lengths[plan.length]=(lengths[plan.length]||0)+1;
   for(const [j,profile] of profiles.entries()){
-    const repetitions=profile.aim?trials:1;
+    const repetitions=profile.nominal?1:trials;
     for(let r=0;r<repetitions;r++){
       const seed=(Math.imul(i+1,2654435761)+Math.imul(r,2246822519))>>>0;
       const result=fly(start,randomIndex,plan,profile,seed), total=totals[j];
@@ -179,5 +185,5 @@ for(let i=0;i<count;i++){
 assert.equal(seen.size,count);
 for(const x of [-1,1])for(const y of [-1,1])assert(positions.has(x+','+y) && directions.has(x+','+y));
 console.log({starts:count,planLengths:lengths,longest,maxSpeed,leastBudget});
-profiles.forEach((p,i)=>console.log(p.name,'/',count*(p.aim?trials:1),totals[i]));
+profiles.forEach((p,i)=>console.log(p.name,'/',count*(p.nominal?1:trials),totals[i]));
 console.log('Forecast-only pilot, up to three throws with ±2°/±2 points:',forecastWins,'/',forecastCount);

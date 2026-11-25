@@ -159,7 +159,38 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
 .speedometer[data-reference=&quot;true&quot;] .speed-track::after { background:var(--muted); opacity:.55; width:2px }
 .speed-limit { color:var(--muted); font-size:12px }
 dialog[data-kind=&quot;guide&quot;] { width:min(560px,calc(100% - 28px)) }
-dialog[data-kind=&quot;log&quot;] { width:min(620px,calc(100% - 24px)) }
+dialog[data-kind=&quot;log&quot;] { width:min(870px,calc(100% - 20px)) }
+#approachCard { margin:0 0 14px; padding:clamp(12px,2vw,22px); border:1px solid #485c55; border-radius:8px; background:#141d1b; color:var(--ink) }
+.chart-byline,.chart-meta,.chart-legend,.chart-throws small,.chart-stats { font:12px/1.45 var(--mono) }
+.chart-byline { display:flex; flex-wrap:wrap; justify-content:space-between; gap:2px 12px; color:var(--mint) }
+.chart-byline strong { color:var(--ink); letter-spacing:.12em }
+#approachCard h3 { margin:6px 0 12px; font:650 clamp(19px,3vw,29px)/1.15 var(--sans) }
+.chart-layout { display:grid; grid-template-columns:minmax(0,1.65fr) minmax(185px,1fr); gap:16px; align-items:start }
+.chart-plot { width:100%; display:block; background:#192322; border:1px solid #40534e; border-radius:5px }
+.chart-plot text { fill:var(--muted); font:11px var(--mono) }
+.chart-plot .chart-number { fill:var(--gold); font-weight:700; text-anchor:middle }
+.chart-grid { stroke:#364740; stroke-width:.7 }
+.chart-axis { stroke:#8ba297; stroke-width:1; fill:none }
+.chart-track { stroke:var(--gold); stroke-width:2.2; fill:none; stroke-linejoin:round; stroke-linecap:round }
+.chart-meta { color:var(--muted) }
+.chart-legend { display:flex; gap:3px 10px; flex-wrap:wrap; margin-top:5px; color:var(--muted) }
+.chart-legend .finish-key { color:var(--finish) }
+.chart-throws { list-style:none; margin:6px 0 0; padding:0 }
+.chart-throws li { margin:0 0 7px; display:grid; grid-template-columns:auto 1fr; gap:0 7px; align-items:baseline; line-height:1.25 }
+.chart-throws .throw-index { grid-row:span 2; color:var(--gold); font:600 12px var(--mono) }
+.chart-throws small { grid-column:2; color:var(--muted) }
+.chart-stats { display:flex; flex-wrap:wrap; gap:4px 14px; padding-top:9px; margin-top:10px; border-top:1px solid #40534e; color:var(--muted) }
+.chart-stats b { color:var(--ink); font-weight:600 }
+.chart-result { display:block; margin:0 0 4px; color:var(--oxygen-fill); font-size:17px }
+.chart-result[data-captured=&quot;false&quot;] { color:var(--danger) }
+@media(max-width:650px) {
+  dialog[data-kind=&quot;log&quot;] { width:calc(100% - 12px); max-width:calc(100% - 12px); padding:10px; scrollbar-width:thin }
+  #approachCard { padding:10px }
+  .chart-layout { grid-template-columns:minmax(0,1fr); gap:8px }
+  .chart-plot text { font-size:13px }
+  .chart-throws li { margin-bottom:4px; font-size:13px }
+  .chart-throws small { font-size:11px }
+}
 .seed-share { padding:2px 7px; font-size:12px }
 #shareNotice:not(:empty) { margin-left:5px }
 .seed-panel { margin:12px 0 18px; padding:12px; min-width:0; background:var(--bg); border:1px solid var(--edge); border-radius:5px }
@@ -445,9 +476,10 @@ function randomStream(seed) {
     return seed/4294967296;
   };
 }
-const limits = {Story:Infinity, Easy:900, Medium:600, Hard:450, Orbital:900};
+const limits = {Story:Infinity, Easy:900, Medium:600, Hard:450, Orbital:450};
 const timeRates = [1,2,5,10];
-const captureSpeedLimit = 0.080, hardBearingError = 2;
+const captureSpeedLimit = 0.080, maxBearingError = 2;
+const hasReleaseError = level =&gt; level===&#x27;Hard&#x27; || level===&#x27;Orbital&#x27;;
 const softCapture = level =&gt; level===&#x27;Medium&#x27; || level===&#x27;Hard&#x27; || level===&#x27;Orbital&#x27;;
 const overRedline = (level,vx,vy) =&gt; softCapture(level) &amp;&amp; Math.hypot(vx,vy)&gt;captureSpeedLimit+1e-12;
 const captureCalls = {
@@ -489,7 +521,7 @@ function course(x,y,vx,vy,radius=captureRadius) {
     // Scale the roundoff allowance with velocity so very slow misses stay misses.
     if (disc &gt;= -Number.EPSILON*(dot*dot+vv*c)*4) eta = c/(-dot + Math.sqrt(Math.max(0,disc)));
   }
-  return {eta, clearance};
+  return {eta, clearance, arrivalSpeed:eta===null?null:Math.hypot(vx,vy)};
 }
 // Planar Hill–Clohessy–Wiltshire motion about the hatch on a circular 92-minute orbit.
 // Plot +X is radially outward and +Y is along the station&#x27;s direction of travel.
@@ -593,16 +625,17 @@ function newFlight(index=0,level=&#x27;Easy&#x27;,objective=&#x27;none&#x27;,les
 function difficultyBrief(level) {
   return level===&#x27;Story&#x27;
       ? &#x27;Unlimited oxygen and reloading tools. Full trajectory guidance. Reach the hatch before your suit drifts off the plot.&#x27;
-      : clock(limits[level])+&#x27; to reach the rail on emergency reserve · &#x27;+({Easy:&#x27;Full trajectory, intercept time and miss distance.&#x27;,Medium:&#x27;Predicted velocity vector.&#x27;,Hard:&#x27;Raw navigation telemetry.&#x27;,Orbital:&#x27;Curved coasts in a rotating orbital frame. Full trajectory guidance and precise releases.&#x27;})[level]+(softCapture(level)?&#x27; &#x27;+captureBrief(level):&#x27;&#x27;);
+      : clock(limits[level])+&#x27; to reach the rail on emergency reserve · &#x27;+({Easy:&#x27;Full trajectory, intercept time and miss distance.&#x27;,Medium:&#x27;Predicted velocity vector.&#x27;,Hard:&#x27;Raw navigation telemetry.&#x27;,Orbital:&#x27;Curved coasts in a rotating orbital frame. Full trajectory guidance.&#x27;})[level]+(softCapture(level)?&#x27; &#x27;+captureBrief(level):&#x27;&#x27;);
 }
 function captureBrief(level) {
   const limit=captureSpeedLimit.toFixed(3)+&#x27; m/s&#x27;;
-  if(level===&#x27;Orbital&#x27;)return &#x27;Aim the curved gold forecast through the rail at &#x27;+limit+&#x27; or slower. Check the predicted speed at the rail.&#x27;;
+  const scatter=&#x27; Each release can stray by up to ±&#x27;+maxBearingError+&#x27;°.&#x27;;
+  if(level===&#x27;Orbital&#x27;)return &#x27;Aim the gold curve through the rail at &#x27;+limit+&#x27; or slower.&#x27;+scatter+&#x27; Check the actual coast after each throw.&#x27;;
   return &#x27;Reach the handrail at &#x27;+limit+&#x27; or slower. Throw along your motion to brake.&#x27;+
-    (level===&#x27;Hard&#x27;?&#x27; Each release can stray by up to ±&#x27;+hardBearingError+&#x27;°.&#x27;:&#x27;&#x27;);
+    (level===&#x27;Hard&#x27;?scatter:&#x27;&#x27;);
 }
 function safeCoast(path) {
-  return path.eta!==null &amp;&amp; path.eta&lt;=state.oxygen &amp;&amp; !overRedline(state.level,path.arrivalSpeed ?? Math.hypot(state.vx,state.vy),0);
+  return path.eta!==null &amp;&amp; path.eta&lt;=state.oxygen &amp;&amp; !overRedline(state.level,path.arrivalSpeed,0);
 }
 function objectiveIntact(flight=state) {
   if(flight.objective===&#x27;drill&#x27;)return keptDrill(flight);
@@ -632,7 +665,7 @@ function encodeSeed(start,orbital=Boolean(start.orbital)) {
   const payload=packed.toString(36).toUpperCase().padStart(7,&#x27;0&#x27;);
   return orbital?&#x27;O1&#x27;+payload+seedCheck(&#x27;O1&#x27;+payload):&#x27;F1&#x27;+payload+seedCheck(payload);
 }
-function decodeSeed(input) {
+function decodeSeed(input,allowLegacyOrbital=true) {
   const seed=input.trim().toUpperCase(), payload=seed.slice(2,9);
   const orbital=seed.startsWith(&#x27;O1&#x27;);
   if(!/^[FO]1[0-9A-Z]{8}$/.test(seed) || seedCheck(orbital?&#x27;O1&#x27;+payload:payload)!==seed[9])return null;
@@ -647,7 +680,9 @@ function decodeSeed(input) {
   const y=unpack(1024,512,10), x=unpack(1024,512,10);
   const start={name:&#x27;Random&#x27;,seed,x,y,vx,vy};
   if(orbital)start.orbital=true;
-  return playableDrift(start)?start:null;
+  // Previously shared O1 codes were screened with a 15-minute reserve.
+  // Recognize those starts on input. New deals and conversions use today&#x27;s rules.
+  return playableDrift(start) || (orbital &amp;&amp; allowLegacyOrbital &amp;&amp; playableDrift(start,900))?start:null;
 }
 function closestImpulse(mask,desired) {
   let best=null;
@@ -712,11 +747,11 @@ function orbitalRecovery(start,initialMask=fullMask,reserve=limits.Orbital) {
   }
   return best;
 }
-function playableDrift(start) {
+function playableDrift(start,reserve=limits.Orbital) {
   const range=Math.hypot(start.x,start.y), speed=Math.hypot(start.vx,start.vy);
   if(range&lt;14 || range&gt;28 || speed&lt;.022 || speed&gt;.085)return false;
-  if(start.orbital)return orbitalCourse(start,limits.Orbital).eta===null &amp;&amp;
-    Boolean(orbitalRecovery(start) &amp;&amp; orbitalRecovery(orbitalMotion(start,30),fullMask,limits.Orbital-30));
+  if(start.orbital)return orbitalCourse(start,reserve).eta===null &amp;&amp;
+    Boolean(orbitalRecovery(start,fullMask,reserve) &amp;&amp; orbitalRecovery(orbitalMotion(start,30),fullMask,reserve-30));
   return course(start.x,start.y,start.vx,start.vy).eta===null &amp;&amp;
     Boolean(recoveryPlan(start) &amp;&amp; recoveryPlan(start,true));
 }
@@ -727,10 +762,10 @@ function generateDrift(random=Math.random,level=&#x27;Easy&#x27;) {
     const speed=.022+.063*random(), heading=2*Math.PI*random();
     const seed=encodeSeed({x:range*Math.cos(angle),y:range*Math.sin(angle),
       vx:speed*Math.cos(heading),vy:speed*Math.sin(heading)},orbital);
-    const drift=decodeSeed(seed);
+    const drift=decodeSeed(seed,false);
     if(drift)return drift;
   }
-  return decodeSeed(encodeSeed({x:24,y:-7,vx:.046,vy:.021},orbital));
+  return decodeSeed(encodeSeed({x:24,y:-7,vx:.046,vy:.021},orbital),false);
 }
 function scenarioLink(seed,level,goal) {
   const params=new URLSearchParams({seed,level:seed.startsWith(&#x27;O1&#x27;)?&#x27;Orbital&#x27;:level});
@@ -741,7 +776,8 @@ function scenarioLink(seed,level,goal) {
     ? new URL(&#x27;./&#x27;,location.href).href : &#x27;https://lamcnamara.github.io/fastball/&#x27;;
   return base+&#x27;#&#x27;+params;
 }
-function readSeedInput(text) {
+const invalidSeedMessage=&#x27;Unrecognized Scenario Seed. Check the code or generate a new seed.&#x27;;
+function readSeedInput(text,defaultLevel=null) {
   let input=text.trim(), params=new URLSearchParams();
   if(/^https?:\/\//i.test(input)){
     try {params=new URLSearchParams(new URL(input).hash.slice(1));}
@@ -750,18 +786,20 @@ function readSeedInput(text) {
   }
   let drift=decodeSeed(input);
   if(!drift)return null;
-  const level=params.get(&#x27;level&#x27;), goal=params.get(&#x27;goal&#x27;);
+  const requestedLevel=params.get(&#x27;level&#x27;), requestedGoal=params.get(&#x27;goal&#x27;);
+  const level=drift.orbital?&#x27;Orbital&#x27;:Object.hasOwn(limits,requestedLevel)?requestedLevel:defaultLevel;
+  const goal=Object.hasOwn(replayGoals,requestedGoal)?requestedGoal:(params.has(&#x27;seed&#x27;)?&#x27;none&#x27;:null);
   if(level===&#x27;Orbital&#x27; &amp;&amp; !drift.orbital) {
-    drift=decodeSeed(encodeSeed(drift,true));
-    if(!drift)return null;
+    const seed=drift.seed;
+    drift=decodeSeed(encodeSeed(drift,true),false);
+    if(!drift)return {seed,level,goal,error:&#x27;This start is available on Story through Hard. Choose one of those difficulties or generate an Orbital seed.&#x27;};
   }
-  return {drift,level:drift.orbital?&#x27;Orbital&#x27;:Object.hasOwn(limits,level)?level:null,
-    goal:Object.hasOwn(replayGoals,goal)?goal:(params.has(&#x27;seed&#x27;)?&#x27;none&#x27;:null)};
+  return {drift,level,goal};
 }
 function throwTool() {
   if (!live() || !isAvailable(state.selected) || $(&#x27;modal&#x27;).open) return;
   const i=state.selected, t=gear[i];
-  const offset=state.level===&#x27;Hard&#x27;?(Math.random()*2-1)*hardBearingError:0;
+  const offset=hasReleaseError(state.level)?(Math.random()*2-1)*maxBearingError:0;
   const released=norm(state.bearing+offset), kick=impulse(i,state.power,released);
   state.throwLog.push({time:state.elapsed,i,power:state.power,aim:state.bearing,bearing:released,
     vx:state.vx,vy:state.vy,dx:kick.dx,dy:kick.dy});
@@ -776,7 +814,7 @@ function throwTool() {
   }
   state.lastImpulse=Math.hypot(kick.dx,kick.dy); state.spent+=state.lastImpulse; state.throws++;
   state.phase=&#x27;flying&#x27;; lastFrame=null;
-  const report=t.name+&#x27; released · Δv &#x27;+state.lastImpulse.toFixed(3)+&#x27; m/s&#x27;+(state.level===&#x27;Hard&#x27;?&#x27; · Released at &#x27;+released.toFixed(1)+&#x27;°&#x27;:&#x27;&#x27;);
+  const report=t.name+&#x27; released · Δv &#x27;+state.lastImpulse.toFixed(3)+&#x27; m/s&#x27;+(hasReleaseError(state.level)?&#x27; · Released at &#x27;+logBearing(released):&#x27;&#x27;);
   flash={text:report,until:performance.now()+2400}; $(&#x27;announce&#x27;).textContent=report;
   state.tip=contextTip(); renderGear();
   checkEmpty(); render();
@@ -794,7 +832,7 @@ function contextTip() {
       &#x27;You’re above capture speed with an empty rack. There’s nothing left to brake with.&#x27;;
   }
   if (safeCoast(path)) return &#x27;You are on course. Hold this coast to reach the hatch.&#x27;;
-  if (state.closest&lt;5) return &#x27;Near the hatch, a light tool gives you a smaller course correction.&#x27;;
+  if (Math.hypot(state.x,state.y)-captureRadius&lt;5) return &#x27;Near the hatch, a light tool gives you a smaller course correction.&#x27;;
   if (state.level===&#x27;Story&#x27;) return &#x27;To slow down, throw in the direction of your velocity arrow. Repeat as needed.&#x27;;
   const tips=[&#x27;Correct your lateral velocity as well as your outward drift.&#x27;,
     &#x27;Your velocity persists between throws. Use time acceleration to watch a long coast.&#x27;,
@@ -999,7 +1037,7 @@ function renderForecast(pvx,pvy,coast,trial) {
   const s=state, aiming=s.phase!==&#x27;ended&#x27; &amp;&amp; s.mask &amp;&amp; (s.phase===&#x27;ready&#x27; || s.previewing || drag || charge);
   $(&#x27;plot&#x27;).dataset.forecast=fullGuidance(s.level) &amp;&amp; !aiming?&#x27;coast&#x27;:&#x27;aim&#x27;;
   if(fullGuidance(s.level)){
-    $(&#x27;assistMode&#x27;).textContent=aiming?&#x27;If you throw now&#x27;:&#x27;Current coast&#x27;;
+    $(&#x27;assistMode&#x27;).textContent=aiming?(s.level===&#x27;Orbital&#x27;?&#x27;Aim preview · ±&#x27;+maxBearingError+&#x27;°&#x27;:&#x27;If you throw now&#x27;):&#x27;Current coast&#x27;;
     const primary=aiming?trial:coast;
     $(&#x27;prediction&#x27;).dataset.unsafe=String(s.level===&#x27;Orbital&#x27; &amp;&amp; primary.eta!==null &amp;&amp; overRedline(s.level,primary.arrivalSpeed,0));
     const vector=aiming &amp;&amp; s.level!==&#x27;Orbital&#x27;?&#x27;&lt;div class=&quot;secondary&quot;&gt;&#x27;+signed(pvx)+&#x27;, &#x27;+signed(pvy)+&#x27; m/s&lt;/div&gt;&#x27;:&#x27;&#x27;;
@@ -1011,7 +1049,7 @@ function renderForecast(pvx,pvy,coast,trial) {
     $(&#x27;prediction&#x27;).textContent=signed(x)+&#x27;, &#x27;+signed(y)+&#x27; m/s · &#x27;+(overRedline(s.level,x,y)?&#x27;Above redline&#x27;:&#x27;Within speed limit&#x27;);
   } else {
     $(&#x27;assistMode&#x27;).textContent=&#x27;Manual navigation&#x27;;
-    $(&#x27;prediction&#x27;).textContent=&#x27;Release bearing varies by ±&#x27;+hardBearingError+&#x27;°&#x27;;
+    $(&#x27;prediction&#x27;).textContent=&#x27;Release bearing varies by ±&#x27;+maxBearingError+&#x27;°&#x27;;
   }
 }
 function render() {
@@ -1059,11 +1097,11 @@ function render() {
   renderPlot(pvx,pvy,coast,trial);
 }
 function plotCamera(s,w,h,aimFloor) {
-  // Story keeps the opening frame fixed so the astronaut can fly out of view.
-  const anchor=s.level===&#x27;Story&#x27;?s.start:s;
+  // A Story frame stays fixed between resizes so real drift can still end the flight.
+  const opening=s.level===&#x27;Story&#x27;?s.start:s, anchor=s.storyAnchor ?? opening;
   const reach=Math.min(160,w*.18,h*.27);
-  const left=Math.min(-14,anchor.x), right=Math.max(4,anchor.x);
-  const low=Math.min(-7,anchor.y), high=Math.max(7,anchor.y);
+  const left=Math.min(-14,opening.x,anchor.x), right=Math.max(4,opening.x,anchor.x);
+  const low=Math.min(-7,opening.y,anchor.y), high=Math.max(7,opening.y,anchor.y);
   const scale=Math.max(.01,Math.min(17,(w-2*(reach+14))/(right-left),(h-2*(reach+26))/(high-low)));
   const ox=w/2-(left+right)*scale/2;
   // Leave the full-power ring reachable above the clock on a compact plot.
@@ -1281,14 +1319,15 @@ async function copyText(text,button,notice) {
   }
   notice.textContent=&#x27;Copied to clipboard.&#x27;;
 }
-function setup(proposed=state.level,goal=state.objective,invalidSeed=null) {
+function setup(proposed=state.level,goal=state.objective,linked=null) {
   $(&#x27;difficulty&#x27;).value=state.level;
   const choices=[...scenarios,{name:&#x27;Random&#x27;,brief:&#x27;Generate a recoverable drift, or load a seed to fly someone else’s starting conditions.&#x27;}];
-  let drift=state.seed?state.start:null;
-  const selected=invalidSeed===null?state.index:scenarios.length;
+  let drift=linked?linked.drift:(state.seed?state.start:null);
+  const selected=linked?scenarios.length:state.index;
   const sceneOptions=choices.map((v,i)=&gt;&#x27;&lt;option value=&quot;&#x27;+i+&#x27;&quot;&#x27;+(i===selected?&#x27; selected&#x27;:&#x27;&#x27;)+&#x27;&gt;&#x27;+v.name+&#x27;&lt;/option&gt;&#x27;).join(&#x27;&#x27;);
   const levels=Object.keys(limits).map(k=&gt;&#x27;&lt;option&#x27;+(k===proposed?&#x27; selected&#x27;:&#x27;&#x27;)+&#x27;&gt;&#x27;+k+&#x27;&lt;/option&gt;&#x27;).join(&#x27;&#x27;);
   openDialog(&#x27;setup&#x27;,&#x27;Mission setup&#x27;,&#x27;New mission&#x27;,
+    (linked &amp;&amp; (state.phase===&#x27;flying&#x27; || state.phase===&#x27;paused&#x27;)?&#x27;&lt;p&gt;Begin mission replaces your current flight. Cancel to keep flying.&lt;/p&gt;&#x27;:&#x27;&#x27;)+
     &#x27;&lt;label class=&quot;dialogrow&quot;&gt;Drift scenario &lt;select id=&quot;scenarioChoice&quot;&gt;&#x27;+sceneOptions+&#x27;&lt;/select&gt;&lt;/label&gt;&lt;p id=&quot;scenarioBrief&quot;&gt;&lt;/p&gt;&#x27;+
     &#x27;&lt;div class=&quot;seed-panel&quot; id=&quot;seedPanel&quot; hidden&gt;&lt;label for=&quot;seedInput&quot;&gt;Scenario Seed&lt;/label&gt;&lt;input id=&quot;seedInput&quot; autocomplete=&quot;off&quot; spellcheck=&quot;false&quot; placeholder=&quot;Seed or shared link&quot; aria-describedby=&quot;seedFeedback&quot;&gt;&#x27;+
     &#x27;&lt;div class=&quot;seed-actions&quot;&gt;&lt;button id=&quot;generateSeed&quot;&gt;Generate seed&lt;/button&gt;&lt;button id=&quot;loadSeed&quot;&gt;Load seed&lt;/button&gt;&lt;button id=&quot;copySeed&quot;&gt;Copy link&lt;/button&gt;&lt;/div&gt;&lt;p id=&quot;seedFeedback&quot; role=&quot;status&quot;&gt;&lt;/p&gt;&lt;p id=&quot;seedCopied&quot; role=&quot;status&quot;&gt;&lt;/p&gt;&lt;/div&gt;&#x27;+
@@ -1296,51 +1335,48 @@ function setup(proposed=state.level,goal=state.objective,invalidSeed=null) {
     &#x27;&lt;label class=&quot;dialogrow&quot;&gt;Bonus objective &lt;select id=&quot;goalChoice&quot;&gt;&#x27;+Object.entries(replayGoals).map(([key,label])=&gt;&#x27;&lt;option value=&quot;&#x27;+key+&#x27;&quot;&#x27;+(key===goal?&#x27; selected&#x27;:&#x27;&#x27;)+&#x27;&gt;&#x27;+label+&#x27;&lt;/option&gt;&#x27;).join(&#x27;&#x27;)+&#x27;&lt;/select&gt;&lt;/label&gt;&#x27;,
     [[&#x27;Cancel&#x27;,()=&gt;closeDialog()],[&#x27;Begin mission&#x27;,()=&gt;{const index=Number($(&#x27;scenarioChoice&#x27;).value),level=$(&#x27;levelChoice&#x27;).value,objective=$(&#x27;goalChoice&#x27;).value;closeDialog(false);newFlight(index,level,objective,&#x27;&#x27;,drift);},true]]);
   const input=$(&#x27;seedInput&#x27;), feedback=$(&#x27;seedFeedback&#x27;), begin=$(&#x27;dialogActions&#x27;).lastElementChild;
-  function updateSeed(error=false) {
+  function updateSeed(error=&#x27;&#x27;) {
     const random=Number($(&#x27;scenarioChoice&#x27;).value)===scenarios.length;
     const ready=drift &amp;&amp; input.value===drift.seed;
     $(&#x27;seedPanel&#x27;).hidden=!random;begin.disabled=random &amp;&amp; !ready;
     $(&#x27;copySeed&#x27;).disabled=!ready;
-    feedback.dataset.error=String(error);
-    input.setAttribute(&#x27;aria-invalid&#x27;,String(error));
-    feedback.textContent=error?&#x27;Unrecognized Scenario Seed. Check the code or generate a new seed.&#x27;:
-      ready?(drift.orbital?&#x27;Orbital seed · &#x27;:&#x27;Start &#x27;)+Math.hypot(drift.x,drift.y).toFixed(1)+&#x27; m from the hatch · &#x27;+Math.hypot(drift.vx,drift.vy).toFixed(3)+&#x27; m/s at &#x27;+fmtAngle(degrees(drift.vx,drift.vy)):
-      &#x27;Load the seed to preview this flight.&#x27;;
+    feedback.dataset.error=String(Boolean(error));
+    input.setAttribute(&#x27;aria-invalid&#x27;,String(Boolean(error)));
+    feedback.textContent=error || (ready
+      ? (drift.orbital?&#x27;Orbital seed · &#x27;:&#x27;Start &#x27;)+Math.hypot(drift.x,drift.y).toFixed(1)+&#x27; m from the hatch · &#x27;+Math.hypot(drift.vx,drift.vy).toFixed(3)+&#x27; m/s at &#x27;+fmtAngle(degrees(drift.vx,drift.vy))
+      : &#x27;Load the seed to preview this flight.&#x27;);
     $(&#x27;seedCopied&#x27;).textContent=&#x27;&#x27;;
   }
   function showSeed(start) {drift=start;input.value=start.seed;updateSeed();}
-  const describe=()=&gt;{
+  const describe=(error=&#x27;&#x27;)=&gt;{
     const index=Number($(&#x27;scenarioChoice&#x27;).value);
     $(&#x27;scenarioBrief&#x27;).textContent=choices[index].brief;
     const level=$(&#x27;levelChoice&#x27;).value;
-    if(index===scenarios.length &amp;&amp; invalidSeed===null &amp;&amp; !input.value &amp;&amp; !drift)showSeed(generateDrift(Math.random,level));
+    if(index===scenarios.length &amp;&amp; !error &amp;&amp; !input.value &amp;&amp; !drift)showSeed(generateDrift(Math.random,level));
     else if(index===scenarios.length &amp;&amp; drift &amp;&amp; input.value===drift.seed &amp;&amp; Boolean(drift.orbital)!==(level===&#x27;Orbital&#x27;)){
-      const converted=decodeSeed(encodeSeed(drift,level===&#x27;Orbital&#x27;));
+      const converted=decodeSeed(encodeSeed(drift,level===&#x27;Orbital&#x27;),false);
       showSeed(converted || generateDrift(Math.random,level));
       if(!converted)feedback.textContent+=&#x27; · New start for this difficulty.&#x27;;
-    } else updateSeed();
+    } else updateSeed(error);
     $(&#x27;levelBrief&#x27;).textContent=difficultyBrief(level);
   };
-  if(drift)input.value=drift.seed;
-  $(&#x27;generateSeed&#x27;).onclick=()=&gt;{invalidSeed=null;showSeed(generateDrift(Math.random,$(&#x27;levelChoice&#x27;).value));};
+  input.value=drift?.seed ?? linked?.seed ?? &#x27;&#x27;;
+  $(&#x27;generateSeed&#x27;).onclick=()=&gt;showSeed(generateDrift(Math.random,$(&#x27;levelChoice&#x27;).value));
   $(&#x27;loadSeed&#x27;).onclick=()=&gt;{
-    const loaded=readSeedInput(input.value);
-    if(!loaded){updateSeed(true);input.focus();return;}
-    invalidSeed=null;
-    if(loaded.level)$(&#x27;levelChoice&#x27;).value=loaded.level;
-    else if($(&#x27;levelChoice&#x27;).value===&#x27;Orbital&#x27;){
-      const converted=decodeSeed(encodeSeed(loaded.drift,true));
-      if(!converted){updateSeed(true);feedback.textContent=&#x27;This start is available on Story through Hard. Choose one of those difficulties or generate an Orbital seed.&#x27;;return;}
-      loaded.drift=converted;
-    }
+    const loaded=readSeedInput(input.value,$(&#x27;levelChoice&#x27;).value);
+    if(!loaded){updateSeed(invalidSeedMessage);input.focus();return;}
+    $(&#x27;levelChoice&#x27;).value=loaded.level;
     if(loaded.goal)$(&#x27;goalChoice&#x27;).value=loaded.goal;
-    showSeed(loaded.drift);describe();
+    drift=loaded.drift;
+    input.value=drift?.seed ?? loaded.seed;
+    describe(loaded.error);
   };
   input.oninput=()=&gt;updateSeed();
   input.onkeydown=e=&gt;{if(e.key===&#x27;Enter&#x27;){e.preventDefault();$(&#x27;loadSeed&#x27;).click();}};
   $(&#x27;copySeed&#x27;).onclick=()=&gt;copyText(scenarioLink(drift.seed,$(&#x27;levelChoice&#x27;).value,$(&#x27;goalChoice&#x27;).value),$(&#x27;copySeed&#x27;),$(&#x27;seedCopied&#x27;));
-  $(&#x27;scenarioChoice&#x27;).onchange=describe;$(&#x27;levelChoice&#x27;).onchange=describe;$(&#x27;goalChoice&#x27;).onchange=()=&gt;updateSeed();describe();
-  if(invalidSeed!==null){input.value=invalidSeed;updateSeed(true);}
+  $(&#x27;scenarioChoice&#x27;).onchange=$(&#x27;levelChoice&#x27;).onchange=()=&gt;describe();
+  $(&#x27;goalChoice&#x27;).onchange=()=&gt;updateSeed();
+  describe(linked?.error);
 }
 function localCrewVoice() {
   return window.speechSynthesis?.getVoices().find(voice=&gt;voice.localService &amp;&amp; /^en(?:-|$)/i.test(voice.lang));
@@ -1361,10 +1397,10 @@ function guide() {
     &#x27;&lt;ul&gt;&lt;li&gt;&lt;b&gt;Select&lt;/b&gt; a tool from the rack or press 1–6. The slots run from lightest to heaviest, left to right across each row. A heavier or faster tool changes your velocity more.&lt;/li&gt;&#x27;+
     &#x27;&lt;li&gt;&lt;b&gt;Drag on the plot&lt;/b&gt; or grab the reticle. Point where the tool should travel. Your suit recoils in the opposite direction. Distance from your suit sets power, from 10% up to 100% at the dotted ring.&lt;/li&gt;&#x27;+
     &#x27;&lt;li&gt;&lt;b&gt;Release to throw.&lt;/b&gt; A click or tap previews your aim. Use Throw beneath the rack to commit it. Escape or release outside the plot, over the rack, or over the flight clock to cancel a drag.&lt;/li&gt;&#x27;+
-    &#x27;&lt;li&gt;&lt;b&gt;Keyboard controls.&lt;/b&gt; Left turns counterclockwise and right turns clockwise in 1° steps (Shift for 10°). Up and down change power by 1% (Shift for 10%). Press Enter on the plot to throw, or hold Space to wind up and release to throw. Escape cancels the windup.&lt;/li&gt;&#x27;+
+    &#x27;&lt;li&gt;&lt;b&gt;Keyboard controls.&lt;/b&gt; Focus the plot or a tool in the rack to aim. Left turns counterclockwise and right turns clockwise in 1° steps (Shift for 10°). Up and down change power by 1% (Shift for 10%). Press Enter on the plot to throw, or hold Space to wind up and release to throw. Escape cancels the windup.&lt;/li&gt;&#x27;+
     &#x27;&lt;li&gt;&lt;b&gt;Set the flight clock&lt;/b&gt; to 1×, 2×, 5× or 10× with the slider at the lower right of the HUD. Amber means fast-forward. P starts, pauses or resumes the clock. Switching tabs or windows pauses a running flight.&lt;/li&gt;&#x27;+
     &#x27;&lt;li&gt;&lt;b&gt;Check your course halfway home.&lt;/b&gt; When the original gap to the handrail reach zone has halved, the station calls once. Check your path and approach speed before spending another tool. A safe coast unlocks Coast to halfway, then Coast to rail. Use the speed slider to take over during the final approach.&lt;/li&gt;&#x27;+
-    &#x27;&lt;li&gt;&lt;b&gt;Share a flight.&lt;/b&gt; Choose Random in New mission to generate or load a Scenario Seed. Copy link shares the start, difficulty and bonus objective. Codes beginning with O1 select Orbital automatically. Choose View flight log in the debrief to copy the throws, capture speed and awards. Click outside the log or debrief to return to the finished plot.&lt;/li&gt;&lt;/ul&gt;&#x27;+
+    &#x27;&lt;li&gt;&lt;b&gt;Share a flight.&lt;/b&gt; Choose Random in New mission to generate or load a Scenario Seed. Copy link shares the start, difficulty and bonus objective. Codes beginning with O1 select Orbital automatically. In the debrief, choose View flight log to screenshot your approach chart or copy the full transcript. Click outside the log or debrief to return to the finished plot.&lt;/li&gt;&lt;/ul&gt;&#x27;+
     &#x27;&lt;p&gt;Bearings run counterclockwise from right (000°) to up (090°). Vx, Vy and radial speed use m/s. Green hatch distance and negative radial speed mean you are closing in. Red distance and positive radial speed mean you are moving away. Hatch distance measures the gap to the edge of the handrail reach zone. In Orbital, +X points away from Earth and +Y follows the station along its orbit. The velocity arrow is instantaneous. The coast and after-throw curves run to first contact or reserve expiry. Check speed at the rail, or closest approach on a miss. Other modes coast in a straight line.&lt;/p&gt;&#x27;+
     &#x27;&lt;p&gt;&lt;b&gt;Plan your next throw.&lt;/b&gt; A shrinking range can still lead to a flyby. On Medium, compare the predicted velocity arrow with the hatch bearing. On Hard, read the actual velocity after each release. Save a light tool to trim sideways drift. On Orbital, use the gold curve to test a correction and compare the predicted rail speed with the capture limit.&lt;/p&gt;&#x27;+
     (state.level===&#x27;Story&#x27;?&#x27;&#x27;:&#x27;&lt;p&gt;The Δv budget is the largest total velocity change available from full-power throws in the best order.&lt;/p&gt;&#x27;)+
@@ -1414,7 +1450,7 @@ function flightLogText(s) {
   for(const [n,entry] of s.throwLog.entries()){
     const t=gear[entry.i], vx=entry.vx+entry.dx, vy=entry.vy+entry.dy;
     lines.push(&#x27;Throw &#x27;+(n+1)+&#x27; · &#x27;+logTime(entry.time)+&#x27; · &#x27;+t.name+&#x27; (&#x27;+t.mass.toFixed(1)+&#x27; kg)&#x27;,
-      &#x27;Power &#x27;+entry.power+&#x27;% · Release &#x27;+logBearing(entry.bearing)+(s.level===&#x27;Hard&#x27;?&#x27; · Aim &#x27;+logBearing(entry.aim):&#x27;&#x27;),
+      &#x27;Power &#x27;+entry.power+&#x27;% · Release &#x27;+logBearing(entry.bearing)+(hasReleaseError(s.level)?&#x27; · Aim &#x27;+logBearing(entry.aim):&#x27;&#x27;),
       &#x27;Δvx &#x27;+logComponent(entry.dx)+&#x27; · Δvy &#x27;+logComponent(entry.dy)+&#x27; m/s&#x27;,
       &#x27;Heading &#x27;+logHeading(entry.vx,entry.vy)+&#x27; → &#x27;+logHeading(vx,vy)+&#x27; · Speed &#x27;+Math.hypot(vx,vy).toFixed(4)+&#x27; m/s&#x27;,&#x27;&#x27;);
   }
@@ -1426,10 +1462,133 @@ function flightLogText(s) {
   if(captured &amp;&amp; keptDrill(s))lines.push(&#x27;🏅 Upmass Hero · Returned with the original power drill&#x27;);
   return lines.join(&#x27;\n&#x27;);
 }
+// Replay coasts in flight time; the logged recoil already includes release scatter.
+function flightTrack(s) {
+  let coast=s.start, time=0;
+  const points=[coast], releases=[];
+  for(let i=0;i&lt;=s.throwLog.length;i++){
+    const entry=s.throwLog[i], until=entry?.time ?? s.elapsed, dt=until-time;
+    const steps=s.level===&#x27;Orbital&#x27;?Math.ceil(dt/4):Number(dt&gt;0);
+    for(let step=1;step&lt;=steps;step++){
+      points.push(s.level===&#x27;Orbital&#x27;?orbitalMotion(coast,dt*step/steps):
+        {x:coast.x+coast.vx*dt,y:coast.y+coast.vy*dt});
+    }
+    if(entry){
+      const point=points[points.length-1];
+      releases.push({point,entry,number:i+1});
+      coast={x:point.x,y:point.y,vx:entry.vx+entry.dx,vy:entry.vy+entry.dy};
+    }
+    time=until;
+  }
+  return {points,releases};
+}
+function drawApproachPlot(svg,points,shown,captured) {
+  const left=34,right=348,top=12,bottom=208;
+  let minX=-captureRadius,maxX=captureRadius,minY=-captureRadius,maxY=captureRadius;
+  for(const p of points){
+    minX=Math.min(minX,p.x);maxX=Math.max(maxX,p.x);
+    minY=Math.min(minY,p.y);maxY=Math.max(maxY,p.y);
+  }
+  // Shuttle convention: +V (game +Y) left, +R (game -X) down. Both axes use metres.
+  const scale=Math.min((right-left-30)/(maxY-minY),(bottom-top-30)/(maxX-minX));
+  const ox=(left+right+(minY+maxY)*scale)/2, oy=(top+bottom+(minX+maxX)*scale)/2;
+  const project=p=&gt;({x:ox-p.y*scale,y:oy-p.x*scale});
+  const screen=points.map(project), start=screen[0], end=screen[screen.length-1];
+  function add(tag,attrs,label) {
+    const el=document.createElementNS(&#x27;http://www.w3.org/2000/svg&#x27;,tag);
+    for(const [key,value] of Object.entries(attrs))el.setAttribute(key,value);
+    if(label!==undefined)el.textContent=label;
+    svg.append(el);return el;
+  }
+  function line(x1,y1,x2,y2,style) {add(&#x27;line&#x27;,{x1,y1,x2,y2,class:style});}
+  const desired=50/scale, decade=10**Math.floor(Math.log10(desired));
+  const step=decade*[1,2,5,10].find(n=&gt;n*decade&gt;=desired);
+  for(let i=Math.ceil((ox-right)/(scale*step));i&lt;=(ox-left)/(scale*step);i++){
+    const x=ox-i*step*scale;
+    line(x,top,x,bottom,i?&#x27;chart-grid&#x27;:&#x27;chart-axis&#x27;);
+    add(&#x27;text&#x27;,{x,y:bottom+16,&#x27;text-anchor&#x27;:&#x27;middle&#x27;},Number((i*step).toPrecision(5)));
+  }
+  for(let i=Math.ceil((top-oy)/(scale*step));i&lt;=(bottom-oy)/(scale*step);i++){
+    const y=oy+i*step*scale;
+    line(left,y,right,y,i?&#x27;chart-grid&#x27;:&#x27;chart-axis&#x27;);
+    add(&#x27;text&#x27;,{x:left-4,y:y+3,&#x27;text-anchor&#x27;:&#x27;end&#x27;},Number((i*step).toPrecision(5)));
+  }
+  add(&#x27;path&#x27;,{d:&#x27;M&#x27;+(left+4)+&#x27; &#x27;+(oy-3)+&#x27;l-4 3 4 3 M&#x27;+(ox-3)+&#x27; &#x27;+(bottom-4)+&#x27;l3 4 3 -4&#x27;,class:&#x27;chart-axis&#x27;});
+  add(&#x27;circle&#x27;,{cx:ox,cy:oy,r:captureRadius*scale,fill:&#x27;#233a30&#x27;,stroke:&#x27;var(--mint)&#x27;,&#x27;stroke-dasharray&#x27;:&#x27;3 2&#x27;});
+  add(&#x27;rect&#x27;,{x:ox-2,y:oy-2,width:4,height:4,fill:&#x27;var(--mint)&#x27;});
+  add(&#x27;path&#x27;,{d:screen.map((p,i)=&gt;(i?&#x27;L&#x27;:&#x27;M&#x27;)+p.x.toFixed(2)+&#x27; &#x27;+p.y.toFixed(2)).join(&#x27; &#x27;),class:&#x27;chart-track&#x27;});
+  // Space arrowheads by distance travelled so even a single straight coast has a direction.
+  const lengths=screen.map((p,i)=&gt;i?Math.hypot(p.x-screen[i-1].x,p.y-screen[i-1].y):0);
+  const length=lengths.reduce((sum,n)=&gt;sum+n,0), arrows=Math.min(3,Math.floor(length/55));
+  let travelled=0,next=1;
+  for(let i=1;i&lt;screen.length &amp;&amp; next&lt;=arrows;i++){
+    const a=screen[i-1], b=screen[i], span=lengths[i];
+    while(next&lt;=arrows &amp;&amp; travelled+span&gt;=length*next/(arrows+1)){
+      const t=(length*next/(arrows+1)-travelled)/span;
+      const angle=Math.atan2(b.y-a.y,b.x-a.x)*180/Math.PI;
+      add(&#x27;path&#x27;,{d:&#x27;M-4 -3 L1 0 -4 3&#x27;,class:&#x27;chart-track&#x27;,transform:&#x27;translate(&#x27;+(a.x+t*(b.x-a.x))+&#x27; &#x27;+(a.y+t*(b.y-a.y))+&#x27;) rotate(&#x27;+angle+&#x27;)&#x27;});
+      next++;
+    }
+    travelled+=span;
+  }
+  add(&#x27;rect&#x27;,{x:-4,y:-4,width:8,height:8,transform:&#x27;translate(&#x27;+start.x+&#x27; &#x27;+start.y+&#x27;) rotate(45)&#x27;,fill:&#x27;var(--panel)&#x27;,stroke:&#x27;var(--ink)&#x27;,&#x27;stroke-width&#x27;:1.5});
+  add(&#x27;circle&#x27;,{cx:end.x,cy:end.y,r:3.7,fill:captured?&#x27;var(--oxygen-fill)&#x27;:&#x27;var(--danger)&#x27;,stroke:&#x27;var(--bg)&#x27;,&#x27;stroke-width&#x27;:1.2});
+  // Stack consecutive releases at a shared location under one numbered callout.
+  const groups=[];
+  for(const release of shown){
+    const p=project(release.point), previous=groups[groups.length-1];
+    if(previous &amp;&amp; release.number===previous.last+1 &amp;&amp; Math.hypot(previous.x-p.x,previous.y-p.y)&lt;5)previous.last=release.number;
+    else groups.push({...p,first:release.number,last:release.number});
+  }
+  const occupied=[];
+  for(const g of groups){
+    const label=g.first===g.last?String(g.first):g.first+&#x27;–&#x27;+g.last;
+    const w=11+7*label.length;
+    const positions=[-17,17,-35,35,-53,53].map(d=&gt;({
+      x:Math.max(left+w/2,Math.min(right-w/2,g.x)),y:Math.max(top+8,Math.min(bottom-8,g.y+d))}));
+    const p=positions.find(c=&gt;occupied.every(o=&gt;Math.abs(c.x-o.x)&gt;(w+o.w)/2+2 || Math.abs(c.y-o.y)&gt;16)) || positions[0];
+    occupied.push({...p,w});
+    line(g.x,g.y,p.x,p.y,&#x27;chart-axis&#x27;);
+    add(&#x27;circle&#x27;,{cx:g.x,cy:g.y,r:1.8,fill:&#x27;var(--gold)&#x27;});
+    add(&#x27;rect&#x27;,{x:p.x-w/2,y:p.y-7.5,width:w,height:15,rx:6,fill:&#x27;var(--panel)&#x27;,stroke:&#x27;var(--gold)&#x27;});
+    add(&#x27;text&#x27;,{x:p.x,y:p.y+3.7,class:&#x27;chart-number&#x27;},label);
+  }
+}
+function renderApproachChart(s) {
+  const {points,releases}=flightTrack(s), captured=s.result.title===&#x27;Capture confirmed&#x27;;
+  const shown=releases.length&lt;=6?releases:[...releases.slice(0,3),...releases.slice(-3)];
+  $(&#x27;chartLevel&#x27;).textContent=s.level+&#x27; · Alpha v0.3&#x27;;
+  $(&#x27;chartScenario&#x27;).textContent=s.seed?&#x27;Seed &#x27;+s.seed:s.name;
+  $(&#x27;chartResult&#x27;).textContent=s.result.title;
+  $(&#x27;chartResult&#x27;).dataset.captured=String(captured);
+  $(&#x27;approachCard&#x27;).style.setProperty(&#x27;--finish&#x27;,captured?&#x27;var(--oxygen-fill)&#x27;:&#x27;var(--danger)&#x27;);
+  $(&#x27;chartDesc&#x27;).textContent=s.name+&#x27;, &#x27;+s.level+&#x27;. &#x27;+s.result.title+&#x27; after &#x27;+logTime(s.elapsed)+&#x27;. &#x27;+s.throws+&#x27; throws. The hatch is at the origin. Both axes are in metres.&#x27;;
+  drawApproachPlot($(&#x27;approachPlot&#x27;),points,shown,captured);
+  const list=$(&#x27;chartThrows&#x27;);
+  for(const {entry,number} of shown){
+    const row=document.createElement(&#x27;li&#x27;), index=document.createElement(&#x27;span&#x27;), details=document.createElement(&#x27;small&#x27;);
+    index.className=&#x27;throw-index&#x27;;index.textContent=&#x27;#&#x27;+number;
+    details.textContent=logTime(entry.time)+&#x27; · &#x27;+entry.power+&#x27;% · &#x27;+logBearing(entry.bearing);
+    row.append(index,gear[entry.i].name+&#x27; &#x27;,details);list.append(row);
+  }
+  $(&#x27;chartThrowCount&#x27;).textContent=releases.length?releases.length+(releases.length===1?&#x27; throw&#x27;:&#x27; throws&#x27;):&#x27;No throws&#x27;;
+  if(shown.length&lt;releases.length)$(&#x27;chartThrowCount&#x27;).textContent+=&#x27; · first and last three shown&#x27;;
+  $(&#x27;chartTime&#x27;).textContent=logTime(s.elapsed);
+  $(&#x27;chartSpeedLabel&#x27;).textContent=captured || s.result.title===&#x27;Approach too fast&#x27;?&#x27;Contact speed&#x27;:&#x27;Final speed&#x27;;
+  $(&#x27;chartSpeed&#x27;).textContent=Math.hypot(s.vx,s.vy).toFixed(4)+&#x27; m/s&#x27;;
+  $(&#x27;chartReserve&#x27;).textContent=Number.isFinite(s.oxygen)?logTime(s.oxygen):&#x27;Unlimited&#x27;;
+}
 function openFlightLog() {
   const transcript=flightLogText(state);
-  openDialog(&#x27;log&#x27;,&#x27;Mission debrief&#x27;,&#x27;Flight log&#x27;,&#x27;&lt;pre id=&quot;flightTranscript&quot; tabindex=&quot;0&quot; aria-label=&quot;Flight transcript&quot;&gt;&lt;/pre&gt;&lt;p id=&quot;logCopied&quot; role=&quot;status&quot;&gt;&lt;/p&gt;&#x27;,
+  openDialog(&#x27;log&#x27;,&#x27;Mission debrief&#x27;,&#x27;Flight log&#x27;,
+    &#x27;&lt;figure id=&quot;approachCard&quot; aria-labelledby=&quot;chartHeading&quot;&gt;&lt;div class=&quot;chart-byline&quot;&gt;&lt;span&gt;&lt;strong&gt;FASTBALL&lt;/strong&gt; / &lt;span id=&quot;chartLevel&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span id=&quot;chartScenario&quot;&gt;&lt;/span&gt;&lt;/div&gt;&#x27;+
+    &#x27;&lt;h3 id=&quot;chartHeading&quot;&gt;Approach to the rail&lt;/h3&gt;&lt;div class=&quot;chart-layout&quot;&gt;&lt;div&gt;&lt;svg class=&quot;chart-plot&quot; id=&quot;approachPlot&quot; viewBox=&quot;0 0 360 230&quot; role=&quot;img&quot; aria-labelledby=&quot;chartTitle chartDesc&quot;&gt;&lt;title id=&quot;chartTitle&quot;&gt;V-bar/R-bar approach in metres&lt;/title&gt;&lt;desc id=&quot;chartDesc&quot;&gt;&lt;/desc&gt;&lt;/svg&gt;&#x27;+
+    &#x27;&lt;div class=&quot;chart-meta&quot;&gt;← +V-bar along track · ↓ +R-bar Earthward (m)&lt;/div&gt;&lt;div class=&quot;chart-legend&quot;&gt;&lt;span&gt;◇ Start&lt;/span&gt;&lt;span&gt;&lt;b class=&quot;finish-key&quot;&gt;●&lt;/b&gt; Finish&lt;/span&gt;&lt;span&gt;⊙ Hatch · 1.2 m reach&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&#x27;+
+    &#x27;&lt;div&gt;&lt;strong class=&quot;chart-result&quot; id=&quot;chartResult&quot;&gt;&lt;/strong&gt;&lt;div class=&quot;chart-meta&quot; id=&quot;chartThrowCount&quot;&gt;&lt;/div&gt;&lt;ol class=&quot;chart-throws&quot; id=&quot;chartThrows&quot;&gt;&lt;/ol&gt;&lt;/div&gt;&lt;/div&gt;&#x27;+
+    &#x27;&lt;div class=&quot;chart-stats&quot;&gt;&lt;span&gt;Flight time &lt;b id=&quot;chartTime&quot;&gt;&lt;/b&gt;&lt;/span&gt;&lt;span&gt;&lt;span id=&quot;chartSpeedLabel&quot;&gt;&lt;/span&gt; &lt;b id=&quot;chartSpeed&quot;&gt;&lt;/b&gt;&lt;/span&gt;&lt;span&gt;Reserve &lt;b id=&quot;chartReserve&quot;&gt;&lt;/b&gt;&lt;/span&gt;&lt;/div&gt;&lt;/figure&gt;&#x27;+
+    &#x27;&lt;pre id=&quot;flightTranscript&quot; tabindex=&quot;0&quot; aria-label=&quot;Flight transcript&quot;&gt;&lt;/pre&gt;&lt;p id=&quot;logCopied&quot; role=&quot;status&quot;&gt;&lt;/p&gt;&#x27;,
     [[&#x27;Back to debrief&#x27;,summary],[&#x27;Copy flight log&#x27;,e=&gt;copyText(transcript,e.currentTarget,$(&#x27;logCopied&#x27;)),true]]);
+  renderApproachChart(state);
   $(&#x27;flightTranscript&#x27;).textContent=transcript;
 }
 function summary() {
@@ -1478,19 +1637,29 @@ function backgroundPause() {
 }
 function measurePlot() {
   const b=$(&#x27;plot&#x27;).getBoundingClientRect();
-  plotW=Math.max(1,b.width);plotH=Math.max(1,b.height);
-  aimFloor=matchMedia(&#x27;(max-width:999px)&#x27;).matches ? $(&#x27;flightClock&#x27;).getBoundingClientRect().top-b.top-6 : plotH;
+  const w=Math.max(1,b.width), h=Math.max(1,b.height);
+  const floor=matchMedia(&#x27;(max-width:999px)&#x27;).matches ? $(&#x27;flightClock&#x27;).getBoundingClientRect().top-b.top-6 : h;
+  if(state.level===&#x27;Story&#x27; &amp;&amp; state.phase!==&#x27;ended&#x27; &amp;&amp; (w!==plotW || h!==plotH || floor!==aimFloor)) {
+    const {px,py,suitScale}=plotCamera(state,w,h,floor);
+    if(px+suitBounds.left*suitScale&lt;0 || px+suitBounds.right*suitScale&gt;w ||
+       py+suitBounds.top*suitScale&lt;0 || py+suitBounds.bottom*suitScale&gt;h) {
+      state.storyAnchor={x:state.x,y:state.y};
+    }
+  }
+  plotW=w;plotH=h;aimFloor=floor;
   $(&#x27;plot&#x27;).setAttribute(&#x27;viewBox&#x27;,&#x27;0 0 &#x27;+plotW+&#x27; &#x27;+plotH);
 }
 function loadMissionLink(hash) {
   const params=new URLSearchParams(hash.slice(1));
   if(!params.has(&#x27;seed&#x27;))return false;
-  const loaded=readSeedInput(&#x27;https://lamcnamara.github.io/fastball/&#x27;+hash);
-  if($(&#x27;modal&#x27;).open)closeDialog(false);
-  if(loaded)newFlight(scenarios.length,loaded.level || &#x27;Easy&#x27;,loaded.goal || &#x27;none&#x27;,&#x27;&#x27;,loaded.drift);
-  else {
+  const linked=readSeedInput(&#x27;https://lamcnamara.github.io/fastball/&#x27;+hash,&#x27;Easy&#x27;) ||
+    {seed:params.get(&#x27;seed&#x27;),level:state?.level ?? &#x27;Easy&#x27;,goal:state?.objective ?? &#x27;none&#x27;,error:invalidSeedMessage};
+  if(linked.error || state?.phase===&#x27;flying&#x27; || state?.phase===&#x27;paused&#x27;) {
     if(!state)newFlight();
-    setup(state.level,state.objective,params.get(&#x27;seed&#x27;));
+    setup(linked.level,linked.goal,linked);
+  } else {
+    closeDialog(false);
+    newFlight(scenarios.length,linked.level,linked.goal,&#x27;&#x27;,linked.drift);
   }
   return true;
 }
@@ -1579,6 +1748,7 @@ function init() {
     if(e.code===&#x27;KeyP&#x27;&amp;&amp;!e.repeat){e.preventDefault();toggleClock();return;}
     if(!live() || !state.mask || drag || charge)return;
     if(/^[1-6]$/.test(e.key))selectTool(rackOrder[Number(e.key)-1]);
+    if(e.target!==plot &amp;&amp; !e.target.closest?.(&#x27;button.tool&#x27;))return;
     const step=e.shiftKey?10:1;
     if([&#x27;ArrowLeft&#x27;,&#x27;ArrowRight&#x27;].includes(e.key)){
       e.preventDefault();markAim();state.bearing=norm(state.bearing+(e.key===&#x27;ArrowLeft&#x27;?step:-step));render();
@@ -1750,6 +1920,34 @@ init();
         near(state.elapsed,distance/speed,&#x27;crossing time&#x27;,2/speed);
       }
     });
+    test(&#x27;Resizing a Story plot preserves the flight and the new edge still ends a real drift&#x27;,()=&gt;{
+      const plot=$(&#x27;plot&#x27;);
+      try {
+        for(const direction of [-1,1]){
+          if($(&#x27;modal&#x27;).open)closeDialog(false);
+          plot.style.width=&#x27;1280px&#x27;;plot.style.height=&#x27;560px&#x27;;
+          newFlight(0,&#x27;Story&#x27;);
+          const targetX=((direction&lt;0?48:plotW-48)-camera.ox)/camera.scale;
+          state.vx=(targetX-state.x)/180;state.vy=0;
+          toggleClock();advance(180);toggleClock();
+          yes(state.phase===&#x27;paused&#x27;,&#x27;paused before resize&#x27;);
+          const x=state.x, y=state.y, elapsed=state.elapsed;
+          plot.style.width=&#x27;390px&#x27;;plot.style.height=&#x27;640px&#x27;;
+          measurePlot();render();
+          const view=plot.getBoundingClientRect(), suit=$(&#x27;suitMan&#x27;).getBoundingClientRect();
+          yes(suit.left&gt;=view.left &amp;&amp; suit.right&lt;=view.right &amp;&amp; suit.top&gt;=view.top &amp;&amp; suit.bottom&lt;=view.bottom,&#x27;suit visible after resize&#x27;);
+          near(state.x,x,&#x27;unchanged x&#x27;);near(state.y,y,&#x27;unchanged y&#x27;);near(state.elapsed,elapsed,&#x27;unchanged clock&#x27;);
+          const {ox,oy,scale}=camera, remaining=plotExitTime(state.vx,state.vy);
+          yes(remaining&gt;1 &amp;&amp; Number.isFinite(remaining),&#x27;room to act&#x27;);
+          toggleClock();advance(remaining-.1);measurePlot();render();
+          yes(state.phase===&#x27;flying&#x27; &amp;&amp; camera.ox===ox &amp;&amp; camera.oy===oy &amp;&amp; camera.scale===scale,&#x27;camera holds at the new edge&#x27;);
+          advance(1);yes(state.result?.title===&#x27;Drifted out of view&#x27;,&#x27;genuine exit&#x27;);
+          near(state.elapsed,elapsed+remaining,&#x27;exit time&#x27;);
+        }
+      } finally {
+        plot.style.removeProperty(&#x27;width&#x27;);plot.style.removeProperty(&#x27;height&#x27;);measurePlot();render();
+      }
+    });
     test(&#x27;Hatch distance and radial speed track closing, opening and tangential motion in every mode&#x27;,()=&gt;{
       for(const level of Object.keys(limits)){
         newFlight(0,level);state.x=3;state.y=4;state.vx=0;
@@ -1849,6 +2047,34 @@ init();
       yes($(&#x27;tip&#x27;).textContent.includes(&#x27;empty rack&#x27;) &amp;&amp; !$(&#x27;tip&#x27;).textContent.includes(&#x27;Throw&#x27;),&#x27;no unavailable maneuver&#x27;);
       advance(600);yes(state.result.title===&#x27;Approach too fast&#x27;,&#x27;overspeed still resolves at rail&#x27;);
     });
+    test(&#x27;Near-hatch advice follows the present gap after a flyby&#x27;,()=&gt;{
+      Object.assign(state,{x:10,y:4,vx:-.05,vy:0,phase:&#x27;flying&#x27;});
+      advance(200);
+      yes(contextTip().includes(&#x27;Near the hatch&#x27;),&#x27;near at closest approach&#x27;);
+      advance(200);selectTool(5);state.bearing=90;state.power=10;throwTool();
+      yes(state.closest&lt;5 &amp;&amp; Math.hypot(state.x,state.y)-captureRadius&gt;5,&#x27;a past near pass&#x27;);
+      yes(!state.tip.includes(&#x27;Near the hatch&#x27;) &amp;&amp; $(&#x27;tip&#x27;).textContent===state.tip,&#x27;advisory after receding&#x27;);
+    });
+    test(&#x27;A linear preview evaluates its own contact speed in both directions&#x27;,()=&gt;{
+      for(const level of [&#x27;Medium&#x27;,&#x27;Hard&#x27;]){
+        newFlight(0,level);Object.assign(state,{x:10,y:0,vx:-.05,vy:0});
+        const kick=impulse(3,100,0), fast=flightCourse(state.vx+kick.dx,state.vy+kick.dy);
+        near(fast.arrivalSpeed,Math.hypot(state.vx+kick.dx,state.vy+kick.dy),&#x27;preview speed&#x27;);
+        yes(safeCoast(flightCourse()) &amp;&amp; !safeCoast(fast),&#x27;throw would exceed redline&#x27;);
+        state.vx+=kick.dx;
+        yes(!safeCoast(flightCourse()) &amp;&amp; safeCoast(flightCourse(-.05,0)),&#x27;braking would permit capture&#x27;);
+        yes(flightCourse(.05,0).arrivalSpeed===null,&#x27;no speed at contact for a miss&#x27;);
+      }
+    });
+    test(&#x27;Hard releases round north consistently in the HUD, announcement and log&#x27;,()=&gt;{
+      const random=Math.random;
+      try {
+        Math.random=()=&gt;.49;newFlight(0,&#x27;Hard&#x27;);throwTool();
+        const bearing=logBearing(state.throwLog[0].bearing);
+        yes(bearing===&#x27;0.0°&#x27; &amp;&amp; flash.text.endsWith(&#x27;Released at &#x27;+bearing),&#x27;rounded through north&#x27;);
+        yes($(&#x27;announce&#x27;).textContent===flash.text,&#x27;accessible release matches&#x27;);
+      } finally {Math.random=random;}
+    });
     test(&#x27;Final coast and debrief keep keyboard focus on a usable control&#x27;,()=&gt;{
       for(const guided of [false,true]){
         newFlight(0,&#x27;Easy&#x27;,&#x27;none&#x27;,guided?&#x27;aim&#x27;:&#x27;&#x27;);
@@ -1893,6 +2119,37 @@ init();
       $(&#x27;scenarioChoice&#x27;).value=&#x27;1&#x27;;$(&#x27;scenarioChoice&#x27;).dispatchEvent(new Event(&#x27;change&#x27;));$(&#x27;dialogActions&#x27;).lastElementChild.click();
       yes(!state.seed &amp;&amp; $(&#x27;shareFlight&#x27;).hidden &amp;&amp; state.name===&#x27;Lateral drift&#x27;,&#x27;fixed scenario ignores invalid seed&#x27;);
     });
+    test(&#x27;A linked mission waits for confirmation during a running or paused flight&#x27;,()=&gt;{
+      const code=&#x27;F1N73CGPHF&#x27;, hash=&#x27;#seed=&#x27;+code+&#x27;&amp;level=Medium&amp;goal=drill&#x27;;
+      for(const paused of [false,true]){
+        newFlight(1,&#x27;Hard&#x27;,&#x27;two&#x27;);throwTool();advance(2);
+        if(paused)toggleClock();
+        const original=state, elapsed=state.elapsed, mask=state.mask;
+        guide();loadMissionLink(hash);
+        yes(dialogKind===&#x27;setup&#x27; &amp;&amp; state===original &amp;&amp; state.phase===&#x27;paused&#x27;,&#x27;flight retained with guide open&#x27;);
+        yes($(&#x27;seedInput&#x27;).value===code &amp;&amp; $(&#x27;levelChoice&#x27;).value===&#x27;Medium&#x27; &amp;&amp; $(&#x27;goalChoice&#x27;).value===&#x27;drill&#x27;,&#x27;link preloaded&#x27;);
+        $(&#x27;dialogActions&#x27;).firstElementChild.click();
+        yes(state===original &amp;&amp; state.phase===(paused?&#x27;paused&#x27;:&#x27;flying&#x27;),&#x27;cancel restores previous phase&#x27;);
+        yes(state.elapsed===elapsed &amp;&amp; state.throws===1 &amp;&amp; state.mask===mask &amp;&amp; state.objective===&#x27;two&#x27;,&#x27;time, inventory and objective retained&#x27;);
+        loadMissionLink(hash);$(&#x27;dialogActions&#x27;).lastElementChild.click();
+        yes(state.seed===code &amp;&amp; state.level===&#x27;Medium&#x27; &amp;&amp; state.objective===&#x27;drill&#x27; &amp;&amp; state.phase===&#x27;ready&#x27; &amp;&amp; !state.throws,&#x27;confirmed replacement&#x27;);
+      }
+      newFlight();toggleClock();advance(5);loadMissionLink(hash);
+      yes(dialogKind===&#x27;setup&#x27; &amp;&amp; !state.throws &amp;&amp; state.elapsed===5,&#x27;unassisted coast is protected&#x27;);
+    });
+    test(&#x27;Ineligible Orbital links explain how to fly the original seed&#x27;,()=&gt;{
+      const code=&#x27;F1KJMNWCJ3&#x27;,hash=&#x27;#seed=&#x27;+code+&#x27;&amp;level=Orbital&amp;goal=two&#x27;;
+      loadMissionLink(hash);
+      const begin=$(&#x27;dialogActions&#x27;).lastElementChild, message=$(&#x27;seedFeedback&#x27;).textContent;
+      yes($(&#x27;levelChoice&#x27;).value===&#x27;Orbital&#x27; &amp;&amp; $(&#x27;goalChoice&#x27;).value===&#x27;two&#x27; &amp;&amp; $(&#x27;seedInput&#x27;).value===code,&#x27;editable linked start&#x27;);
+      yes(/Story through Hard/.test(message) &amp;&amp; begin.disabled &amp;&amp; $(&#x27;copySeed&#x27;).disabled,&#x27;unavailable on Orbital&#x27;);
+      $(&#x27;seedInput&#x27;).value=&#x27;https://example.org/&#x27;+hash;$(&#x27;loadSeed&#x27;).click();
+      yes($(&#x27;seedFeedback&#x27;).textContent===message &amp;&amp; $(&#x27;seedInput&#x27;).value===code,&#x27;pasted link uses the same explanation&#x27;);
+      $(&#x27;levelChoice&#x27;).value=&#x27;Hard&#x27;;$(&#x27;levelChoice&#x27;).dispatchEvent(new Event(&#x27;change&#x27;));$(&#x27;loadSeed&#x27;).click();begin.click();
+      yes(state.seed===code &amp;&amp; state.level===&#x27;Hard&#x27; &amp;&amp; state.objective===&#x27;two&#x27;,&#x27;same start on a supported difficulty&#x27;);
+      loadMissionLink(&#x27;#seed=NOTASEED&#x27;);
+      yes(/Unrecognized/.test($(&#x27;seedFeedback&#x27;).textContent) &amp;&amp; $(&#x27;dialogActions&#x27;).lastElementChild.disabled,&#x27;malformed seed retains its own error&#x27;);
+    });
     test(&#x27;Random Story openings leave the whole suit visible and at least thirty flight seconds to act&#x27;,()=&gt;{
       const random=randomStream(17);
       for(let i=0;i&lt;32;i++){
@@ -1902,6 +2159,47 @@ init();
         yes(suit.left&gt;=view.left &amp;&amp; suit.right&lt;=view.right &amp;&amp; suit.top&gt;=view.top &amp;&amp; suit.bottom&lt;=view.bottom,&#x27;suit starts inside plot&#x27;);
         toggleClock();advance(30);yes(state.phase===&#x27;flying&#x27;,&#x27;opening reaction time &#x27;+drift.seed);
       }
+    });
+    test(&#x27;The Orbital chart replays actual releases and reaches the recorded rail contact&#x27;,()=&gt;{
+      const random=Math.random;
+      try {
+        Math.random=randomStream(408);
+        newFlight(scenarios.length,&#x27;Orbital&#x27;,&#x27;none&#x27;,&#x27;&#x27;,decodeSeed(&#x27;O1K7EDPYT3&#x27;));
+        toggleClock();advance(90);
+        const first={x:state.x,y:state.y};
+        selectTool(0);state.bearing=135;state.power=60;throwTool();advance(150);
+        const second={x:state.x,y:state.y};
+        selectTool(3);state.bearing=34;state.power=91;throwTool();advance(450);
+        yes(state.result.title===&#x27;Capture confirmed&#x27;,&#x27;two-throw orbital rescue&#x27;);
+        Math.random=()=&gt;{throw Error(&#x27;chart rerolled a release&#x27;);};
+        const track=flightTrack(state), last=track.points[track.points.length-1];
+        for(const [i,p] of [first,second].entries()){
+          near(track.releases[i].point.x,p.x,&#x27;throw x&#x27;);near(track.releases[i].point.y,p.y,&#x27;throw y&#x27;);
+        }
+        near(last.x,state.x,&#x27;contact x&#x27;);near(last.y,state.y,&#x27;contact y&#x27;);
+        yes(track.points.length&gt;50,&#x27;sampled curved motion&#x27;);
+        $(&#x27;openLog&#x27;).click();
+        yes($(&#x27;dialogBody&#x27;).firstElementChild===$(&#x27;approachCard&#x27;) &amp;&amp; $(&#x27;chartResult&#x27;).textContent===state.result.title,&#x27;chart opens above transcript&#x27;);
+        yes($(&#x27;chartScenario&#x27;).textContent.includes(state.seed) &amp;&amp; $(&#x27;chartThrows&#x27;).children.length===2,&#x27;shareable seed and throws&#x27;);
+        yes($(&#x27;chartThrows&#x27;).textContent.includes(logBearing(state.lastBearing)) &amp;&amp; $(&#x27;chartTime&#x27;).textContent===logTime(state.elapsed),&#x27;actual release and time&#x27;);
+        const path=$(&#x27;approachPlot&#x27;).querySelector(&#x27;.chart-track&#x27;).getAttribute(&#x27;d&#x27;);
+        yes(!/NaN|Infinity/.test(path) &amp;&amp; $(&#x27;modal&#x27;).scrollWidth&lt;=$(&#x27;modal&#x27;).clientWidth+1,&#x27;finite and fits the dialog&#x27;);
+        summary();$(&#x27;openLog&#x27;).click();
+        yes($(&#x27;approachPlot&#x27;).querySelector(&#x27;.chart-track&#x27;).getAttribute(&#x27;d&#x27;)===path,&#x27;stable on reopening&#x27;);
+      } finally {Math.random=random;}
+    });
+    test(&#x27;Linear approach charts preserve coast endpoints, zero throws and repeated Story throws&#x27;,()=&gt;{
+      newFlight(0,&#x27;Easy&#x27;);toggleClock();advance(1000);$(&#x27;openLog&#x27;).click();
+      const t=flightTrack(state),last=t.points[t.points.length-1];
+      yes(t.points.length===2 &amp;&amp; !$(&#x27;chartThrows&#x27;).children.length &amp;&amp; $(&#x27;chartResult&#x27;).dataset.captured===&#x27;false&#x27;,&#x27;unassisted loss&#x27;);
+      near(last.x,state.x,&#x27;linear x&#x27;);near(last.y,state.y,&#x27;linear y&#x27;);
+      yes($(&#x27;chartSpeedLabel&#x27;).textContent===&#x27;Final speed&#x27; &amp;&amp; $(&#x27;chartReserve&#x27;).textContent===&#x27;0:00.0&#x27;,&#x27;expiry stats&#x27;);
+      closeDialog(false);newFlight(0,&#x27;Story&#x27;);
+      for(let i=0;i&lt;9;i++){state.bearing=i%2?180:0;throwTool();}
+      advance(1e5);$(&#x27;openLog&#x27;).click();
+      yes($(&#x27;chartThrows&#x27;).children.length===6 &amp;&amp; $(&#x27;chartThrows&#x27;).textContent.includes(&#x27;#9&#x27;) &amp;&amp; $(&#x27;chartThrowCount&#x27;).textContent.includes(&#x27;9 throws&#x27;),&#x27;bounded chart key&#x27;);
+      yes($(&#x27;flightTranscript&#x27;).textContent.includes(&#x27;Throw 9&#x27;) &amp;&amp; $(&#x27;chartReserve&#x27;).textContent===&#x27;Unlimited&#x27;,&#x27;full transcript and Story reserve&#x27;);
+      yes(!/NaN|Infinity/.test($(&#x27;approachPlot&#x27;).innerHTML) &amp;&amp; $(&#x27;approachPlot&#x27;).querySelectorAll(&#x27;.chart-number&#x27;).length===2,&#x27;coincident releases grouped&#x27;);
     });
     test(&#x27;The optional debrief log records actual releases, flight times, velocity, headings and awards&#x27;,()=&gt;{
       newFlight(0,&#x27;Hard&#x27;,&#x27;two&#x27;);toggleClock();advance(4.25);
@@ -1993,6 +2291,19 @@ init();
       for(let i=0;i&lt;10;i++)key(&#x27;ArrowUp&#x27;,true);near(state.power,100,&#x27;cap&#x27;);
       for(let i=0;i&lt;10;i++)key(&#x27;ArrowDown&#x27;,true);near(state.power,10,&#x27;floor&#x27;);
       key(&#x27;Enter&#x27;);yes(state.throws===1,&#x27;keyboard release&#x27;);
+    });
+    test(&#x27;Only the plot and tool buttons use arrows to aim&#x27;,()=&gt;{
+      const tool=$(&#x27;tools&#x27;).querySelector(&#x27;button&#x27;);
+      const press=(target,key)=&gt;target.dispatchEvent(new KeyboardEvent(&#x27;keydown&#x27;,{key,bubbles:true,cancelable:true}));
+      for(const target of [$(&#x27;setup&#x27;),$(&#x27;coastButton&#x27;),$(&#x27;shareFlight&#x27;),$(&#x27;timeRate&#x27;),document.body]){
+        yes(press(target,&#x27;ArrowLeft&#x27;) &amp;&amp; press(target,&#x27;ArrowUp&#x27;),&#x27;native keys on &#x27;+target.id);
+      }
+      yes(state.bearing===0 &amp;&amp; state.power===65,&#x27;other controls leave aim alone&#x27;);
+      for(const target of [$(&#x27;plot&#x27;),tool]){
+        target.focus({preventScroll:true});
+        yes(!press(document.activeElement,&#x27;ArrowLeft&#x27;) &amp;&amp; !press(document.activeElement,&#x27;ArrowUp&#x27;),&#x27;aim keys consumed&#x27;);
+      }
+      yes(state.bearing===2 &amp;&amp; state.power===67 &amp;&amp; !state.throws,&#x27;plot and rack aim without releasing&#x27;);
     });
     test(&#x27;Docking hatch stays centered on the capture zone in each scenario&#x27;,()=&gt;{
       for(let index=0;index&lt;scenarios.length;index++) {
@@ -2118,7 +2429,7 @@ init();
       closeDialog(false);newFlight(0,&#x27;Medium&#x27;);state.x=2;state.y=0;state.vx=-.04;state.vy=.08;render();
       yes($(&#x27;speedometer&#x27;).dataset.over===&#x27;true&#x27;,&#x27;fast sideways motion&#x27;);
     });
-    test(&#x27;Hard samples one bounded release error and preserves opposite recoil&#x27;,()=&gt;{
+    test(&#x27;Hard and Orbital sample one bounded release error and preserve opposite recoil&#x27;,()=&gt;{
       const random=Math.random;
       try {
         for(const level of Object.keys(limits))for(const sample of [0,.5,.999999]){
@@ -2126,12 +2437,22 @@ init();
           let calls=0;Math.random=()=&gt;{calls++;return sample;};
           state.bearing=359;state.power=85;
           render();render();yes(calls===0,&#x27;preview sampled random&#x27;);
-          const angle=359+(level===&#x27;Hard&#x27;?(sample*2-1)*hardBearingError:0);
+          const scattered=level===&#x27;Hard&#x27; || level===&#x27;Orbital&#x27;;
+          const angle=359+(scattered?(sample*2-1)*2:0);
+          const nominalPath=$(&#x27;trial&#x27;).getAttribute(&#x27;d&#x27;);
           const k=impulse(0,85,angle),vx=state.vx,vy=state.vy;
           $(&#x27;throwButton&#x27;).click();
-          yes(calls===(level===&#x27;Hard&#x27;?1:0),&#x27;one draw at release&#x27;);
+          yes(calls===(scattered?1:0),&#x27;one draw at release&#x27;);
           near(state.lastBearing,norm(angle),&#x27;actual bearing&#x27;);near(state.vx,vx+k.dx,&#x27;recoil x&#x27;);near(state.vy,vy+k.dy,&#x27;recoil y&#x27;);
           near(anim.vx-state.vx,k.ux,&#x27;tool x&#x27;);near(anim.vy-state.vy,k.uy,&#x27;tool y&#x27;);
+          if(level===&#x27;Orbital&#x27;){
+            yes(($(&#x27;coast&#x27;).getAttribute(&#x27;d&#x27;)===nominalPath)===(sample===.5),&#x27;coast uses actual release&#x27;);
+            const released=logBearing(angle);
+            yes($(&#x27;announce&#x27;).textContent.endsWith(&#x27;Released at &#x27;+released),&#x27;announced actual release&#x27;);
+            finish(&#x27;Return lost&#x27;,&#x27;Test&#x27;);$(&#x27;openLog&#x27;).click();
+            yes($(&#x27;flightTranscript&#x27;).textContent.includes(&#x27;Release &#x27;+released+&#x27; · Aim 359.0°&#x27;),&#x27;aim and release in log&#x27;);
+            closeDialog(false);
+          }
         }
       } finally {Math.random=random;}
     });
@@ -2180,23 +2501,24 @@ init();
       }
       yes(document.documentElement.scrollWidth&lt;=innerWidth+1,&#x27;horizontal overflow &#x27;+document.documentElement.scrollWidth+&#x27; &#x27;+innerWidth);
     });
-    test(&#x27;Orbital forecasts curve, meet the rail at the predicted speed and support both coast shortcuts&#x27;,()=&gt;{
-      for(const [index,steps] of [[[3,94,10]],[[3,72,344]],[[3,100,3],[2,74,2]]].entries()){
+    test(&#x27;Nominal Orbital forecasts reach the rail on time and support both coast shortcuts&#x27;,()=&gt;{
+      for(const [index,steps] of [[[3,94,10]],[[3,72,344]],[[3,100,1],[2,97,0]]].entries()){
         if($(&#x27;modal&#x27;).open)closeDialog(false);
-        newFlight(index,&#x27;Orbital&#x27;);yes(state.oxygen===900 &amp;&amp; $(&#x27;vxLabel&#x27;).textContent===&#x27;X outward&#x27;,&#x27;frame and clock&#x27;);
+        newFlight(index,&#x27;Orbital&#x27;);yes(state.oxygen===450 &amp;&amp; $(&#x27;oxygen&#x27;).textContent===&#x27;07:30&#x27; &amp;&amp; $(&#x27;vxLabel&#x27;).textContent===&#x27;X outward&#x27;,&#x27;frame and clock&#x27;);
         for(const [j,[i,power,bearing]] of steps.entries()){
           if(j)advance(4);
           selectTool(i);state.bearing=bearing;state.power=power;markAim();render();
           const projected=$(&#x27;trial&#x27;).getAttribute(&#x27;d&#x27;);
           yes(projected.split(&#x27; L&#x27;).length&gt;4,&#x27;curved preview samples&#x27;);
-          $(&#x27;throwButton&#x27;).click();
+          const random=Math.random;
+          try {Math.random=()=&gt;.5;$(&#x27;throwButton&#x27;).click();} finally {Math.random=random;}
           yes($(&#x27;coast&#x27;).getAttribute(&#x27;d&#x27;)===projected,&#x27;preview becomes actual coast&#x27;);
         }
         const path=flightCourse(), eta=state.elapsed+path.eta;
         yes(safeCoast(path) &amp;&amp; $(&#x27;prediction&#x27;).textContent.includes(&#x27;m/s at rail&#x27;),&#x27;safe contact forecast&#x27;);
         coastToHatch();yes(state.midpointThrow===state.throws &amp;&amp; state.phase===&#x27;flying&#x27;,&#x27;midpoint shortcut&#x27;);
         near(Math.hypot(state.x,state.y)-captureRadius,state.halfwayGap,&#x27;orbital halfway&#x27;,1e-8);
-        coastToHatch();advance(900);near(state.elapsed,eta,&#x27;time at rail&#x27;,1e-7);
+        coastToHatch();advance(450);near(state.elapsed,eta,&#x27;time at rail&#x27;,1e-7);
         near(Math.hypot(state.vx,state.vy),path.arrivalSpeed,&#x27;relative speed at rail&#x27;,1e-9);
         yes(state.result?.title===&#x27;Capture confirmed&#x27;,&#x27;named Orbital capture&#x27;);
       }
@@ -2219,7 +2541,7 @@ init();
         yes(state.result.title===(speed&lt;=.080?&#x27;Capture confirmed&#x27;:&#x27;Approach too fast&#x27;),&#x27;use contact speed for outcome&#x27;);
       }
       closeDialog(false);newFlight(0,&#x27;Orbital&#x27;);toggleClock();advance(999);
-      yes(state.result.title===&#x27;Reserve expired&#x27; &amp;&amp; state.elapsed===900,&#x27;orbital reserve&#x27;);
+      yes(state.result.title===&#x27;Reserve expired&#x27; &amp;&amp; state.elapsed===450,&#x27;orbital reserve&#x27;);
     });
     test(&#x27;Orbital seeds bind the physics through setup, bare codes, contradictory links and retry&#x27;,()=&gt;{
       const code=&#x27;O1K7EDPYT3&#x27;,s=decodeSeed(code);
@@ -2233,7 +2555,9 @@ init();
       loadMissionLink(&#x27;#seed=&#x27;+code+&#x27;&amp;level=Easy&amp;goal=two&#x27;);
       yes(state.level===&#x27;Orbital&#x27; &amp;&amp; state.objective===&#x27;two&#x27; &amp;&amp; state.start.x===s.x &amp;&amp; state.seed===code,&#x27;mode lock&#x27;);
       finish(&#x27;Reserve expired&#x27;,&#x27;Test&#x27;);[...$(&#x27;dialogActions&#x27;).children].find(b=&gt;b.textContent===&#x27;Retry this flight&#x27;).click();
-      yes(state.seed===code &amp;&amp; state.level===&#x27;Orbital&#x27; &amp;&amp; state.oxygen===900,&#x27;same seed retry&#x27;);
+      yes(state.seed===code &amp;&amp; state.level===&#x27;Orbital&#x27; &amp;&amp; state.oxygen===450,&#x27;same seed retry&#x27;);
+      loadMissionLink(&#x27;#seed=O1FMG2AIHL&#x27;);
+      yes(state.seed===&#x27;O1FMG2AIHL&#x27; &amp;&amp; state.oxygen===450,&#x27;previously issued seed loads with the current reserve&#x27;);
     });
     test(&#x27;Debrief actions share two aligned rows and backdrop dismissal preserves the flight&#x27;,()=&gt;{
       finish(&#x27;Reserve expired&#x27;,&#x27;Test&#x27;);const m=$(&#x27;modal&#x27;);
@@ -2418,7 +2742,38 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
 .speedometer[data-reference=&quot;true&quot;] .speed-track::after { background:var(--muted); opacity:.55; width:2px }
 .speed-limit { color:var(--muted); font-size:12px }
 dialog[data-kind=&quot;guide&quot;] { width:min(560px,calc(100% - 28px)) }
-dialog[data-kind=&quot;log&quot;] { width:min(620px,calc(100% - 24px)) }
+dialog[data-kind=&quot;log&quot;] { width:min(870px,calc(100% - 20px)) }
+#approachCard { margin:0 0 14px; padding:clamp(12px,2vw,22px); border:1px solid #485c55; border-radius:8px; background:#141d1b; color:var(--ink) }
+.chart-byline,.chart-meta,.chart-legend,.chart-throws small,.chart-stats { font:12px/1.45 var(--mono) }
+.chart-byline { display:flex; flex-wrap:wrap; justify-content:space-between; gap:2px 12px; color:var(--mint) }
+.chart-byline strong { color:var(--ink); letter-spacing:.12em }
+#approachCard h3 { margin:6px 0 12px; font:650 clamp(19px,3vw,29px)/1.15 var(--sans) }
+.chart-layout { display:grid; grid-template-columns:minmax(0,1.65fr) minmax(185px,1fr); gap:16px; align-items:start }
+.chart-plot { width:100%; display:block; background:#192322; border:1px solid #40534e; border-radius:5px }
+.chart-plot text { fill:var(--muted); font:11px var(--mono) }
+.chart-plot .chart-number { fill:var(--gold); font-weight:700; text-anchor:middle }
+.chart-grid { stroke:#364740; stroke-width:.7 }
+.chart-axis { stroke:#8ba297; stroke-width:1; fill:none }
+.chart-track { stroke:var(--gold); stroke-width:2.2; fill:none; stroke-linejoin:round; stroke-linecap:round }
+.chart-meta { color:var(--muted) }
+.chart-legend { display:flex; gap:3px 10px; flex-wrap:wrap; margin-top:5px; color:var(--muted) }
+.chart-legend .finish-key { color:var(--finish) }
+.chart-throws { list-style:none; margin:6px 0 0; padding:0 }
+.chart-throws li { margin:0 0 7px; display:grid; grid-template-columns:auto 1fr; gap:0 7px; align-items:baseline; line-height:1.25 }
+.chart-throws .throw-index { grid-row:span 2; color:var(--gold); font:600 12px var(--mono) }
+.chart-throws small { grid-column:2; color:var(--muted) }
+.chart-stats { display:flex; flex-wrap:wrap; gap:4px 14px; padding-top:9px; margin-top:10px; border-top:1px solid #40534e; color:var(--muted) }
+.chart-stats b { color:var(--ink); font-weight:600 }
+.chart-result { display:block; margin:0 0 4px; color:var(--oxygen-fill); font-size:17px }
+.chart-result[data-captured=&quot;false&quot;] { color:var(--danger) }
+@media(max-width:650px) {
+  dialog[data-kind=&quot;log&quot;] { width:calc(100% - 12px); max-width:calc(100% - 12px); padding:10px; scrollbar-width:thin }
+  #approachCard { padding:10px }
+  .chart-layout { grid-template-columns:minmax(0,1fr); gap:8px }
+  .chart-plot text { font-size:13px }
+  .chart-throws li { margin-bottom:4px; font-size:13px }
+  .chart-throws small { font-size:11px }
+}
 .seed-share { padding:2px 7px; font-size:12px }
 #shareNotice:not(:empty) { margin-left:5px }
 .seed-panel { margin:12px 0 18px; padding:12px; min-width:0; background:var(--bg); border:1px solid var(--edge); border-radius:5px }
@@ -2704,9 +3059,10 @@ function randomStream(seed) {
     return seed/4294967296;
   };
 }
-const limits = {Story:Infinity, Easy:900, Medium:600, Hard:450, Orbital:900};
+const limits = {Story:Infinity, Easy:900, Medium:600, Hard:450, Orbital:450};
 const timeRates = [1,2,5,10];
-const captureSpeedLimit = 0.080, hardBearingError = 2;
+const captureSpeedLimit = 0.080, maxBearingError = 2;
+const hasReleaseError = level =&gt; level===&#x27;Hard&#x27; || level===&#x27;Orbital&#x27;;
 const softCapture = level =&gt; level===&#x27;Medium&#x27; || level===&#x27;Hard&#x27; || level===&#x27;Orbital&#x27;;
 const overRedline = (level,vx,vy) =&gt; softCapture(level) &amp;&amp; Math.hypot(vx,vy)&gt;captureSpeedLimit+1e-12;
 const captureCalls = {
@@ -2748,7 +3104,7 @@ function course(x,y,vx,vy,radius=captureRadius) {
     // Scale the roundoff allowance with velocity so very slow misses stay misses.
     if (disc &gt;= -Number.EPSILON*(dot*dot+vv*c)*4) eta = c/(-dot + Math.sqrt(Math.max(0,disc)));
   }
-  return {eta, clearance};
+  return {eta, clearance, arrivalSpeed:eta===null?null:Math.hypot(vx,vy)};
 }
 // Planar Hill–Clohessy–Wiltshire motion about the hatch on a circular 92-minute orbit.
 // Plot +X is radially outward and +Y is along the station&#x27;s direction of travel.
@@ -2852,16 +3208,17 @@ function newFlight(index=0,level=&#x27;Easy&#x27;,objective=&#x27;none&#x27;,les
 function difficultyBrief(level) {
   return level===&#x27;Story&#x27;
       ? &#x27;Unlimited oxygen and reloading tools. Full trajectory guidance. Reach the hatch before your suit drifts off the plot.&#x27;
-      : clock(limits[level])+&#x27; to reach the rail on emergency reserve · &#x27;+({Easy:&#x27;Full trajectory, intercept time and miss distance.&#x27;,Medium:&#x27;Predicted velocity vector.&#x27;,Hard:&#x27;Raw navigation telemetry.&#x27;,Orbital:&#x27;Curved coasts in a rotating orbital frame. Full trajectory guidance and precise releases.&#x27;})[level]+(softCapture(level)?&#x27; &#x27;+captureBrief(level):&#x27;&#x27;);
+      : clock(limits[level])+&#x27; to reach the rail on emergency reserve · &#x27;+({Easy:&#x27;Full trajectory, intercept time and miss distance.&#x27;,Medium:&#x27;Predicted velocity vector.&#x27;,Hard:&#x27;Raw navigation telemetry.&#x27;,Orbital:&#x27;Curved coasts in a rotating orbital frame. Full trajectory guidance.&#x27;})[level]+(softCapture(level)?&#x27; &#x27;+captureBrief(level):&#x27;&#x27;);
 }
 function captureBrief(level) {
   const limit=captureSpeedLimit.toFixed(3)+&#x27; m/s&#x27;;
-  if(level===&#x27;Orbital&#x27;)return &#x27;Aim the curved gold forecast through the rail at &#x27;+limit+&#x27; or slower. Check the predicted speed at the rail.&#x27;;
+  const scatter=&#x27; Each release can stray by up to ±&#x27;+maxBearingError+&#x27;°.&#x27;;
+  if(level===&#x27;Orbital&#x27;)return &#x27;Aim the gold curve through the rail at &#x27;+limit+&#x27; or slower.&#x27;+scatter+&#x27; Check the actual coast after each throw.&#x27;;
   return &#x27;Reach the handrail at &#x27;+limit+&#x27; or slower. Throw along your motion to brake.&#x27;+
-    (level===&#x27;Hard&#x27;?&#x27; Each release can stray by up to ±&#x27;+hardBearingError+&#x27;°.&#x27;:&#x27;&#x27;);
+    (level===&#x27;Hard&#x27;?scatter:&#x27;&#x27;);
 }
 function safeCoast(path) {
-  return path.eta!==null &amp;&amp; path.eta&lt;=state.oxygen &amp;&amp; !overRedline(state.level,path.arrivalSpeed ?? Math.hypot(state.vx,state.vy),0);
+  return path.eta!==null &amp;&amp; path.eta&lt;=state.oxygen &amp;&amp; !overRedline(state.level,path.arrivalSpeed,0);
 }
 function objectiveIntact(flight=state) {
   if(flight.objective===&#x27;drill&#x27;)return keptDrill(flight);
@@ -2891,7 +3248,7 @@ function encodeSeed(start,orbital=Boolean(start.orbital)) {
   const payload=packed.toString(36).toUpperCase().padStart(7,&#x27;0&#x27;);
   return orbital?&#x27;O1&#x27;+payload+seedCheck(&#x27;O1&#x27;+payload):&#x27;F1&#x27;+payload+seedCheck(payload);
 }
-function decodeSeed(input) {
+function decodeSeed(input,allowLegacyOrbital=true) {
   const seed=input.trim().toUpperCase(), payload=seed.slice(2,9);
   const orbital=seed.startsWith(&#x27;O1&#x27;);
   if(!/^[FO]1[0-9A-Z]{8}$/.test(seed) || seedCheck(orbital?&#x27;O1&#x27;+payload:payload)!==seed[9])return null;
@@ -2906,7 +3263,9 @@ function decodeSeed(input) {
   const y=unpack(1024,512,10), x=unpack(1024,512,10);
   const start={name:&#x27;Random&#x27;,seed,x,y,vx,vy};
   if(orbital)start.orbital=true;
-  return playableDrift(start)?start:null;
+  // Previously shared O1 codes were screened with a 15-minute reserve.
+  // Recognize those starts on input. New deals and conversions use today&#x27;s rules.
+  return playableDrift(start) || (orbital &amp;&amp; allowLegacyOrbital &amp;&amp; playableDrift(start,900))?start:null;
 }
 function closestImpulse(mask,desired) {
   let best=null;
@@ -2971,11 +3330,11 @@ function orbitalRecovery(start,initialMask=fullMask,reserve=limits.Orbital) {
   }
   return best;
 }
-function playableDrift(start) {
+function playableDrift(start,reserve=limits.Orbital) {
   const range=Math.hypot(start.x,start.y), speed=Math.hypot(start.vx,start.vy);
   if(range&lt;14 || range&gt;28 || speed&lt;.022 || speed&gt;.085)return false;
-  if(start.orbital)return orbitalCourse(start,limits.Orbital).eta===null &amp;&amp;
-    Boolean(orbitalRecovery(start) &amp;&amp; orbitalRecovery(orbitalMotion(start,30),fullMask,limits.Orbital-30));
+  if(start.orbital)return orbitalCourse(start,reserve).eta===null &amp;&amp;
+    Boolean(orbitalRecovery(start,fullMask,reserve) &amp;&amp; orbitalRecovery(orbitalMotion(start,30),fullMask,reserve-30));
   return course(start.x,start.y,start.vx,start.vy).eta===null &amp;&amp;
     Boolean(recoveryPlan(start) &amp;&amp; recoveryPlan(start,true));
 }
@@ -2986,10 +3345,10 @@ function generateDrift(random=Math.random,level=&#x27;Easy&#x27;) {
     const speed=.022+.063*random(), heading=2*Math.PI*random();
     const seed=encodeSeed({x:range*Math.cos(angle),y:range*Math.sin(angle),
       vx:speed*Math.cos(heading),vy:speed*Math.sin(heading)},orbital);
-    const drift=decodeSeed(seed);
+    const drift=decodeSeed(seed,false);
     if(drift)return drift;
   }
-  return decodeSeed(encodeSeed({x:24,y:-7,vx:.046,vy:.021},orbital));
+  return decodeSeed(encodeSeed({x:24,y:-7,vx:.046,vy:.021},orbital),false);
 }
 function scenarioLink(seed,level,goal) {
   const params=new URLSearchParams({seed,level:seed.startsWith(&#x27;O1&#x27;)?&#x27;Orbital&#x27;:level});
@@ -3000,7 +3359,8 @@ function scenarioLink(seed,level,goal) {
     ? new URL(&#x27;./&#x27;,location.href).href : &#x27;https://lamcnamara.github.io/fastball/&#x27;;
   return base+&#x27;#&#x27;+params;
 }
-function readSeedInput(text) {
+const invalidSeedMessage=&#x27;Unrecognized Scenario Seed. Check the code or generate a new seed.&#x27;;
+function readSeedInput(text,defaultLevel=null) {
   let input=text.trim(), params=new URLSearchParams();
   if(/^https?:\/\//i.test(input)){
     try {params=new URLSearchParams(new URL(input).hash.slice(1));}
@@ -3009,18 +3369,20 @@ function readSeedInput(text) {
   }
   let drift=decodeSeed(input);
   if(!drift)return null;
-  const level=params.get(&#x27;level&#x27;), goal=params.get(&#x27;goal&#x27;);
+  const requestedLevel=params.get(&#x27;level&#x27;), requestedGoal=params.get(&#x27;goal&#x27;);
+  const level=drift.orbital?&#x27;Orbital&#x27;:Object.hasOwn(limits,requestedLevel)?requestedLevel:defaultLevel;
+  const goal=Object.hasOwn(replayGoals,requestedGoal)?requestedGoal:(params.has(&#x27;seed&#x27;)?&#x27;none&#x27;:null);
   if(level===&#x27;Orbital&#x27; &amp;&amp; !drift.orbital) {
-    drift=decodeSeed(encodeSeed(drift,true));
-    if(!drift)return null;
+    const seed=drift.seed;
+    drift=decodeSeed(encodeSeed(drift,true),false);
+    if(!drift)return {seed,level,goal,error:&#x27;This start is available on Story through Hard. Choose one of those difficulties or generate an Orbital seed.&#x27;};
   }
-  return {drift,level:drift.orbital?&#x27;Orbital&#x27;:Object.hasOwn(limits,level)?level:null,
-    goal:Object.hasOwn(replayGoals,goal)?goal:(params.has(&#x27;seed&#x27;)?&#x27;none&#x27;:null)};
+  return {drift,level,goal};
 }
 function throwTool() {
   if (!live() || !isAvailable(state.selected) || $(&#x27;modal&#x27;).open) return;
   const i=state.selected, t=gear[i];
-  const offset=state.level===&#x27;Hard&#x27;?(Math.random()*2-1)*hardBearingError:0;
+  const offset=hasReleaseError(state.level)?(Math.random()*2-1)*maxBearingError:0;
   const released=norm(state.bearing+offset), kick=impulse(i,state.power,released);
   state.throwLog.push({time:state.elapsed,i,power:state.power,aim:state.bearing,bearing:released,
     vx:state.vx,vy:state.vy,dx:kick.dx,dy:kick.dy});
@@ -3035,7 +3397,7 @@ function throwTool() {
   }
   state.lastImpulse=Math.hypot(kick.dx,kick.dy); state.spent+=state.lastImpulse; state.throws++;
   state.phase=&#x27;flying&#x27;; lastFrame=null;
-  const report=t.name+&#x27; released · Δv &#x27;+state.lastImpulse.toFixed(3)+&#x27; m/s&#x27;+(state.level===&#x27;Hard&#x27;?&#x27; · Released at &#x27;+released.toFixed(1)+&#x27;°&#x27;:&#x27;&#x27;);
+  const report=t.name+&#x27; released · Δv &#x27;+state.lastImpulse.toFixed(3)+&#x27; m/s&#x27;+(hasReleaseError(state.level)?&#x27; · Released at &#x27;+logBearing(released):&#x27;&#x27;);
   flash={text:report,until:performance.now()+2400}; $(&#x27;announce&#x27;).textContent=report;
   state.tip=contextTip(); renderGear();
   checkEmpty(); render();
@@ -3053,7 +3415,7 @@ function contextTip() {
       &#x27;You’re above capture speed with an empty rack. There’s nothing left to brake with.&#x27;;
   }
   if (safeCoast(path)) return &#x27;You are on course. Hold this coast to reach the hatch.&#x27;;
-  if (state.closest&lt;5) return &#x27;Near the hatch, a light tool gives you a smaller course correction.&#x27;;
+  if (Math.hypot(state.x,state.y)-captureRadius&lt;5) return &#x27;Near the hatch, a light tool gives you a smaller course correction.&#x27;;
   if (state.level===&#x27;Story&#x27;) return &#x27;To slow down, throw in the direction of your velocity arrow. Repeat as needed.&#x27;;
   const tips=[&#x27;Correct your lateral velocity as well as your outward drift.&#x27;,
     &#x27;Your velocity persists between throws. Use time acceleration to watch a long coast.&#x27;,
@@ -3258,7 +3620,7 @@ function renderForecast(pvx,pvy,coast,trial) {
   const s=state, aiming=s.phase!==&#x27;ended&#x27; &amp;&amp; s.mask &amp;&amp; (s.phase===&#x27;ready&#x27; || s.previewing || drag || charge);
   $(&#x27;plot&#x27;).dataset.forecast=fullGuidance(s.level) &amp;&amp; !aiming?&#x27;coast&#x27;:&#x27;aim&#x27;;
   if(fullGuidance(s.level)){
-    $(&#x27;assistMode&#x27;).textContent=aiming?&#x27;If you throw now&#x27;:&#x27;Current coast&#x27;;
+    $(&#x27;assistMode&#x27;).textContent=aiming?(s.level===&#x27;Orbital&#x27;?&#x27;Aim preview · ±&#x27;+maxBearingError+&#x27;°&#x27;:&#x27;If you throw now&#x27;):&#x27;Current coast&#x27;;
     const primary=aiming?trial:coast;
     $(&#x27;prediction&#x27;).dataset.unsafe=String(s.level===&#x27;Orbital&#x27; &amp;&amp; primary.eta!==null &amp;&amp; overRedline(s.level,primary.arrivalSpeed,0));
     const vector=aiming &amp;&amp; s.level!==&#x27;Orbital&#x27;?&#x27;&lt;div class=&quot;secondary&quot;&gt;&#x27;+signed(pvx)+&#x27;, &#x27;+signed(pvy)+&#x27; m/s&lt;/div&gt;&#x27;:&#x27;&#x27;;
@@ -3270,7 +3632,7 @@ function renderForecast(pvx,pvy,coast,trial) {
     $(&#x27;prediction&#x27;).textContent=signed(x)+&#x27;, &#x27;+signed(y)+&#x27; m/s · &#x27;+(overRedline(s.level,x,y)?&#x27;Above redline&#x27;:&#x27;Within speed limit&#x27;);
   } else {
     $(&#x27;assistMode&#x27;).textContent=&#x27;Manual navigation&#x27;;
-    $(&#x27;prediction&#x27;).textContent=&#x27;Release bearing varies by ±&#x27;+hardBearingError+&#x27;°&#x27;;
+    $(&#x27;prediction&#x27;).textContent=&#x27;Release bearing varies by ±&#x27;+maxBearingError+&#x27;°&#x27;;
   }
 }
 function render() {
@@ -3318,11 +3680,11 @@ function render() {
   renderPlot(pvx,pvy,coast,trial);
 }
 function plotCamera(s,w,h,aimFloor) {
-  // Story keeps the opening frame fixed so the astronaut can fly out of view.
-  const anchor=s.level===&#x27;Story&#x27;?s.start:s;
+  // A Story frame stays fixed between resizes so real drift can still end the flight.
+  const opening=s.level===&#x27;Story&#x27;?s.start:s, anchor=s.storyAnchor ?? opening;
   const reach=Math.min(160,w*.18,h*.27);
-  const left=Math.min(-14,anchor.x), right=Math.max(4,anchor.x);
-  const low=Math.min(-7,anchor.y), high=Math.max(7,anchor.y);
+  const left=Math.min(-14,opening.x,anchor.x), right=Math.max(4,opening.x,anchor.x);
+  const low=Math.min(-7,opening.y,anchor.y), high=Math.max(7,opening.y,anchor.y);
   const scale=Math.max(.01,Math.min(17,(w-2*(reach+14))/(right-left),(h-2*(reach+26))/(high-low)));
   const ox=w/2-(left+right)*scale/2;
   // Leave the full-power ring reachable above the clock on a compact plot.
@@ -3540,14 +3902,15 @@ async function copyText(text,button,notice) {
   }
   notice.textContent=&#x27;Copied to clipboard.&#x27;;
 }
-function setup(proposed=state.level,goal=state.objective,invalidSeed=null) {
+function setup(proposed=state.level,goal=state.objective,linked=null) {
   $(&#x27;difficulty&#x27;).value=state.level;
   const choices=[...scenarios,{name:&#x27;Random&#x27;,brief:&#x27;Generate a recoverable drift, or load a seed to fly someone else’s starting conditions.&#x27;}];
-  let drift=state.seed?state.start:null;
-  const selected=invalidSeed===null?state.index:scenarios.length;
+  let drift=linked?linked.drift:(state.seed?state.start:null);
+  const selected=linked?scenarios.length:state.index;
   const sceneOptions=choices.map((v,i)=&gt;&#x27;&lt;option value=&quot;&#x27;+i+&#x27;&quot;&#x27;+(i===selected?&#x27; selected&#x27;:&#x27;&#x27;)+&#x27;&gt;&#x27;+v.name+&#x27;&lt;/option&gt;&#x27;).join(&#x27;&#x27;);
   const levels=Object.keys(limits).map(k=&gt;&#x27;&lt;option&#x27;+(k===proposed?&#x27; selected&#x27;:&#x27;&#x27;)+&#x27;&gt;&#x27;+k+&#x27;&lt;/option&gt;&#x27;).join(&#x27;&#x27;);
   openDialog(&#x27;setup&#x27;,&#x27;Mission setup&#x27;,&#x27;New mission&#x27;,
+    (linked &amp;&amp; (state.phase===&#x27;flying&#x27; || state.phase===&#x27;paused&#x27;)?&#x27;&lt;p&gt;Begin mission replaces your current flight. Cancel to keep flying.&lt;/p&gt;&#x27;:&#x27;&#x27;)+
     &#x27;&lt;label class=&quot;dialogrow&quot;&gt;Drift scenario &lt;select id=&quot;scenarioChoice&quot;&gt;&#x27;+sceneOptions+&#x27;&lt;/select&gt;&lt;/label&gt;&lt;p id=&quot;scenarioBrief&quot;&gt;&lt;/p&gt;&#x27;+
     &#x27;&lt;div class=&quot;seed-panel&quot; id=&quot;seedPanel&quot; hidden&gt;&lt;label for=&quot;seedInput&quot;&gt;Scenario Seed&lt;/label&gt;&lt;input id=&quot;seedInput&quot; autocomplete=&quot;off&quot; spellcheck=&quot;false&quot; placeholder=&quot;Seed or shared link&quot; aria-describedby=&quot;seedFeedback&quot;&gt;&#x27;+
     &#x27;&lt;div class=&quot;seed-actions&quot;&gt;&lt;button id=&quot;generateSeed&quot;&gt;Generate seed&lt;/button&gt;&lt;button id=&quot;loadSeed&quot;&gt;Load seed&lt;/button&gt;&lt;button id=&quot;copySeed&quot;&gt;Copy link&lt;/button&gt;&lt;/div&gt;&lt;p id=&quot;seedFeedback&quot; role=&quot;status&quot;&gt;&lt;/p&gt;&lt;p id=&quot;seedCopied&quot; role=&quot;status&quot;&gt;&lt;/p&gt;&lt;/div&gt;&#x27;+
@@ -3555,51 +3918,48 @@ function setup(proposed=state.level,goal=state.objective,invalidSeed=null) {
     &#x27;&lt;label class=&quot;dialogrow&quot;&gt;Bonus objective &lt;select id=&quot;goalChoice&quot;&gt;&#x27;+Object.entries(replayGoals).map(([key,label])=&gt;&#x27;&lt;option value=&quot;&#x27;+key+&#x27;&quot;&#x27;+(key===goal?&#x27; selected&#x27;:&#x27;&#x27;)+&#x27;&gt;&#x27;+label+&#x27;&lt;/option&gt;&#x27;).join(&#x27;&#x27;)+&#x27;&lt;/select&gt;&lt;/label&gt;&#x27;,
     [[&#x27;Cancel&#x27;,()=&gt;closeDialog()],[&#x27;Begin mission&#x27;,()=&gt;{const index=Number($(&#x27;scenarioChoice&#x27;).value),level=$(&#x27;levelChoice&#x27;).value,objective=$(&#x27;goalChoice&#x27;).value;closeDialog(false);newFlight(index,level,objective,&#x27;&#x27;,drift);},true]]);
   const input=$(&#x27;seedInput&#x27;), feedback=$(&#x27;seedFeedback&#x27;), begin=$(&#x27;dialogActions&#x27;).lastElementChild;
-  function updateSeed(error=false) {
+  function updateSeed(error=&#x27;&#x27;) {
     const random=Number($(&#x27;scenarioChoice&#x27;).value)===scenarios.length;
     const ready=drift &amp;&amp; input.value===drift.seed;
     $(&#x27;seedPanel&#x27;).hidden=!random;begin.disabled=random &amp;&amp; !ready;
     $(&#x27;copySeed&#x27;).disabled=!ready;
-    feedback.dataset.error=String(error);
-    input.setAttribute(&#x27;aria-invalid&#x27;,String(error));
-    feedback.textContent=error?&#x27;Unrecognized Scenario Seed. Check the code or generate a new seed.&#x27;:
-      ready?(drift.orbital?&#x27;Orbital seed · &#x27;:&#x27;Start &#x27;)+Math.hypot(drift.x,drift.y).toFixed(1)+&#x27; m from the hatch · &#x27;+Math.hypot(drift.vx,drift.vy).toFixed(3)+&#x27; m/s at &#x27;+fmtAngle(degrees(drift.vx,drift.vy)):
-      &#x27;Load the seed to preview this flight.&#x27;;
+    feedback.dataset.error=String(Boolean(error));
+    input.setAttribute(&#x27;aria-invalid&#x27;,String(Boolean(error)));
+    feedback.textContent=error || (ready
+      ? (drift.orbital?&#x27;Orbital seed · &#x27;:&#x27;Start &#x27;)+Math.hypot(drift.x,drift.y).toFixed(1)+&#x27; m from the hatch · &#x27;+Math.hypot(drift.vx,drift.vy).toFixed(3)+&#x27; m/s at &#x27;+fmtAngle(degrees(drift.vx,drift.vy))
+      : &#x27;Load the seed to preview this flight.&#x27;);
     $(&#x27;seedCopied&#x27;).textContent=&#x27;&#x27;;
   }
   function showSeed(start) {drift=start;input.value=start.seed;updateSeed();}
-  const describe=()=&gt;{
+  const describe=(error=&#x27;&#x27;)=&gt;{
     const index=Number($(&#x27;scenarioChoice&#x27;).value);
     $(&#x27;scenarioBrief&#x27;).textContent=choices[index].brief;
     const level=$(&#x27;levelChoice&#x27;).value;
-    if(index===scenarios.length &amp;&amp; invalidSeed===null &amp;&amp; !input.value &amp;&amp; !drift)showSeed(generateDrift(Math.random,level));
+    if(index===scenarios.length &amp;&amp; !error &amp;&amp; !input.value &amp;&amp; !drift)showSeed(generateDrift(Math.random,level));
     else if(index===scenarios.length &amp;&amp; drift &amp;&amp; input.value===drift.seed &amp;&amp; Boolean(drift.orbital)!==(level===&#x27;Orbital&#x27;)){
-      const converted=decodeSeed(encodeSeed(drift,level===&#x27;Orbital&#x27;));
+      const converted=decodeSeed(encodeSeed(drift,level===&#x27;Orbital&#x27;),false);
       showSeed(converted || generateDrift(Math.random,level));
       if(!converted)feedback.textContent+=&#x27; · New start for this difficulty.&#x27;;
-    } else updateSeed();
+    } else updateSeed(error);
     $(&#x27;levelBrief&#x27;).textContent=difficultyBrief(level);
   };
-  if(drift)input.value=drift.seed;
-  $(&#x27;generateSeed&#x27;).onclick=()=&gt;{invalidSeed=null;showSeed(generateDrift(Math.random,$(&#x27;levelChoice&#x27;).value));};
+  input.value=drift?.seed ?? linked?.seed ?? &#x27;&#x27;;
+  $(&#x27;generateSeed&#x27;).onclick=()=&gt;showSeed(generateDrift(Math.random,$(&#x27;levelChoice&#x27;).value));
   $(&#x27;loadSeed&#x27;).onclick=()=&gt;{
-    const loaded=readSeedInput(input.value);
-    if(!loaded){updateSeed(true);input.focus();return;}
-    invalidSeed=null;
-    if(loaded.level)$(&#x27;levelChoice&#x27;).value=loaded.level;
-    else if($(&#x27;levelChoice&#x27;).value===&#x27;Orbital&#x27;){
-      const converted=decodeSeed(encodeSeed(loaded.drift,true));
-      if(!converted){updateSeed(true);feedback.textContent=&#x27;This start is available on Story through Hard. Choose one of those difficulties or generate an Orbital seed.&#x27;;return;}
-      loaded.drift=converted;
-    }
+    const loaded=readSeedInput(input.value,$(&#x27;levelChoice&#x27;).value);
+    if(!loaded){updateSeed(invalidSeedMessage);input.focus();return;}
+    $(&#x27;levelChoice&#x27;).value=loaded.level;
     if(loaded.goal)$(&#x27;goalChoice&#x27;).value=loaded.goal;
-    showSeed(loaded.drift);describe();
+    drift=loaded.drift;
+    input.value=drift?.seed ?? loaded.seed;
+    describe(loaded.error);
   };
   input.oninput=()=&gt;updateSeed();
   input.onkeydown=e=&gt;{if(e.key===&#x27;Enter&#x27;){e.preventDefault();$(&#x27;loadSeed&#x27;).click();}};
   $(&#x27;copySeed&#x27;).onclick=()=&gt;copyText(scenarioLink(drift.seed,$(&#x27;levelChoice&#x27;).value,$(&#x27;goalChoice&#x27;).value),$(&#x27;copySeed&#x27;),$(&#x27;seedCopied&#x27;));
-  $(&#x27;scenarioChoice&#x27;).onchange=describe;$(&#x27;levelChoice&#x27;).onchange=describe;$(&#x27;goalChoice&#x27;).onchange=()=&gt;updateSeed();describe();
-  if(invalidSeed!==null){input.value=invalidSeed;updateSeed(true);}
+  $(&#x27;scenarioChoice&#x27;).onchange=$(&#x27;levelChoice&#x27;).onchange=()=&gt;describe();
+  $(&#x27;goalChoice&#x27;).onchange=()=&gt;updateSeed();
+  describe(linked?.error);
 }
 function localCrewVoice() {
   return window.speechSynthesis?.getVoices().find(voice=&gt;voice.localService &amp;&amp; /^en(?:-|$)/i.test(voice.lang));
@@ -3620,10 +3980,10 @@ function guide() {
     &#x27;&lt;ul&gt;&lt;li&gt;&lt;b&gt;Select&lt;/b&gt; a tool from the rack or press 1–6. The slots run from lightest to heaviest, left to right across each row. A heavier or faster tool changes your velocity more.&lt;/li&gt;&#x27;+
     &#x27;&lt;li&gt;&lt;b&gt;Drag on the plot&lt;/b&gt; or grab the reticle. Point where the tool should travel. Your suit recoils in the opposite direction. Distance from your suit sets power, from 10% up to 100% at the dotted ring.&lt;/li&gt;&#x27;+
     &#x27;&lt;li&gt;&lt;b&gt;Release to throw.&lt;/b&gt; A click or tap previews your aim. Use Throw beneath the rack to commit it. Escape or release outside the plot, over the rack, or over the flight clock to cancel a drag.&lt;/li&gt;&#x27;+
-    &#x27;&lt;li&gt;&lt;b&gt;Keyboard controls.&lt;/b&gt; Left turns counterclockwise and right turns clockwise in 1° steps (Shift for 10°). Up and down change power by 1% (Shift for 10%). Press Enter on the plot to throw, or hold Space to wind up and release to throw. Escape cancels the windup.&lt;/li&gt;&#x27;+
+    &#x27;&lt;li&gt;&lt;b&gt;Keyboard controls.&lt;/b&gt; Focus the plot or a tool in the rack to aim. Left turns counterclockwise and right turns clockwise in 1° steps (Shift for 10°). Up and down change power by 1% (Shift for 10%). Press Enter on the plot to throw, or hold Space to wind up and release to throw. Escape cancels the windup.&lt;/li&gt;&#x27;+
     &#x27;&lt;li&gt;&lt;b&gt;Set the flight clock&lt;/b&gt; to 1×, 2×, 5× or 10× with the slider at the lower right of the HUD. Amber means fast-forward. P starts, pauses or resumes the clock. Switching tabs or windows pauses a running flight.&lt;/li&gt;&#x27;+
     &#x27;&lt;li&gt;&lt;b&gt;Check your course halfway home.&lt;/b&gt; When the original gap to the handrail reach zone has halved, the station calls once. Check your path and approach speed before spending another tool. A safe coast unlocks Coast to halfway, then Coast to rail. Use the speed slider to take over during the final approach.&lt;/li&gt;&#x27;+
-    &#x27;&lt;li&gt;&lt;b&gt;Share a flight.&lt;/b&gt; Choose Random in New mission to generate or load a Scenario Seed. Copy link shares the start, difficulty and bonus objective. Codes beginning with O1 select Orbital automatically. Choose View flight log in the debrief to copy the throws, capture speed and awards. Click outside the log or debrief to return to the finished plot.&lt;/li&gt;&lt;/ul&gt;&#x27;+
+    &#x27;&lt;li&gt;&lt;b&gt;Share a flight.&lt;/b&gt; Choose Random in New mission to generate or load a Scenario Seed. Copy link shares the start, difficulty and bonus objective. Codes beginning with O1 select Orbital automatically. In the debrief, choose View flight log to screenshot your approach chart or copy the full transcript. Click outside the log or debrief to return to the finished plot.&lt;/li&gt;&lt;/ul&gt;&#x27;+
     &#x27;&lt;p&gt;Bearings run counterclockwise from right (000°) to up (090°). Vx, Vy and radial speed use m/s. Green hatch distance and negative radial speed mean you are closing in. Red distance and positive radial speed mean you are moving away. Hatch distance measures the gap to the edge of the handrail reach zone. In Orbital, +X points away from Earth and +Y follows the station along its orbit. The velocity arrow is instantaneous. The coast and after-throw curves run to first contact or reserve expiry. Check speed at the rail, or closest approach on a miss. Other modes coast in a straight line.&lt;/p&gt;&#x27;+
     &#x27;&lt;p&gt;&lt;b&gt;Plan your next throw.&lt;/b&gt; A shrinking range can still lead to a flyby. On Medium, compare the predicted velocity arrow with the hatch bearing. On Hard, read the actual velocity after each release. Save a light tool to trim sideways drift. On Orbital, use the gold curve to test a correction and compare the predicted rail speed with the capture limit.&lt;/p&gt;&#x27;+
     (state.level===&#x27;Story&#x27;?&#x27;&#x27;:&#x27;&lt;p&gt;The Δv budget is the largest total velocity change available from full-power throws in the best order.&lt;/p&gt;&#x27;)+
@@ -3673,7 +4033,7 @@ function flightLogText(s) {
   for(const [n,entry] of s.throwLog.entries()){
     const t=gear[entry.i], vx=entry.vx+entry.dx, vy=entry.vy+entry.dy;
     lines.push(&#x27;Throw &#x27;+(n+1)+&#x27; · &#x27;+logTime(entry.time)+&#x27; · &#x27;+t.name+&#x27; (&#x27;+t.mass.toFixed(1)+&#x27; kg)&#x27;,
-      &#x27;Power &#x27;+entry.power+&#x27;% · Release &#x27;+logBearing(entry.bearing)+(s.level===&#x27;Hard&#x27;?&#x27; · Aim &#x27;+logBearing(entry.aim):&#x27;&#x27;),
+      &#x27;Power &#x27;+entry.power+&#x27;% · Release &#x27;+logBearing(entry.bearing)+(hasReleaseError(s.level)?&#x27; · Aim &#x27;+logBearing(entry.aim):&#x27;&#x27;),
       &#x27;Δvx &#x27;+logComponent(entry.dx)+&#x27; · Δvy &#x27;+logComponent(entry.dy)+&#x27; m/s&#x27;,
       &#x27;Heading &#x27;+logHeading(entry.vx,entry.vy)+&#x27; → &#x27;+logHeading(vx,vy)+&#x27; · Speed &#x27;+Math.hypot(vx,vy).toFixed(4)+&#x27; m/s&#x27;,&#x27;&#x27;);
   }
@@ -3685,10 +4045,133 @@ function flightLogText(s) {
   if(captured &amp;&amp; keptDrill(s))lines.push(&#x27;🏅 Upmass Hero · Returned with the original power drill&#x27;);
   return lines.join(&#x27;\n&#x27;);
 }
+// Replay coasts in flight time; the logged recoil already includes release scatter.
+function flightTrack(s) {
+  let coast=s.start, time=0;
+  const points=[coast], releases=[];
+  for(let i=0;i&lt;=s.throwLog.length;i++){
+    const entry=s.throwLog[i], until=entry?.time ?? s.elapsed, dt=until-time;
+    const steps=s.level===&#x27;Orbital&#x27;?Math.ceil(dt/4):Number(dt&gt;0);
+    for(let step=1;step&lt;=steps;step++){
+      points.push(s.level===&#x27;Orbital&#x27;?orbitalMotion(coast,dt*step/steps):
+        {x:coast.x+coast.vx*dt,y:coast.y+coast.vy*dt});
+    }
+    if(entry){
+      const point=points[points.length-1];
+      releases.push({point,entry,number:i+1});
+      coast={x:point.x,y:point.y,vx:entry.vx+entry.dx,vy:entry.vy+entry.dy};
+    }
+    time=until;
+  }
+  return {points,releases};
+}
+function drawApproachPlot(svg,points,shown,captured) {
+  const left=34,right=348,top=12,bottom=208;
+  let minX=-captureRadius,maxX=captureRadius,minY=-captureRadius,maxY=captureRadius;
+  for(const p of points){
+    minX=Math.min(minX,p.x);maxX=Math.max(maxX,p.x);
+    minY=Math.min(minY,p.y);maxY=Math.max(maxY,p.y);
+  }
+  // Shuttle convention: +V (game +Y) left, +R (game -X) down. Both axes use metres.
+  const scale=Math.min((right-left-30)/(maxY-minY),(bottom-top-30)/(maxX-minX));
+  const ox=(left+right+(minY+maxY)*scale)/2, oy=(top+bottom+(minX+maxX)*scale)/2;
+  const project=p=&gt;({x:ox-p.y*scale,y:oy-p.x*scale});
+  const screen=points.map(project), start=screen[0], end=screen[screen.length-1];
+  function add(tag,attrs,label) {
+    const el=document.createElementNS(&#x27;http://www.w3.org/2000/svg&#x27;,tag);
+    for(const [key,value] of Object.entries(attrs))el.setAttribute(key,value);
+    if(label!==undefined)el.textContent=label;
+    svg.append(el);return el;
+  }
+  function line(x1,y1,x2,y2,style) {add(&#x27;line&#x27;,{x1,y1,x2,y2,class:style});}
+  const desired=50/scale, decade=10**Math.floor(Math.log10(desired));
+  const step=decade*[1,2,5,10].find(n=&gt;n*decade&gt;=desired);
+  for(let i=Math.ceil((ox-right)/(scale*step));i&lt;=(ox-left)/(scale*step);i++){
+    const x=ox-i*step*scale;
+    line(x,top,x,bottom,i?&#x27;chart-grid&#x27;:&#x27;chart-axis&#x27;);
+    add(&#x27;text&#x27;,{x,y:bottom+16,&#x27;text-anchor&#x27;:&#x27;middle&#x27;},Number((i*step).toPrecision(5)));
+  }
+  for(let i=Math.ceil((top-oy)/(scale*step));i&lt;=(bottom-oy)/(scale*step);i++){
+    const y=oy+i*step*scale;
+    line(left,y,right,y,i?&#x27;chart-grid&#x27;:&#x27;chart-axis&#x27;);
+    add(&#x27;text&#x27;,{x:left-4,y:y+3,&#x27;text-anchor&#x27;:&#x27;end&#x27;},Number((i*step).toPrecision(5)));
+  }
+  add(&#x27;path&#x27;,{d:&#x27;M&#x27;+(left+4)+&#x27; &#x27;+(oy-3)+&#x27;l-4 3 4 3 M&#x27;+(ox-3)+&#x27; &#x27;+(bottom-4)+&#x27;l3 4 3 -4&#x27;,class:&#x27;chart-axis&#x27;});
+  add(&#x27;circle&#x27;,{cx:ox,cy:oy,r:captureRadius*scale,fill:&#x27;#233a30&#x27;,stroke:&#x27;var(--mint)&#x27;,&#x27;stroke-dasharray&#x27;:&#x27;3 2&#x27;});
+  add(&#x27;rect&#x27;,{x:ox-2,y:oy-2,width:4,height:4,fill:&#x27;var(--mint)&#x27;});
+  add(&#x27;path&#x27;,{d:screen.map((p,i)=&gt;(i?&#x27;L&#x27;:&#x27;M&#x27;)+p.x.toFixed(2)+&#x27; &#x27;+p.y.toFixed(2)).join(&#x27; &#x27;),class:&#x27;chart-track&#x27;});
+  // Space arrowheads by distance travelled so even a single straight coast has a direction.
+  const lengths=screen.map((p,i)=&gt;i?Math.hypot(p.x-screen[i-1].x,p.y-screen[i-1].y):0);
+  const length=lengths.reduce((sum,n)=&gt;sum+n,0), arrows=Math.min(3,Math.floor(length/55));
+  let travelled=0,next=1;
+  for(let i=1;i&lt;screen.length &amp;&amp; next&lt;=arrows;i++){
+    const a=screen[i-1], b=screen[i], span=lengths[i];
+    while(next&lt;=arrows &amp;&amp; travelled+span&gt;=length*next/(arrows+1)){
+      const t=(length*next/(arrows+1)-travelled)/span;
+      const angle=Math.atan2(b.y-a.y,b.x-a.x)*180/Math.PI;
+      add(&#x27;path&#x27;,{d:&#x27;M-4 -3 L1 0 -4 3&#x27;,class:&#x27;chart-track&#x27;,transform:&#x27;translate(&#x27;+(a.x+t*(b.x-a.x))+&#x27; &#x27;+(a.y+t*(b.y-a.y))+&#x27;) rotate(&#x27;+angle+&#x27;)&#x27;});
+      next++;
+    }
+    travelled+=span;
+  }
+  add(&#x27;rect&#x27;,{x:-4,y:-4,width:8,height:8,transform:&#x27;translate(&#x27;+start.x+&#x27; &#x27;+start.y+&#x27;) rotate(45)&#x27;,fill:&#x27;var(--panel)&#x27;,stroke:&#x27;var(--ink)&#x27;,&#x27;stroke-width&#x27;:1.5});
+  add(&#x27;circle&#x27;,{cx:end.x,cy:end.y,r:3.7,fill:captured?&#x27;var(--oxygen-fill)&#x27;:&#x27;var(--danger)&#x27;,stroke:&#x27;var(--bg)&#x27;,&#x27;stroke-width&#x27;:1.2});
+  // Stack consecutive releases at a shared location under one numbered callout.
+  const groups=[];
+  for(const release of shown){
+    const p=project(release.point), previous=groups[groups.length-1];
+    if(previous &amp;&amp; release.number===previous.last+1 &amp;&amp; Math.hypot(previous.x-p.x,previous.y-p.y)&lt;5)previous.last=release.number;
+    else groups.push({...p,first:release.number,last:release.number});
+  }
+  const occupied=[];
+  for(const g of groups){
+    const label=g.first===g.last?String(g.first):g.first+&#x27;–&#x27;+g.last;
+    const w=11+7*label.length;
+    const positions=[-17,17,-35,35,-53,53].map(d=&gt;({
+      x:Math.max(left+w/2,Math.min(right-w/2,g.x)),y:Math.max(top+8,Math.min(bottom-8,g.y+d))}));
+    const p=positions.find(c=&gt;occupied.every(o=&gt;Math.abs(c.x-o.x)&gt;(w+o.w)/2+2 || Math.abs(c.y-o.y)&gt;16)) || positions[0];
+    occupied.push({...p,w});
+    line(g.x,g.y,p.x,p.y,&#x27;chart-axis&#x27;);
+    add(&#x27;circle&#x27;,{cx:g.x,cy:g.y,r:1.8,fill:&#x27;var(--gold)&#x27;});
+    add(&#x27;rect&#x27;,{x:p.x-w/2,y:p.y-7.5,width:w,height:15,rx:6,fill:&#x27;var(--panel)&#x27;,stroke:&#x27;var(--gold)&#x27;});
+    add(&#x27;text&#x27;,{x:p.x,y:p.y+3.7,class:&#x27;chart-number&#x27;},label);
+  }
+}
+function renderApproachChart(s) {
+  const {points,releases}=flightTrack(s), captured=s.result.title===&#x27;Capture confirmed&#x27;;
+  const shown=releases.length&lt;=6?releases:[...releases.slice(0,3),...releases.slice(-3)];
+  $(&#x27;chartLevel&#x27;).textContent=s.level+&#x27; · Alpha v0.3&#x27;;
+  $(&#x27;chartScenario&#x27;).textContent=s.seed?&#x27;Seed &#x27;+s.seed:s.name;
+  $(&#x27;chartResult&#x27;).textContent=s.result.title;
+  $(&#x27;chartResult&#x27;).dataset.captured=String(captured);
+  $(&#x27;approachCard&#x27;).style.setProperty(&#x27;--finish&#x27;,captured?&#x27;var(--oxygen-fill)&#x27;:&#x27;var(--danger)&#x27;);
+  $(&#x27;chartDesc&#x27;).textContent=s.name+&#x27;, &#x27;+s.level+&#x27;. &#x27;+s.result.title+&#x27; after &#x27;+logTime(s.elapsed)+&#x27;. &#x27;+s.throws+&#x27; throws. The hatch is at the origin. Both axes are in metres.&#x27;;
+  drawApproachPlot($(&#x27;approachPlot&#x27;),points,shown,captured);
+  const list=$(&#x27;chartThrows&#x27;);
+  for(const {entry,number} of shown){
+    const row=document.createElement(&#x27;li&#x27;), index=document.createElement(&#x27;span&#x27;), details=document.createElement(&#x27;small&#x27;);
+    index.className=&#x27;throw-index&#x27;;index.textContent=&#x27;#&#x27;+number;
+    details.textContent=logTime(entry.time)+&#x27; · &#x27;+entry.power+&#x27;% · &#x27;+logBearing(entry.bearing);
+    row.append(index,gear[entry.i].name+&#x27; &#x27;,details);list.append(row);
+  }
+  $(&#x27;chartThrowCount&#x27;).textContent=releases.length?releases.length+(releases.length===1?&#x27; throw&#x27;:&#x27; throws&#x27;):&#x27;No throws&#x27;;
+  if(shown.length&lt;releases.length)$(&#x27;chartThrowCount&#x27;).textContent+=&#x27; · first and last three shown&#x27;;
+  $(&#x27;chartTime&#x27;).textContent=logTime(s.elapsed);
+  $(&#x27;chartSpeedLabel&#x27;).textContent=captured || s.result.title===&#x27;Approach too fast&#x27;?&#x27;Contact speed&#x27;:&#x27;Final speed&#x27;;
+  $(&#x27;chartSpeed&#x27;).textContent=Math.hypot(s.vx,s.vy).toFixed(4)+&#x27; m/s&#x27;;
+  $(&#x27;chartReserve&#x27;).textContent=Number.isFinite(s.oxygen)?logTime(s.oxygen):&#x27;Unlimited&#x27;;
+}
 function openFlightLog() {
   const transcript=flightLogText(state);
-  openDialog(&#x27;log&#x27;,&#x27;Mission debrief&#x27;,&#x27;Flight log&#x27;,&#x27;&lt;pre id=&quot;flightTranscript&quot; tabindex=&quot;0&quot; aria-label=&quot;Flight transcript&quot;&gt;&lt;/pre&gt;&lt;p id=&quot;logCopied&quot; role=&quot;status&quot;&gt;&lt;/p&gt;&#x27;,
+  openDialog(&#x27;log&#x27;,&#x27;Mission debrief&#x27;,&#x27;Flight log&#x27;,
+    &#x27;&lt;figure id=&quot;approachCard&quot; aria-labelledby=&quot;chartHeading&quot;&gt;&lt;div class=&quot;chart-byline&quot;&gt;&lt;span&gt;&lt;strong&gt;FASTBALL&lt;/strong&gt; / &lt;span id=&quot;chartLevel&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span id=&quot;chartScenario&quot;&gt;&lt;/span&gt;&lt;/div&gt;&#x27;+
+    &#x27;&lt;h3 id=&quot;chartHeading&quot;&gt;Approach to the rail&lt;/h3&gt;&lt;div class=&quot;chart-layout&quot;&gt;&lt;div&gt;&lt;svg class=&quot;chart-plot&quot; id=&quot;approachPlot&quot; viewBox=&quot;0 0 360 230&quot; role=&quot;img&quot; aria-labelledby=&quot;chartTitle chartDesc&quot;&gt;&lt;title id=&quot;chartTitle&quot;&gt;V-bar/R-bar approach in metres&lt;/title&gt;&lt;desc id=&quot;chartDesc&quot;&gt;&lt;/desc&gt;&lt;/svg&gt;&#x27;+
+    &#x27;&lt;div class=&quot;chart-meta&quot;&gt;← +V-bar along track · ↓ +R-bar Earthward (m)&lt;/div&gt;&lt;div class=&quot;chart-legend&quot;&gt;&lt;span&gt;◇ Start&lt;/span&gt;&lt;span&gt;&lt;b class=&quot;finish-key&quot;&gt;●&lt;/b&gt; Finish&lt;/span&gt;&lt;span&gt;⊙ Hatch · 1.2 m reach&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&#x27;+
+    &#x27;&lt;div&gt;&lt;strong class=&quot;chart-result&quot; id=&quot;chartResult&quot;&gt;&lt;/strong&gt;&lt;div class=&quot;chart-meta&quot; id=&quot;chartThrowCount&quot;&gt;&lt;/div&gt;&lt;ol class=&quot;chart-throws&quot; id=&quot;chartThrows&quot;&gt;&lt;/ol&gt;&lt;/div&gt;&lt;/div&gt;&#x27;+
+    &#x27;&lt;div class=&quot;chart-stats&quot;&gt;&lt;span&gt;Flight time &lt;b id=&quot;chartTime&quot;&gt;&lt;/b&gt;&lt;/span&gt;&lt;span&gt;&lt;span id=&quot;chartSpeedLabel&quot;&gt;&lt;/span&gt; &lt;b id=&quot;chartSpeed&quot;&gt;&lt;/b&gt;&lt;/span&gt;&lt;span&gt;Reserve &lt;b id=&quot;chartReserve&quot;&gt;&lt;/b&gt;&lt;/span&gt;&lt;/div&gt;&lt;/figure&gt;&#x27;+
+    &#x27;&lt;pre id=&quot;flightTranscript&quot; tabindex=&quot;0&quot; aria-label=&quot;Flight transcript&quot;&gt;&lt;/pre&gt;&lt;p id=&quot;logCopied&quot; role=&quot;status&quot;&gt;&lt;/p&gt;&#x27;,
     [[&#x27;Back to debrief&#x27;,summary],[&#x27;Copy flight log&#x27;,e=&gt;copyText(transcript,e.currentTarget,$(&#x27;logCopied&#x27;)),true]]);
+  renderApproachChart(state);
   $(&#x27;flightTranscript&#x27;).textContent=transcript;
 }
 function summary() {
@@ -3737,19 +4220,29 @@ function backgroundPause() {
 }
 function measurePlot() {
   const b=$(&#x27;plot&#x27;).getBoundingClientRect();
-  plotW=Math.max(1,b.width);plotH=Math.max(1,b.height);
-  aimFloor=matchMedia(&#x27;(max-width:999px)&#x27;).matches ? $(&#x27;flightClock&#x27;).getBoundingClientRect().top-b.top-6 : plotH;
+  const w=Math.max(1,b.width), h=Math.max(1,b.height);
+  const floor=matchMedia(&#x27;(max-width:999px)&#x27;).matches ? $(&#x27;flightClock&#x27;).getBoundingClientRect().top-b.top-6 : h;
+  if(state.level===&#x27;Story&#x27; &amp;&amp; state.phase!==&#x27;ended&#x27; &amp;&amp; (w!==plotW || h!==plotH || floor!==aimFloor)) {
+    const {px,py,suitScale}=plotCamera(state,w,h,floor);
+    if(px+suitBounds.left*suitScale&lt;0 || px+suitBounds.right*suitScale&gt;w ||
+       py+suitBounds.top*suitScale&lt;0 || py+suitBounds.bottom*suitScale&gt;h) {
+      state.storyAnchor={x:state.x,y:state.y};
+    }
+  }
+  plotW=w;plotH=h;aimFloor=floor;
   $(&#x27;plot&#x27;).setAttribute(&#x27;viewBox&#x27;,&#x27;0 0 &#x27;+plotW+&#x27; &#x27;+plotH);
 }
 function loadMissionLink(hash) {
   const params=new URLSearchParams(hash.slice(1));
   if(!params.has(&#x27;seed&#x27;))return false;
-  const loaded=readSeedInput(&#x27;https://lamcnamara.github.io/fastball/&#x27;+hash);
-  if($(&#x27;modal&#x27;).open)closeDialog(false);
-  if(loaded)newFlight(scenarios.length,loaded.level || &#x27;Easy&#x27;,loaded.goal || &#x27;none&#x27;,&#x27;&#x27;,loaded.drift);
-  else {
+  const linked=readSeedInput(&#x27;https://lamcnamara.github.io/fastball/&#x27;+hash,&#x27;Easy&#x27;) ||
+    {seed:params.get(&#x27;seed&#x27;),level:state?.level ?? &#x27;Easy&#x27;,goal:state?.objective ?? &#x27;none&#x27;,error:invalidSeedMessage};
+  if(linked.error || state?.phase===&#x27;flying&#x27; || state?.phase===&#x27;paused&#x27;) {
     if(!state)newFlight();
-    setup(state.level,state.objective,params.get(&#x27;seed&#x27;));
+    setup(linked.level,linked.goal,linked);
+  } else {
+    closeDialog(false);
+    newFlight(scenarios.length,linked.level,linked.goal,&#x27;&#x27;,linked.drift);
   }
   return true;
 }
@@ -3838,6 +4331,7 @@ function init() {
     if(e.code===&#x27;KeyP&#x27;&amp;&amp;!e.repeat){e.preventDefault();toggleClock();return;}
     if(!live() || !state.mask || drag || charge)return;
     if(/^[1-6]$/.test(e.key))selectTool(rackOrder[Number(e.key)-1]);
+    if(e.target!==plot &amp;&amp; !e.target.closest?.(&#x27;button.tool&#x27;))return;
     const step=e.shiftKey?10:1;
     if([&#x27;ArrowLeft&#x27;,&#x27;ArrowRight&#x27;].includes(e.key)){
       e.preventDefault();markAim();state.bearing=norm(state.bearing+(e.key===&#x27;ArrowLeft&#x27;?step:-step));render();
@@ -4009,6 +4503,34 @@ init();
         near(state.elapsed,distance/speed,&#x27;crossing time&#x27;,2/speed);
       }
     });
+    test(&#x27;Resizing a Story plot preserves the flight and the new edge still ends a real drift&#x27;,()=&gt;{
+      const plot=$(&#x27;plot&#x27;);
+      try {
+        for(const direction of [-1,1]){
+          if($(&#x27;modal&#x27;).open)closeDialog(false);
+          plot.style.width=&#x27;1280px&#x27;;plot.style.height=&#x27;560px&#x27;;
+          newFlight(0,&#x27;Story&#x27;);
+          const targetX=((direction&lt;0?48:plotW-48)-camera.ox)/camera.scale;
+          state.vx=(targetX-state.x)/180;state.vy=0;
+          toggleClock();advance(180);toggleClock();
+          yes(state.phase===&#x27;paused&#x27;,&#x27;paused before resize&#x27;);
+          const x=state.x, y=state.y, elapsed=state.elapsed;
+          plot.style.width=&#x27;390px&#x27;;plot.style.height=&#x27;640px&#x27;;
+          measurePlot();render();
+          const view=plot.getBoundingClientRect(), suit=$(&#x27;suitMan&#x27;).getBoundingClientRect();
+          yes(suit.left&gt;=view.left &amp;&amp; suit.right&lt;=view.right &amp;&amp; suit.top&gt;=view.top &amp;&amp; suit.bottom&lt;=view.bottom,&#x27;suit visible after resize&#x27;);
+          near(state.x,x,&#x27;unchanged x&#x27;);near(state.y,y,&#x27;unchanged y&#x27;);near(state.elapsed,elapsed,&#x27;unchanged clock&#x27;);
+          const {ox,oy,scale}=camera, remaining=plotExitTime(state.vx,state.vy);
+          yes(remaining&gt;1 &amp;&amp; Number.isFinite(remaining),&#x27;room to act&#x27;);
+          toggleClock();advance(remaining-.1);measurePlot();render();
+          yes(state.phase===&#x27;flying&#x27; &amp;&amp; camera.ox===ox &amp;&amp; camera.oy===oy &amp;&amp; camera.scale===scale,&#x27;camera holds at the new edge&#x27;);
+          advance(1);yes(state.result?.title===&#x27;Drifted out of view&#x27;,&#x27;genuine exit&#x27;);
+          near(state.elapsed,elapsed+remaining,&#x27;exit time&#x27;);
+        }
+      } finally {
+        plot.style.removeProperty(&#x27;width&#x27;);plot.style.removeProperty(&#x27;height&#x27;);measurePlot();render();
+      }
+    });
     test(&#x27;Hatch distance and radial speed track closing, opening and tangential motion in every mode&#x27;,()=&gt;{
       for(const level of Object.keys(limits)){
         newFlight(0,level);state.x=3;state.y=4;state.vx=0;
@@ -4108,6 +4630,34 @@ init();
       yes($(&#x27;tip&#x27;).textContent.includes(&#x27;empty rack&#x27;) &amp;&amp; !$(&#x27;tip&#x27;).textContent.includes(&#x27;Throw&#x27;),&#x27;no unavailable maneuver&#x27;);
       advance(600);yes(state.result.title===&#x27;Approach too fast&#x27;,&#x27;overspeed still resolves at rail&#x27;);
     });
+    test(&#x27;Near-hatch advice follows the present gap after a flyby&#x27;,()=&gt;{
+      Object.assign(state,{x:10,y:4,vx:-.05,vy:0,phase:&#x27;flying&#x27;});
+      advance(200);
+      yes(contextTip().includes(&#x27;Near the hatch&#x27;),&#x27;near at closest approach&#x27;);
+      advance(200);selectTool(5);state.bearing=90;state.power=10;throwTool();
+      yes(state.closest&lt;5 &amp;&amp; Math.hypot(state.x,state.y)-captureRadius&gt;5,&#x27;a past near pass&#x27;);
+      yes(!state.tip.includes(&#x27;Near the hatch&#x27;) &amp;&amp; $(&#x27;tip&#x27;).textContent===state.tip,&#x27;advisory after receding&#x27;);
+    });
+    test(&#x27;A linear preview evaluates its own contact speed in both directions&#x27;,()=&gt;{
+      for(const level of [&#x27;Medium&#x27;,&#x27;Hard&#x27;]){
+        newFlight(0,level);Object.assign(state,{x:10,y:0,vx:-.05,vy:0});
+        const kick=impulse(3,100,0), fast=flightCourse(state.vx+kick.dx,state.vy+kick.dy);
+        near(fast.arrivalSpeed,Math.hypot(state.vx+kick.dx,state.vy+kick.dy),&#x27;preview speed&#x27;);
+        yes(safeCoast(flightCourse()) &amp;&amp; !safeCoast(fast),&#x27;throw would exceed redline&#x27;);
+        state.vx+=kick.dx;
+        yes(!safeCoast(flightCourse()) &amp;&amp; safeCoast(flightCourse(-.05,0)),&#x27;braking would permit capture&#x27;);
+        yes(flightCourse(.05,0).arrivalSpeed===null,&#x27;no speed at contact for a miss&#x27;);
+      }
+    });
+    test(&#x27;Hard releases round north consistently in the HUD, announcement and log&#x27;,()=&gt;{
+      const random=Math.random;
+      try {
+        Math.random=()=&gt;.49;newFlight(0,&#x27;Hard&#x27;);throwTool();
+        const bearing=logBearing(state.throwLog[0].bearing);
+        yes(bearing===&#x27;0.0°&#x27; &amp;&amp; flash.text.endsWith(&#x27;Released at &#x27;+bearing),&#x27;rounded through north&#x27;);
+        yes($(&#x27;announce&#x27;).textContent===flash.text,&#x27;accessible release matches&#x27;);
+      } finally {Math.random=random;}
+    });
     test(&#x27;Final coast and debrief keep keyboard focus on a usable control&#x27;,()=&gt;{
       for(const guided of [false,true]){
         newFlight(0,&#x27;Easy&#x27;,&#x27;none&#x27;,guided?&#x27;aim&#x27;:&#x27;&#x27;);
@@ -4152,6 +4702,37 @@ init();
       $(&#x27;scenarioChoice&#x27;).value=&#x27;1&#x27;;$(&#x27;scenarioChoice&#x27;).dispatchEvent(new Event(&#x27;change&#x27;));$(&#x27;dialogActions&#x27;).lastElementChild.click();
       yes(!state.seed &amp;&amp; $(&#x27;shareFlight&#x27;).hidden &amp;&amp; state.name===&#x27;Lateral drift&#x27;,&#x27;fixed scenario ignores invalid seed&#x27;);
     });
+    test(&#x27;A linked mission waits for confirmation during a running or paused flight&#x27;,()=&gt;{
+      const code=&#x27;F1N73CGPHF&#x27;, hash=&#x27;#seed=&#x27;+code+&#x27;&amp;level=Medium&amp;goal=drill&#x27;;
+      for(const paused of [false,true]){
+        newFlight(1,&#x27;Hard&#x27;,&#x27;two&#x27;);throwTool();advance(2);
+        if(paused)toggleClock();
+        const original=state, elapsed=state.elapsed, mask=state.mask;
+        guide();loadMissionLink(hash);
+        yes(dialogKind===&#x27;setup&#x27; &amp;&amp; state===original &amp;&amp; state.phase===&#x27;paused&#x27;,&#x27;flight retained with guide open&#x27;);
+        yes($(&#x27;seedInput&#x27;).value===code &amp;&amp; $(&#x27;levelChoice&#x27;).value===&#x27;Medium&#x27; &amp;&amp; $(&#x27;goalChoice&#x27;).value===&#x27;drill&#x27;,&#x27;link preloaded&#x27;);
+        $(&#x27;dialogActions&#x27;).firstElementChild.click();
+        yes(state===original &amp;&amp; state.phase===(paused?&#x27;paused&#x27;:&#x27;flying&#x27;),&#x27;cancel restores previous phase&#x27;);
+        yes(state.elapsed===elapsed &amp;&amp; state.throws===1 &amp;&amp; state.mask===mask &amp;&amp; state.objective===&#x27;two&#x27;,&#x27;time, inventory and objective retained&#x27;);
+        loadMissionLink(hash);$(&#x27;dialogActions&#x27;).lastElementChild.click();
+        yes(state.seed===code &amp;&amp; state.level===&#x27;Medium&#x27; &amp;&amp; state.objective===&#x27;drill&#x27; &amp;&amp; state.phase===&#x27;ready&#x27; &amp;&amp; !state.throws,&#x27;confirmed replacement&#x27;);
+      }
+      newFlight();toggleClock();advance(5);loadMissionLink(hash);
+      yes(dialogKind===&#x27;setup&#x27; &amp;&amp; !state.throws &amp;&amp; state.elapsed===5,&#x27;unassisted coast is protected&#x27;);
+    });
+    test(&#x27;Ineligible Orbital links explain how to fly the original seed&#x27;,()=&gt;{
+      const code=&#x27;F1KJMNWCJ3&#x27;,hash=&#x27;#seed=&#x27;+code+&#x27;&amp;level=Orbital&amp;goal=two&#x27;;
+      loadMissionLink(hash);
+      const begin=$(&#x27;dialogActions&#x27;).lastElementChild, message=$(&#x27;seedFeedback&#x27;).textContent;
+      yes($(&#x27;levelChoice&#x27;).value===&#x27;Orbital&#x27; &amp;&amp; $(&#x27;goalChoice&#x27;).value===&#x27;two&#x27; &amp;&amp; $(&#x27;seedInput&#x27;).value===code,&#x27;editable linked start&#x27;);
+      yes(/Story through Hard/.test(message) &amp;&amp; begin.disabled &amp;&amp; $(&#x27;copySeed&#x27;).disabled,&#x27;unavailable on Orbital&#x27;);
+      $(&#x27;seedInput&#x27;).value=&#x27;https://example.org/&#x27;+hash;$(&#x27;loadSeed&#x27;).click();
+      yes($(&#x27;seedFeedback&#x27;).textContent===message &amp;&amp; $(&#x27;seedInput&#x27;).value===code,&#x27;pasted link uses the same explanation&#x27;);
+      $(&#x27;levelChoice&#x27;).value=&#x27;Hard&#x27;;$(&#x27;levelChoice&#x27;).dispatchEvent(new Event(&#x27;change&#x27;));$(&#x27;loadSeed&#x27;).click();begin.click();
+      yes(state.seed===code &amp;&amp; state.level===&#x27;Hard&#x27; &amp;&amp; state.objective===&#x27;two&#x27;,&#x27;same start on a supported difficulty&#x27;);
+      loadMissionLink(&#x27;#seed=NOTASEED&#x27;);
+      yes(/Unrecognized/.test($(&#x27;seedFeedback&#x27;).textContent) &amp;&amp; $(&#x27;dialogActions&#x27;).lastElementChild.disabled,&#x27;malformed seed retains its own error&#x27;);
+    });
     test(&#x27;Random Story openings leave the whole suit visible and at least thirty flight seconds to act&#x27;,()=&gt;{
       const random=randomStream(17);
       for(let i=0;i&lt;32;i++){
@@ -4161,6 +4742,47 @@ init();
         yes(suit.left&gt;=view.left &amp;&amp; suit.right&lt;=view.right &amp;&amp; suit.top&gt;=view.top &amp;&amp; suit.bottom&lt;=view.bottom,&#x27;suit starts inside plot&#x27;);
         toggleClock();advance(30);yes(state.phase===&#x27;flying&#x27;,&#x27;opening reaction time &#x27;+drift.seed);
       }
+    });
+    test(&#x27;The Orbital chart replays actual releases and reaches the recorded rail contact&#x27;,()=&gt;{
+      const random=Math.random;
+      try {
+        Math.random=randomStream(408);
+        newFlight(scenarios.length,&#x27;Orbital&#x27;,&#x27;none&#x27;,&#x27;&#x27;,decodeSeed(&#x27;O1K7EDPYT3&#x27;));
+        toggleClock();advance(90);
+        const first={x:state.x,y:state.y};
+        selectTool(0);state.bearing=135;state.power=60;throwTool();advance(150);
+        const second={x:state.x,y:state.y};
+        selectTool(3);state.bearing=34;state.power=91;throwTool();advance(450);
+        yes(state.result.title===&#x27;Capture confirmed&#x27;,&#x27;two-throw orbital rescue&#x27;);
+        Math.random=()=&gt;{throw Error(&#x27;chart rerolled a release&#x27;);};
+        const track=flightTrack(state), last=track.points[track.points.length-1];
+        for(const [i,p] of [first,second].entries()){
+          near(track.releases[i].point.x,p.x,&#x27;throw x&#x27;);near(track.releases[i].point.y,p.y,&#x27;throw y&#x27;);
+        }
+        near(last.x,state.x,&#x27;contact x&#x27;);near(last.y,state.y,&#x27;contact y&#x27;);
+        yes(track.points.length&gt;50,&#x27;sampled curved motion&#x27;);
+        $(&#x27;openLog&#x27;).click();
+        yes($(&#x27;dialogBody&#x27;).firstElementChild===$(&#x27;approachCard&#x27;) &amp;&amp; $(&#x27;chartResult&#x27;).textContent===state.result.title,&#x27;chart opens above transcript&#x27;);
+        yes($(&#x27;chartScenario&#x27;).textContent.includes(state.seed) &amp;&amp; $(&#x27;chartThrows&#x27;).children.length===2,&#x27;shareable seed and throws&#x27;);
+        yes($(&#x27;chartThrows&#x27;).textContent.includes(logBearing(state.lastBearing)) &amp;&amp; $(&#x27;chartTime&#x27;).textContent===logTime(state.elapsed),&#x27;actual release and time&#x27;);
+        const path=$(&#x27;approachPlot&#x27;).querySelector(&#x27;.chart-track&#x27;).getAttribute(&#x27;d&#x27;);
+        yes(!/NaN|Infinity/.test(path) &amp;&amp; $(&#x27;modal&#x27;).scrollWidth&lt;=$(&#x27;modal&#x27;).clientWidth+1,&#x27;finite and fits the dialog&#x27;);
+        summary();$(&#x27;openLog&#x27;).click();
+        yes($(&#x27;approachPlot&#x27;).querySelector(&#x27;.chart-track&#x27;).getAttribute(&#x27;d&#x27;)===path,&#x27;stable on reopening&#x27;);
+      } finally {Math.random=random;}
+    });
+    test(&#x27;Linear approach charts preserve coast endpoints, zero throws and repeated Story throws&#x27;,()=&gt;{
+      newFlight(0,&#x27;Easy&#x27;);toggleClock();advance(1000);$(&#x27;openLog&#x27;).click();
+      const t=flightTrack(state),last=t.points[t.points.length-1];
+      yes(t.points.length===2 &amp;&amp; !$(&#x27;chartThrows&#x27;).children.length &amp;&amp; $(&#x27;chartResult&#x27;).dataset.captured===&#x27;false&#x27;,&#x27;unassisted loss&#x27;);
+      near(last.x,state.x,&#x27;linear x&#x27;);near(last.y,state.y,&#x27;linear y&#x27;);
+      yes($(&#x27;chartSpeedLabel&#x27;).textContent===&#x27;Final speed&#x27; &amp;&amp; $(&#x27;chartReserve&#x27;).textContent===&#x27;0:00.0&#x27;,&#x27;expiry stats&#x27;);
+      closeDialog(false);newFlight(0,&#x27;Story&#x27;);
+      for(let i=0;i&lt;9;i++){state.bearing=i%2?180:0;throwTool();}
+      advance(1e5);$(&#x27;openLog&#x27;).click();
+      yes($(&#x27;chartThrows&#x27;).children.length===6 &amp;&amp; $(&#x27;chartThrows&#x27;).textContent.includes(&#x27;#9&#x27;) &amp;&amp; $(&#x27;chartThrowCount&#x27;).textContent.includes(&#x27;9 throws&#x27;),&#x27;bounded chart key&#x27;);
+      yes($(&#x27;flightTranscript&#x27;).textContent.includes(&#x27;Throw 9&#x27;) &amp;&amp; $(&#x27;chartReserve&#x27;).textContent===&#x27;Unlimited&#x27;,&#x27;full transcript and Story reserve&#x27;);
+      yes(!/NaN|Infinity/.test($(&#x27;approachPlot&#x27;).innerHTML) &amp;&amp; $(&#x27;approachPlot&#x27;).querySelectorAll(&#x27;.chart-number&#x27;).length===2,&#x27;coincident releases grouped&#x27;);
     });
     test(&#x27;The optional debrief log records actual releases, flight times, velocity, headings and awards&#x27;,()=&gt;{
       newFlight(0,&#x27;Hard&#x27;,&#x27;two&#x27;);toggleClock();advance(4.25);
@@ -4252,6 +4874,19 @@ init();
       for(let i=0;i&lt;10;i++)key(&#x27;ArrowUp&#x27;,true);near(state.power,100,&#x27;cap&#x27;);
       for(let i=0;i&lt;10;i++)key(&#x27;ArrowDown&#x27;,true);near(state.power,10,&#x27;floor&#x27;);
       key(&#x27;Enter&#x27;);yes(state.throws===1,&#x27;keyboard release&#x27;);
+    });
+    test(&#x27;Only the plot and tool buttons use arrows to aim&#x27;,()=&gt;{
+      const tool=$(&#x27;tools&#x27;).querySelector(&#x27;button&#x27;);
+      const press=(target,key)=&gt;target.dispatchEvent(new KeyboardEvent(&#x27;keydown&#x27;,{key,bubbles:true,cancelable:true}));
+      for(const target of [$(&#x27;setup&#x27;),$(&#x27;coastButton&#x27;),$(&#x27;shareFlight&#x27;),$(&#x27;timeRate&#x27;),document.body]){
+        yes(press(target,&#x27;ArrowLeft&#x27;) &amp;&amp; press(target,&#x27;ArrowUp&#x27;),&#x27;native keys on &#x27;+target.id);
+      }
+      yes(state.bearing===0 &amp;&amp; state.power===65,&#x27;other controls leave aim alone&#x27;);
+      for(const target of [$(&#x27;plot&#x27;),tool]){
+        target.focus({preventScroll:true});
+        yes(!press(document.activeElement,&#x27;ArrowLeft&#x27;) &amp;&amp; !press(document.activeElement,&#x27;ArrowUp&#x27;),&#x27;aim keys consumed&#x27;);
+      }
+      yes(state.bearing===2 &amp;&amp; state.power===67 &amp;&amp; !state.throws,&#x27;plot and rack aim without releasing&#x27;);
     });
     test(&#x27;Docking hatch stays centered on the capture zone in each scenario&#x27;,()=&gt;{
       for(let index=0;index&lt;scenarios.length;index++) {
@@ -4377,7 +5012,7 @@ init();
       closeDialog(false);newFlight(0,&#x27;Medium&#x27;);state.x=2;state.y=0;state.vx=-.04;state.vy=.08;render();
       yes($(&#x27;speedometer&#x27;).dataset.over===&#x27;true&#x27;,&#x27;fast sideways motion&#x27;);
     });
-    test(&#x27;Hard samples one bounded release error and preserves opposite recoil&#x27;,()=&gt;{
+    test(&#x27;Hard and Orbital sample one bounded release error and preserve opposite recoil&#x27;,()=&gt;{
       const random=Math.random;
       try {
         for(const level of Object.keys(limits))for(const sample of [0,.5,.999999]){
@@ -4385,12 +5020,22 @@ init();
           let calls=0;Math.random=()=&gt;{calls++;return sample;};
           state.bearing=359;state.power=85;
           render();render();yes(calls===0,&#x27;preview sampled random&#x27;);
-          const angle=359+(level===&#x27;Hard&#x27;?(sample*2-1)*hardBearingError:0);
+          const scattered=level===&#x27;Hard&#x27; || level===&#x27;Orbital&#x27;;
+          const angle=359+(scattered?(sample*2-1)*2:0);
+          const nominalPath=$(&#x27;trial&#x27;).getAttribute(&#x27;d&#x27;);
           const k=impulse(0,85,angle),vx=state.vx,vy=state.vy;
           $(&#x27;throwButton&#x27;).click();
-          yes(calls===(level===&#x27;Hard&#x27;?1:0),&#x27;one draw at release&#x27;);
+          yes(calls===(scattered?1:0),&#x27;one draw at release&#x27;);
           near(state.lastBearing,norm(angle),&#x27;actual bearing&#x27;);near(state.vx,vx+k.dx,&#x27;recoil x&#x27;);near(state.vy,vy+k.dy,&#x27;recoil y&#x27;);
           near(anim.vx-state.vx,k.ux,&#x27;tool x&#x27;);near(anim.vy-state.vy,k.uy,&#x27;tool y&#x27;);
+          if(level===&#x27;Orbital&#x27;){
+            yes(($(&#x27;coast&#x27;).getAttribute(&#x27;d&#x27;)===nominalPath)===(sample===.5),&#x27;coast uses actual release&#x27;);
+            const released=logBearing(angle);
+            yes($(&#x27;announce&#x27;).textContent.endsWith(&#x27;Released at &#x27;+released),&#x27;announced actual release&#x27;);
+            finish(&#x27;Return lost&#x27;,&#x27;Test&#x27;);$(&#x27;openLog&#x27;).click();
+            yes($(&#x27;flightTranscript&#x27;).textContent.includes(&#x27;Release &#x27;+released+&#x27; · Aim 359.0°&#x27;),&#x27;aim and release in log&#x27;);
+            closeDialog(false);
+          }
         }
       } finally {Math.random=random;}
     });
@@ -4439,23 +5084,24 @@ init();
       }
       yes(document.documentElement.scrollWidth&lt;=innerWidth+1,&#x27;horizontal overflow &#x27;+document.documentElement.scrollWidth+&#x27; &#x27;+innerWidth);
     });
-    test(&#x27;Orbital forecasts curve, meet the rail at the predicted speed and support both coast shortcuts&#x27;,()=&gt;{
-      for(const [index,steps] of [[[3,94,10]],[[3,72,344]],[[3,100,3],[2,74,2]]].entries()){
+    test(&#x27;Nominal Orbital forecasts reach the rail on time and support both coast shortcuts&#x27;,()=&gt;{
+      for(const [index,steps] of [[[3,94,10]],[[3,72,344]],[[3,100,1],[2,97,0]]].entries()){
         if($(&#x27;modal&#x27;).open)closeDialog(false);
-        newFlight(index,&#x27;Orbital&#x27;);yes(state.oxygen===900 &amp;&amp; $(&#x27;vxLabel&#x27;).textContent===&#x27;X outward&#x27;,&#x27;frame and clock&#x27;);
+        newFlight(index,&#x27;Orbital&#x27;);yes(state.oxygen===450 &amp;&amp; $(&#x27;oxygen&#x27;).textContent===&#x27;07:30&#x27; &amp;&amp; $(&#x27;vxLabel&#x27;).textContent===&#x27;X outward&#x27;,&#x27;frame and clock&#x27;);
         for(const [j,[i,power,bearing]] of steps.entries()){
           if(j)advance(4);
           selectTool(i);state.bearing=bearing;state.power=power;markAim();render();
           const projected=$(&#x27;trial&#x27;).getAttribute(&#x27;d&#x27;);
           yes(projected.split(&#x27; L&#x27;).length&gt;4,&#x27;curved preview samples&#x27;);
-          $(&#x27;throwButton&#x27;).click();
+          const random=Math.random;
+          try {Math.random=()=&gt;.5;$(&#x27;throwButton&#x27;).click();} finally {Math.random=random;}
           yes($(&#x27;coast&#x27;).getAttribute(&#x27;d&#x27;)===projected,&#x27;preview becomes actual coast&#x27;);
         }
         const path=flightCourse(), eta=state.elapsed+path.eta;
         yes(safeCoast(path) &amp;&amp; $(&#x27;prediction&#x27;).textContent.includes(&#x27;m/s at rail&#x27;),&#x27;safe contact forecast&#x27;);
         coastToHatch();yes(state.midpointThrow===state.throws &amp;&amp; state.phase===&#x27;flying&#x27;,&#x27;midpoint shortcut&#x27;);
         near(Math.hypot(state.x,state.y)-captureRadius,state.halfwayGap,&#x27;orbital halfway&#x27;,1e-8);
-        coastToHatch();advance(900);near(state.elapsed,eta,&#x27;time at rail&#x27;,1e-7);
+        coastToHatch();advance(450);near(state.elapsed,eta,&#x27;time at rail&#x27;,1e-7);
         near(Math.hypot(state.vx,state.vy),path.arrivalSpeed,&#x27;relative speed at rail&#x27;,1e-9);
         yes(state.result?.title===&#x27;Capture confirmed&#x27;,&#x27;named Orbital capture&#x27;);
       }
@@ -4478,7 +5124,7 @@ init();
         yes(state.result.title===(speed&lt;=.080?&#x27;Capture confirmed&#x27;:&#x27;Approach too fast&#x27;),&#x27;use contact speed for outcome&#x27;);
       }
       closeDialog(false);newFlight(0,&#x27;Orbital&#x27;);toggleClock();advance(999);
-      yes(state.result.title===&#x27;Reserve expired&#x27; &amp;&amp; state.elapsed===900,&#x27;orbital reserve&#x27;);
+      yes(state.result.title===&#x27;Reserve expired&#x27; &amp;&amp; state.elapsed===450,&#x27;orbital reserve&#x27;);
     });
     test(&#x27;Orbital seeds bind the physics through setup, bare codes, contradictory links and retry&#x27;,()=&gt;{
       const code=&#x27;O1K7EDPYT3&#x27;,s=decodeSeed(code);
@@ -4492,7 +5138,9 @@ init();
       loadMissionLink(&#x27;#seed=&#x27;+code+&#x27;&amp;level=Easy&amp;goal=two&#x27;);
       yes(state.level===&#x27;Orbital&#x27; &amp;&amp; state.objective===&#x27;two&#x27; &amp;&amp; state.start.x===s.x &amp;&amp; state.seed===code,&#x27;mode lock&#x27;);
       finish(&#x27;Reserve expired&#x27;,&#x27;Test&#x27;);[...$(&#x27;dialogActions&#x27;).children].find(b=&gt;b.textContent===&#x27;Retry this flight&#x27;).click();
-      yes(state.seed===code &amp;&amp; state.level===&#x27;Orbital&#x27; &amp;&amp; state.oxygen===900,&#x27;same seed retry&#x27;);
+      yes(state.seed===code &amp;&amp; state.level===&#x27;Orbital&#x27; &amp;&amp; state.oxygen===450,&#x27;same seed retry&#x27;);
+      loadMissionLink(&#x27;#seed=O1FMG2AIHL&#x27;);
+      yes(state.seed===&#x27;O1FMG2AIHL&#x27; &amp;&amp; state.oxygen===450,&#x27;previously issued seed loads with the current reserve&#x27;);
     });
     test(&#x27;Debrief actions share two aligned rows and backdrop dismissal preserves the flight&#x27;,()=&gt;{
       finish(&#x27;Reserve expired&#x27;,&#x27;Test&#x27;);const m=$(&#x27;modal&#x27;);
@@ -4677,7 +5325,38 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
 .speedometer[data-reference=&quot;true&quot;] .speed-track::after { background:var(--muted); opacity:.55; width:2px }
 .speed-limit { color:var(--muted); font-size:12px }
 dialog[data-kind=&quot;guide&quot;] { width:min(560px,calc(100% - 28px)) }
-dialog[data-kind=&quot;log&quot;] { width:min(620px,calc(100% - 24px)) }
+dialog[data-kind=&quot;log&quot;] { width:min(870px,calc(100% - 20px)) }
+#approachCard { margin:0 0 14px; padding:clamp(12px,2vw,22px); border:1px solid #485c55; border-radius:8px; background:#141d1b; color:var(--ink) }
+.chart-byline,.chart-meta,.chart-legend,.chart-throws small,.chart-stats { font:12px/1.45 var(--mono) }
+.chart-byline { display:flex; flex-wrap:wrap; justify-content:space-between; gap:2px 12px; color:var(--mint) }
+.chart-byline strong { color:var(--ink); letter-spacing:.12em }
+#approachCard h3 { margin:6px 0 12px; font:650 clamp(19px,3vw,29px)/1.15 var(--sans) }
+.chart-layout { display:grid; grid-template-columns:minmax(0,1.65fr) minmax(185px,1fr); gap:16px; align-items:start }
+.chart-plot { width:100%; display:block; background:#192322; border:1px solid #40534e; border-radius:5px }
+.chart-plot text { fill:var(--muted); font:11px var(--mono) }
+.chart-plot .chart-number { fill:var(--gold); font-weight:700; text-anchor:middle }
+.chart-grid { stroke:#364740; stroke-width:.7 }
+.chart-axis { stroke:#8ba297; stroke-width:1; fill:none }
+.chart-track { stroke:var(--gold); stroke-width:2.2; fill:none; stroke-linejoin:round; stroke-linecap:round }
+.chart-meta { color:var(--muted) }
+.chart-legend { display:flex; gap:3px 10px; flex-wrap:wrap; margin-top:5px; color:var(--muted) }
+.chart-legend .finish-key { color:var(--finish) }
+.chart-throws { list-style:none; margin:6px 0 0; padding:0 }
+.chart-throws li { margin:0 0 7px; display:grid; grid-template-columns:auto 1fr; gap:0 7px; align-items:baseline; line-height:1.25 }
+.chart-throws .throw-index { grid-row:span 2; color:var(--gold); font:600 12px var(--mono) }
+.chart-throws small { grid-column:2; color:var(--muted) }
+.chart-stats { display:flex; flex-wrap:wrap; gap:4px 14px; padding-top:9px; margin-top:10px; border-top:1px solid #40534e; color:var(--muted) }
+.chart-stats b { color:var(--ink); font-weight:600 }
+.chart-result { display:block; margin:0 0 4px; color:var(--oxygen-fill); font-size:17px }
+.chart-result[data-captured=&quot;false&quot;] { color:var(--danger) }
+@media(max-width:650px) {
+  dialog[data-kind=&quot;log&quot;] { width:calc(100% - 12px); max-width:calc(100% - 12px); padding:10px; scrollbar-width:thin }
+  #approachCard { padding:10px }
+  .chart-layout { grid-template-columns:minmax(0,1fr); gap:8px }
+  .chart-plot text { font-size:13px }
+  .chart-throws li { margin-bottom:4px; font-size:13px }
+  .chart-throws small { font-size:11px }
+}
 .seed-share { padding:2px 7px; font-size:12px }
 #shareNotice:not(:empty) { margin-left:5px }
 .seed-panel { margin:12px 0 18px; padding:12px; min-width:0; background:var(--bg); border:1px solid var(--edge); border-radius:5px }
@@ -4963,9 +5642,10 @@ function randomStream(seed) {
     return seed/4294967296;
   };
 }
-const limits = {Story:Infinity, Easy:900, Medium:600, Hard:450, Orbital:900};
+const limits = {Story:Infinity, Easy:900, Medium:600, Hard:450, Orbital:450};
 const timeRates = [1,2,5,10];
-const captureSpeedLimit = 0.080, hardBearingError = 2;
+const captureSpeedLimit = 0.080, maxBearingError = 2;
+const hasReleaseError = level =&gt; level===&#x27;Hard&#x27; || level===&#x27;Orbital&#x27;;
 const softCapture = level =&gt; level===&#x27;Medium&#x27; || level===&#x27;Hard&#x27; || level===&#x27;Orbital&#x27;;
 const overRedline = (level,vx,vy) =&gt; softCapture(level) &amp;&amp; Math.hypot(vx,vy)&gt;captureSpeedLimit+1e-12;
 const captureCalls = {
@@ -5007,7 +5687,7 @@ function course(x,y,vx,vy,radius=captureRadius) {
     // Scale the roundoff allowance with velocity so very slow misses stay misses.
     if (disc &gt;= -Number.EPSILON*(dot*dot+vv*c)*4) eta = c/(-dot + Math.sqrt(Math.max(0,disc)));
   }
-  return {eta, clearance};
+  return {eta, clearance, arrivalSpeed:eta===null?null:Math.hypot(vx,vy)};
 }
 // Planar Hill–Clohessy–Wiltshire motion about the hatch on a circular 92-minute orbit.
 // Plot +X is radially outward and +Y is along the station&#x27;s direction of travel.
@@ -5111,16 +5791,17 @@ function newFlight(index=0,level=&#x27;Easy&#x27;,objective=&#x27;none&#x27;,les
 function difficultyBrief(level) {
   return level===&#x27;Story&#x27;
       ? &#x27;Unlimited oxygen and reloading tools. Full trajectory guidance. Reach the hatch before your suit drifts off the plot.&#x27;
-      : clock(limits[level])+&#x27; to reach the rail on emergency reserve · &#x27;+({Easy:&#x27;Full trajectory, intercept time and miss distance.&#x27;,Medium:&#x27;Predicted velocity vector.&#x27;,Hard:&#x27;Raw navigation telemetry.&#x27;,Orbital:&#x27;Curved coasts in a rotating orbital frame. Full trajectory guidance and precise releases.&#x27;})[level]+(softCapture(level)?&#x27; &#x27;+captureBrief(level):&#x27;&#x27;);
+      : clock(limits[level])+&#x27; to reach the rail on emergency reserve · &#x27;+({Easy:&#x27;Full trajectory, intercept time and miss distance.&#x27;,Medium:&#x27;Predicted velocity vector.&#x27;,Hard:&#x27;Raw navigation telemetry.&#x27;,Orbital:&#x27;Curved coasts in a rotating orbital frame. Full trajectory guidance.&#x27;})[level]+(softCapture(level)?&#x27; &#x27;+captureBrief(level):&#x27;&#x27;);
 }
 function captureBrief(level) {
   const limit=captureSpeedLimit.toFixed(3)+&#x27; m/s&#x27;;
-  if(level===&#x27;Orbital&#x27;)return &#x27;Aim the curved gold forecast through the rail at &#x27;+limit+&#x27; or slower. Check the predicted speed at the rail.&#x27;;
+  const scatter=&#x27; Each release can stray by up to ±&#x27;+maxBearingError+&#x27;°.&#x27;;
+  if(level===&#x27;Orbital&#x27;)return &#x27;Aim the gold curve through the rail at &#x27;+limit+&#x27; or slower.&#x27;+scatter+&#x27; Check the actual coast after each throw.&#x27;;
   return &#x27;Reach the handrail at &#x27;+limit+&#x27; or slower. Throw along your motion to brake.&#x27;+
-    (level===&#x27;Hard&#x27;?&#x27; Each release can stray by up to ±&#x27;+hardBearingError+&#x27;°.&#x27;:&#x27;&#x27;);
+    (level===&#x27;Hard&#x27;?scatter:&#x27;&#x27;);
 }
 function safeCoast(path) {
-  return path.eta!==null &amp;&amp; path.eta&lt;=state.oxygen &amp;&amp; !overRedline(state.level,path.arrivalSpeed ?? Math.hypot(state.vx,state.vy),0);
+  return path.eta!==null &amp;&amp; path.eta&lt;=state.oxygen &amp;&amp; !overRedline(state.level,path.arrivalSpeed,0);
 }
 function objectiveIntact(flight=state) {
   if(flight.objective===&#x27;drill&#x27;)return keptDrill(flight);
@@ -5150,7 +5831,7 @@ function encodeSeed(start,orbital=Boolean(start.orbital)) {
   const payload=packed.toString(36).toUpperCase().padStart(7,&#x27;0&#x27;);
   return orbital?&#x27;O1&#x27;+payload+seedCheck(&#x27;O1&#x27;+payload):&#x27;F1&#x27;+payload+seedCheck(payload);
 }
-function decodeSeed(input) {
+function decodeSeed(input,allowLegacyOrbital=true) {
   const seed=input.trim().toUpperCase(), payload=seed.slice(2,9);
   const orbital=seed.startsWith(&#x27;O1&#x27;);
   if(!/^[FO]1[0-9A-Z]{8}$/.test(seed) || seedCheck(orbital?&#x27;O1&#x27;+payload:payload)!==seed[9])return null;
@@ -5165,7 +5846,9 @@ function decodeSeed(input) {
   const y=unpack(1024,512,10), x=unpack(1024,512,10);
   const start={name:&#x27;Random&#x27;,seed,x,y,vx,vy};
   if(orbital)start.orbital=true;
-  return playableDrift(start)?start:null;
+  // Previously shared O1 codes were screened with a 15-minute reserve.
+  // Recognize those starts on input. New deals and conversions use today&#x27;s rules.
+  return playableDrift(start) || (orbital &amp;&amp; allowLegacyOrbital &amp;&amp; playableDrift(start,900))?start:null;
 }
 function closestImpulse(mask,desired) {
   let best=null;
@@ -5230,11 +5913,11 @@ function orbitalRecovery(start,initialMask=fullMask,reserve=limits.Orbital) {
   }
   return best;
 }
-function playableDrift(start) {
+function playableDrift(start,reserve=limits.Orbital) {
   const range=Math.hypot(start.x,start.y), speed=Math.hypot(start.vx,start.vy);
   if(range&lt;14 || range&gt;28 || speed&lt;.022 || speed&gt;.085)return false;
-  if(start.orbital)return orbitalCourse(start,limits.Orbital).eta===null &amp;&amp;
-    Boolean(orbitalRecovery(start) &amp;&amp; orbitalRecovery(orbitalMotion(start,30),fullMask,limits.Orbital-30));
+  if(start.orbital)return orbitalCourse(start,reserve).eta===null &amp;&amp;
+    Boolean(orbitalRecovery(start,fullMask,reserve) &amp;&amp; orbitalRecovery(orbitalMotion(start,30),fullMask,reserve-30));
   return course(start.x,start.y,start.vx,start.vy).eta===null &amp;&amp;
     Boolean(recoveryPlan(start) &amp;&amp; recoveryPlan(start,true));
 }
@@ -5245,10 +5928,10 @@ function generateDrift(random=Math.random,level=&#x27;Easy&#x27;) {
     const speed=.022+.063*random(), heading=2*Math.PI*random();
     const seed=encodeSeed({x:range*Math.cos(angle),y:range*Math.sin(angle),
       vx:speed*Math.cos(heading),vy:speed*Math.sin(heading)},orbital);
-    const drift=decodeSeed(seed);
+    const drift=decodeSeed(seed,false);
     if(drift)return drift;
   }
-  return decodeSeed(encodeSeed({x:24,y:-7,vx:.046,vy:.021},orbital));
+  return decodeSeed(encodeSeed({x:24,y:-7,vx:.046,vy:.021},orbital),false);
 }
 function scenarioLink(seed,level,goal) {
   const params=new URLSearchParams({seed,level:seed.startsWith(&#x27;O1&#x27;)?&#x27;Orbital&#x27;:level});
@@ -5259,7 +5942,8 @@ function scenarioLink(seed,level,goal) {
     ? new URL(&#x27;./&#x27;,location.href).href : &#x27;https://lamcnamara.github.io/fastball/&#x27;;
   return base+&#x27;#&#x27;+params;
 }
-function readSeedInput(text) {
+const invalidSeedMessage=&#x27;Unrecognized Scenario Seed. Check the code or generate a new seed.&#x27;;
+function readSeedInput(text,defaultLevel=null) {
   let input=text.trim(), params=new URLSearchParams();
   if(/^https?:\/\//i.test(input)){
     try {params=new URLSearchParams(new URL(input).hash.slice(1));}
@@ -5268,18 +5952,20 @@ function readSeedInput(text) {
   }
   let drift=decodeSeed(input);
   if(!drift)return null;
-  const level=params.get(&#x27;level&#x27;), goal=params.get(&#x27;goal&#x27;);
+  const requestedLevel=params.get(&#x27;level&#x27;), requestedGoal=params.get(&#x27;goal&#x27;);
+  const level=drift.orbital?&#x27;Orbital&#x27;:Object.hasOwn(limits,requestedLevel)?requestedLevel:defaultLevel;
+  const goal=Object.hasOwn(replayGoals,requestedGoal)?requestedGoal:(params.has(&#x27;seed&#x27;)?&#x27;none&#x27;:null);
   if(level===&#x27;Orbital&#x27; &amp;&amp; !drift.orbital) {
-    drift=decodeSeed(encodeSeed(drift,true));
-    if(!drift)return null;
+    const seed=drift.seed;
+    drift=decodeSeed(encodeSeed(drift,true),false);
+    if(!drift)return {seed,level,goal,error:&#x27;This start is available on Story through Hard. Choose one of those difficulties or generate an Orbital seed.&#x27;};
   }
-  return {drift,level:drift.orbital?&#x27;Orbital&#x27;:Object.hasOwn(limits,level)?level:null,
-    goal:Object.hasOwn(replayGoals,goal)?goal:(params.has(&#x27;seed&#x27;)?&#x27;none&#x27;:null)};
+  return {drift,level,goal};
 }
 function throwTool() {
   if (!live() || !isAvailable(state.selected) || $(&#x27;modal&#x27;).open) return;
   const i=state.selected, t=gear[i];
-  const offset=state.level===&#x27;Hard&#x27;?(Math.random()*2-1)*hardBearingError:0;
+  const offset=hasReleaseError(state.level)?(Math.random()*2-1)*maxBearingError:0;
   const released=norm(state.bearing+offset), kick=impulse(i,state.power,released);
   state.throwLog.push({time:state.elapsed,i,power:state.power,aim:state.bearing,bearing:released,
     vx:state.vx,vy:state.vy,dx:kick.dx,dy:kick.dy});
@@ -5294,7 +5980,7 @@ function throwTool() {
   }
   state.lastImpulse=Math.hypot(kick.dx,kick.dy); state.spent+=state.lastImpulse; state.throws++;
   state.phase=&#x27;flying&#x27;; lastFrame=null;
-  const report=t.name+&#x27; released · Δv &#x27;+state.lastImpulse.toFixed(3)+&#x27; m/s&#x27;+(state.level===&#x27;Hard&#x27;?&#x27; · Released at &#x27;+released.toFixed(1)+&#x27;°&#x27;:&#x27;&#x27;);
+  const report=t.name+&#x27; released · Δv &#x27;+state.lastImpulse.toFixed(3)+&#x27; m/s&#x27;+(hasReleaseError(state.level)?&#x27; · Released at &#x27;+logBearing(released):&#x27;&#x27;);
   flash={text:report,until:performance.now()+2400}; $(&#x27;announce&#x27;).textContent=report;
   state.tip=contextTip(); renderGear();
   checkEmpty(); render();
@@ -5312,7 +5998,7 @@ function contextTip() {
       &#x27;You’re above capture speed with an empty rack. There’s nothing left to brake with.&#x27;;
   }
   if (safeCoast(path)) return &#x27;You are on course. Hold this coast to reach the hatch.&#x27;;
-  if (state.closest&lt;5) return &#x27;Near the hatch, a light tool gives you a smaller course correction.&#x27;;
+  if (Math.hypot(state.x,state.y)-captureRadius&lt;5) return &#x27;Near the hatch, a light tool gives you a smaller course correction.&#x27;;
   if (state.level===&#x27;Story&#x27;) return &#x27;To slow down, throw in the direction of your velocity arrow. Repeat as needed.&#x27;;
   const tips=[&#x27;Correct your lateral velocity as well as your outward drift.&#x27;,
     &#x27;Your velocity persists between throws. Use time acceleration to watch a long coast.&#x27;,
@@ -5517,7 +6203,7 @@ function renderForecast(pvx,pvy,coast,trial) {
   const s=state, aiming=s.phase!==&#x27;ended&#x27; &amp;&amp; s.mask &amp;&amp; (s.phase===&#x27;ready&#x27; || s.previewing || drag || charge);
   $(&#x27;plot&#x27;).dataset.forecast=fullGuidance(s.level) &amp;&amp; !aiming?&#x27;coast&#x27;:&#x27;aim&#x27;;
   if(fullGuidance(s.level)){
-    $(&#x27;assistMode&#x27;).textContent=aiming?&#x27;If you throw now&#x27;:&#x27;Current coast&#x27;;
+    $(&#x27;assistMode&#x27;).textContent=aiming?(s.level===&#x27;Orbital&#x27;?&#x27;Aim preview · ±&#x27;+maxBearingError+&#x27;°&#x27;:&#x27;If you throw now&#x27;):&#x27;Current coast&#x27;;
     const primary=aiming?trial:coast;
     $(&#x27;prediction&#x27;).dataset.unsafe=String(s.level===&#x27;Orbital&#x27; &amp;&amp; primary.eta!==null &amp;&amp; overRedline(s.level,primary.arrivalSpeed,0));
     const vector=aiming &amp;&amp; s.level!==&#x27;Orbital&#x27;?&#x27;&lt;div class=&quot;secondary&quot;&gt;&#x27;+signed(pvx)+&#x27;, &#x27;+signed(pvy)+&#x27; m/s&lt;/div&gt;&#x27;:&#x27;&#x27;;
@@ -5529,7 +6215,7 @@ function renderForecast(pvx,pvy,coast,trial) {
     $(&#x27;prediction&#x27;).textContent=signed(x)+&#x27;, &#x27;+signed(y)+&#x27; m/s · &#x27;+(overRedline(s.level,x,y)?&#x27;Above redline&#x27;:&#x27;Within speed limit&#x27;);
   } else {
     $(&#x27;assistMode&#x27;).textContent=&#x27;Manual navigation&#x27;;
-    $(&#x27;prediction&#x27;).textContent=&#x27;Release bearing varies by ±&#x27;+hardBearingError+&#x27;°&#x27;;
+    $(&#x27;prediction&#x27;).textContent=&#x27;Release bearing varies by ±&#x27;+maxBearingError+&#x27;°&#x27;;
   }
 }
 function render() {
@@ -5577,11 +6263,11 @@ function render() {
   renderPlot(pvx,pvy,coast,trial);
 }
 function plotCamera(s,w,h,aimFloor) {
-  // Story keeps the opening frame fixed so the astronaut can fly out of view.
-  const anchor=s.level===&#x27;Story&#x27;?s.start:s;
+  // A Story frame stays fixed between resizes so real drift can still end the flight.
+  const opening=s.level===&#x27;Story&#x27;?s.start:s, anchor=s.storyAnchor ?? opening;
   const reach=Math.min(160,w*.18,h*.27);
-  const left=Math.min(-14,anchor.x), right=Math.max(4,anchor.x);
-  const low=Math.min(-7,anchor.y), high=Math.max(7,anchor.y);
+  const left=Math.min(-14,opening.x,anchor.x), right=Math.max(4,opening.x,anchor.x);
+  const low=Math.min(-7,opening.y,anchor.y), high=Math.max(7,opening.y,anchor.y);
   const scale=Math.max(.01,Math.min(17,(w-2*(reach+14))/(right-left),(h-2*(reach+26))/(high-low)));
   const ox=w/2-(left+right)*scale/2;
   // Leave the full-power ring reachable above the clock on a compact plot.
@@ -5799,14 +6485,15 @@ async function copyText(text,button,notice) {
   }
   notice.textContent=&#x27;Copied to clipboard.&#x27;;
 }
-function setup(proposed=state.level,goal=state.objective,invalidSeed=null) {
+function setup(proposed=state.level,goal=state.objective,linked=null) {
   $(&#x27;difficulty&#x27;).value=state.level;
   const choices=[...scenarios,{name:&#x27;Random&#x27;,brief:&#x27;Generate a recoverable drift, or load a seed to fly someone else’s starting conditions.&#x27;}];
-  let drift=state.seed?state.start:null;
-  const selected=invalidSeed===null?state.index:scenarios.length;
+  let drift=linked?linked.drift:(state.seed?state.start:null);
+  const selected=linked?scenarios.length:state.index;
   const sceneOptions=choices.map((v,i)=&gt;&#x27;&lt;option value=&quot;&#x27;+i+&#x27;&quot;&#x27;+(i===selected?&#x27; selected&#x27;:&#x27;&#x27;)+&#x27;&gt;&#x27;+v.name+&#x27;&lt;/option&gt;&#x27;).join(&#x27;&#x27;);
   const levels=Object.keys(limits).map(k=&gt;&#x27;&lt;option&#x27;+(k===proposed?&#x27; selected&#x27;:&#x27;&#x27;)+&#x27;&gt;&#x27;+k+&#x27;&lt;/option&gt;&#x27;).join(&#x27;&#x27;);
   openDialog(&#x27;setup&#x27;,&#x27;Mission setup&#x27;,&#x27;New mission&#x27;,
+    (linked &amp;&amp; (state.phase===&#x27;flying&#x27; || state.phase===&#x27;paused&#x27;)?&#x27;&lt;p&gt;Begin mission replaces your current flight. Cancel to keep flying.&lt;/p&gt;&#x27;:&#x27;&#x27;)+
     &#x27;&lt;label class=&quot;dialogrow&quot;&gt;Drift scenario &lt;select id=&quot;scenarioChoice&quot;&gt;&#x27;+sceneOptions+&#x27;&lt;/select&gt;&lt;/label&gt;&lt;p id=&quot;scenarioBrief&quot;&gt;&lt;/p&gt;&#x27;+
     &#x27;&lt;div class=&quot;seed-panel&quot; id=&quot;seedPanel&quot; hidden&gt;&lt;label for=&quot;seedInput&quot;&gt;Scenario Seed&lt;/label&gt;&lt;input id=&quot;seedInput&quot; autocomplete=&quot;off&quot; spellcheck=&quot;false&quot; placeholder=&quot;Seed or shared link&quot; aria-describedby=&quot;seedFeedback&quot;&gt;&#x27;+
     &#x27;&lt;div class=&quot;seed-actions&quot;&gt;&lt;button id=&quot;generateSeed&quot;&gt;Generate seed&lt;/button&gt;&lt;button id=&quot;loadSeed&quot;&gt;Load seed&lt;/button&gt;&lt;button id=&quot;copySeed&quot;&gt;Copy link&lt;/button&gt;&lt;/div&gt;&lt;p id=&quot;seedFeedback&quot; role=&quot;status&quot;&gt;&lt;/p&gt;&lt;p id=&quot;seedCopied&quot; role=&quot;status&quot;&gt;&lt;/p&gt;&lt;/div&gt;&#x27;+
@@ -5814,51 +6501,48 @@ function setup(proposed=state.level,goal=state.objective,invalidSeed=null) {
     &#x27;&lt;label class=&quot;dialogrow&quot;&gt;Bonus objective &lt;select id=&quot;goalChoice&quot;&gt;&#x27;+Object.entries(replayGoals).map(([key,label])=&gt;&#x27;&lt;option value=&quot;&#x27;+key+&#x27;&quot;&#x27;+(key===goal?&#x27; selected&#x27;:&#x27;&#x27;)+&#x27;&gt;&#x27;+label+&#x27;&lt;/option&gt;&#x27;).join(&#x27;&#x27;)+&#x27;&lt;/select&gt;&lt;/label&gt;&#x27;,
     [[&#x27;Cancel&#x27;,()=&gt;closeDialog()],[&#x27;Begin mission&#x27;,()=&gt;{const index=Number($(&#x27;scenarioChoice&#x27;).value),level=$(&#x27;levelChoice&#x27;).value,objective=$(&#x27;goalChoice&#x27;).value;closeDialog(false);newFlight(index,level,objective,&#x27;&#x27;,drift);},true]]);
   const input=$(&#x27;seedInput&#x27;), feedback=$(&#x27;seedFeedback&#x27;), begin=$(&#x27;dialogActions&#x27;).lastElementChild;
-  function updateSeed(error=false) {
+  function updateSeed(error=&#x27;&#x27;) {
     const random=Number($(&#x27;scenarioChoice&#x27;).value)===scenarios.length;
     const ready=drift &amp;&amp; input.value===drift.seed;
     $(&#x27;seedPanel&#x27;).hidden=!random;begin.disabled=random &amp;&amp; !ready;
     $(&#x27;copySeed&#x27;).disabled=!ready;
-    feedback.dataset.error=String(error);
-    input.setAttribute(&#x27;aria-invalid&#x27;,String(error));
-    feedback.textContent=error?&#x27;Unrecognized Scenario Seed. Check the code or generate a new seed.&#x27;:
-      ready?(drift.orbital?&#x27;Orbital seed · &#x27;:&#x27;Start &#x27;)+Math.hypot(drift.x,drift.y).toFixed(1)+&#x27; m from the hatch · &#x27;+Math.hypot(drift.vx,drift.vy).toFixed(3)+&#x27; m/s at &#x27;+fmtAngle(degrees(drift.vx,drift.vy)):
-      &#x27;Load the seed to preview this flight.&#x27;;
+    feedback.dataset.error=String(Boolean(error));
+    input.setAttribute(&#x27;aria-invalid&#x27;,String(Boolean(error)));
+    feedback.textContent=error || (ready
+      ? (drift.orbital?&#x27;Orbital seed · &#x27;:&#x27;Start &#x27;)+Math.hypot(drift.x,drift.y).toFixed(1)+&#x27; m from the hatch · &#x27;+Math.hypot(drift.vx,drift.vy).toFixed(3)+&#x27; m/s at &#x27;+fmtAngle(degrees(drift.vx,drift.vy))
+      : &#x27;Load the seed to preview this flight.&#x27;);
     $(&#x27;seedCopied&#x27;).textContent=&#x27;&#x27;;
   }
   function showSeed(start) {drift=start;input.value=start.seed;updateSeed();}
-  const describe=()=&gt;{
+  const describe=(error=&#x27;&#x27;)=&gt;{
     const index=Number($(&#x27;scenarioChoice&#x27;).value);
     $(&#x27;scenarioBrief&#x27;).textContent=choices[index].brief;
     const level=$(&#x27;levelChoice&#x27;).value;
-    if(index===scenarios.length &amp;&amp; invalidSeed===null &amp;&amp; !input.value &amp;&amp; !drift)showSeed(generateDrift(Math.random,level));
+    if(index===scenarios.length &amp;&amp; !error &amp;&amp; !input.value &amp;&amp; !drift)showSeed(generateDrift(Math.random,level));
     else if(index===scenarios.length &amp;&amp; drift &amp;&amp; input.value===drift.seed &amp;&amp; Boolean(drift.orbital)!==(level===&#x27;Orbital&#x27;)){
-      const converted=decodeSeed(encodeSeed(drift,level===&#x27;Orbital&#x27;));
+      const converted=decodeSeed(encodeSeed(drift,level===&#x27;Orbital&#x27;),false);
       showSeed(converted || generateDrift(Math.random,level));
       if(!converted)feedback.textContent+=&#x27; · New start for this difficulty.&#x27;;
-    } else updateSeed();
+    } else updateSeed(error);
     $(&#x27;levelBrief&#x27;).textContent=difficultyBrief(level);
   };
-  if(drift)input.value=drift.seed;
-  $(&#x27;generateSeed&#x27;).onclick=()=&gt;{invalidSeed=null;showSeed(generateDrift(Math.random,$(&#x27;levelChoice&#x27;).value));};
+  input.value=drift?.seed ?? linked?.seed ?? &#x27;&#x27;;
+  $(&#x27;generateSeed&#x27;).onclick=()=&gt;showSeed(generateDrift(Math.random,$(&#x27;levelChoice&#x27;).value));
   $(&#x27;loadSeed&#x27;).onclick=()=&gt;{
-    const loaded=readSeedInput(input.value);
-    if(!loaded){updateSeed(true);input.focus();return;}
-    invalidSeed=null;
-    if(loaded.level)$(&#x27;levelChoice&#x27;).value=loaded.level;
-    else if($(&#x27;levelChoice&#x27;).value===&#x27;Orbital&#x27;){
-      const converted=decodeSeed(encodeSeed(loaded.drift,true));
-      if(!converted){updateSeed(true);feedback.textContent=&#x27;This start is available on Story through Hard. Choose one of those difficulties or generate an Orbital seed.&#x27;;return;}
-      loaded.drift=converted;
-    }
+    const loaded=readSeedInput(input.value,$(&#x27;levelChoice&#x27;).value);
+    if(!loaded){updateSeed(invalidSeedMessage);input.focus();return;}
+    $(&#x27;levelChoice&#x27;).value=loaded.level;
     if(loaded.goal)$(&#x27;goalChoice&#x27;).value=loaded.goal;
-    showSeed(loaded.drift);describe();
+    drift=loaded.drift;
+    input.value=drift?.seed ?? loaded.seed;
+    describe(loaded.error);
   };
   input.oninput=()=&gt;updateSeed();
   input.onkeydown=e=&gt;{if(e.key===&#x27;Enter&#x27;){e.preventDefault();$(&#x27;loadSeed&#x27;).click();}};
   $(&#x27;copySeed&#x27;).onclick=()=&gt;copyText(scenarioLink(drift.seed,$(&#x27;levelChoice&#x27;).value,$(&#x27;goalChoice&#x27;).value),$(&#x27;copySeed&#x27;),$(&#x27;seedCopied&#x27;));
-  $(&#x27;scenarioChoice&#x27;).onchange=describe;$(&#x27;levelChoice&#x27;).onchange=describe;$(&#x27;goalChoice&#x27;).onchange=()=&gt;updateSeed();describe();
-  if(invalidSeed!==null){input.value=invalidSeed;updateSeed(true);}
+  $(&#x27;scenarioChoice&#x27;).onchange=$(&#x27;levelChoice&#x27;).onchange=()=&gt;describe();
+  $(&#x27;goalChoice&#x27;).onchange=()=&gt;updateSeed();
+  describe(linked?.error);
 }
 function localCrewVoice() {
   return window.speechSynthesis?.getVoices().find(voice=&gt;voice.localService &amp;&amp; /^en(?:-|$)/i.test(voice.lang));
@@ -5879,10 +6563,10 @@ function guide() {
     &#x27;&lt;ul&gt;&lt;li&gt;&lt;b&gt;Select&lt;/b&gt; a tool from the rack or press 1–6. The slots run from lightest to heaviest, left to right across each row. A heavier or faster tool changes your velocity more.&lt;/li&gt;&#x27;+
     &#x27;&lt;li&gt;&lt;b&gt;Drag on the plot&lt;/b&gt; or grab the reticle. Point where the tool should travel. Your suit recoils in the opposite direction. Distance from your suit sets power, from 10% up to 100% at the dotted ring.&lt;/li&gt;&#x27;+
     &#x27;&lt;li&gt;&lt;b&gt;Release to throw.&lt;/b&gt; A click or tap previews your aim. Use Throw beneath the rack to commit it. Escape or release outside the plot, over the rack, or over the flight clock to cancel a drag.&lt;/li&gt;&#x27;+
-    &#x27;&lt;li&gt;&lt;b&gt;Keyboard controls.&lt;/b&gt; Left turns counterclockwise and right turns clockwise in 1° steps (Shift for 10°). Up and down change power by 1% (Shift for 10%). Press Enter on the plot to throw, or hold Space to wind up and release to throw. Escape cancels the windup.&lt;/li&gt;&#x27;+
+    &#x27;&lt;li&gt;&lt;b&gt;Keyboard controls.&lt;/b&gt; Focus the plot or a tool in the rack to aim. Left turns counterclockwise and right turns clockwise in 1° steps (Shift for 10°). Up and down change power by 1% (Shift for 10%). Press Enter on the plot to throw, or hold Space to wind up and release to throw. Escape cancels the windup.&lt;/li&gt;&#x27;+
     &#x27;&lt;li&gt;&lt;b&gt;Set the flight clock&lt;/b&gt; to 1×, 2×, 5× or 10× with the slider at the lower right of the HUD. Amber means fast-forward. P starts, pauses or resumes the clock. Switching tabs or windows pauses a running flight.&lt;/li&gt;&#x27;+
     &#x27;&lt;li&gt;&lt;b&gt;Check your course halfway home.&lt;/b&gt; When the original gap to the handrail reach zone has halved, the station calls once. Check your path and approach speed before spending another tool. A safe coast unlocks Coast to halfway, then Coast to rail. Use the speed slider to take over during the final approach.&lt;/li&gt;&#x27;+
-    &#x27;&lt;li&gt;&lt;b&gt;Share a flight.&lt;/b&gt; Choose Random in New mission to generate or load a Scenario Seed. Copy link shares the start, difficulty and bonus objective. Codes beginning with O1 select Orbital automatically. Choose View flight log in the debrief to copy the throws, capture speed and awards. Click outside the log or debrief to return to the finished plot.&lt;/li&gt;&lt;/ul&gt;&#x27;+
+    &#x27;&lt;li&gt;&lt;b&gt;Share a flight.&lt;/b&gt; Choose Random in New mission to generate or load a Scenario Seed. Copy link shares the start, difficulty and bonus objective. Codes beginning with O1 select Orbital automatically. In the debrief, choose View flight log to screenshot your approach chart or copy the full transcript. Click outside the log or debrief to return to the finished plot.&lt;/li&gt;&lt;/ul&gt;&#x27;+
     &#x27;&lt;p&gt;Bearings run counterclockwise from right (000°) to up (090°). Vx, Vy and radial speed use m/s. Green hatch distance and negative radial speed mean you are closing in. Red distance and positive radial speed mean you are moving away. Hatch distance measures the gap to the edge of the handrail reach zone. In Orbital, +X points away from Earth and +Y follows the station along its orbit. The velocity arrow is instantaneous. The coast and after-throw curves run to first contact or reserve expiry. Check speed at the rail, or closest approach on a miss. Other modes coast in a straight line.&lt;/p&gt;&#x27;+
     &#x27;&lt;p&gt;&lt;b&gt;Plan your next throw.&lt;/b&gt; A shrinking range can still lead to a flyby. On Medium, compare the predicted velocity arrow with the hatch bearing. On Hard, read the actual velocity after each release. Save a light tool to trim sideways drift. On Orbital, use the gold curve to test a correction and compare the predicted rail speed with the capture limit.&lt;/p&gt;&#x27;+
     (state.level===&#x27;Story&#x27;?&#x27;&#x27;:&#x27;&lt;p&gt;The Δv budget is the largest total velocity change available from full-power throws in the best order.&lt;/p&gt;&#x27;)+
@@ -5932,7 +6616,7 @@ function flightLogText(s) {
   for(const [n,entry] of s.throwLog.entries()){
     const t=gear[entry.i], vx=entry.vx+entry.dx, vy=entry.vy+entry.dy;
     lines.push(&#x27;Throw &#x27;+(n+1)+&#x27; · &#x27;+logTime(entry.time)+&#x27; · &#x27;+t.name+&#x27; (&#x27;+t.mass.toFixed(1)+&#x27; kg)&#x27;,
-      &#x27;Power &#x27;+entry.power+&#x27;% · Release &#x27;+logBearing(entry.bearing)+(s.level===&#x27;Hard&#x27;?&#x27; · Aim &#x27;+logBearing(entry.aim):&#x27;&#x27;),
+      &#x27;Power &#x27;+entry.power+&#x27;% · Release &#x27;+logBearing(entry.bearing)+(hasReleaseError(s.level)?&#x27; · Aim &#x27;+logBearing(entry.aim):&#x27;&#x27;),
       &#x27;Δvx &#x27;+logComponent(entry.dx)+&#x27; · Δvy &#x27;+logComponent(entry.dy)+&#x27; m/s&#x27;,
       &#x27;Heading &#x27;+logHeading(entry.vx,entry.vy)+&#x27; → &#x27;+logHeading(vx,vy)+&#x27; · Speed &#x27;+Math.hypot(vx,vy).toFixed(4)+&#x27; m/s&#x27;,&#x27;&#x27;);
   }
@@ -5944,10 +6628,133 @@ function flightLogText(s) {
   if(captured &amp;&amp; keptDrill(s))lines.push(&#x27;🏅 Upmass Hero · Returned with the original power drill&#x27;);
   return lines.join(&#x27;\n&#x27;);
 }
+// Replay coasts in flight time; the logged recoil already includes release scatter.
+function flightTrack(s) {
+  let coast=s.start, time=0;
+  const points=[coast], releases=[];
+  for(let i=0;i&lt;=s.throwLog.length;i++){
+    const entry=s.throwLog[i], until=entry?.time ?? s.elapsed, dt=until-time;
+    const steps=s.level===&#x27;Orbital&#x27;?Math.ceil(dt/4):Number(dt&gt;0);
+    for(let step=1;step&lt;=steps;step++){
+      points.push(s.level===&#x27;Orbital&#x27;?orbitalMotion(coast,dt*step/steps):
+        {x:coast.x+coast.vx*dt,y:coast.y+coast.vy*dt});
+    }
+    if(entry){
+      const point=points[points.length-1];
+      releases.push({point,entry,number:i+1});
+      coast={x:point.x,y:point.y,vx:entry.vx+entry.dx,vy:entry.vy+entry.dy};
+    }
+    time=until;
+  }
+  return {points,releases};
+}
+function drawApproachPlot(svg,points,shown,captured) {
+  const left=34,right=348,top=12,bottom=208;
+  let minX=-captureRadius,maxX=captureRadius,minY=-captureRadius,maxY=captureRadius;
+  for(const p of points){
+    minX=Math.min(minX,p.x);maxX=Math.max(maxX,p.x);
+    minY=Math.min(minY,p.y);maxY=Math.max(maxY,p.y);
+  }
+  // Shuttle convention: +V (game +Y) left, +R (game -X) down. Both axes use metres.
+  const scale=Math.min((right-left-30)/(maxY-minY),(bottom-top-30)/(maxX-minX));
+  const ox=(left+right+(minY+maxY)*scale)/2, oy=(top+bottom+(minX+maxX)*scale)/2;
+  const project=p=&gt;({x:ox-p.y*scale,y:oy-p.x*scale});
+  const screen=points.map(project), start=screen[0], end=screen[screen.length-1];
+  function add(tag,attrs,label) {
+    const el=document.createElementNS(&#x27;http://www.w3.org/2000/svg&#x27;,tag);
+    for(const [key,value] of Object.entries(attrs))el.setAttribute(key,value);
+    if(label!==undefined)el.textContent=label;
+    svg.append(el);return el;
+  }
+  function line(x1,y1,x2,y2,style) {add(&#x27;line&#x27;,{x1,y1,x2,y2,class:style});}
+  const desired=50/scale, decade=10**Math.floor(Math.log10(desired));
+  const step=decade*[1,2,5,10].find(n=&gt;n*decade&gt;=desired);
+  for(let i=Math.ceil((ox-right)/(scale*step));i&lt;=(ox-left)/(scale*step);i++){
+    const x=ox-i*step*scale;
+    line(x,top,x,bottom,i?&#x27;chart-grid&#x27;:&#x27;chart-axis&#x27;);
+    add(&#x27;text&#x27;,{x,y:bottom+16,&#x27;text-anchor&#x27;:&#x27;middle&#x27;},Number((i*step).toPrecision(5)));
+  }
+  for(let i=Math.ceil((top-oy)/(scale*step));i&lt;=(bottom-oy)/(scale*step);i++){
+    const y=oy+i*step*scale;
+    line(left,y,right,y,i?&#x27;chart-grid&#x27;:&#x27;chart-axis&#x27;);
+    add(&#x27;text&#x27;,{x:left-4,y:y+3,&#x27;text-anchor&#x27;:&#x27;end&#x27;},Number((i*step).toPrecision(5)));
+  }
+  add(&#x27;path&#x27;,{d:&#x27;M&#x27;+(left+4)+&#x27; &#x27;+(oy-3)+&#x27;l-4 3 4 3 M&#x27;+(ox-3)+&#x27; &#x27;+(bottom-4)+&#x27;l3 4 3 -4&#x27;,class:&#x27;chart-axis&#x27;});
+  add(&#x27;circle&#x27;,{cx:ox,cy:oy,r:captureRadius*scale,fill:&#x27;#233a30&#x27;,stroke:&#x27;var(--mint)&#x27;,&#x27;stroke-dasharray&#x27;:&#x27;3 2&#x27;});
+  add(&#x27;rect&#x27;,{x:ox-2,y:oy-2,width:4,height:4,fill:&#x27;var(--mint)&#x27;});
+  add(&#x27;path&#x27;,{d:screen.map((p,i)=&gt;(i?&#x27;L&#x27;:&#x27;M&#x27;)+p.x.toFixed(2)+&#x27; &#x27;+p.y.toFixed(2)).join(&#x27; &#x27;),class:&#x27;chart-track&#x27;});
+  // Space arrowheads by distance travelled so even a single straight coast has a direction.
+  const lengths=screen.map((p,i)=&gt;i?Math.hypot(p.x-screen[i-1].x,p.y-screen[i-1].y):0);
+  const length=lengths.reduce((sum,n)=&gt;sum+n,0), arrows=Math.min(3,Math.floor(length/55));
+  let travelled=0,next=1;
+  for(let i=1;i&lt;screen.length &amp;&amp; next&lt;=arrows;i++){
+    const a=screen[i-1], b=screen[i], span=lengths[i];
+    while(next&lt;=arrows &amp;&amp; travelled+span&gt;=length*next/(arrows+1)){
+      const t=(length*next/(arrows+1)-travelled)/span;
+      const angle=Math.atan2(b.y-a.y,b.x-a.x)*180/Math.PI;
+      add(&#x27;path&#x27;,{d:&#x27;M-4 -3 L1 0 -4 3&#x27;,class:&#x27;chart-track&#x27;,transform:&#x27;translate(&#x27;+(a.x+t*(b.x-a.x))+&#x27; &#x27;+(a.y+t*(b.y-a.y))+&#x27;) rotate(&#x27;+angle+&#x27;)&#x27;});
+      next++;
+    }
+    travelled+=span;
+  }
+  add(&#x27;rect&#x27;,{x:-4,y:-4,width:8,height:8,transform:&#x27;translate(&#x27;+start.x+&#x27; &#x27;+start.y+&#x27;) rotate(45)&#x27;,fill:&#x27;var(--panel)&#x27;,stroke:&#x27;var(--ink)&#x27;,&#x27;stroke-width&#x27;:1.5});
+  add(&#x27;circle&#x27;,{cx:end.x,cy:end.y,r:3.7,fill:captured?&#x27;var(--oxygen-fill)&#x27;:&#x27;var(--danger)&#x27;,stroke:&#x27;var(--bg)&#x27;,&#x27;stroke-width&#x27;:1.2});
+  // Stack consecutive releases at a shared location under one numbered callout.
+  const groups=[];
+  for(const release of shown){
+    const p=project(release.point), previous=groups[groups.length-1];
+    if(previous &amp;&amp; release.number===previous.last+1 &amp;&amp; Math.hypot(previous.x-p.x,previous.y-p.y)&lt;5)previous.last=release.number;
+    else groups.push({...p,first:release.number,last:release.number});
+  }
+  const occupied=[];
+  for(const g of groups){
+    const label=g.first===g.last?String(g.first):g.first+&#x27;–&#x27;+g.last;
+    const w=11+7*label.length;
+    const positions=[-17,17,-35,35,-53,53].map(d=&gt;({
+      x:Math.max(left+w/2,Math.min(right-w/2,g.x)),y:Math.max(top+8,Math.min(bottom-8,g.y+d))}));
+    const p=positions.find(c=&gt;occupied.every(o=&gt;Math.abs(c.x-o.x)&gt;(w+o.w)/2+2 || Math.abs(c.y-o.y)&gt;16)) || positions[0];
+    occupied.push({...p,w});
+    line(g.x,g.y,p.x,p.y,&#x27;chart-axis&#x27;);
+    add(&#x27;circle&#x27;,{cx:g.x,cy:g.y,r:1.8,fill:&#x27;var(--gold)&#x27;});
+    add(&#x27;rect&#x27;,{x:p.x-w/2,y:p.y-7.5,width:w,height:15,rx:6,fill:&#x27;var(--panel)&#x27;,stroke:&#x27;var(--gold)&#x27;});
+    add(&#x27;text&#x27;,{x:p.x,y:p.y+3.7,class:&#x27;chart-number&#x27;},label);
+  }
+}
+function renderApproachChart(s) {
+  const {points,releases}=flightTrack(s), captured=s.result.title===&#x27;Capture confirmed&#x27;;
+  const shown=releases.length&lt;=6?releases:[...releases.slice(0,3),...releases.slice(-3)];
+  $(&#x27;chartLevel&#x27;).textContent=s.level+&#x27; · Alpha v0.3&#x27;;
+  $(&#x27;chartScenario&#x27;).textContent=s.seed?&#x27;Seed &#x27;+s.seed:s.name;
+  $(&#x27;chartResult&#x27;).textContent=s.result.title;
+  $(&#x27;chartResult&#x27;).dataset.captured=String(captured);
+  $(&#x27;approachCard&#x27;).style.setProperty(&#x27;--finish&#x27;,captured?&#x27;var(--oxygen-fill)&#x27;:&#x27;var(--danger)&#x27;);
+  $(&#x27;chartDesc&#x27;).textContent=s.name+&#x27;, &#x27;+s.level+&#x27;. &#x27;+s.result.title+&#x27; after &#x27;+logTime(s.elapsed)+&#x27;. &#x27;+s.throws+&#x27; throws. The hatch is at the origin. Both axes are in metres.&#x27;;
+  drawApproachPlot($(&#x27;approachPlot&#x27;),points,shown,captured);
+  const list=$(&#x27;chartThrows&#x27;);
+  for(const {entry,number} of shown){
+    const row=document.createElement(&#x27;li&#x27;), index=document.createElement(&#x27;span&#x27;), details=document.createElement(&#x27;small&#x27;);
+    index.className=&#x27;throw-index&#x27;;index.textContent=&#x27;#&#x27;+number;
+    details.textContent=logTime(entry.time)+&#x27; · &#x27;+entry.power+&#x27;% · &#x27;+logBearing(entry.bearing);
+    row.append(index,gear[entry.i].name+&#x27; &#x27;,details);list.append(row);
+  }
+  $(&#x27;chartThrowCount&#x27;).textContent=releases.length?releases.length+(releases.length===1?&#x27; throw&#x27;:&#x27; throws&#x27;):&#x27;No throws&#x27;;
+  if(shown.length&lt;releases.length)$(&#x27;chartThrowCount&#x27;).textContent+=&#x27; · first and last three shown&#x27;;
+  $(&#x27;chartTime&#x27;).textContent=logTime(s.elapsed);
+  $(&#x27;chartSpeedLabel&#x27;).textContent=captured || s.result.title===&#x27;Approach too fast&#x27;?&#x27;Contact speed&#x27;:&#x27;Final speed&#x27;;
+  $(&#x27;chartSpeed&#x27;).textContent=Math.hypot(s.vx,s.vy).toFixed(4)+&#x27; m/s&#x27;;
+  $(&#x27;chartReserve&#x27;).textContent=Number.isFinite(s.oxygen)?logTime(s.oxygen):&#x27;Unlimited&#x27;;
+}
 function openFlightLog() {
   const transcript=flightLogText(state);
-  openDialog(&#x27;log&#x27;,&#x27;Mission debrief&#x27;,&#x27;Flight log&#x27;,&#x27;&lt;pre id=&quot;flightTranscript&quot; tabindex=&quot;0&quot; aria-label=&quot;Flight transcript&quot;&gt;&lt;/pre&gt;&lt;p id=&quot;logCopied&quot; role=&quot;status&quot;&gt;&lt;/p&gt;&#x27;,
+  openDialog(&#x27;log&#x27;,&#x27;Mission debrief&#x27;,&#x27;Flight log&#x27;,
+    &#x27;&lt;figure id=&quot;approachCard&quot; aria-labelledby=&quot;chartHeading&quot;&gt;&lt;div class=&quot;chart-byline&quot;&gt;&lt;span&gt;&lt;strong&gt;FASTBALL&lt;/strong&gt; / &lt;span id=&quot;chartLevel&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span id=&quot;chartScenario&quot;&gt;&lt;/span&gt;&lt;/div&gt;&#x27;+
+    &#x27;&lt;h3 id=&quot;chartHeading&quot;&gt;Approach to the rail&lt;/h3&gt;&lt;div class=&quot;chart-layout&quot;&gt;&lt;div&gt;&lt;svg class=&quot;chart-plot&quot; id=&quot;approachPlot&quot; viewBox=&quot;0 0 360 230&quot; role=&quot;img&quot; aria-labelledby=&quot;chartTitle chartDesc&quot;&gt;&lt;title id=&quot;chartTitle&quot;&gt;V-bar/R-bar approach in metres&lt;/title&gt;&lt;desc id=&quot;chartDesc&quot;&gt;&lt;/desc&gt;&lt;/svg&gt;&#x27;+
+    &#x27;&lt;div class=&quot;chart-meta&quot;&gt;← +V-bar along track · ↓ +R-bar Earthward (m)&lt;/div&gt;&lt;div class=&quot;chart-legend&quot;&gt;&lt;span&gt;◇ Start&lt;/span&gt;&lt;span&gt;&lt;b class=&quot;finish-key&quot;&gt;●&lt;/b&gt; Finish&lt;/span&gt;&lt;span&gt;⊙ Hatch · 1.2 m reach&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&#x27;+
+    &#x27;&lt;div&gt;&lt;strong class=&quot;chart-result&quot; id=&quot;chartResult&quot;&gt;&lt;/strong&gt;&lt;div class=&quot;chart-meta&quot; id=&quot;chartThrowCount&quot;&gt;&lt;/div&gt;&lt;ol class=&quot;chart-throws&quot; id=&quot;chartThrows&quot;&gt;&lt;/ol&gt;&lt;/div&gt;&lt;/div&gt;&#x27;+
+    &#x27;&lt;div class=&quot;chart-stats&quot;&gt;&lt;span&gt;Flight time &lt;b id=&quot;chartTime&quot;&gt;&lt;/b&gt;&lt;/span&gt;&lt;span&gt;&lt;span id=&quot;chartSpeedLabel&quot;&gt;&lt;/span&gt; &lt;b id=&quot;chartSpeed&quot;&gt;&lt;/b&gt;&lt;/span&gt;&lt;span&gt;Reserve &lt;b id=&quot;chartReserve&quot;&gt;&lt;/b&gt;&lt;/span&gt;&lt;/div&gt;&lt;/figure&gt;&#x27;+
+    &#x27;&lt;pre id=&quot;flightTranscript&quot; tabindex=&quot;0&quot; aria-label=&quot;Flight transcript&quot;&gt;&lt;/pre&gt;&lt;p id=&quot;logCopied&quot; role=&quot;status&quot;&gt;&lt;/p&gt;&#x27;,
     [[&#x27;Back to debrief&#x27;,summary],[&#x27;Copy flight log&#x27;,e=&gt;copyText(transcript,e.currentTarget,$(&#x27;logCopied&#x27;)),true]]);
+  renderApproachChart(state);
   $(&#x27;flightTranscript&#x27;).textContent=transcript;
 }
 function summary() {
@@ -5996,19 +6803,29 @@ function backgroundPause() {
 }
 function measurePlot() {
   const b=$(&#x27;plot&#x27;).getBoundingClientRect();
-  plotW=Math.max(1,b.width);plotH=Math.max(1,b.height);
-  aimFloor=matchMedia(&#x27;(max-width:999px)&#x27;).matches ? $(&#x27;flightClock&#x27;).getBoundingClientRect().top-b.top-6 : plotH;
+  const w=Math.max(1,b.width), h=Math.max(1,b.height);
+  const floor=matchMedia(&#x27;(max-width:999px)&#x27;).matches ? $(&#x27;flightClock&#x27;).getBoundingClientRect().top-b.top-6 : h;
+  if(state.level===&#x27;Story&#x27; &amp;&amp; state.phase!==&#x27;ended&#x27; &amp;&amp; (w!==plotW || h!==plotH || floor!==aimFloor)) {
+    const {px,py,suitScale}=plotCamera(state,w,h,floor);
+    if(px+suitBounds.left*suitScale&lt;0 || px+suitBounds.right*suitScale&gt;w ||
+       py+suitBounds.top*suitScale&lt;0 || py+suitBounds.bottom*suitScale&gt;h) {
+      state.storyAnchor={x:state.x,y:state.y};
+    }
+  }
+  plotW=w;plotH=h;aimFloor=floor;
   $(&#x27;plot&#x27;).setAttribute(&#x27;viewBox&#x27;,&#x27;0 0 &#x27;+plotW+&#x27; &#x27;+plotH);
 }
 function loadMissionLink(hash) {
   const params=new URLSearchParams(hash.slice(1));
   if(!params.has(&#x27;seed&#x27;))return false;
-  const loaded=readSeedInput(&#x27;https://lamcnamara.github.io/fastball/&#x27;+hash);
-  if($(&#x27;modal&#x27;).open)closeDialog(false);
-  if(loaded)newFlight(scenarios.length,loaded.level || &#x27;Easy&#x27;,loaded.goal || &#x27;none&#x27;,&#x27;&#x27;,loaded.drift);
-  else {
+  const linked=readSeedInput(&#x27;https://lamcnamara.github.io/fastball/&#x27;+hash,&#x27;Easy&#x27;) ||
+    {seed:params.get(&#x27;seed&#x27;),level:state?.level ?? &#x27;Easy&#x27;,goal:state?.objective ?? &#x27;none&#x27;,error:invalidSeedMessage};
+  if(linked.error || state?.phase===&#x27;flying&#x27; || state?.phase===&#x27;paused&#x27;) {
     if(!state)newFlight();
-    setup(state.level,state.objective,params.get(&#x27;seed&#x27;));
+    setup(linked.level,linked.goal,linked);
+  } else {
+    closeDialog(false);
+    newFlight(scenarios.length,linked.level,linked.goal,&#x27;&#x27;,linked.drift);
   }
   return true;
 }
@@ -6097,6 +6914,7 @@ function init() {
     if(e.code===&#x27;KeyP&#x27;&amp;&amp;!e.repeat){e.preventDefault();toggleClock();return;}
     if(!live() || !state.mask || drag || charge)return;
     if(/^[1-6]$/.test(e.key))selectTool(rackOrder[Number(e.key)-1]);
+    if(e.target!==plot &amp;&amp; !e.target.closest?.(&#x27;button.tool&#x27;))return;
     const step=e.shiftKey?10:1;
     if([&#x27;ArrowLeft&#x27;,&#x27;ArrowRight&#x27;].includes(e.key)){
       e.preventDefault();markAim();state.bearing=norm(state.bearing+(e.key===&#x27;ArrowLeft&#x27;?step:-step));render();
@@ -6268,6 +7086,34 @@ init();
         near(state.elapsed,distance/speed,&#x27;crossing time&#x27;,2/speed);
       }
     });
+    test(&#x27;Resizing a Story plot preserves the flight and the new edge still ends a real drift&#x27;,()=&gt;{
+      const plot=$(&#x27;plot&#x27;);
+      try {
+        for(const direction of [-1,1]){
+          if($(&#x27;modal&#x27;).open)closeDialog(false);
+          plot.style.width=&#x27;1280px&#x27;;plot.style.height=&#x27;560px&#x27;;
+          newFlight(0,&#x27;Story&#x27;);
+          const targetX=((direction&lt;0?48:plotW-48)-camera.ox)/camera.scale;
+          state.vx=(targetX-state.x)/180;state.vy=0;
+          toggleClock();advance(180);toggleClock();
+          yes(state.phase===&#x27;paused&#x27;,&#x27;paused before resize&#x27;);
+          const x=state.x, y=state.y, elapsed=state.elapsed;
+          plot.style.width=&#x27;390px&#x27;;plot.style.height=&#x27;640px&#x27;;
+          measurePlot();render();
+          const view=plot.getBoundingClientRect(), suit=$(&#x27;suitMan&#x27;).getBoundingClientRect();
+          yes(suit.left&gt;=view.left &amp;&amp; suit.right&lt;=view.right &amp;&amp; suit.top&gt;=view.top &amp;&amp; suit.bottom&lt;=view.bottom,&#x27;suit visible after resize&#x27;);
+          near(state.x,x,&#x27;unchanged x&#x27;);near(state.y,y,&#x27;unchanged y&#x27;);near(state.elapsed,elapsed,&#x27;unchanged clock&#x27;);
+          const {ox,oy,scale}=camera, remaining=plotExitTime(state.vx,state.vy);
+          yes(remaining&gt;1 &amp;&amp; Number.isFinite(remaining),&#x27;room to act&#x27;);
+          toggleClock();advance(remaining-.1);measurePlot();render();
+          yes(state.phase===&#x27;flying&#x27; &amp;&amp; camera.ox===ox &amp;&amp; camera.oy===oy &amp;&amp; camera.scale===scale,&#x27;camera holds at the new edge&#x27;);
+          advance(1);yes(state.result?.title===&#x27;Drifted out of view&#x27;,&#x27;genuine exit&#x27;);
+          near(state.elapsed,elapsed+remaining,&#x27;exit time&#x27;);
+        }
+      } finally {
+        plot.style.removeProperty(&#x27;width&#x27;);plot.style.removeProperty(&#x27;height&#x27;);measurePlot();render();
+      }
+    });
     test(&#x27;Hatch distance and radial speed track closing, opening and tangential motion in every mode&#x27;,()=&gt;{
       for(const level of Object.keys(limits)){
         newFlight(0,level);state.x=3;state.y=4;state.vx=0;
@@ -6367,6 +7213,34 @@ init();
       yes($(&#x27;tip&#x27;).textContent.includes(&#x27;empty rack&#x27;) &amp;&amp; !$(&#x27;tip&#x27;).textContent.includes(&#x27;Throw&#x27;),&#x27;no unavailable maneuver&#x27;);
       advance(600);yes(state.result.title===&#x27;Approach too fast&#x27;,&#x27;overspeed still resolves at rail&#x27;);
     });
+    test(&#x27;Near-hatch advice follows the present gap after a flyby&#x27;,()=&gt;{
+      Object.assign(state,{x:10,y:4,vx:-.05,vy:0,phase:&#x27;flying&#x27;});
+      advance(200);
+      yes(contextTip().includes(&#x27;Near the hatch&#x27;),&#x27;near at closest approach&#x27;);
+      advance(200);selectTool(5);state.bearing=90;state.power=10;throwTool();
+      yes(state.closest&lt;5 &amp;&amp; Math.hypot(state.x,state.y)-captureRadius&gt;5,&#x27;a past near pass&#x27;);
+      yes(!state.tip.includes(&#x27;Near the hatch&#x27;) &amp;&amp; $(&#x27;tip&#x27;).textContent===state.tip,&#x27;advisory after receding&#x27;);
+    });
+    test(&#x27;A linear preview evaluates its own contact speed in both directions&#x27;,()=&gt;{
+      for(const level of [&#x27;Medium&#x27;,&#x27;Hard&#x27;]){
+        newFlight(0,level);Object.assign(state,{x:10,y:0,vx:-.05,vy:0});
+        const kick=impulse(3,100,0), fast=flightCourse(state.vx+kick.dx,state.vy+kick.dy);
+        near(fast.arrivalSpeed,Math.hypot(state.vx+kick.dx,state.vy+kick.dy),&#x27;preview speed&#x27;);
+        yes(safeCoast(flightCourse()) &amp;&amp; !safeCoast(fast),&#x27;throw would exceed redline&#x27;);
+        state.vx+=kick.dx;
+        yes(!safeCoast(flightCourse()) &amp;&amp; safeCoast(flightCourse(-.05,0)),&#x27;braking would permit capture&#x27;);
+        yes(flightCourse(.05,0).arrivalSpeed===null,&#x27;no speed at contact for a miss&#x27;);
+      }
+    });
+    test(&#x27;Hard releases round north consistently in the HUD, announcement and log&#x27;,()=&gt;{
+      const random=Math.random;
+      try {
+        Math.random=()=&gt;.49;newFlight(0,&#x27;Hard&#x27;);throwTool();
+        const bearing=logBearing(state.throwLog[0].bearing);
+        yes(bearing===&#x27;0.0°&#x27; &amp;&amp; flash.text.endsWith(&#x27;Released at &#x27;+bearing),&#x27;rounded through north&#x27;);
+        yes($(&#x27;announce&#x27;).textContent===flash.text,&#x27;accessible release matches&#x27;);
+      } finally {Math.random=random;}
+    });
     test(&#x27;Final coast and debrief keep keyboard focus on a usable control&#x27;,()=&gt;{
       for(const guided of [false,true]){
         newFlight(0,&#x27;Easy&#x27;,&#x27;none&#x27;,guided?&#x27;aim&#x27;:&#x27;&#x27;);
@@ -6411,6 +7285,37 @@ init();
       $(&#x27;scenarioChoice&#x27;).value=&#x27;1&#x27;;$(&#x27;scenarioChoice&#x27;).dispatchEvent(new Event(&#x27;change&#x27;));$(&#x27;dialogActions&#x27;).lastElementChild.click();
       yes(!state.seed &amp;&amp; $(&#x27;shareFlight&#x27;).hidden &amp;&amp; state.name===&#x27;Lateral drift&#x27;,&#x27;fixed scenario ignores invalid seed&#x27;);
     });
+    test(&#x27;A linked mission waits for confirmation during a running or paused flight&#x27;,()=&gt;{
+      const code=&#x27;F1N73CGPHF&#x27;, hash=&#x27;#seed=&#x27;+code+&#x27;&amp;level=Medium&amp;goal=drill&#x27;;
+      for(const paused of [false,true]){
+        newFlight(1,&#x27;Hard&#x27;,&#x27;two&#x27;);throwTool();advance(2);
+        if(paused)toggleClock();
+        const original=state, elapsed=state.elapsed, mask=state.mask;
+        guide();loadMissionLink(hash);
+        yes(dialogKind===&#x27;setup&#x27; &amp;&amp; state===original &amp;&amp; state.phase===&#x27;paused&#x27;,&#x27;flight retained with guide open&#x27;);
+        yes($(&#x27;seedInput&#x27;).value===code &amp;&amp; $(&#x27;levelChoice&#x27;).value===&#x27;Medium&#x27; &amp;&amp; $(&#x27;goalChoice&#x27;).value===&#x27;drill&#x27;,&#x27;link preloaded&#x27;);
+        $(&#x27;dialogActions&#x27;).firstElementChild.click();
+        yes(state===original &amp;&amp; state.phase===(paused?&#x27;paused&#x27;:&#x27;flying&#x27;),&#x27;cancel restores previous phase&#x27;);
+        yes(state.elapsed===elapsed &amp;&amp; state.throws===1 &amp;&amp; state.mask===mask &amp;&amp; state.objective===&#x27;two&#x27;,&#x27;time, inventory and objective retained&#x27;);
+        loadMissionLink(hash);$(&#x27;dialogActions&#x27;).lastElementChild.click();
+        yes(state.seed===code &amp;&amp; state.level===&#x27;Medium&#x27; &amp;&amp; state.objective===&#x27;drill&#x27; &amp;&amp; state.phase===&#x27;ready&#x27; &amp;&amp; !state.throws,&#x27;confirmed replacement&#x27;);
+      }
+      newFlight();toggleClock();advance(5);loadMissionLink(hash);
+      yes(dialogKind===&#x27;setup&#x27; &amp;&amp; !state.throws &amp;&amp; state.elapsed===5,&#x27;unassisted coast is protected&#x27;);
+    });
+    test(&#x27;Ineligible Orbital links explain how to fly the original seed&#x27;,()=&gt;{
+      const code=&#x27;F1KJMNWCJ3&#x27;,hash=&#x27;#seed=&#x27;+code+&#x27;&amp;level=Orbital&amp;goal=two&#x27;;
+      loadMissionLink(hash);
+      const begin=$(&#x27;dialogActions&#x27;).lastElementChild, message=$(&#x27;seedFeedback&#x27;).textContent;
+      yes($(&#x27;levelChoice&#x27;).value===&#x27;Orbital&#x27; &amp;&amp; $(&#x27;goalChoice&#x27;).value===&#x27;two&#x27; &amp;&amp; $(&#x27;seedInput&#x27;).value===code,&#x27;editable linked start&#x27;);
+      yes(/Story through Hard/.test(message) &amp;&amp; begin.disabled &amp;&amp; $(&#x27;copySeed&#x27;).disabled,&#x27;unavailable on Orbital&#x27;);
+      $(&#x27;seedInput&#x27;).value=&#x27;https://example.org/&#x27;+hash;$(&#x27;loadSeed&#x27;).click();
+      yes($(&#x27;seedFeedback&#x27;).textContent===message &amp;&amp; $(&#x27;seedInput&#x27;).value===code,&#x27;pasted link uses the same explanation&#x27;);
+      $(&#x27;levelChoice&#x27;).value=&#x27;Hard&#x27;;$(&#x27;levelChoice&#x27;).dispatchEvent(new Event(&#x27;change&#x27;));$(&#x27;loadSeed&#x27;).click();begin.click();
+      yes(state.seed===code &amp;&amp; state.level===&#x27;Hard&#x27; &amp;&amp; state.objective===&#x27;two&#x27;,&#x27;same start on a supported difficulty&#x27;);
+      loadMissionLink(&#x27;#seed=NOTASEED&#x27;);
+      yes(/Unrecognized/.test($(&#x27;seedFeedback&#x27;).textContent) &amp;&amp; $(&#x27;dialogActions&#x27;).lastElementChild.disabled,&#x27;malformed seed retains its own error&#x27;);
+    });
     test(&#x27;Random Story openings leave the whole suit visible and at least thirty flight seconds to act&#x27;,()=&gt;{
       const random=randomStream(17);
       for(let i=0;i&lt;32;i++){
@@ -6420,6 +7325,47 @@ init();
         yes(suit.left&gt;=view.left &amp;&amp; suit.right&lt;=view.right &amp;&amp; suit.top&gt;=view.top &amp;&amp; suit.bottom&lt;=view.bottom,&#x27;suit starts inside plot&#x27;);
         toggleClock();advance(30);yes(state.phase===&#x27;flying&#x27;,&#x27;opening reaction time &#x27;+drift.seed);
       }
+    });
+    test(&#x27;The Orbital chart replays actual releases and reaches the recorded rail contact&#x27;,()=&gt;{
+      const random=Math.random;
+      try {
+        Math.random=randomStream(408);
+        newFlight(scenarios.length,&#x27;Orbital&#x27;,&#x27;none&#x27;,&#x27;&#x27;,decodeSeed(&#x27;O1K7EDPYT3&#x27;));
+        toggleClock();advance(90);
+        const first={x:state.x,y:state.y};
+        selectTool(0);state.bearing=135;state.power=60;throwTool();advance(150);
+        const second={x:state.x,y:state.y};
+        selectTool(3);state.bearing=34;state.power=91;throwTool();advance(450);
+        yes(state.result.title===&#x27;Capture confirmed&#x27;,&#x27;two-throw orbital rescue&#x27;);
+        Math.random=()=&gt;{throw Error(&#x27;chart rerolled a release&#x27;);};
+        const track=flightTrack(state), last=track.points[track.points.length-1];
+        for(const [i,p] of [first,second].entries()){
+          near(track.releases[i].point.x,p.x,&#x27;throw x&#x27;);near(track.releases[i].point.y,p.y,&#x27;throw y&#x27;);
+        }
+        near(last.x,state.x,&#x27;contact x&#x27;);near(last.y,state.y,&#x27;contact y&#x27;);
+        yes(track.points.length&gt;50,&#x27;sampled curved motion&#x27;);
+        $(&#x27;openLog&#x27;).click();
+        yes($(&#x27;dialogBody&#x27;).firstElementChild===$(&#x27;approachCard&#x27;) &amp;&amp; $(&#x27;chartResult&#x27;).textContent===state.result.title,&#x27;chart opens above transcript&#x27;);
+        yes($(&#x27;chartScenario&#x27;).textContent.includes(state.seed) &amp;&amp; $(&#x27;chartThrows&#x27;).children.length===2,&#x27;shareable seed and throws&#x27;);
+        yes($(&#x27;chartThrows&#x27;).textContent.includes(logBearing(state.lastBearing)) &amp;&amp; $(&#x27;chartTime&#x27;).textContent===logTime(state.elapsed),&#x27;actual release and time&#x27;);
+        const path=$(&#x27;approachPlot&#x27;).querySelector(&#x27;.chart-track&#x27;).getAttribute(&#x27;d&#x27;);
+        yes(!/NaN|Infinity/.test(path) &amp;&amp; $(&#x27;modal&#x27;).scrollWidth&lt;=$(&#x27;modal&#x27;).clientWidth+1,&#x27;finite and fits the dialog&#x27;);
+        summary();$(&#x27;openLog&#x27;).click();
+        yes($(&#x27;approachPlot&#x27;).querySelector(&#x27;.chart-track&#x27;).getAttribute(&#x27;d&#x27;)===path,&#x27;stable on reopening&#x27;);
+      } finally {Math.random=random;}
+    });
+    test(&#x27;Linear approach charts preserve coast endpoints, zero throws and repeated Story throws&#x27;,()=&gt;{
+      newFlight(0,&#x27;Easy&#x27;);toggleClock();advance(1000);$(&#x27;openLog&#x27;).click();
+      const t=flightTrack(state),last=t.points[t.points.length-1];
+      yes(t.points.length===2 &amp;&amp; !$(&#x27;chartThrows&#x27;).children.length &amp;&amp; $(&#x27;chartResult&#x27;).dataset.captured===&#x27;false&#x27;,&#x27;unassisted loss&#x27;);
+      near(last.x,state.x,&#x27;linear x&#x27;);near(last.y,state.y,&#x27;linear y&#x27;);
+      yes($(&#x27;chartSpeedLabel&#x27;).textContent===&#x27;Final speed&#x27; &amp;&amp; $(&#x27;chartReserve&#x27;).textContent===&#x27;0:00.0&#x27;,&#x27;expiry stats&#x27;);
+      closeDialog(false);newFlight(0,&#x27;Story&#x27;);
+      for(let i=0;i&lt;9;i++){state.bearing=i%2?180:0;throwTool();}
+      advance(1e5);$(&#x27;openLog&#x27;).click();
+      yes($(&#x27;chartThrows&#x27;).children.length===6 &amp;&amp; $(&#x27;chartThrows&#x27;).textContent.includes(&#x27;#9&#x27;) &amp;&amp; $(&#x27;chartThrowCount&#x27;).textContent.includes(&#x27;9 throws&#x27;),&#x27;bounded chart key&#x27;);
+      yes($(&#x27;flightTranscript&#x27;).textContent.includes(&#x27;Throw 9&#x27;) &amp;&amp; $(&#x27;chartReserve&#x27;).textContent===&#x27;Unlimited&#x27;,&#x27;full transcript and Story reserve&#x27;);
+      yes(!/NaN|Infinity/.test($(&#x27;approachPlot&#x27;).innerHTML) &amp;&amp; $(&#x27;approachPlot&#x27;).querySelectorAll(&#x27;.chart-number&#x27;).length===2,&#x27;coincident releases grouped&#x27;);
     });
     test(&#x27;The optional debrief log records actual releases, flight times, velocity, headings and awards&#x27;,()=&gt;{
       newFlight(0,&#x27;Hard&#x27;,&#x27;two&#x27;);toggleClock();advance(4.25);
@@ -6511,6 +7457,19 @@ init();
       for(let i=0;i&lt;10;i++)key(&#x27;ArrowUp&#x27;,true);near(state.power,100,&#x27;cap&#x27;);
       for(let i=0;i&lt;10;i++)key(&#x27;ArrowDown&#x27;,true);near(state.power,10,&#x27;floor&#x27;);
       key(&#x27;Enter&#x27;);yes(state.throws===1,&#x27;keyboard release&#x27;);
+    });
+    test(&#x27;Only the plot and tool buttons use arrows to aim&#x27;,()=&gt;{
+      const tool=$(&#x27;tools&#x27;).querySelector(&#x27;button&#x27;);
+      const press=(target,key)=&gt;target.dispatchEvent(new KeyboardEvent(&#x27;keydown&#x27;,{key,bubbles:true,cancelable:true}));
+      for(const target of [$(&#x27;setup&#x27;),$(&#x27;coastButton&#x27;),$(&#x27;shareFlight&#x27;),$(&#x27;timeRate&#x27;),document.body]){
+        yes(press(target,&#x27;ArrowLeft&#x27;) &amp;&amp; press(target,&#x27;ArrowUp&#x27;),&#x27;native keys on &#x27;+target.id);
+      }
+      yes(state.bearing===0 &amp;&amp; state.power===65,&#x27;other controls leave aim alone&#x27;);
+      for(const target of [$(&#x27;plot&#x27;),tool]){
+        target.focus({preventScroll:true});
+        yes(!press(document.activeElement,&#x27;ArrowLeft&#x27;) &amp;&amp; !press(document.activeElement,&#x27;ArrowUp&#x27;),&#x27;aim keys consumed&#x27;);
+      }
+      yes(state.bearing===2 &amp;&amp; state.power===67 &amp;&amp; !state.throws,&#x27;plot and rack aim without releasing&#x27;);
     });
     test(&#x27;Docking hatch stays centered on the capture zone in each scenario&#x27;,()=&gt;{
       for(let index=0;index&lt;scenarios.length;index++) {
@@ -6636,7 +7595,7 @@ init();
       closeDialog(false);newFlight(0,&#x27;Medium&#x27;);state.x=2;state.y=0;state.vx=-.04;state.vy=.08;render();
       yes($(&#x27;speedometer&#x27;).dataset.over===&#x27;true&#x27;,&#x27;fast sideways motion&#x27;);
     });
-    test(&#x27;Hard samples one bounded release error and preserves opposite recoil&#x27;,()=&gt;{
+    test(&#x27;Hard and Orbital sample one bounded release error and preserve opposite recoil&#x27;,()=&gt;{
       const random=Math.random;
       try {
         for(const level of Object.keys(limits))for(const sample of [0,.5,.999999]){
@@ -6644,12 +7603,22 @@ init();
           let calls=0;Math.random=()=&gt;{calls++;return sample;};
           state.bearing=359;state.power=85;
           render();render();yes(calls===0,&#x27;preview sampled random&#x27;);
-          const angle=359+(level===&#x27;Hard&#x27;?(sample*2-1)*hardBearingError:0);
+          const scattered=level===&#x27;Hard&#x27; || level===&#x27;Orbital&#x27;;
+          const angle=359+(scattered?(sample*2-1)*2:0);
+          const nominalPath=$(&#x27;trial&#x27;).getAttribute(&#x27;d&#x27;);
           const k=impulse(0,85,angle),vx=state.vx,vy=state.vy;
           $(&#x27;throwButton&#x27;).click();
-          yes(calls===(level===&#x27;Hard&#x27;?1:0),&#x27;one draw at release&#x27;);
+          yes(calls===(scattered?1:0),&#x27;one draw at release&#x27;);
           near(state.lastBearing,norm(angle),&#x27;actual bearing&#x27;);near(state.vx,vx+k.dx,&#x27;recoil x&#x27;);near(state.vy,vy+k.dy,&#x27;recoil y&#x27;);
           near(anim.vx-state.vx,k.ux,&#x27;tool x&#x27;);near(anim.vy-state.vy,k.uy,&#x27;tool y&#x27;);
+          if(level===&#x27;Orbital&#x27;){
+            yes(($(&#x27;coast&#x27;).getAttribute(&#x27;d&#x27;)===nominalPath)===(sample===.5),&#x27;coast uses actual release&#x27;);
+            const released=logBearing(angle);
+            yes($(&#x27;announce&#x27;).textContent.endsWith(&#x27;Released at &#x27;+released),&#x27;announced actual release&#x27;);
+            finish(&#x27;Return lost&#x27;,&#x27;Test&#x27;);$(&#x27;openLog&#x27;).click();
+            yes($(&#x27;flightTranscript&#x27;).textContent.includes(&#x27;Release &#x27;+released+&#x27; · Aim 359.0°&#x27;),&#x27;aim and release in log&#x27;);
+            closeDialog(false);
+          }
         }
       } finally {Math.random=random;}
     });
@@ -6698,23 +7667,24 @@ init();
       }
       yes(document.documentElement.scrollWidth&lt;=innerWidth+1,&#x27;horizontal overflow &#x27;+document.documentElement.scrollWidth+&#x27; &#x27;+innerWidth);
     });
-    test(&#x27;Orbital forecasts curve, meet the rail at the predicted speed and support both coast shortcuts&#x27;,()=&gt;{
-      for(const [index,steps] of [[[3,94,10]],[[3,72,344]],[[3,100,3],[2,74,2]]].entries()){
+    test(&#x27;Nominal Orbital forecasts reach the rail on time and support both coast shortcuts&#x27;,()=&gt;{
+      for(const [index,steps] of [[[3,94,10]],[[3,72,344]],[[3,100,1],[2,97,0]]].entries()){
         if($(&#x27;modal&#x27;).open)closeDialog(false);
-        newFlight(index,&#x27;Orbital&#x27;);yes(state.oxygen===900 &amp;&amp; $(&#x27;vxLabel&#x27;).textContent===&#x27;X outward&#x27;,&#x27;frame and clock&#x27;);
+        newFlight(index,&#x27;Orbital&#x27;);yes(state.oxygen===450 &amp;&amp; $(&#x27;oxygen&#x27;).textContent===&#x27;07:30&#x27; &amp;&amp; $(&#x27;vxLabel&#x27;).textContent===&#x27;X outward&#x27;,&#x27;frame and clock&#x27;);
         for(const [j,[i,power,bearing]] of steps.entries()){
           if(j)advance(4);
           selectTool(i);state.bearing=bearing;state.power=power;markAim();render();
           const projected=$(&#x27;trial&#x27;).getAttribute(&#x27;d&#x27;);
           yes(projected.split(&#x27; L&#x27;).length&gt;4,&#x27;curved preview samples&#x27;);
-          $(&#x27;throwButton&#x27;).click();
+          const random=Math.random;
+          try {Math.random=()=&gt;.5;$(&#x27;throwButton&#x27;).click();} finally {Math.random=random;}
           yes($(&#x27;coast&#x27;).getAttribute(&#x27;d&#x27;)===projected,&#x27;preview becomes actual coast&#x27;);
         }
         const path=flightCourse(), eta=state.elapsed+path.eta;
         yes(safeCoast(path) &amp;&amp; $(&#x27;prediction&#x27;).textContent.includes(&#x27;m/s at rail&#x27;),&#x27;safe contact forecast&#x27;);
         coastToHatch();yes(state.midpointThrow===state.throws &amp;&amp; state.phase===&#x27;flying&#x27;,&#x27;midpoint shortcut&#x27;);
         near(Math.hypot(state.x,state.y)-captureRadius,state.halfwayGap,&#x27;orbital halfway&#x27;,1e-8);
-        coastToHatch();advance(900);near(state.elapsed,eta,&#x27;time at rail&#x27;,1e-7);
+        coastToHatch();advance(450);near(state.elapsed,eta,&#x27;time at rail&#x27;,1e-7);
         near(Math.hypot(state.vx,state.vy),path.arrivalSpeed,&#x27;relative speed at rail&#x27;,1e-9);
         yes(state.result?.title===&#x27;Capture confirmed&#x27;,&#x27;named Orbital capture&#x27;);
       }
@@ -6737,7 +7707,7 @@ init();
         yes(state.result.title===(speed&lt;=.080?&#x27;Capture confirmed&#x27;:&#x27;Approach too fast&#x27;),&#x27;use contact speed for outcome&#x27;);
       }
       closeDialog(false);newFlight(0,&#x27;Orbital&#x27;);toggleClock();advance(999);
-      yes(state.result.title===&#x27;Reserve expired&#x27; &amp;&amp; state.elapsed===900,&#x27;orbital reserve&#x27;);
+      yes(state.result.title===&#x27;Reserve expired&#x27; &amp;&amp; state.elapsed===450,&#x27;orbital reserve&#x27;);
     });
     test(&#x27;Orbital seeds bind the physics through setup, bare codes, contradictory links and retry&#x27;,()=&gt;{
       const code=&#x27;O1K7EDPYT3&#x27;,s=decodeSeed(code);
@@ -6751,7 +7721,9 @@ init();
       loadMissionLink(&#x27;#seed=&#x27;+code+&#x27;&amp;level=Easy&amp;goal=two&#x27;);
       yes(state.level===&#x27;Orbital&#x27; &amp;&amp; state.objective===&#x27;two&#x27; &amp;&amp; state.start.x===s.x &amp;&amp; state.seed===code,&#x27;mode lock&#x27;);
       finish(&#x27;Reserve expired&#x27;,&#x27;Test&#x27;);[...$(&#x27;dialogActions&#x27;).children].find(b=&gt;b.textContent===&#x27;Retry this flight&#x27;).click();
-      yes(state.seed===code &amp;&amp; state.level===&#x27;Orbital&#x27; &amp;&amp; state.oxygen===900,&#x27;same seed retry&#x27;);
+      yes(state.seed===code &amp;&amp; state.level===&#x27;Orbital&#x27; &amp;&amp; state.oxygen===450,&#x27;same seed retry&#x27;);
+      loadMissionLink(&#x27;#seed=O1FMG2AIHL&#x27;);
+      yes(state.seed===&#x27;O1FMG2AIHL&#x27; &amp;&amp; state.oxygen===450,&#x27;previously issued seed loads with the current reserve&#x27;);
     });
     test(&#x27;Debrief actions share two aligned rows and backdrop dismissal preserves the flight&#x27;,()=&gt;{
       finish(&#x27;Reserve expired&#x27;,&#x27;Test&#x27;);const m=$(&#x27;modal&#x27;);

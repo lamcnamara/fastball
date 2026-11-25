@@ -159,7 +159,38 @@ h1 { font-weight:580; font-size:clamp(26px,2.4vw,38px) }
 .speedometer[data-reference="true"] .speed-track::after { background:var(--muted); opacity:.55; width:2px }
 .speed-limit { color:var(--muted); font-size:12px }
 dialog[data-kind="guide"] { width:min(560px,calc(100% - 28px)) }
-dialog[data-kind="log"] { width:min(620px,calc(100% - 24px)) }
+dialog[data-kind="log"] { width:min(870px,calc(100% - 20px)) }
+#approachCard { margin:0 0 14px; padding:clamp(12px,2vw,22px); border:1px solid #485c55; border-radius:8px; background:#141d1b; color:var(--ink) }
+.chart-byline,.chart-meta,.chart-legend,.chart-throws small,.chart-stats { font:12px/1.45 var(--mono) }
+.chart-byline { display:flex; flex-wrap:wrap; justify-content:space-between; gap:2px 12px; color:var(--mint) }
+.chart-byline strong { color:var(--ink); letter-spacing:.12em }
+#approachCard h3 { margin:6px 0 12px; font:650 clamp(19px,3vw,29px)/1.15 var(--sans) }
+.chart-layout { display:grid; grid-template-columns:minmax(0,1.65fr) minmax(185px,1fr); gap:16px; align-items:start }
+.chart-plot { width:100%; display:block; background:#192322; border:1px solid #40534e; border-radius:5px }
+.chart-plot text { fill:var(--muted); font:11px var(--mono) }
+.chart-plot .chart-number { fill:var(--gold); font-weight:700; text-anchor:middle }
+.chart-grid { stroke:#364740; stroke-width:.7 }
+.chart-axis { stroke:#8ba297; stroke-width:1; fill:none }
+.chart-track { stroke:var(--gold); stroke-width:2.2; fill:none; stroke-linejoin:round; stroke-linecap:round }
+.chart-meta { color:var(--muted) }
+.chart-legend { display:flex; gap:3px 10px; flex-wrap:wrap; margin-top:5px; color:var(--muted) }
+.chart-legend .finish-key { color:var(--finish) }
+.chart-throws { list-style:none; margin:6px 0 0; padding:0 }
+.chart-throws li { margin:0 0 7px; display:grid; grid-template-columns:auto 1fr; gap:0 7px; align-items:baseline; line-height:1.25 }
+.chart-throws .throw-index { grid-row:span 2; color:var(--gold); font:600 12px var(--mono) }
+.chart-throws small { grid-column:2; color:var(--muted) }
+.chart-stats { display:flex; flex-wrap:wrap; gap:4px 14px; padding-top:9px; margin-top:10px; border-top:1px solid #40534e; color:var(--muted) }
+.chart-stats b { color:var(--ink); font-weight:600 }
+.chart-result { display:block; margin:0 0 4px; color:var(--oxygen-fill); font-size:17px }
+.chart-result[data-captured="false"] { color:var(--danger) }
+@media(max-width:650px) {
+  dialog[data-kind="log"] { width:calc(100% - 12px); max-width:calc(100% - 12px); padding:10px; scrollbar-width:thin }
+  #approachCard { padding:10px }
+  .chart-layout { grid-template-columns:minmax(0,1fr); gap:8px }
+  .chart-plot text { font-size:13px }
+  .chart-throws li { margin-bottom:4px; font-size:13px }
+  .chart-throws small { font-size:11px }
+}
 .seed-share { padding:2px 7px; font-size:12px }
 #shareNotice:not(:empty) { margin-left:5px }
 .seed-panel { margin:12px 0 18px; padding:12px; min-width:0; background:var(--bg); border:1px solid var(--edge); border-radius:5px }
@@ -445,9 +476,10 @@ function randomStream(seed) {
     return seed/4294967296;
   };
 }
-const limits = {Story:Infinity, Easy:900, Medium:600, Hard:450, Orbital:900};
+const limits = {Story:Infinity, Easy:900, Medium:600, Hard:450, Orbital:450};
 const timeRates = [1,2,5,10];
-const captureSpeedLimit = 0.080, hardBearingError = 2;
+const captureSpeedLimit = 0.080, maxBearingError = 2;
+const hasReleaseError = level => level==='Hard' || level==='Orbital';
 const softCapture = level => level==='Medium' || level==='Hard' || level==='Orbital';
 const overRedline = (level,vx,vy) => softCapture(level) && Math.hypot(vx,vy)>captureSpeedLimit+1e-12;
 const captureCalls = {
@@ -489,7 +521,7 @@ function course(x,y,vx,vy,radius=captureRadius) {
     // Scale the roundoff allowance with velocity so very slow misses stay misses.
     if (disc >= -Number.EPSILON*(dot*dot+vv*c)*4) eta = c/(-dot + Math.sqrt(Math.max(0,disc)));
   }
-  return {eta, clearance};
+  return {eta, clearance, arrivalSpeed:eta===null?null:Math.hypot(vx,vy)};
 }
 // Planar Hill–Clohessy–Wiltshire motion about the hatch on a circular 92-minute orbit.
 // Plot +X is radially outward and +Y is along the station's direction of travel.
@@ -593,16 +625,17 @@ function newFlight(index=0,level='Easy',objective='none',lesson='',drift) {
 function difficultyBrief(level) {
   return level==='Story'
       ? 'Unlimited oxygen and reloading tools. Full trajectory guidance. Reach the hatch before your suit drifts off the plot.'
-      : clock(limits[level])+' to reach the rail on emergency reserve · '+({Easy:'Full trajectory, intercept time and miss distance.',Medium:'Predicted velocity vector.',Hard:'Raw navigation telemetry.',Orbital:'Curved coasts in a rotating orbital frame. Full trajectory guidance and precise releases.'})[level]+(softCapture(level)?' '+captureBrief(level):'');
+      : clock(limits[level])+' to reach the rail on emergency reserve · '+({Easy:'Full trajectory, intercept time and miss distance.',Medium:'Predicted velocity vector.',Hard:'Raw navigation telemetry.',Orbital:'Curved coasts in a rotating orbital frame. Full trajectory guidance.'})[level]+(softCapture(level)?' '+captureBrief(level):'');
 }
 function captureBrief(level) {
   const limit=captureSpeedLimit.toFixed(3)+' m/s';
-  if(level==='Orbital')return 'Aim the curved gold forecast through the rail at '+limit+' or slower. Check the predicted speed at the rail.';
+  const scatter=' Each release can stray by up to ±'+maxBearingError+'°.';
+  if(level==='Orbital')return 'Aim the gold curve through the rail at '+limit+' or slower.'+scatter+' Check the actual coast after each throw.';
   return 'Reach the handrail at '+limit+' or slower. Throw along your motion to brake.'+
-    (level==='Hard'?' Each release can stray by up to ±'+hardBearingError+'°.':'');
+    (level==='Hard'?scatter:'');
 }
 function safeCoast(path) {
-  return path.eta!==null && path.eta<=state.oxygen && !overRedline(state.level,path.arrivalSpeed ?? Math.hypot(state.vx,state.vy),0);
+  return path.eta!==null && path.eta<=state.oxygen && !overRedline(state.level,path.arrivalSpeed,0);
 }
 function objectiveIntact(flight=state) {
   if(flight.objective==='drill')return keptDrill(flight);
@@ -632,7 +665,7 @@ function encodeSeed(start,orbital=Boolean(start.orbital)) {
   const payload=packed.toString(36).toUpperCase().padStart(7,'0');
   return orbital?'O1'+payload+seedCheck('O1'+payload):'F1'+payload+seedCheck(payload);
 }
-function decodeSeed(input) {
+function decodeSeed(input,allowLegacyOrbital=true) {
   const seed=input.trim().toUpperCase(), payload=seed.slice(2,9);
   const orbital=seed.startsWith('O1');
   if(!/^[FO]1[0-9A-Z]{8}$/.test(seed) || seedCheck(orbital?'O1'+payload:payload)!==seed[9])return null;
@@ -647,7 +680,9 @@ function decodeSeed(input) {
   const y=unpack(1024,512,10), x=unpack(1024,512,10);
   const start={name:'Random',seed,x,y,vx,vy};
   if(orbital)start.orbital=true;
-  return playableDrift(start)?start:null;
+  // Previously shared O1 codes were screened with a 15-minute reserve.
+  // Recognize those starts on input. New deals and conversions use today's rules.
+  return playableDrift(start) || (orbital && allowLegacyOrbital && playableDrift(start,900))?start:null;
 }
 function closestImpulse(mask,desired) {
   let best=null;
@@ -712,11 +747,11 @@ function orbitalRecovery(start,initialMask=fullMask,reserve=limits.Orbital) {
   }
   return best;
 }
-function playableDrift(start) {
+function playableDrift(start,reserve=limits.Orbital) {
   const range=Math.hypot(start.x,start.y), speed=Math.hypot(start.vx,start.vy);
   if(range<14 || range>28 || speed<.022 || speed>.085)return false;
-  if(start.orbital)return orbitalCourse(start,limits.Orbital).eta===null &&
-    Boolean(orbitalRecovery(start) && orbitalRecovery(orbitalMotion(start,30),fullMask,limits.Orbital-30));
+  if(start.orbital)return orbitalCourse(start,reserve).eta===null &&
+    Boolean(orbitalRecovery(start,fullMask,reserve) && orbitalRecovery(orbitalMotion(start,30),fullMask,reserve-30));
   return course(start.x,start.y,start.vx,start.vy).eta===null &&
     Boolean(recoveryPlan(start) && recoveryPlan(start,true));
 }
@@ -727,10 +762,10 @@ function generateDrift(random=Math.random,level='Easy') {
     const speed=.022+.063*random(), heading=2*Math.PI*random();
     const seed=encodeSeed({x:range*Math.cos(angle),y:range*Math.sin(angle),
       vx:speed*Math.cos(heading),vy:speed*Math.sin(heading)},orbital);
-    const drift=decodeSeed(seed);
+    const drift=decodeSeed(seed,false);
     if(drift)return drift;
   }
-  return decodeSeed(encodeSeed({x:24,y:-7,vx:.046,vy:.021},orbital));
+  return decodeSeed(encodeSeed({x:24,y:-7,vx:.046,vy:.021},orbital),false);
 }
 function scenarioLink(seed,level,goal) {
   const params=new URLSearchParams({seed,level:seed.startsWith('O1')?'Orbital':level});
@@ -741,7 +776,8 @@ function scenarioLink(seed,level,goal) {
     ? new URL('./',location.href).href : 'https://lamcnamara.github.io/fastball/';
   return base+'#'+params;
 }
-function readSeedInput(text) {
+const invalidSeedMessage='Unrecognized Scenario Seed. Check the code or generate a new seed.';
+function readSeedInput(text,defaultLevel=null) {
   let input=text.trim(), params=new URLSearchParams();
   if(/^https?:\/\//i.test(input)){
     try {params=new URLSearchParams(new URL(input).hash.slice(1));}
@@ -750,18 +786,20 @@ function readSeedInput(text) {
   }
   let drift=decodeSeed(input);
   if(!drift)return null;
-  const level=params.get('level'), goal=params.get('goal');
+  const requestedLevel=params.get('level'), requestedGoal=params.get('goal');
+  const level=drift.orbital?'Orbital':Object.hasOwn(limits,requestedLevel)?requestedLevel:defaultLevel;
+  const goal=Object.hasOwn(replayGoals,requestedGoal)?requestedGoal:(params.has('seed')?'none':null);
   if(level==='Orbital' && !drift.orbital) {
-    drift=decodeSeed(encodeSeed(drift,true));
-    if(!drift)return null;
+    const seed=drift.seed;
+    drift=decodeSeed(encodeSeed(drift,true),false);
+    if(!drift)return {seed,level,goal,error:'This start is available on Story through Hard. Choose one of those difficulties or generate an Orbital seed.'};
   }
-  return {drift,level:drift.orbital?'Orbital':Object.hasOwn(limits,level)?level:null,
-    goal:Object.hasOwn(replayGoals,goal)?goal:(params.has('seed')?'none':null)};
+  return {drift,level,goal};
 }
 function throwTool() {
   if (!live() || !isAvailable(state.selected) || $('modal').open) return;
   const i=state.selected, t=gear[i];
-  const offset=state.level==='Hard'?(Math.random()*2-1)*hardBearingError:0;
+  const offset=hasReleaseError(state.level)?(Math.random()*2-1)*maxBearingError:0;
   const released=norm(state.bearing+offset), kick=impulse(i,state.power,released);
   state.throwLog.push({time:state.elapsed,i,power:state.power,aim:state.bearing,bearing:released,
     vx:state.vx,vy:state.vy,dx:kick.dx,dy:kick.dy});
@@ -776,7 +814,7 @@ function throwTool() {
   }
   state.lastImpulse=Math.hypot(kick.dx,kick.dy); state.spent+=state.lastImpulse; state.throws++;
   state.phase='flying'; lastFrame=null;
-  const report=t.name+' released · Δv '+state.lastImpulse.toFixed(3)+' m/s'+(state.level==='Hard'?' · Released at '+released.toFixed(1)+'°':'');
+  const report=t.name+' released · Δv '+state.lastImpulse.toFixed(3)+' m/s'+(hasReleaseError(state.level)?' · Released at '+logBearing(released):'');
   flash={text:report,until:performance.now()+2400}; $('announce').textContent=report;
   state.tip=contextTip(); renderGear();
   checkEmpty(); render();
@@ -794,7 +832,7 @@ function contextTip() {
       'You’re above capture speed with an empty rack. There’s nothing left to brake with.';
   }
   if (safeCoast(path)) return 'You are on course. Hold this coast to reach the hatch.';
-  if (state.closest<5) return 'Near the hatch, a light tool gives you a smaller course correction.';
+  if (Math.hypot(state.x,state.y)-captureRadius<5) return 'Near the hatch, a light tool gives you a smaller course correction.';
   if (state.level==='Story') return 'To slow down, throw in the direction of your velocity arrow. Repeat as needed.';
   const tips=['Correct your lateral velocity as well as your outward drift.',
     'Your velocity persists between throws. Use time acceleration to watch a long coast.',
@@ -999,7 +1037,7 @@ function renderForecast(pvx,pvy,coast,trial) {
   const s=state, aiming=s.phase!=='ended' && s.mask && (s.phase==='ready' || s.previewing || drag || charge);
   $('plot').dataset.forecast=fullGuidance(s.level) && !aiming?'coast':'aim';
   if(fullGuidance(s.level)){
-    $('assistMode').textContent=aiming?'If you throw now':'Current coast';
+    $('assistMode').textContent=aiming?(s.level==='Orbital'?'Aim preview · ±'+maxBearingError+'°':'If you throw now'):'Current coast';
     const primary=aiming?trial:coast;
     $('prediction').dataset.unsafe=String(s.level==='Orbital' && primary.eta!==null && overRedline(s.level,primary.arrivalSpeed,0));
     const vector=aiming && s.level!=='Orbital'?'<div class="secondary">'+signed(pvx)+', '+signed(pvy)+' m/s</div>':'';
@@ -1011,7 +1049,7 @@ function renderForecast(pvx,pvy,coast,trial) {
     $('prediction').textContent=signed(x)+', '+signed(y)+' m/s · '+(overRedline(s.level,x,y)?'Above redline':'Within speed limit');
   } else {
     $('assistMode').textContent='Manual navigation';
-    $('prediction').textContent='Release bearing varies by ±'+hardBearingError+'°';
+    $('prediction').textContent='Release bearing varies by ±'+maxBearingError+'°';
   }
 }
 function render() {
@@ -1059,11 +1097,11 @@ function render() {
   renderPlot(pvx,pvy,coast,trial);
 }
 function plotCamera(s,w,h,aimFloor) {
-  // Story keeps the opening frame fixed so the astronaut can fly out of view.
-  const anchor=s.level==='Story'?s.start:s;
+  // A Story frame stays fixed between resizes so real drift can still end the flight.
+  const opening=s.level==='Story'?s.start:s, anchor=s.storyAnchor ?? opening;
   const reach=Math.min(160,w*.18,h*.27);
-  const left=Math.min(-14,anchor.x), right=Math.max(4,anchor.x);
-  const low=Math.min(-7,anchor.y), high=Math.max(7,anchor.y);
+  const left=Math.min(-14,opening.x,anchor.x), right=Math.max(4,opening.x,anchor.x);
+  const low=Math.min(-7,opening.y,anchor.y), high=Math.max(7,opening.y,anchor.y);
   const scale=Math.max(.01,Math.min(17,(w-2*(reach+14))/(right-left),(h-2*(reach+26))/(high-low)));
   const ox=w/2-(left+right)*scale/2;
   // Leave the full-power ring reachable above the clock on a compact plot.
@@ -1281,14 +1319,15 @@ async function copyText(text,button,notice) {
   }
   notice.textContent='Copied to clipboard.';
 }
-function setup(proposed=state.level,goal=state.objective,invalidSeed=null) {
+function setup(proposed=state.level,goal=state.objective,linked=null) {
   $('difficulty').value=state.level;
   const choices=[...scenarios,{name:'Random',brief:'Generate a recoverable drift, or load a seed to fly someone else’s starting conditions.'}];
-  let drift=state.seed?state.start:null;
-  const selected=invalidSeed===null?state.index:scenarios.length;
+  let drift=linked?linked.drift:(state.seed?state.start:null);
+  const selected=linked?scenarios.length:state.index;
   const sceneOptions=choices.map((v,i)=>'<option value="'+i+'"'+(i===selected?' selected':'')+'>'+v.name+'</option>').join('');
   const levels=Object.keys(limits).map(k=>'<option'+(k===proposed?' selected':'')+'>'+k+'</option>').join('');
   openDialog('setup','Mission setup','New mission',
+    (linked && (state.phase==='flying' || state.phase==='paused')?'<p>Begin mission replaces your current flight. Cancel to keep flying.</p>':'')+
     '<label class="dialogrow">Drift scenario <select id="scenarioChoice">'+sceneOptions+'</select></label><p id="scenarioBrief"></p>'+
     '<div class="seed-panel" id="seedPanel" hidden><label for="seedInput">Scenario Seed</label><input id="seedInput" autocomplete="off" spellcheck="false" placeholder="Seed or shared link" aria-describedby="seedFeedback">'+
     '<div class="seed-actions"><button id="generateSeed">Generate seed</button><button id="loadSeed">Load seed</button><button id="copySeed">Copy link</button></div><p id="seedFeedback" role="status"></p><p id="seedCopied" role="status"></p></div>'+
@@ -1296,51 +1335,48 @@ function setup(proposed=state.level,goal=state.objective,invalidSeed=null) {
     '<label class="dialogrow">Bonus objective <select id="goalChoice">'+Object.entries(replayGoals).map(([key,label])=>'<option value="'+key+'"'+(key===goal?' selected':'')+'>'+label+'</option>').join('')+'</select></label>',
     [['Cancel',()=>closeDialog()],['Begin mission',()=>{const index=Number($('scenarioChoice').value),level=$('levelChoice').value,objective=$('goalChoice').value;closeDialog(false);newFlight(index,level,objective,'',drift);},true]]);
   const input=$('seedInput'), feedback=$('seedFeedback'), begin=$('dialogActions').lastElementChild;
-  function updateSeed(error=false) {
+  function updateSeed(error='') {
     const random=Number($('scenarioChoice').value)===scenarios.length;
     const ready=drift && input.value===drift.seed;
     $('seedPanel').hidden=!random;begin.disabled=random && !ready;
     $('copySeed').disabled=!ready;
-    feedback.dataset.error=String(error);
-    input.setAttribute('aria-invalid',String(error));
-    feedback.textContent=error?'Unrecognized Scenario Seed. Check the code or generate a new seed.':
-      ready?(drift.orbital?'Orbital seed · ':'Start ')+Math.hypot(drift.x,drift.y).toFixed(1)+' m from the hatch · '+Math.hypot(drift.vx,drift.vy).toFixed(3)+' m/s at '+fmtAngle(degrees(drift.vx,drift.vy)):
-      'Load the seed to preview this flight.';
+    feedback.dataset.error=String(Boolean(error));
+    input.setAttribute('aria-invalid',String(Boolean(error)));
+    feedback.textContent=error || (ready
+      ? (drift.orbital?'Orbital seed · ':'Start ')+Math.hypot(drift.x,drift.y).toFixed(1)+' m from the hatch · '+Math.hypot(drift.vx,drift.vy).toFixed(3)+' m/s at '+fmtAngle(degrees(drift.vx,drift.vy))
+      : 'Load the seed to preview this flight.');
     $('seedCopied').textContent='';
   }
   function showSeed(start) {drift=start;input.value=start.seed;updateSeed();}
-  const describe=()=>{
+  const describe=(error='')=>{
     const index=Number($('scenarioChoice').value);
     $('scenarioBrief').textContent=choices[index].brief;
     const level=$('levelChoice').value;
-    if(index===scenarios.length && invalidSeed===null && !input.value && !drift)showSeed(generateDrift(Math.random,level));
+    if(index===scenarios.length && !error && !input.value && !drift)showSeed(generateDrift(Math.random,level));
     else if(index===scenarios.length && drift && input.value===drift.seed && Boolean(drift.orbital)!==(level==='Orbital')){
-      const converted=decodeSeed(encodeSeed(drift,level==='Orbital'));
+      const converted=decodeSeed(encodeSeed(drift,level==='Orbital'),false);
       showSeed(converted || generateDrift(Math.random,level));
       if(!converted)feedback.textContent+=' · New start for this difficulty.';
-    } else updateSeed();
+    } else updateSeed(error);
     $('levelBrief').textContent=difficultyBrief(level);
   };
-  if(drift)input.value=drift.seed;
-  $('generateSeed').onclick=()=>{invalidSeed=null;showSeed(generateDrift(Math.random,$('levelChoice').value));};
+  input.value=drift?.seed ?? linked?.seed ?? '';
+  $('generateSeed').onclick=()=>showSeed(generateDrift(Math.random,$('levelChoice').value));
   $('loadSeed').onclick=()=>{
-    const loaded=readSeedInput(input.value);
-    if(!loaded){updateSeed(true);input.focus();return;}
-    invalidSeed=null;
-    if(loaded.level)$('levelChoice').value=loaded.level;
-    else if($('levelChoice').value==='Orbital'){
-      const converted=decodeSeed(encodeSeed(loaded.drift,true));
-      if(!converted){updateSeed(true);feedback.textContent='This start is available on Story through Hard. Choose one of those difficulties or generate an Orbital seed.';return;}
-      loaded.drift=converted;
-    }
+    const loaded=readSeedInput(input.value,$('levelChoice').value);
+    if(!loaded){updateSeed(invalidSeedMessage);input.focus();return;}
+    $('levelChoice').value=loaded.level;
     if(loaded.goal)$('goalChoice').value=loaded.goal;
-    showSeed(loaded.drift);describe();
+    drift=loaded.drift;
+    input.value=drift?.seed ?? loaded.seed;
+    describe(loaded.error);
   };
   input.oninput=()=>updateSeed();
   input.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();$('loadSeed').click();}};
   $('copySeed').onclick=()=>copyText(scenarioLink(drift.seed,$('levelChoice').value,$('goalChoice').value),$('copySeed'),$('seedCopied'));
-  $('scenarioChoice').onchange=describe;$('levelChoice').onchange=describe;$('goalChoice').onchange=()=>updateSeed();describe();
-  if(invalidSeed!==null){input.value=invalidSeed;updateSeed(true);}
+  $('scenarioChoice').onchange=$('levelChoice').onchange=()=>describe();
+  $('goalChoice').onchange=()=>updateSeed();
+  describe(linked?.error);
 }
 function localCrewVoice() {
   return window.speechSynthesis?.getVoices().find(voice=>voice.localService && /^en(?:-|$)/i.test(voice.lang));
@@ -1361,10 +1397,10 @@ function guide() {
     '<ul><li><b>Select</b> a tool from the rack or press 1–6. The slots run from lightest to heaviest, left to right across each row. A heavier or faster tool changes your velocity more.</li>'+
     '<li><b>Drag on the plot</b> or grab the reticle. Point where the tool should travel. Your suit recoils in the opposite direction. Distance from your suit sets power, from 10% up to 100% at the dotted ring.</li>'+
     '<li><b>Release to throw.</b> A click or tap previews your aim. Use Throw beneath the rack to commit it. Escape or release outside the plot, over the rack, or over the flight clock to cancel a drag.</li>'+
-    '<li><b>Keyboard controls.</b> Left turns counterclockwise and right turns clockwise in 1° steps (Shift for 10°). Up and down change power by 1% (Shift for 10%). Press Enter on the plot to throw, or hold Space to wind up and release to throw. Escape cancels the windup.</li>'+
+    '<li><b>Keyboard controls.</b> Focus the plot or a tool in the rack to aim. Left turns counterclockwise and right turns clockwise in 1° steps (Shift for 10°). Up and down change power by 1% (Shift for 10%). Press Enter on the plot to throw, or hold Space to wind up and release to throw. Escape cancels the windup.</li>'+
     '<li><b>Set the flight clock</b> to 1×, 2×, 5× or 10× with the slider at the lower right of the HUD. Amber means fast-forward. P starts, pauses or resumes the clock. Switching tabs or windows pauses a running flight.</li>'+
     '<li><b>Check your course halfway home.</b> When the original gap to the handrail reach zone has halved, the station calls once. Check your path and approach speed before spending another tool. A safe coast unlocks Coast to halfway, then Coast to rail. Use the speed slider to take over during the final approach.</li>'+
-    '<li><b>Share a flight.</b> Choose Random in New mission to generate or load a Scenario Seed. Copy link shares the start, difficulty and bonus objective. Codes beginning with O1 select Orbital automatically. Choose View flight log in the debrief to copy the throws, capture speed and awards. Click outside the log or debrief to return to the finished plot.</li></ul>'+
+    '<li><b>Share a flight.</b> Choose Random in New mission to generate or load a Scenario Seed. Copy link shares the start, difficulty and bonus objective. Codes beginning with O1 select Orbital automatically. In the debrief, choose View flight log to screenshot your approach chart or copy the full transcript. Click outside the log or debrief to return to the finished plot.</li></ul>'+
     '<p>Bearings run counterclockwise from right (000°) to up (090°). Vx, Vy and radial speed use m/s. Green hatch distance and negative radial speed mean you are closing in. Red distance and positive radial speed mean you are moving away. Hatch distance measures the gap to the edge of the handrail reach zone. In Orbital, +X points away from Earth and +Y follows the station along its orbit. The velocity arrow is instantaneous. The coast and after-throw curves run to first contact or reserve expiry. Check speed at the rail, or closest approach on a miss. Other modes coast in a straight line.</p>'+
     '<p><b>Plan your next throw.</b> A shrinking range can still lead to a flyby. On Medium, compare the predicted velocity arrow with the hatch bearing. On Hard, read the actual velocity after each release. Save a light tool to trim sideways drift. On Orbital, use the gold curve to test a correction and compare the predicted rail speed with the capture limit.</p>'+
     (state.level==='Story'?'':'<p>The Δv budget is the largest total velocity change available from full-power throws in the best order.</p>')+
@@ -1414,7 +1450,7 @@ function flightLogText(s) {
   for(const [n,entry] of s.throwLog.entries()){
     const t=gear[entry.i], vx=entry.vx+entry.dx, vy=entry.vy+entry.dy;
     lines.push('Throw '+(n+1)+' · '+logTime(entry.time)+' · '+t.name+' ('+t.mass.toFixed(1)+' kg)',
-      'Power '+entry.power+'% · Release '+logBearing(entry.bearing)+(s.level==='Hard'?' · Aim '+logBearing(entry.aim):''),
+      'Power '+entry.power+'% · Release '+logBearing(entry.bearing)+(hasReleaseError(s.level)?' · Aim '+logBearing(entry.aim):''),
       'Δvx '+logComponent(entry.dx)+' · Δvy '+logComponent(entry.dy)+' m/s',
       'Heading '+logHeading(entry.vx,entry.vy)+' → '+logHeading(vx,vy)+' · Speed '+Math.hypot(vx,vy).toFixed(4)+' m/s','');
   }
@@ -1426,10 +1462,133 @@ function flightLogText(s) {
   if(captured && keptDrill(s))lines.push('🏅 Upmass Hero · Returned with the original power drill');
   return lines.join('\n');
 }
+// Replay coasts in flight time; the logged recoil already includes release scatter.
+function flightTrack(s) {
+  let coast=s.start, time=0;
+  const points=[coast], releases=[];
+  for(let i=0;i<=s.throwLog.length;i++){
+    const entry=s.throwLog[i], until=entry?.time ?? s.elapsed, dt=until-time;
+    const steps=s.level==='Orbital'?Math.ceil(dt/4):Number(dt>0);
+    for(let step=1;step<=steps;step++){
+      points.push(s.level==='Orbital'?orbitalMotion(coast,dt*step/steps):
+        {x:coast.x+coast.vx*dt,y:coast.y+coast.vy*dt});
+    }
+    if(entry){
+      const point=points[points.length-1];
+      releases.push({point,entry,number:i+1});
+      coast={x:point.x,y:point.y,vx:entry.vx+entry.dx,vy:entry.vy+entry.dy};
+    }
+    time=until;
+  }
+  return {points,releases};
+}
+function drawApproachPlot(svg,points,shown,captured) {
+  const left=34,right=348,top=12,bottom=208;
+  let minX=-captureRadius,maxX=captureRadius,minY=-captureRadius,maxY=captureRadius;
+  for(const p of points){
+    minX=Math.min(minX,p.x);maxX=Math.max(maxX,p.x);
+    minY=Math.min(minY,p.y);maxY=Math.max(maxY,p.y);
+  }
+  // Shuttle convention: +V (game +Y) left, +R (game -X) down. Both axes use metres.
+  const scale=Math.min((right-left-30)/(maxY-minY),(bottom-top-30)/(maxX-minX));
+  const ox=(left+right+(minY+maxY)*scale)/2, oy=(top+bottom+(minX+maxX)*scale)/2;
+  const project=p=>({x:ox-p.y*scale,y:oy-p.x*scale});
+  const screen=points.map(project), start=screen[0], end=screen[screen.length-1];
+  function add(tag,attrs,label) {
+    const el=document.createElementNS('http://www.w3.org/2000/svg',tag);
+    for(const [key,value] of Object.entries(attrs))el.setAttribute(key,value);
+    if(label!==undefined)el.textContent=label;
+    svg.append(el);return el;
+  }
+  function line(x1,y1,x2,y2,style) {add('line',{x1,y1,x2,y2,class:style});}
+  const desired=50/scale, decade=10**Math.floor(Math.log10(desired));
+  const step=decade*[1,2,5,10].find(n=>n*decade>=desired);
+  for(let i=Math.ceil((ox-right)/(scale*step));i<=(ox-left)/(scale*step);i++){
+    const x=ox-i*step*scale;
+    line(x,top,x,bottom,i?'chart-grid':'chart-axis');
+    add('text',{x,y:bottom+16,'text-anchor':'middle'},Number((i*step).toPrecision(5)));
+  }
+  for(let i=Math.ceil((top-oy)/(scale*step));i<=(bottom-oy)/(scale*step);i++){
+    const y=oy+i*step*scale;
+    line(left,y,right,y,i?'chart-grid':'chart-axis');
+    add('text',{x:left-4,y:y+3,'text-anchor':'end'},Number((i*step).toPrecision(5)));
+  }
+  add('path',{d:'M'+(left+4)+' '+(oy-3)+'l-4 3 4 3 M'+(ox-3)+' '+(bottom-4)+'l3 4 3 -4',class:'chart-axis'});
+  add('circle',{cx:ox,cy:oy,r:captureRadius*scale,fill:'#233a30',stroke:'var(--mint)','stroke-dasharray':'3 2'});
+  add('rect',{x:ox-2,y:oy-2,width:4,height:4,fill:'var(--mint)'});
+  add('path',{d:screen.map((p,i)=>(i?'L':'M')+p.x.toFixed(2)+' '+p.y.toFixed(2)).join(' '),class:'chart-track'});
+  // Space arrowheads by distance travelled so even a single straight coast has a direction.
+  const lengths=screen.map((p,i)=>i?Math.hypot(p.x-screen[i-1].x,p.y-screen[i-1].y):0);
+  const length=lengths.reduce((sum,n)=>sum+n,0), arrows=Math.min(3,Math.floor(length/55));
+  let travelled=0,next=1;
+  for(let i=1;i<screen.length && next<=arrows;i++){
+    const a=screen[i-1], b=screen[i], span=lengths[i];
+    while(next<=arrows && travelled+span>=length*next/(arrows+1)){
+      const t=(length*next/(arrows+1)-travelled)/span;
+      const angle=Math.atan2(b.y-a.y,b.x-a.x)*180/Math.PI;
+      add('path',{d:'M-4 -3 L1 0 -4 3',class:'chart-track',transform:'translate('+(a.x+t*(b.x-a.x))+' '+(a.y+t*(b.y-a.y))+') rotate('+angle+')'});
+      next++;
+    }
+    travelled+=span;
+  }
+  add('rect',{x:-4,y:-4,width:8,height:8,transform:'translate('+start.x+' '+start.y+') rotate(45)',fill:'var(--panel)',stroke:'var(--ink)','stroke-width':1.5});
+  add('circle',{cx:end.x,cy:end.y,r:3.7,fill:captured?'var(--oxygen-fill)':'var(--danger)',stroke:'var(--bg)','stroke-width':1.2});
+  // Stack consecutive releases at a shared location under one numbered callout.
+  const groups=[];
+  for(const release of shown){
+    const p=project(release.point), previous=groups[groups.length-1];
+    if(previous && release.number===previous.last+1 && Math.hypot(previous.x-p.x,previous.y-p.y)<5)previous.last=release.number;
+    else groups.push({...p,first:release.number,last:release.number});
+  }
+  const occupied=[];
+  for(const g of groups){
+    const label=g.first===g.last?String(g.first):g.first+'–'+g.last;
+    const w=11+7*label.length;
+    const positions=[-17,17,-35,35,-53,53].map(d=>({
+      x:Math.max(left+w/2,Math.min(right-w/2,g.x)),y:Math.max(top+8,Math.min(bottom-8,g.y+d))}));
+    const p=positions.find(c=>occupied.every(o=>Math.abs(c.x-o.x)>(w+o.w)/2+2 || Math.abs(c.y-o.y)>16)) || positions[0];
+    occupied.push({...p,w});
+    line(g.x,g.y,p.x,p.y,'chart-axis');
+    add('circle',{cx:g.x,cy:g.y,r:1.8,fill:'var(--gold)'});
+    add('rect',{x:p.x-w/2,y:p.y-7.5,width:w,height:15,rx:6,fill:'var(--panel)',stroke:'var(--gold)'});
+    add('text',{x:p.x,y:p.y+3.7,class:'chart-number'},label);
+  }
+}
+function renderApproachChart(s) {
+  const {points,releases}=flightTrack(s), captured=s.result.title==='Capture confirmed';
+  const shown=releases.length<=6?releases:[...releases.slice(0,3),...releases.slice(-3)];
+  $('chartLevel').textContent=s.level+' · Alpha v0.3';
+  $('chartScenario').textContent=s.seed?'Seed '+s.seed:s.name;
+  $('chartResult').textContent=s.result.title;
+  $('chartResult').dataset.captured=String(captured);
+  $('approachCard').style.setProperty('--finish',captured?'var(--oxygen-fill)':'var(--danger)');
+  $('chartDesc').textContent=s.name+', '+s.level+'. '+s.result.title+' after '+logTime(s.elapsed)+'. '+s.throws+' throws. The hatch is at the origin. Both axes are in metres.';
+  drawApproachPlot($('approachPlot'),points,shown,captured);
+  const list=$('chartThrows');
+  for(const {entry,number} of shown){
+    const row=document.createElement('li'), index=document.createElement('span'), details=document.createElement('small');
+    index.className='throw-index';index.textContent='#'+number;
+    details.textContent=logTime(entry.time)+' · '+entry.power+'% · '+logBearing(entry.bearing);
+    row.append(index,gear[entry.i].name+' ',details);list.append(row);
+  }
+  $('chartThrowCount').textContent=releases.length?releases.length+(releases.length===1?' throw':' throws'):'No throws';
+  if(shown.length<releases.length)$('chartThrowCount').textContent+=' · first and last three shown';
+  $('chartTime').textContent=logTime(s.elapsed);
+  $('chartSpeedLabel').textContent=captured || s.result.title==='Approach too fast'?'Contact speed':'Final speed';
+  $('chartSpeed').textContent=Math.hypot(s.vx,s.vy).toFixed(4)+' m/s';
+  $('chartReserve').textContent=Number.isFinite(s.oxygen)?logTime(s.oxygen):'Unlimited';
+}
 function openFlightLog() {
   const transcript=flightLogText(state);
-  openDialog('log','Mission debrief','Flight log','<pre id="flightTranscript" tabindex="0" aria-label="Flight transcript"></pre><p id="logCopied" role="status"></p>',
+  openDialog('log','Mission debrief','Flight log',
+    '<figure id="approachCard" aria-labelledby="chartHeading"><div class="chart-byline"><span><strong>FASTBALL</strong> / <span id="chartLevel"></span></span><span id="chartScenario"></span></div>'+
+    '<h3 id="chartHeading">Approach to the rail</h3><div class="chart-layout"><div><svg class="chart-plot" id="approachPlot" viewBox="0 0 360 230" role="img" aria-labelledby="chartTitle chartDesc"><title id="chartTitle">V-bar/R-bar approach in metres</title><desc id="chartDesc"></desc></svg>'+
+    '<div class="chart-meta">← +V-bar along track · ↓ +R-bar Earthward (m)</div><div class="chart-legend"><span>◇ Start</span><span><b class="finish-key">●</b> Finish</span><span>⊙ Hatch · 1.2 m reach</span></div></div>'+
+    '<div><strong class="chart-result" id="chartResult"></strong><div class="chart-meta" id="chartThrowCount"></div><ol class="chart-throws" id="chartThrows"></ol></div></div>'+
+    '<div class="chart-stats"><span>Flight time <b id="chartTime"></b></span><span><span id="chartSpeedLabel"></span> <b id="chartSpeed"></b></span><span>Reserve <b id="chartReserve"></b></span></div></figure>'+
+    '<pre id="flightTranscript" tabindex="0" aria-label="Flight transcript"></pre><p id="logCopied" role="status"></p>',
     [['Back to debrief',summary],['Copy flight log',e=>copyText(transcript,e.currentTarget,$('logCopied')),true]]);
+  renderApproachChart(state);
   $('flightTranscript').textContent=transcript;
 }
 function summary() {
@@ -1478,19 +1637,29 @@ function backgroundPause() {
 }
 function measurePlot() {
   const b=$('plot').getBoundingClientRect();
-  plotW=Math.max(1,b.width);plotH=Math.max(1,b.height);
-  aimFloor=matchMedia('(max-width:999px)').matches ? $('flightClock').getBoundingClientRect().top-b.top-6 : plotH;
+  const w=Math.max(1,b.width), h=Math.max(1,b.height);
+  const floor=matchMedia('(max-width:999px)').matches ? $('flightClock').getBoundingClientRect().top-b.top-6 : h;
+  if(state.level==='Story' && state.phase!=='ended' && (w!==plotW || h!==plotH || floor!==aimFloor)) {
+    const {px,py,suitScale}=plotCamera(state,w,h,floor);
+    if(px+suitBounds.left*suitScale<0 || px+suitBounds.right*suitScale>w ||
+       py+suitBounds.top*suitScale<0 || py+suitBounds.bottom*suitScale>h) {
+      state.storyAnchor={x:state.x,y:state.y};
+    }
+  }
+  plotW=w;plotH=h;aimFloor=floor;
   $('plot').setAttribute('viewBox','0 0 '+plotW+' '+plotH);
 }
 function loadMissionLink(hash) {
   const params=new URLSearchParams(hash.slice(1));
   if(!params.has('seed'))return false;
-  const loaded=readSeedInput('https://lamcnamara.github.io/fastball/'+hash);
-  if($('modal').open)closeDialog(false);
-  if(loaded)newFlight(scenarios.length,loaded.level || 'Easy',loaded.goal || 'none','',loaded.drift);
-  else {
+  const linked=readSeedInput('https://lamcnamara.github.io/fastball/'+hash,'Easy') ||
+    {seed:params.get('seed'),level:state?.level ?? 'Easy',goal:state?.objective ?? 'none',error:invalidSeedMessage};
+  if(linked.error || state?.phase==='flying' || state?.phase==='paused') {
     if(!state)newFlight();
-    setup(state.level,state.objective,params.get('seed'));
+    setup(linked.level,linked.goal,linked);
+  } else {
+    closeDialog(false);
+    newFlight(scenarios.length,linked.level,linked.goal,'',linked.drift);
   }
   return true;
 }
@@ -1579,6 +1748,7 @@ function init() {
     if(e.code==='KeyP'&&!e.repeat){e.preventDefault();toggleClock();return;}
     if(!live() || !state.mask || drag || charge)return;
     if(/^[1-6]$/.test(e.key))selectTool(rackOrder[Number(e.key)-1]);
+    if(e.target!==plot && !e.target.closest?.('button.tool'))return;
     const step=e.shiftKey?10:1;
     if(['ArrowLeft','ArrowRight'].includes(e.key)){
       e.preventDefault();markAim();state.bearing=norm(state.bearing+(e.key==='ArrowLeft'?step:-step));render();
