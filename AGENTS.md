@@ -2,7 +2,7 @@
 
 ## Project structure
 
-Fastball is a browser-based EVA return simulator. Edit `index.html` for the interface, inline SVG artwork, CSS, and simulation logic. The script starts with equipment and scenario definitions. Use `impulse()` for throw calculations, `advance()` for elapsed flight time, and `renderPlot()` for the trajectory display. Keep the throw preview and the actual throw on the same physics calculation.
+Fastball is a browser-based EVA return simulator. Edit `index.html` for the interface, inline SVG artwork, CSS, and simulation logic. The script starts with equipment and scenario definitions. Use `impulse()` for throw calculations, `advance()` for elapsed flight time, and `renderPlot()` for the trajectory display. Keep the throw preview and the actual throw on the same physics calculation. Orbital uses `orbitalMotion()` for the rotating-frame state and `orbitalCourse()` for first contact and closest approach. Check the soft-capture speed at contact.
 
 The root also contains two browser test pages and `preview-qa.png`, a visual reference.
 
@@ -20,7 +20,7 @@ Use two spaces for JavaScript block indentation and camelCase for functions and 
 
 ## Testing
 
-Both QA pages embed simulator code. After changing `index.html`, refresh the simulator copy in `qa-runner.html` and the runner copies in the `srcdoc` frames of `qa-widths.html` before relying on their results. Add regression cases to the runner using `test('descriptive behavior', ...)`. Use `near()` for floating-point comparisons and `yes()` for state or DOM assertions. Existing groups cover momentum conservation, capture timing, oxygen expiry, keyboard controls, and layout. There is no configured coverage threshold.
+Both QA pages embed simulator code. After changing `index.html`, refresh the simulator copy in `qa-runner.html` and the runner copies in the `srcdoc` frames of `qa-widths.html` before relying on their results. Add regression cases to the runner using `test('descriptive behavior', ...)`. Use `near()` for floating-point comparisons and `yes()` for state or DOM assertions. Existing groups cover momentum conservation, capture timing, oxygen expiry, keyboard controls, and layout. Run `node qa-balance.cjs` for the straight-line scenarios and `node qa-orbital.cjs` for the curved-flight scenarios and control-error trials. Both suites exercise the same game functions used during play.
 
 ## Commits and pull requests
 
