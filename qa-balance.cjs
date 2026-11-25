@@ -24,7 +24,7 @@ const flight = vm.runInNewContext(script.replace(/\ninit\(\);\s*$/,'')+`
   measurePlot=renderGear=render=summary=()=>{};
   ({
     scenarios,gear,captureRadius,captureSpeedLimit,massOf,course,
-    start:(i,level)=>newFlight(i,level), state:()=>state,
+    start:(i,level,day)=>newFlight(i,level,'none','',day), state:()=>state,
     release:(i,power,bearing)=>{selectTool(i);state.power=power;state.bearing=bearing;throwTool();},
     advance
   });
@@ -58,11 +58,11 @@ function planThrow(reading,targetSpeed) {
   return best;
 }
 
-function fly(index,level,seed,recheck,fastLaunch) {
+function fly(index,level,seed,recheck,fastLaunch,day) {
   // Use paired, independent streams for release scatter and pilot inputs.
   const pilot = randomStream(seed);
   gameMath.random=randomStream(seed ^ 0x56e94517);
-  flight.start(index,level);
+  flight.start(index,level,day);
   const s=flight.state(), landingSpeed=flight.captureSpeedLimit*.92;
   const targetSpeed=fastLaunch?flight.captureSpeedLimit*1.5:landingSpeed;
   let estimate=readInstruments(s);
@@ -123,4 +123,18 @@ for(const level of ['Medium','Hard']) {
       else assert(wins>0,'No winning runs for '+scenario.name);
     }
   }
+}
+
+// A dated start should admit a legal capture with the same imperfect pilot and course check.
+for(const level of ['Medium','Hard']) {
+  for(let dayIndex=0;dayIndex<365;dayIndex++) {
+    const day=new Date(Date.UTC(2027,0,dayIndex+1)).toISOString().slice(0,10);
+    let captured=false;
+    for(let attempt=0;attempt<8 && !captured;attempt++) {
+      const seed=(Math.imul(dayIndex+1,2654435761)+attempt)>>>0;
+      captured=fly(flight.scenarios.length,level,seed,true,false,day).result==='Capture confirmed';
+    }
+    assert(captured,'No daily capture for '+day+' on '+level);
+  }
+  console.log(level,'daily drift: verified a safe capture for all 365 sampled dates');
 }
