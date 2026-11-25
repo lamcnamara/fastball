@@ -72,46 +72,37 @@ for(const [i,s] of f.scenarios.entries()){
   console.log(s.name,JSON.stringify(plan.map(t=>[f.gear[t.i].name,t.bearing,t.power])),result);
 }
 
-// This pilot gets rounded instrument readings and tries a small menu of throw
-// previews. It never calls the transfer solver or reads a seed's recovery plan.
-function flyByForecast(start,index,seed) {
+// Use the grey arrow and rounded telemetry to aim. Only a committed release
+// unlocks the HUD's safe-coast verdict. Check for a trim at 10 s and halfway.
+function flyByInstruments(start,index,seed) {
   const pilot=randomStream(seed);
   gameMath.random=randomStream(seed ^ 0xAF35BB17);
   f.start(index,'Orbital',start);
   const s=f.state();
-  for(let attempt=0;attempt<3;attempt++){
-    const current=f.flightCourse();
-    if(f.safeCoast(current) || s.phase==='ended')break;
-    const range=Math.round((Math.hypot(s.x,s.y)-f.captureRadius)*100)/100+f.captureRadius;
-    const angle=Math.round(Math.atan2(s.y,s.x)*180/Math.PI)*Math.PI/180;
-    const vx=Math.round(s.vx*1000)/1000,vy=Math.round(s.vy*1000)/1000;
-    const returnSpeed=Math.min(.065,Math.max(.04,range/(s.oxygen*.8)));
-    const dx=vx+returnSpeed*Math.cos(angle),dy=vy+returnSpeed*Math.sin(angle);
-    const bearing=Math.round(Math.atan2(dy,dx)*180/Math.PI),wanted=Math.hypot(dx,dy);
-    const candidates=f.gear.flatMap((tool,i)=>{
-      if(!(s.mask & (1<<i)))return [];
-      const kick=tool.speed*tool.mass/f.massOf(s.mask);
-      const power=Math.min(100,Math.max(10,Math.round(100*wanted/kick)));
-      return [{i,power,error:Math.abs(wanted-kick*power/100)}];
-    }).sort((a,b)=>a.error-b.error).slice(0,2);
-    let best=null;
-    for(const tool of candidates){
-      for(const turn of [0,-15,15,-30,30,-45,45])for(const change of [0,-10,10]){
-        const power=Math.max(10,Math.min(100,tool.power+change)),aim=bearing+turn;
-        const kick=f.impulse(tool.i,power,aim,s.mask);
-        const preview=f.flightCourse(s.vx+kick.dx,s.vy+kick.dy);
-        // Use only information the forecast prints: rail safety, ETA or miss distance.
-        const safe=f.safeCoast(preview);
-        const score=safe?-1000+Math.ceil(preview.eta)/1000:
-          preview.eta!==null?10+Math.round(preview.arrivalSpeed*1000)/1000:Math.round(preview.clearance*100)/100;
-        if(!best || score<best.score)best={i:tool.i,power,aim,score};
-      }
-    }
-    f.release(best.i,Math.min(100,Math.max(10,best.power+Math.round(4*pilot()-2))),
-      best.aim+Math.round(4*pilot()-2));
-    const path=f.flightCourse();
-    if(f.safeCoast(path))break;
-    f.advance(Math.min(60,Math.max(4,(path.eta ?? path.closestTime)/2)));
+  const gap=()=>Math.round((Math.hypot(s.x,s.y)-f.captureRadius)*100)/100;
+  const halfway=gap()/2;
+  function pitch() {
+    const range=gap(), lead=range>12?20:range>6?10:5;
+    const hatch=Math.round(Math.atan2(-s.y,-s.x)*180/Math.PI);
+    const heading=(hatch+lead)*Math.PI/180;
+    const speed=Math.min(.075,Math.max(.065,(range+f.captureRadius)/(.85*s.oxygen)));
+    const dx=Math.round(s.vx*1000)/1000-speed*Math.cos(heading);
+    const dy=Math.round(s.vy*1000)/1000-speed*Math.sin(heading);
+    const wanted=Math.hypot(dx,dy), bearing=Math.round(Math.atan2(dy,dx)*180/Math.PI);
+    const tools=f.gear.flatMap((tool,i)=>(s.mask & (1<<i))?
+      [{i,max:tool.speed*tool.mass/f.massOf(s.mask)}]:[]).sort((a,b)=>a.max-b.max);
+    const tool=tools.find(t=>t.max>=wanted) ?? tools.at(-1);
+    const power=Math.round(100*wanted/tool.max)+Math.round(4*pilot()-2);
+    f.release(tool.i,Math.min(100,Math.max(10,power)),bearing+Math.round(4*pilot()-2));
+  }
+  pitch();
+  if(!f.safeCoast(f.flightCourse())){
+    f.advance(10);
+    if(s.phase==='flying')pitch();
+  }
+  if(s.phase==='flying' && !f.safeCoast(f.flightCourse())){
+    while(s.phase==='flying' && gap()>halfway)f.advance(5);
+    if(s.phase==='flying')pitch();
   }
   f.advance(s.oxygen+1);
   return s.result?.title==='Capture confirmed';
@@ -150,8 +141,8 @@ for(const [index,start] of f.scenarios.entries()){
   assert.equal(s.result.title,'Capture confirmed');assert(Math.abs(s.elapsed-expected)<1e-7);
 }
 
-let forecastWins=0;
-const forecastCount=300;
+let instrumentWins=0;
+const instrumentCount=300;
 const totals=profiles.map(()=>({wins:0,wide:0,maxThrows:0}));
 const lengths={},seen=new Set(), positions=new Set(), directions=new Set();
 let leastBudget=Infinity,longest=0,maxSpeed=0;
@@ -164,7 +155,7 @@ for(let i=0;i<count;i++){
   const plan=f.orbitalRecovery(start), delayed=f.orbitalRecovery(f.orbitalMotion(start,30),f.fullMask,reserve-30);
   assert(plan && delayed,start.seed);
   assert(fly(start,randomIndex,delayed,{delay:30,nominal:true},i).won,'no recovery after 30s '+start.seed);
-  if(i<forecastCount && flyByForecast(start,randomIndex,(i+1)*73))forecastWins++;
+  if(i<instrumentCount && flyByInstruments(start,randomIndex,(i+1)*73))instrumentWins++;
   lengths[plan.length]=(lengths[plan.length]||0)+1;
   for(const [j,profile] of profiles.entries()){
     const repetitions=profile.nominal?1:trials;
@@ -186,4 +177,4 @@ assert.equal(seen.size,count);
 for(const x of [-1,1])for(const y of [-1,1])assert(positions.has(x+','+y) && directions.has(x+','+y));
 console.log({starts:count,planLengths:lengths,longest,maxSpeed,leastBudget});
 profiles.forEach((p,i)=>console.log(p.name,'/',count*(p.nominal?1:trials),totals[i]));
-console.log('Forecast-only pilot, up to three throws with ±2°/±2 points:',forecastWins,'/',forecastCount);
+console.log('Manual aim with committed coast, up to three throws with ±2°/±2 points:',instrumentWins,'/',instrumentCount);

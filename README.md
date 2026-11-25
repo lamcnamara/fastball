@@ -1,4 +1,4 @@
-# Fastball · Alpha v0.3
+# Fastball · Alpha v0.4
 
 [Play Fastball on GitHub Pages](https://lamcnamara.github.io/fastball/)
 
@@ -36,7 +36,7 @@ Both mass and release speed affect recoil. The **Δv budget** estimates how much
 | Action | Control |
 | --- | --- |
 | Select a tool | Click or tap its button, or press **1–6**. |
-| Preview a throw | Click or tap the plot. The crosshair sets the tool's bearing. Distance from the suit sets power from 10% to 100%. Press **Throw** beneath the rack to release the selected tool. |
+| Aim a throw | Click or tap the plot. The crosshair sets the tool’s bearing. Distance from the suit sets power from 10% to 100%. Press **Throw** beneath the rack to release the selected tool. |
 | Throw in one gesture | Drag on the plot or from the crosshair, then release. The dotted ring marks full power. **Escape**, releasing outside the plot, or releasing over the rack or flight clock cancels the drag. |
 | Fine-tune aim | Focus the plot or a tool in the rack. Use **← / →** for 1° bearing steps and **↑ / ↓** for 1% power steps. Left increases the bearing counterclockwise. Right decreases it clockwise. Hold **Shift** for steps of 10. With the plot focused, press **Enter** to throw. |
 | Wind up | Hold **Space**, then release to throw. With a tool button focused, Space uses that tool. **Escape** cancels the windup. |
@@ -64,7 +64,7 @@ Under **New mission**, choose **Tether separation**, **Lateral drift**, **Wide s
 | Easy | 15 minutes | Full trajectory, intercept-time and miss-distance forecasts. Any capture speed is allowed. |
 | Medium | 10 minutes | The HUD previews the velocity a throw would produce. Reach the rail at **0.080 m/s or slower**. |
 | Hard | 7 minutes 30 seconds | Navigate by raw telemetry. The same capture limit applies, and each release can stray up to **2°** either side of the selected bearing. |
-| Orbital | 7 minutes 30 seconds | Curved coasts and full previews. Each release can stray up to **2°** either side of your aim. Enter the 1.2 m handrail zone at **0.080 m/s or slower**. |
+| Orbital | 7 minutes 30 seconds | Aim manually. After each release, a mint curve shows your actual coast. Each release can stray up to **2°** either side of your aim. Enter the 1.2 m handrail zone at **0.080 m/s or slower**. |
 
 The approach gauge shows the 0.080 m/s reference in every mode. On Medium, Hard and Orbital it turns red above the capture limit. An empty rack can still get you home if your final coast reaches the rail in time at a permitted speed.
 
@@ -92,15 +92,19 @@ Random starts lie 14–28 m from the hatch and drift at 0.022–0.085 m/s. Each 
 
 The plot rotates with a station on an assumed circular 92-minute orbit. The hatch is the origin. Right (+X) points away from Earth and up (+Y) follows the station’s direction of travel. **Range rate** measures how fast the gap to the hatch changes. The model uses the two in-plane Hill–Clohessy–Wiltshire equations. [Equations for relative position and velocity, equations 6.16–6.18](https://thesis.unipd.it/bitstream/20.500.12608/17593/1/Andrea_Antonello_TESI_MAGISTRALE.pdf)
 
-The grey arrow shows your velocity now. The gold curve previews a throw at the bearing you select. Each release can stray by up to ±2°, so read the mint **Current coast** after the throw to see where you are actually headed. Both curves stop at first contact or reserve expiry. When a forecast reaches the rail, the HUD shows time and speed **at contact**. A miss shows the smallest gap to the edge of the reach zone and when it occurs. Check again halfway home before spending another tool.
+Use the grey arrow to read your current velocity and the gold crosshair to aim the tool. Your suit recoils the other way, and its path bends as it coasts. Each release can stray by up to 2° either side of your aim.
 
-![Orbital aim preview. The battery at 010° and 94% power forecasts a rail speed of 0.056 m/s. The actual release can stray by up to 2°.](preview-orbital.png)
+[View the Orbital plot before the first throw](preview-orbital-aim.png)
+
+After your first throw, the mint **Current coast** shows where the suit is headed. It stays visible while you aim your next tool and updates when you release it. If the coast reaches the rail before reserve expiry, the HUD shows time and speed **at contact**. A miss shows the smallest gap to the reach zone and when it occurs. Check again halfway home before spending another tool.
+
+![Orbital after a battery throw. The mint curve reaches the rail, and the Current coast readout gives the time and speed at contact.](preview-orbital.png)
 
 Try the example rescue from the link below, or load it in an offline copy. Open **New mission**, choose **Random**, enter `O1K7EDPYT3`, and select **Load seed**, then **Begin mission**. For a fresh opening, choose **Orbital** and **Generate seed**. Every newly generated start needs a throw and has a verified route to a soft capture within 7:30, both immediately and after 30 seconds of drift, assuming a release at the selected bearing. Previously shared `O1` starts also load with the new clock and scatter.
 
 [Fly Orbital seed O1K7EDPYT3](https://lamcnamara.github.io/fastball/#seed=O1K7EDPYT3)
 
-Run `node qa-orbital.cjs` for the three named rescues, 2,000 seeded openings, release scatter, pilot error and midpoint corrections. The forecast-only pilot uses the instrument readings and throw previews without consulting the generator's solution.
+Run `node qa-orbital.cjs` for the three named rescues, 2,000 seeded openings, release scatter, pilot error and midpoint corrections. A separate pilot aims from the instrument readings and checks the current coast after release.
 
 <details>
 <summary>Orbital playtest results and example returns</summary>
@@ -125,7 +129,7 @@ Across 2,000 distinct seeds, the planner found 1,370 one-throw and 630 two-throw
 | Additional ±5° and ±5 points | 3,808 / 6,000 | 63.5% |
 | Same errors with a course check and correction halfway to predicted contact or closest pass | 6,000 / 6,000 | 100% |
 
-Each row after the nominal baseline uses the game's ±2° scatter on every release, including corrections. Each opening gets three trials per profile, with paired random draws across profiles. A 1.6 m rail would catch 94.8% of the ±2° / ±2-point final coasts. A separate pilot using only a limited set of HUD previews and up to three throws captured 182 of 300 starts (60.7%) at that same error level. These are simulated results for those strategies.
+Each row after the nominal baseline uses the game’s ±2° scatter on every release, including corrections. Each opening gets three trials per profile, with paired random draws across profiles. A 1.6 m rail would catch 94.8% of the ±2° / ±2-point final coasts. The simulated manual pilot captured 278 of 300 starts (92.7%) with up to three throws at the ±2° / ±2-point error level. It aimed ahead of the hatch and checked for a correction 10 seconds after release and again halfway home.
 
 </details>
 
